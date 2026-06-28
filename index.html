@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures and Algorithms | Course Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Design System & Variables */
+        :root {
+            /* Dark Mode Variables (Default base for the CSS) */
+            --bg-primary: #090d16;
+            --bg-secondary: #0f1626;
+            --bg-card: rgba(15, 22, 38, 0.7);
+            --bg-header: linear-gradient(135deg, #0b0f1a, #05070b);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(59, 130, 246, 0.25);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            /* Accents & Glows */
+            --accent-blue: #3b82f6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.2);
+            --accent-purple: #a855f7;
+            --accent-purple-glow: rgba(168, 85, 247, 0.2);
+            --accent-cyan: #06b6d4;
+            --accent-cyan-glow: rgba(6, 182, 212, 0.2);
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.2);
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.2);
+            --accent-orange: #f97316;
+            --accent-orange-glow: rgba(249, 115, 22, 0.2);
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+            
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --border-radius-card: 16px;
+            --border-radius-btn: 10px;
+        }
+
+        /* Light Mode Theme Overrides */
+        body.light-mode {
+            --bg-primary: #f1f5f9;      /* slate-100 */
+            --bg-secondary: #f8fafc;    /* slate-50 */
+            --bg-card: #ffffff;         /* pure white */
+            --bg-header: linear-gradient(135deg, #1e293b, #0f172a);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --border-accent: rgba(59, 130, 246, 0.15);
+            
+            --text-primary: #0f172a;    /* slate-900 */
+            --text-secondary: #334155;  /* slate-700 */
+            --text-muted: #64748b;      /* slate-500 */
+            
+            --accent-blue-glow: rgba(59, 130, 246, 0.1);
+            --accent-purple-glow: rgba(168, 85, 247, 0.1);
+            --accent-cyan-glow: rgba(6, 182, 212, 0.1);
+            --accent-green-glow: rgba(16, 185, 129, 0.1);
+            --accent-red-glow: rgba(239, 68, 68, 0.1);
+            --accent-orange-glow: rgba(249, 115, 22, 0.1);
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Base & Reset Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+        }
+
+        a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Course Header Dashboard */
+        header {
+            background: var(--bg-header);
+            color: #ffffff;
+            padding: 2.5rem 2rem 2rem;
+            position: relative;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .header-title-area h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 0.4rem;
+        }
+
+        .header-title-area p {
+            font-size: 1rem;
+            color: #cbd5e1;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-title-area p i {
+            color: var(--accent-blue);
+        }
+
+        /* Theme Toggle Button in Header */
+        .theme-toggle-btn {
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: var(--border-radius-btn);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-fast);
+        }
+
+        .theme-toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode .theme-toggle-btn {
+            /* Keep header styling clean in dark header context */
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main Workspace Container */
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem auto 4rem;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* Top Widgets Grid (Overview, Contact & Resources) */
+
+        .info-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-card);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        }
+
+        body:not(.light-mode) .info-card {
+            backdrop-filter: blur(12px);
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .info-card-icon {
+            font-size: 1.4rem;
+            color: var(--accent-blue);
+        }
+
+        .info-card-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .info-card-body {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .info-card-body p.tagline {
+            font-style: italic;
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        .key-info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .key-info-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-info-list li strong {
+            color: var(--text-primary);
+            min-width: 110px;
+        }
+
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #5865f2;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: var(--border-radius-btn);
+            font-weight: 600;
+            font-size: 0.85rem;
+            width: fit-content;
+            transition: var(--transition-fast);
+        }
+
+        .discord-btn:hover {
+            background-color: #4752c4;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.35);
+        }
+
+        /* Course Outline Control Center */
+        .controls-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-card);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .controls-title h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .controls-title p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+
+
+        /* Filter buttons container */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        .filter-btn {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .filter-btn:hover {
+            color: var(--text-primary);
+            background-color: var(--border-color);
+        }
+
+        .filter-btn.active {
+            background-color: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 10px var(--accent-blue-glow);
+        }
+
+        /* Course Weeks Grid */
+        .weeks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Week card general styling */
+        .week-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-card);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: opacity var(--transition-normal), transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+        }
+
+        .week-card.hidden {
+            display: none !important;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .week-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border-accent);
+        }
+
+        /* Category left borders on hover */
+        .week-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: transparent;
+            transition: var(--transition-fast);
+        }
+        
+        .week-card[data-category="basics"]:hover::before { background-color: var(--accent-blue); }
+        .week-card[data-category="complexity"]:hover::before { background-color: var(--accent-orange); }
+        .week-card[data-category="lists"]:hover::before { background-color: var(--accent-purple); }
+        .week-card[data-category="trees"]:hover::before { background-color: var(--accent-cyan); }
+
+        /* Week card header details */
+        .week-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .week-badge {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        /* Color configurations for week badges */
+        .week-card[data-category="basics"] .week-badge {
+            background-color: var(--accent-blue-glow);
+            color: var(--accent-blue);
+        }
+        .week-card[data-category="complexity"] .week-badge {
+            background-color: var(--accent-orange-glow);
+            color: var(--accent-orange);
+        }
+        .week-card[data-category="lists"] .week-badge {
+            background-color: var(--accent-purple-glow);
+            color: var(--accent-purple);
+        }
+        .week-card[data-category="trees"] .week-badge {
+            background-color: var(--accent-cyan-glow);
+            color: var(--accent-cyan);
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Material buttons listing */
+        .materials-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .material-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 10px 14px;
+            border-radius: var(--border-radius-btn);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--transition-fast);
+        }
+
+        .material-link i {
+            font-size: 1.05rem;
+            width: 18px;
+            text-align: center;
+        }
+
+        .material-link:hover {
+            color: var(--text-primary);
+            background-color: var(--border-color);
+            text-decoration: none;
+            transform: translateX(2px);
+        }
+
+        /* Specific link icon colors */
+        .material-link i.fa-file-pdf { color: var(--accent-red); }
+        .material-link i.fa-laptop-code { color: var(--accent-blue); }
+        .material-link i.fa-book-open { color: var(--accent-orange); }
+
+        /* Special Card styles (Holidays/Exams) */
+        .week-card.special-card {
+            border-style: dashed;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.03), rgba(239, 68, 68, 0.01));
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .week-card.special-card[data-special="midterm"],
+        .week-card.special-card[data-special="final"] {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.03), rgba(249, 115, 22, 0.01));
+            border-color: rgba(249, 115, 22, 0.25);
+        }
+
+        .week-card.special-card .week-badge {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+        }
+
+        .week-card.special-card[data-special="midterm"] .week-badge,
+        .week-card.special-card[data-special="final"] .week-badge {
+            background-color: rgba(249, 115, 22, 0.1);
+            color: var(--accent-orange);
+        }
+
+        .special-placeholder {
+            margin: auto;
+            text-align: center;
+            padding: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+        }
+
+        .special-placeholder i {
+            font-size: 2.2rem;
+            opacity: 0.6;
+        }
+
+        .special-placeholder[data-icon="midterm"] i,
+        .special-placeholder[data-icon="final"] i {
+            color: var(--accent-orange);
+        }
+        .special-placeholder[data-icon="holiday"] i {
+            color: var(--accent-red);
+        }
+
+        .special-placeholder span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding: 2rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-secondary);
+            margin-top: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .weeks-grid > div {
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            main {
+                margin: 1.5rem auto 3rem;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+
+    <!-- Course Header -->
+    <header>
+        <div class="header-container">
+            <div class="header-title-area">
+                <h1>Data Structures and Algorithms</h1>
+                <p><i class="fa-solid fa-building-columns"></i>Course Home Dashboard</p>
+                <br>
+                <p><small>Generated by Gemini, Google and Claude, Anthropic
+                    <br>Prepared by Panatsaya Boonprakob, Indira Thanabpraphas (TA)
+                    <br>Edited by Dr. Sirasit Lochanachit</small></p>
+            </div>
+            <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                <i class="fa-solid fa-moon"></i> <span id="theme-text">Dark Mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Workspace -->
+    <main>
+
+
+        <!-- Dynamic Outline Dashboard Control -->
+        <section class="controls-card">
+            <div class="controls-header">
+                <div class="controls-title">
+                    <h2>Course outline</h2>
+                </div>
+            </div>
+
+            <!-- Topic Filters -->
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">All Materials</button>
+                <button class="filter-btn" data-filter="basics">Basics & Recursion</button>
+                <button class="filter-btn" data-filter="complexity">Complexity & Sorting</button>
+                <button class="filter-btn" data-filter="lists">Linked Lists, Stacks & Queues</button>
+                <button class="filter-btn" data-filter="trees">Trees & Graphs</button>
+            </div>
+        </section>
+
+        <!-- Weeks Interactive Grid -->
+        <section class="weeks-grid" id="weeks-grid">
+            
+            <!-- Week 1 -->
+            <div class="week-card" data-category="basics" data-tags="basics">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 01</span>
+                </div>
+                <h3 class="card-title">Introduction & Basic Python</h3>
+                <p class="card-desc">Transitioning from C language concepts to Python programming syntax, dynamic structures, and interpreter engines.</p>
+                <div class="materials-container">
+                    <a href="week1.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Python Interactive Guide</a>
+                    <a href="Week1/DSA_Week1.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Week 1 Intro Slides (PDF)</a>
+                    <a href="Week1/DSA-Colab-Tutorial.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Colab Tutorial Sheet (PDF)</a>
+                    <a href="Week1/Getting-Started-with-VS-Code.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> VS Code Guide (PDF)</a>
+                    <a href="Week1/DSA_Python_Crash_Course_stu.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Python Crash Course (PDF)</a>
+                    <a href="Week1/DSA_Lab_1_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 1 Student (Notebook)</a>
+                    <a href="Week1/DSA_Lab_1_Challenge.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 1 Challenge (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="week-card" data-category="basics" data-tags="basics">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 02</span>
+                </div>
+                <h3 class="card-title">Recursion & Memory Call Stack</h3>
+                <p class="card-desc">Core components of recursive operations, base cases, recursion limits, and stack frames trace.</p>
+                <div class="materials-container">
+                    <a href="Week2/Recursion_Interactive_Guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Recursion Interactive Guide</a>
+                    <a href="Week2/Tutorial_Week2_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Timeit & Globals Tutorial (Notebook)</a>
+                    <a href="Week2/DSA_HW-1.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Homework 1 (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 3 -->
+            <div class="week-card" data-category="complexity" data-tags="complexity">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 03</span>
+                </div>
+                <h3 class="card-title">Algorithm Analysis & Big-O</h3>
+                <p class="card-desc">Theoretical analysis of runtimes, growth rates of functions, and evaluating operations via Big-O curves.</p>
+                <div class="materials-container">
+                    <a href="Week3/DSA_Week3.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Algorithm Analysis Slides (PDF)</a>
+                    <a href="Week3/Big-O_Interactive_Guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Big-O Interactive Guide</a>
+                    <a href="Week3/DSA_Lab_2_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 2 Student (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 4 -->
+            <div class="week-card" data-category="complexity" data-tags="complexity">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 04</span>
+                </div>
+                <h3 class="card-title">Arrays & Object-Oriented Basics</h3>
+                <p class="card-desc">Contiguous memory representation, Python list implementation details, and basic OOP namespaces.</p>
+                <div class="materials-container">
+                    <a href="Week4/DSA_Week4.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Arrays & Python List Slides (PDF)</a>
+                    <a href="Week4/Array_Interactive_Guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Array Insertion Interactive Guide</a>
+                    <a href="Week4/Tutorial_Week4_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> OOP Tutorial (Notebook)</a>
+                    <a href="Week4/DSA_Lab_3_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 3 Student (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 5 -->
+            <div class="week-card" data-category="complexity" data-tags="complexity">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 05</span>
+                </div>
+                <h3 class="card-title">Searching Algorithms</h3>
+                <p class="card-desc">Linear search, binary search, and the complexity bounds of lookup algorithms in ordered arrays.</p>
+                <div class="materials-container">
+                    <a href="Week5/DSA_Week5.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Searching Slides (PDF)</a>
+                    <a href="Week5/DSA_Lab_4_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 4 Student (Notebook)</a>
+                    <a href="Week5/DSA_Lab_4_challenge.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 4 Challenge (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 6 (Holiday) -->
+            <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="holiday">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 06</span>
+                </div>
+                <h3 class="card-title">New Year Holiday</h3>
+                <div class="special-placeholder" data-icon="holiday">
+                    <i class="fa-solid fa-umbrella-beach"></i>
+                    <span>No Class - Holiday & Self-Study Period</span>
+                </div>
+            </div>
+
+            <!-- Week 7 -->
+            <div class="week-card" data-category="complexity" data-tags="complexity">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 07</span>
+                </div>
+                <h3 class="card-title">Sorting Algorithms</h3>
+                <p class="card-desc">Bubble sort, selection sort, insertion sort, and comparative benchmarks of quadratic processes.</p>
+                <div class="materials-container">
+                    <a href="https://github.com/noswolf/DSA_BIT/blob/DSA_24_Term2/Week10/DSA_Week10.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Sorting Slides (GitHub PDF)</a>
+                    <a href="Week7/Sorting_Interactive_Guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Sorting Interactive Guide</a>
+                    <a href="Week7/DSA_Lab_5_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 5 Student (Notebook)</a>
+                    <a href="Week7/DSA_Lab_5_challenge.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 5 Challenge (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 8 (Commencement Ceremony) -->
+            <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="holiday">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 08</span>
+                </div>
+                <h3 class="card-title">Commencement Holiday</h3>
+                <div class="special-placeholder" data-icon="holiday">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span>No Class - Graduation Commencement Ceremony</span>
+                </div>
+            </div>
+
+            <!-- Midterm Exam -->
+            <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="midterm">
+                <div class="week-card-header">
+                    <span class="week-badge">Mid-Term</span>
+                </div>
+                <h3 class="card-title">Midterm Examination</h3>
+                <div class="special-placeholder" data-icon="midterm">
+                    <i class="fa-solid fa-file-signature"></i>
+                    <span>Midterm Exam Week (Weeks 1-7 Syllabus)</span>
+                </div>
+            </div>
+
+            <!-- Week 9 -->
+            <div class="week-card" data-category="lists" data-tags="lists">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 09</span>
+                </div>
+                <h3 class="card-title">Singly Linked Lists</h3>
+                <p class="card-desc">Singly linked structures, node dereferencing, head/tail insertion, traversal loops, and deletion logic.</p>
+                <div class="materials-container">
+                    <a href="Week9/DSA_Week9.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Singly Linked List Slides (PDF)</a>
+                    <a href="Week9/Linked_list_guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Linked List Interactive Guide</a>
+                    <a href="Week9/DSA_Lab_6_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 6 Student (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 10 -->
+            <div class="week-card" data-category="lists" data-tags="lists">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 10</span>
+                </div>
+                <h3 class="card-title">Doubly Linked Lists, Stacks & Queues</h3>
+                <p class="card-desc">Double linking nodes, sentinel values, LIFO Stack structures, and FIFO linear Queue pipelines.</p>
+                <div class="materials-container">
+                    <a href="Week10/Doubly_LL_guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Doubly Linked List Guide</a>
+                    <a href="Week10/stack_queue_guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Stack & Queue Interactive Guide</a>
+                    <a href="Week10/DSA_Lab_7_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 7 Student (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 11 -->
+            <div class="week-card" data-category="trees" data-tags="trees">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 11</span>
+                </div>
+                <h3 class="card-title">Trees & Traversals</h3>
+                <p class="card-desc">Hierarchical data structures, root node, height limits, preorder, inorder, and postorder recursive traversals.</p>
+                <div class="materials-container">
+                    <a href="Week11/DSA_Week11.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Tree Structures Slides (PDF)</a>
+                    <a href="Week11/Tree_traversals.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Tree Traversals Interactive Guide</a>
+                    <a href="Week11/DSA_Lab_8_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 8 Student (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 12 -->
+            <div class="week-card" data-category="trees" data-tags="trees">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 12</span>
+                </div>
+                <h3 class="card-title">Binary Search Trees (BST)</h3>
+                <p class="card-desc">BST property constraints, near-optimal lookup logic, dynamic leaf insertion, and node deletion cases.</p>
+                <div class="materials-container">
+                    <a href="Week12/DSA_Week12.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> BST Operations Slides (PDF)</a>
+                    <a href="Week12/BST_operations.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> BST Interactive Guide</a>
+                    <a href="Week12/DSA_Lab_9_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 9 Student (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 13 -->
+            <div class="week-card" data-category="trees" data-tags="trees">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 13</span>
+                </div>
+                <h3 class="card-title">Graphs & Graph Algorithms</h3>
+                <p class="card-desc">Adjacency matrices, adjacency lists, depth-first search (DFS) recursion, and breadth-first search (BFS).</p>
+                <div class="materials-container">
+                    <a href="Week13/DSA_Week13.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Graph Algorithms Slides (PDF)</a>
+                    <a href="Week13/DSA_DFS_recursive.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Recursive DFS Slides (PDF)</a>
+                    <a href="Week13/Graph_Algorithms.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Graph Algorithms Guide</a>
+                    <a href="Week13/DSA_Lab_10_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 10 Student (Notebook)</a>
+                </div>
+            </div>
+
+            <!-- Week 14 (Bridge Holiday) -->
+            <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="holiday">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 14</span>
+                </div>
+                <h3 class="card-title">Bridge Holiday</h3>
+                <div class="special-placeholder" data-icon="holiday">
+                    <i class="fa-solid fa-calendar-day"></i>
+                    <span>No Class - Unofficial Bridge Holiday</span>
+                </div>
+            </div>
+
+            <!-- Week 15 (No Class) -->
+            <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="holiday">
+                <div class="week-card-header">
+                    <span class="week-badge">Week 15</span>
+                </div>
+                <h3 class="card-title">Preparation Week</h3>
+                <div class="special-placeholder" data-icon="holiday">
+                    <i class="fa-solid fa-book-reader"></i>
+                    <span>No Class - Revision & Study Period</span>
+                </div>
+            </div>
+
+            <!-- Final Exam -->
+            <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="final">
+                <div class="week-card-header">
+                    <span class="week-badge">Finals</span>
+                </div>
+                <h3 class="card-title">Final Examination</h3>
+                <div class="special-placeholder" data-icon="final">
+                    <i class="fa-solid fa-award"></i>
+                    <span>Final Exam Week (Comprehensive Syllabus)</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        &copy; Data Structures and Algorithms · Dr. Sirasit Lochanachit
+    </footer>
+
+    <!-- Interactive Logic (Theme, Filter, Search) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Theme toggle setup
+            const body = document.body;
+            const themeBtn = document.getElementById("theme-toggle-btn");
+            const themeText = document.getElementById("theme-text");
+            
+            // Check stored preference
+            const savedTheme = localStorage.getItem("dsa-home-theme") || "light";
+            if (savedTheme === "light") {
+                body.classList.add("light-mode");
+                themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> <span id="theme-text">Dark Mode</span>';
+            } else {
+                body.classList.remove("light-mode");
+                themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> <span id="theme-text">Light Mode</span>';
+            }
+
+            themeBtn.addEventListener("click", () => {
+                body.classList.toggle("light-mode");
+                if (body.classList.contains("light-mode")) {
+                    localStorage.setItem("dsa-home-theme", "light");
+                    themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> <span id="theme-text">Dark Mode</span>';
+                } else {
+                    localStorage.setItem("dsa-home-theme", "dark");
+                    themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> <span id="theme-text">Light Mode</span>';
+                }
+            });
+
+            // Filter Logic
+            const filterBtns = document.querySelectorAll(".filter-btn");
+            const weekCards = document.querySelectorAll(".week-card");
+
+            const updateDashboard = () => {
+                const activeFilter = document.querySelector(".filter-btn.active").getAttribute("data-filter");
+
+                weekCards.forEach(card => {
+                    const tags = card.getAttribute("data-tags").split(" ");
+                    const matchesFilter = activeFilter === "all" || tags.includes(activeFilter);
+
+                    if (matchesFilter) {
+                        card.classList.remove("hidden");
+                    } else {
+                        card.classList.add("hidden");
+                    }
+                });
+            };
+
+            // Setup listeners
+            filterBtns.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    filterBtns.forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+                    updateDashboard();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
