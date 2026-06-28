@@ -12,9 +12,13 @@ Urgency Contact: sirasit.lo@kmitl.ac.th
 
 [VSCode_Tutorial](https://github.com/noswolf/DSA_AIEE/blob/main/Tutorials/VSCode_Tutorial.pdf)
 
+## Main Interactive Guides
+
+[DSA_Guide]()
+
 ## Course Outlines
 
 |Week| Date | Session | Lecture Slides | Interactive Guides | Lab Sheet | Challenges |
 |---|---|---|---|---|---|---|
-|Week 01| 29/06/2026 | 01 | [S01_Introduction](https://github.com/noswolf/DSA_AIEE/blob/main/2026/slides/DSA_Week1_S01.pdf)  | | [Lab #1](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L01/DSA_Lab_1_student.ipynb)  | [Challenge #1](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L01/DSA_Lab_1_Challenge_student.ipynb) |
+|Week 01| 29/06/2026 | 01 | [S01_Introduction](https://github.com/noswolf/DSA_AIEE/blob/main/2026/slides/DSA_Week1_S01.pdf)  | [Guide #1: Basic Python](https://noswolf.github.io/DSA_AIEE/week1.html)| [Lab #1](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L01/DSA_Lab_1_student.ipynb)  | [Challenge #1](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L01/DSA_Lab_1_Challenge_student.ipynb) |
 || | 02 | [S02_Recursion](https://github.com/noswolf/DSA_AIEE/blob/main/2026/slides/DSA_Week1_S02.pdf) | |[Lab #2](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L02/DSA_Lab_2_student.ipynb) <br> [Lab #2 Tutorial](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L02/DSA_Lab_2_tutorial_student.ipynb) | |
