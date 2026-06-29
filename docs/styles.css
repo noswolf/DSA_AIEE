@@ -1836,11 +1836,16 @@ body.light-mode .main-header .btn:hover {
 }
 
 .console-editor-section .panel-subtitle,
-.console-terminal-section .panel-subtitle {
+.console-terminal-section .panel-subtitle,
+.embedded-editor-container .panel-subtitle {
     font-size: 11px;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
+}
+
+body.light-mode .embedded-editor-container .panel-subtitle {
+    color: #94a3b8 !important;
 }
 
 .console-textarea {
@@ -2876,6 +2881,7 @@ body.light-mode .py-dict-row.found {
     .mem-comparison-split {
         grid-template-columns: 1fr;
     }
+
     .mem-vs-badge {
         display: none;
     }
@@ -2896,15 +2902,15 @@ body.light-mode .py-dict-row.found {
     font-size: 11px;
     font-weight: 800;
     color: var(--text-muted);
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15), 0 4px 12px rgba(0,0,0,0.5);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15), 0 4px 12px rgba(0, 0, 0, 0.5);
     flex-shrink: 0;
     align-self: center;
 }
 
 body.light-mode .mem-vs-badge {
     background-color: #ffffff;
-    border-color: rgba(0,0,0,0.12);
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1), 0 4px 12px rgba(0,0,0,0.08);
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .mem-side {
@@ -3408,8 +3414,10 @@ body.light-mode .explorer-btn:hover {
     flex-grow: 1;
 }
 
-.light-mode .flow-code-panel .code-container {
-    color: var(--text-primary);
+.light-mode .flow-code-panel .code-container,
+.light-mode .exception-code-panel .code-container,
+.light-mode .visualizer-code-steps-panel .code-container {
+    color: #f8f8f2 !important;
 }
 
 /* Extracted Layout Classes to Clean Up HTML */
@@ -4986,14 +4994,16 @@ pre[class*="language-"],
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 28px; /* Slightly larger gap to fit the VS badge */
+    gap: 28px;
+    /* Slightly larger gap to fit the VS badge */
     margin: 24px 0;
 }
 
 .code-compare-grid::after {
     content: "VS";
     position: absolute;
-    top: 92px; /* Position it right in the center of the editors */
+    top: 92px;
+    /* Position it right in the center of the editors */
     left: 50%;
     transform: translate(-50%, -50%);
     width: 32px;
@@ -5026,15 +5036,18 @@ body.light-mode .code-compare-grid::after {
         grid-template-columns: 1fr;
         gap: 16px;
     }
+
     .code-compare-grid::after {
-        display: none; /* Hide on mobile since they stack vertically */
+        display: none;
+        /* Hide on mobile since they stack vertically */
     }
 }
 
 /* Ensure C and Python comparison blocks keep their distinct borders and backgrounds */
 .code-compare-block.c-block,
 .c-block {
-    background-color: #1e1515 !important; /* Subtle dark red tint */
+    background-color: #1e1515 !important;
+    /* Subtle dark red tint */
     border: 1px solid rgba(239, 68, 68, 0.2) !important;
     border-left: 4px solid #ef4444 !important;
 }
@@ -5046,7 +5059,8 @@ body.light-mode .code-compare-block.c-block {
 
 .code-compare-block.py-block,
 .py-block {
-    background-color: #111827 !important; /* Subtle dark blue/gray tint */
+    background-color: #111827 !important;
+    /* Subtle dark blue/gray tint */
     border: 1px solid rgba(59, 130, 246, 0.2) !important;
     border-left: 4px solid #3b82f6 !important;
 }
@@ -5063,7 +5077,8 @@ body.light-mode .code-compare-block pre {
     border: none !important;
     padding: 14px !important;
     margin: 0 !important;
-    color: #e2e8f0 !important; /* Always light text — dark backgrounds need this */
+    color: #e2e8f0 !important;
+    /* Always light text — dark backgrounds need this */
 }
 
 /* Block Title Styling - Distinct colors for C and Python */
@@ -5072,7 +5087,8 @@ body.light-mode .code-compare-block pre {
 body.light-mode .code-compare-block.c-block .block-title {
     background-color: rgba(239, 68, 68, 0.12) !important;
     border-bottom: 1px solid rgba(239, 68, 68, 0.25) !important;
-    color: #fca5a5 !important; /* Light red text - clearly readable */
+    color: #fca5a5 !important;
+    /* Light red text - clearly readable */
 }
 
 /* Python Block Title: Blue tinted header bar */
@@ -5080,7 +5096,8 @@ body.light-mode .code-compare-block.c-block .block-title {
 body.light-mode .code-compare-block.py-block .block-title {
     background-color: rgba(59, 130, 246, 0.12) !important;
     border-bottom: 1px solid rgba(59, 130, 246, 0.25) !important;
-    color: #93c5fd !important; /* Light blue text - clearly readable */
+    color: #93c5fd !important;
+    /* Light blue text - clearly readable */
 }
 
 /* Fallback for any other code-compare-block */
@@ -5179,7 +5196,8 @@ body.light-mode .code-compare-block.py-block .block-title {
     background-color: rgba(16, 185, 129, 0.1) !important;
     border: none !important;
     border-top: 1px solid rgba(16, 185, 129, 0.25) !important;
-    color: #34d399 !important; /* Vibrant green */
+    color: #34d399 !important;
+    /* Vibrant green */
     font-family: 'Outfit', sans-serif;
     font-size: 12px;
     font-weight: 700;
@@ -5200,7 +5218,8 @@ body.light-mode .code-compare-block.py-block .block-title {
 body.light-mode .btn-run-live {
     background-color: rgba(16, 185, 129, 0.08) !important;
     border-top: 1px solid rgba(16, 185, 129, 0.2) !important;
-    color: #059669 !important; /* Deep emerald green */
+    color: #059669 !important;
+    /* Deep emerald green */
 }
 
 body.light-mode .btn-run-live:hover {
@@ -5212,7 +5231,8 @@ body.light-mode .btn-run-live:hover {
 .code-compare-block.c-block .btn-run-live {
     background-color: rgba(239, 68, 68, 0.08) !important;
     border-top: 1px solid rgba(239, 68, 68, 0.25) !important;
-    color: #fca5a5 !important; /* Light red */
+    color: #fca5a5 !important;
+    /* Light red */
 }
 
 .code-compare-block.c-block .btn-run-live:hover {
@@ -5223,7 +5243,8 @@ body.light-mode .btn-run-live:hover {
 body.light-mode .code-compare-block.c-block .btn-run-live {
     background-color: rgba(239, 68, 68, 0.08) !important;
     border-top: 1px solid rgba(239, 68, 68, 0.2) !important;
-    color: #dc2626 !important; /* Deep red */
+    color: #dc2626 !important;
+    /* Deep red */
 }
 
 body.light-mode .code-compare-block.c-block .btn-run-live:hover {
@@ -5235,7 +5256,8 @@ body.light-mode .code-compare-block.c-block .btn-run-live:hover {
 .live-editor-output,
 body.light-mode .live-code-output,
 body.light-mode .live-editor-output {
-    background-color: #090d16 !important; /* Terminal black */
+    background-color: #090d16 !important;
+    /* Terminal black */
     border: none !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     color: #e2e8f0 !important;
@@ -5340,7 +5362,8 @@ body.light-mode .lab-tab-content {
 
 .embedded-editor-container {
     border: 1px solid rgba(59, 130, 246, 0.2) !important;
-    background-color: #0b0f19 !important; /* Always dark background */
+    background-color: #0b0f19 !important;
+    /* Always dark background */
     border-radius: 12px;
 }
 

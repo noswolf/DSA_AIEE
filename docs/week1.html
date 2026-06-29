@@ -91,7 +91,8 @@
                     <button class="btn btn-secondary" id="theme-toggle-btn" title="Toggle Light/Dark Mode">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-                    <button class="btn btn-secondary toggle-console-btn" id="toggle-console-btn" title="Toggle Terminal Console">
+                    <button class="btn btn-secondary toggle-console-btn" id="toggle-console-btn"
+                        title="Toggle Terminal Console">
                         <i class="fa-solid fa-terminal"></i>
                     </button>
                 </div>
@@ -109,7 +110,8 @@
                             </div>
                             <div class="mod-header-text">
                                 <h2>3 Reasons Why Python for Data Structures and Algorithms</h2>
-                                <p>From memory management to built-in types and readability — three core advantages Python gives you over C when studying Data Structures & Algorithms.</p>
+                                <p>From memory management to built-in types and readability — three core advantages
+                                    Python gives you over C when studying Data Structures & Algorithms.</p>
                             </div>
                         </div>
                         <div class="why-horizontal-tabs">
@@ -137,28 +139,29 @@
                                     <span class="tab-btn-desc">Clean & Fast Operations</span>
                                 </div>
                             </button>
+                        </div>
                     </div>
-                </div>
 
                     <div class="grid-2col">
                         <!-- <div class="card glass interactive-why-python"> -->
-                            <!-- <div class="card-body stacked-body"> -->
-                                <!-- Top: Horizontal Interactive Tab Buttons -->
-                                
+                        <!-- <div class="card-body stacked-body"> -->
+                        <!-- Top: Horizontal Interactive Tab Buttons -->
 
-                                <!-- Bottom: Tab Content Display -->
-                                <div class="why-content-panel">
-                                    
-                                    <!-- Content 1: Focus on Logic -->
-                                    <div class="why-tab-content active" id="why-content-logic">
-                                        <h4>No Memory Resizing & Allocation Worries</h4>
-                                        <p>Python allows you to write abstract algorithms without worrying about raw memory address management, segmentation faults, and manual buffer reallocations.</p>
-                                        
-                                        <div class="code-compare-grid compact-compare">
-                                            <div class="code-compare-block c-block">
-                                                <div class="block-title">C Dynamic Array</div>
-                                                <div class="live-editor-wrapper">
-                                                    <pre><code>// Resize array from 5 to 10
+
+                        <!-- Bottom: Tab Content Display -->
+                        <div class="why-content-panel">
+
+                            <!-- Content 1: Focus on Logic -->
+                            <div class="why-tab-content active" id="why-content-logic">
+                                <h4>No Memory Resizing & Allocation Worries</h4>
+                                <p>Python allows you to write abstract algorithms without worrying about raw memory
+                                    address management, segmentation faults, and manual buffer reallocations.</p>
+
+                                <div class="code-compare-grid compact-compare">
+                                    <div class="code-compare-block c-block">
+                                        <div class="block-title">C Dynamic Array</div>
+                                        <div class="live-editor-wrapper">
+                                            <pre><code>// Resize array from 5 to 10
 int *arr = malloc(5 * sizeof(int));
 if (arr == NULL) return ERROR;
 int *temp = realloc(arr, 10 * sizeof(int));
@@ -166,91 +169,113 @@ if (temp == NULL) { free(arr); return ERROR; }
 arr = temp;
 // ... do operations ...
 free(arr); // Don't forget!</code></pre>
-                                                    <button class="btn-run-live" onclick="runStaticCCode('logic-c-output')"><i class="fa-solid fa-play"></i> Run Code</button>
-                                                </div>
-                                                <pre class="live-code-output" id="logic-c-output">Click Run Code to execute...</pre>
-                                            </div>
-                                            <div class="code-compare-block py-block live-editor-block">
-                                                <div class="block-title">Python List Resizing (Live Editor)</div>
-                                                <div class="live-editor-wrapper">
-                                                    <textarea class="live-code-textarea" id="logic-py-code" rows="5"># Automatic allocation and resizing
+                                            <button class="btn-run-live" onclick="runStaticCCode('logic-c-output')"><i
+                                                    class="fa-solid fa-play"></i> Run Code</button>
+                                        </div>
+                                        <pre class="live-code-output"
+                                            id="logic-c-output">Click Run Code to execute...</pre>
+                                    </div>
+                                    <div class="code-compare-block py-block live-editor-block">
+                                        <div class="block-title">Python List Resizing (Live Editor)</div>
+                                        <div class="live-editor-wrapper">
+                                            <textarea class="live-code-textarea" id="logic-py-code" rows="5"># Automatic allocation and resizing
 arr = [1, 2, 3, 4, 5]
 arr.append(6) # Resizes on the fly!
 print("List:", arr)
 print("Length:", len(arr))</textarea>
-                                                    <button class="btn-run-live" onclick="runLiveCode('logic-py-code', 'logic-py-output')"><i class="fa-solid fa-play"></i> Run Code</button>
+                                            <button class="btn-run-live"
+                                                onclick="runLiveCode('logic-py-code', 'logic-py-output')"><i
+                                                    class="fa-solid fa-play"></i> Run Code</button>
+                                        </div>
+                                        <pre class="live-code-output"
+                                            id="logic-py-output">Click Run Code to execute...</pre>
+                                    </div>
+                                </div>
+
+                                <!-- Interactive Simulator 1 -->
+                                <div class="simulator-box">
+                                    <span class="sim-title"><i class="fa-solid fa-desktop"></i> Interactive Buffer
+                                        Resizer Simulator</span>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Click
+                                        "Append Element" to add values. See what C has to do when the initial capacity
+                                        of 5 overflows vs Python's automatic resize.</p>
+                                    <div class="sim-controls">
+                                        <button class="btn btn-secondary" id="append-mem-btn"
+                                            style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-plus"></i>
+                                            Append Element</button>
+                                        <button class="btn btn-danger" id="reset-mem-btn"
+                                            style="padding: 6px 12px; font-size: 12px;"><i
+                                                class="fa-solid fa-rotate-left"></i> Reset</button>
+                                    </div>
+                                    <div class="mem-comparison-split">
+                                        <!-- Left Side: C Memory -->
+                                        <div class="mem-side c-mem-side">
+                                            <div class="panel-subtitle-small">C Language: Manual Buffer Block</div>
+                                            <div class="mem-blocks-container">
+                                                <div class="mem-row-label">C Buffer Block (Initial Size = 5)</div>
+                                                <div class="mem-row" id="mem-old-row">
+                                                    <div class="mem-cell" id="old-cell-0">0</div>
+                                                    <div class="mem-cell" id="old-cell-1">1</div>
+                                                    <div class="mem-cell" id="old-cell-2">2</div>
+                                                    <div class="mem-cell" id="old-cell-3">3</div>
+                                                    <div class="mem-cell" id="old-cell-4">4</div>
                                                 </div>
-                                                <pre class="live-code-output" id="logic-py-output">Click Run Code to execute...</pre>
+
+                                                <div class="mem-row-label" id="new-row-label"
+                                                    style="display: none; margin-top: 8px;">C Reallocated Buffer (New
+                                                    Size = 10)</div>
+                                                <div class="mem-row" id="mem-new-row" style="display: none;">
+                                                    <div class="mem-cell" id="new-cell-0">0</div>
+                                                    <div class="mem-cell" id="new-cell-1">1</div>
+                                                    <div class="mem-cell" id="new-cell-2">2</div>
+                                                    <div class="mem-cell" id="new-cell-3">3</div>
+                                                    <div class="mem-cell" id="new-cell-4">4</div>
+                                                    <div class="mem-cell" id="new-cell-5">5</div>
+                                                    <div class="mem-cell" id="new-cell-6">6</div>
+                                                    <div class="mem-cell" id="new-cell-7">7</div>
+                                                    <div class="mem-cell" id="new-cell-8">8</div>
+                                                    <div class="mem-cell" id="new-cell-9">9</div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <!-- Interactive Simulator 1 -->
-                                        <div class="simulator-box">
-                                            <span class="sim-title"><i class="fa-solid fa-desktop"></i> Interactive Buffer Resizer Simulator</span>
-                                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Click "Append Element" to add values. See what C has to do when the initial capacity of 5 overflows vs Python's automatic resize.</p>
-                                            <div class="sim-controls">
-                                                <button class="btn btn-secondary" id="append-mem-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-plus"></i> Append Element</button>
-                                                <button class="btn btn-danger" id="reset-mem-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                                        <!-- Right Side: Python Memory -->
+                                        <div class="mem-vs-badge">VS</div>
+                                        <div class="mem-side py-mem-side">
+                                            <div class="panel-subtitle-small"><i class="fa-brands fa-python"
+                                                    style="margin-right:5px;"></i>Python: Dynamic Over-allocation List
                                             </div>
-                                            <div class="mem-comparison-split">
-                                                <!-- Left Side: C Memory -->
-                                                <div class="mem-side c-mem-side">
-                                                    <div class="panel-subtitle-small">C Language: Manual Buffer Block</div>
-                                                    <div class="mem-blocks-container">
-                                                        <div class="mem-row-label">C Buffer Block (Initial Size = 5)</div>
-                                                        <div class="mem-row" id="mem-old-row">
-                                                            <div class="mem-cell" id="old-cell-0">0</div>
-                                                            <div class="mem-cell" id="old-cell-1">1</div>
-                                                            <div class="mem-cell" id="old-cell-2">2</div>
-                                                            <div class="mem-cell" id="old-cell-3">3</div>
-                                                            <div class="mem-cell" id="old-cell-4">4</div>
-                                                        </div>
-                                                        
-                                                        <div class="mem-row-label" id="new-row-label" style="display: none; margin-top: 8px;">C Reallocated Buffer (New Size = 10)</div>
-                                                        <div class="mem-row" id="mem-new-row" style="display: none;">
-                                                            <div class="mem-cell" id="new-cell-0">0</div>
-                                                            <div class="mem-cell" id="new-cell-1">1</div>
-                                                            <div class="mem-cell" id="new-cell-2">2</div>
-                                                            <div class="mem-cell" id="new-cell-3">3</div>
-                                                            <div class="mem-cell" id="new-cell-4">4</div>
-                                                            <div class="mem-cell" id="new-cell-5">5</div>
-                                                            <div class="mem-cell" id="new-cell-6">6</div>
-                                                            <div class="mem-cell" id="new-cell-7">7</div>
-                                                            <div class="mem-cell" id="new-cell-8">8</div>
-                                                            <div class="mem-cell" id="new-cell-9">9</div>
-                                                        </div>
-                                                    </div>
+                                            <div class="mem-blocks-container">
+                                                <div class="mem-row-label"
+                                                    style="display: flex; justify-content: space-between; align-items: center;">
+                                                    <span>Active List Slots</span>
+                                                    <span id="py-mem-cap-badge" class="tag"
+                                                        style="background-color: var(--accent-blue-glow); color: var(--accent-blue); padding: 1px 6px;">Capacity:
+                                                        0</span>
                                                 </div>
-
-                                                <!-- Right Side: Python Memory -->
-                                                <div class="mem-vs-badge">VS</div>
-                                                <div class="mem-side py-mem-side">
-                                                    <div class="panel-subtitle-small"><i class="fa-brands fa-python" style="margin-right:5px;"></i>Python: Dynamic Over-allocation List</div>
-                                                    <div class="mem-blocks-container">
-                                                        <div class="mem-row-label" style="display: flex; justify-content: space-between; align-items: center;">
-                                                            <span>Active List Slots</span>
-                                                            <span id="py-mem-cap-badge" class="tag" style="background-color: var(--accent-blue-glow); color: var(--accent-blue); padding: 1px 6px;">Capacity: 0</span>
-                                                        </div>
-                                                        <div class="mem-row" id="mem-py-row">
-                                                            <!-- Generated dynamically in JS -->
-                                                        </div>
-                                                    </div>
+                                                <div class="mem-row" id="mem-py-row">
+                                                    <!-- Generated dynamically in JS -->
                                                 </div>
                                             </div>
-                                            <div class="sim-status" id="mem-status-text">Buffer is empty. Add elements to fill the memory slots.</div>
                                         </div>
                                     </div>
+                                    <div class="sim-status" id="mem-status-text">Buffer is empty. Add elements to fill
+                                        the memory slots.</div>
+                                </div>
+                            </div>
 
-                                    <!-- Content 2: Rich Built-in Types -->
-                                    <div class="why-tab-content" id="why-content-types">
-                                        <h4>Native Advanced Structures</h4>
-                                        <p>Python lists, tuples, and dictionaries are powerful, natively-implemented, and highly-optimized data structures. No need to implement a Hash Map or Dynamic Array from scratch.</p>
-                                        
-                                        <div class="code-compare-grid compact-compare">
-                                            <div class="code-compare-block c-block">
-                                                <div class="block-title">C Hash Map (Custom)</div>
-                                                <div class="live-editor-wrapper">
-                                                    <pre><code>// Requires writing hash function, 
+                            <!-- Content 2: Rich Built-in Types -->
+                            <div class="why-tab-content" id="why-content-types">
+                                <h4>Native Advanced Structures</h4>
+                                <p>Python lists, tuples, and dictionaries are powerful, natively-implemented, and
+                                    highly-optimized data structures. No need to implement a Hash Map or Dynamic Array
+                                    from scratch.</p>
+
+                                <div class="code-compare-grid compact-compare">
+                                    <div class="code-compare-block c-block">
+                                        <div class="block-title">C Hash Map (Custom)</div>
+                                        <div class="live-editor-wrapper">
+                                            <pre><code>// Requires writing hash function, 
 // structs, handling collisions, etc.
 int hash = hash_function("Alice");
 HashNode *node = hash_table[hash];
@@ -261,29 +286,34 @@ while(node != NULL) {
     }
     node = node->next;
 }</code></pre>
-                                                    <button class="btn-run-live" onclick="runStaticCCode('types-c-output')"><i class="fa-solid fa-play"></i> Run Code</button>
-                                                </div>
-                                                <pre class="live-code-output" id="types-c-output">Click Run Code to execute...</pre>
-                                            </div>
-                                            <div class="code-compare-block py-block live-editor-block">
-                                                <div class="block-title">Python native Dict (Live Editor)</div>
-                                                <div class="live-editor-wrapper">
-                                                    <textarea class="live-code-textarea" id="types-py-code" rows="5"># Native O(1) Hash Map (Dictionary)
+                                            <button class="btn-run-live" onclick="runStaticCCode('types-c-output')"><i
+                                                    class="fa-solid fa-play"></i> Run Code</button>
+                                        </div>
+                                        <pre class="live-code-output"
+                                            id="types-c-output">Click Run Code to execute...</pre>
+                                    </div>
+                                    <div class="code-compare-block py-block live-editor-block">
+                                        <div class="block-title">Python native Dict (Live Editor)</div>
+                                        <div class="live-editor-wrapper">
+                                            <textarea class="live-code-textarea" id="types-py-code" rows="5"># Native O(1) Hash Map (Dictionary)
 grades = {"Alice": "A", "Bob": "B", "Charlie": "C", "David": "B+"}
 # Try searching for David or adding a student!
 print("Alice's Grade:", grades.get("Alice"))
 print("David's Grade:", grades.get("David"))</textarea>
-                                                    <button class="btn-run-live" onclick="runLiveCode('types-py-code', 'types-py-output')"><i class="fa-solid fa-play"></i> Run Code</button>
-                                                </div>
-                                                <pre class="live-code-output" id="types-py-output">Click Run Code to execute...</pre>
-                                            </div>
+                                            <button class="btn-run-live"
+                                                onclick="runLiveCode('types-py-code', 'types-py-output')"><i
+                                                    class="fa-solid fa-play"></i> Run Code</button>
                                         </div>
-
-
+                                        <pre class="live-code-output"
+                                            id="types-py-output">Click Run Code to execute...</pre>
                                     </div>
+                                </div>
 
-                                     <!-- Interactive Simulator 2 -->
-                                        <!-- <div class="simulator-box">
+
+                            </div>
+
+                            <!-- Interactive Simulator 2 -->
+                            <!-- <div class="simulator-box">
                                             <span class="sim-title"><i class="fa-solid fa-desktop"></i> Interactive Hash Table Collision Simulator</span>
                                             <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Select a student name. "David" collides with "Alice" on Bucket Index 1, demonstrating C's linked list traversal vs Python's native O(1) lookup.</p>
                                             <div class="sim-controls">
@@ -373,99 +403,144 @@ print("David's Grade:", grades.get("David"))</textarea>
                                             <div class="sim-status" id="hash-status-text">Select a student name and click Find Grade to start simulation.</div>
                                         </div> -->
 
-                                    <!-- Content 3: Readability & Speed -->
-                                    <div class="why-tab-content" id="why-content-readability">
-                                        <h4>Clean & Fast Operations</h4>
-                                        <p>Python's syntax is specifically designed to eliminate cognitive overhead. It reads almost exactly like English and academic pseudo-code, allowing you to focus on the logical design of data structures and algorithms rather than low-level mechanical syntax details.</p>
-                                        
-                                        <!-- Highlight Cards showing Pseudo-code comparison -->
-                                        <div class="pseudo-compare-container" style="margin: 1.5rem 0; display: flex; flex-direction: column; gap: 1.25rem;">
-                                            
-                                            <!-- 1. Swapping Elements -->
-                                            <div class="pseudo-compare-card" style="background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
-                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
-                                                    <span style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent-cyan);"><i class="fa-solid fa-arrows-rotate"></i> 1. Swapping Elements</span>
-                                                    <span class="tag" style="background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan);">Readability Level: Exceptionally Easy</span>
+                            <!-- Content 3: Readability & Speed -->
+                            <div class="why-tab-content" id="why-content-readability">
+                                <h4>Clean & Fast Operations</h4>
+                                <p>Python's syntax is specifically designed to eliminate cognitive overhead. It reads
+                                    almost exactly like English and academic pseudo-code, allowing you to focus on the
+                                    logical design of data structures and algorithms rather than low-level mechanical
+                                    syntax details.</p>
+
+                                <!-- Highlight Cards showing Pseudo-code comparison -->
+                                <div class="pseudo-compare-container"
+                                    style="margin: 1.5rem 0; display: flex; flex-direction: column; gap: 1.25rem;">
+
+                                    <!-- 1. Swapping Elements -->
+                                    <div class="pseudo-compare-card"
+                                        style="background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
+                                        <div
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                                            <span
+                                                style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent-cyan);"><i
+                                                    class="fa-solid fa-arrows-rotate"></i> 1. Swapping Elements</span>
+                                            <span class="tag"
+                                                style="background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan);">Readability
+                                                Level: Exceptionally Easy</span>
+                                        </div>
+                                        <div class="code-compare-grid compact-compare"
+                                            style="margin: 0; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                                            <div class="code-compare-block"
+                                                style="border-left: 3px solid var(--text-muted);">
+                                                <div class="block-title" style="color: var(--text-muted);">Pseudo-code
                                                 </div>
-                                                <div class="code-compare-grid compact-compare" style="margin: 0; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-                                                    <div class="code-compare-block" style="border-left: 3px solid var(--text-muted);">
-                                                        <div class="block-title" style="color: var(--text-muted);">Pseudo-code</div>
-                                                        <pre><code>swap(a, b)</code></pre>
-                                                    </div>
-                                                    <div class="code-compare-block py-block">
-                                                        <div class="block-title">Python Code</div>
-                                                        <pre><code>a, b = b, a</code></pre>
-                                                    </div>
-                                                    <div class="code-compare-block c-block">
-                                                        <div class="block-title">C Code</div>
-                                                        <pre><code>int temp = a;
+                                                <pre><code>swap(a, b)</code></pre>
+                                            </div>
+                                            <div class="code-compare-block py-block">
+                                                <div class="block-title">Python Code</div>
+                                                <pre><code>a, b = b, a</code></pre>
+                                            </div>
+                                            <div class="code-compare-block c-block">
+                                                <div class="block-title">C Code</div>
+                                                <pre><code>int temp = a;
 a = b;
 b = temp;</code></pre>
-                                                    </div>
-                                                </div>
-                                                <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">Python uses <strong>tuple unpacking</strong> to swap values in a single statement. In C, you must declare a temporary variable to hold the state, introducing extra steps to simple sorting swaps.</p>
                                             </div>
+                                        </div>
+                                        <p
+                                            style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">
+                                            Python uses <strong>tuple unpacking</strong> to swap values in a single
+                                            statement. In C, you must declare a temporary variable to hold the state,
+                                            introducing extra steps to simple sorting swaps.</p>
+                                    </div>
 
-                                            <!-- 2. Checking Element Existence -->
-                                            <div class="pseudo-compare-card" style="background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
-                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
-                                                    <span style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent-purple);"><i class="fa-solid fa-magnifying-glass"></i> 2. Checking Element Existence (Search)</span>
-                                                    <span class="tag" style="background: rgba(168, 85, 247, 0.1); color: var(--accent-purple);">Readability Level: Like Plain English</span>
+                                    <!-- 2. Checking Element Existence -->
+                                    <div class="pseudo-compare-card"
+                                        style="background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
+                                        <div
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                                            <span
+                                                style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent-purple);"><i
+                                                    class="fa-solid fa-magnifying-glass"></i> 2. Checking Element
+                                                Existence (Search)</span>
+                                            <span class="tag"
+                                                style="background: rgba(168, 85, 247, 0.1); color: var(--accent-purple);">Readability
+                                                Level: Like Plain English</span>
+                                        </div>
+                                        <div class="code-compare-grid compact-compare"
+                                            style="margin: 0; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                                            <div class="code-compare-block"
+                                                style="border-left: 3px solid var(--text-muted);">
+                                                <div class="block-title" style="color: var(--text-muted);">Pseudo-code
                                                 </div>
-                                                <div class="code-compare-grid compact-compare" style="margin: 0; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-                                                    <div class="code-compare-block" style="border-left: 3px solid var(--text-muted);">
-                                                        <div class="block-title" style="color: var(--text-muted);">Pseudo-code</div>
-                                                        <pre><code>if target is in array</code></pre>
-                                                    </div>
-                                                    <div class="code-compare-block py-block">
-                                                        <div class="block-title">Python Code</div>
-                                                        <pre><code>if target in arr:</code></pre>
-                                                    </div>
-                                                    <div class="code-compare-block c-block">
-                                                        <div class="block-title">C Code</div>
-                                                        <pre><code>bool found = false;
+                                                <pre><code>if target is in array</code></pre>
+                                            </div>
+                                            <div class="code-compare-block py-block">
+                                                <div class="block-title">Python Code</div>
+                                                <pre><code>if target in arr:</code></pre>
+                                            </div>
+                                            <div class="code-compare-block c-block">
+                                                <div class="block-title">C Code</div>
+                                                <pre><code>bool found = false;
 for(int i = 0; i &lt; n; i++) {
     if(arr[i] == target) {
         found = true;
         break;
     }
 }</code></pre>
-                                                    </div>
-                                                </div>
-                                                <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">Python's <code>in</code> operator makes search membership trivial. In C, you must write a full loop iteration, manage index bounds, test matching conditions, and break manually.</p>
                                             </div>
+                                        </div>
+                                        <p
+                                            style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">
+                                            Python's <code>in</code> operator makes search membership trivial. In C, you
+                                            must write a full loop iteration, manage index bounds, test matching
+                                            conditions, and break manually.</p>
+                                    </div>
 
-                                            <!-- 3. Filtering Data -->
-                                            <div class="pseudo-compare-card" style="background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
-                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
-                                                    <span style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent-green);"><i class="fa-solid fa-filter"></i> 3. Filtering Data (List Comprehensions)</span>
-                                                    <span class="tag" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">Readability Level: High (Set Notation)</span>
+                                    <!-- 3. Filtering Data -->
+                                    <div class="pseudo-compare-card"
+                                        style="background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
+                                        <div
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                                            <span
+                                                style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent-green);"><i
+                                                    class="fa-solid fa-filter"></i> 3. Filtering Data (List
+                                                Comprehensions)</span>
+                                            <span class="tag"
+                                                style="background: rgba(16, 185, 129, 0.1); color: var(--accent-green);">Readability
+                                                Level: High (Set Notation)</span>
+                                        </div>
+                                        <div class="code-compare-grid compact-compare"
+                                            style="margin: 0; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                                            <div class="code-compare-block"
+                                                style="border-left: 3px solid var(--text-muted);">
+                                                <div class="block-title" style="color: var(--text-muted);">Pseudo-code
                                                 </div>
-                                                <div class="code-compare-grid compact-compare" style="margin: 0; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-                                                    <div class="code-compare-block" style="border-left: 3px solid var(--text-muted);">
-                                                        <div class="block-title" style="color: var(--text-muted);">Pseudo-code</div>
-                                                        <pre><code>filter even elements from arr</code></pre>
-                                                    </div>
-                                                    <div class="code-compare-block py-block">
-                                                        <div class="block-title">Python Code</div>
-                                                        <pre><code>evens = [x for x in arr if x % 2 == 0]</code></pre>
-                                                    </div>
-                                                    <div class="code-compare-block c-block">
-                                                        <div class="block-title">C Code</div>
-                                                        <pre><code>int evens[100];
+                                                <pre><code>filter even elements from arr</code></pre>
+                                            </div>
+                                            <div class="code-compare-block py-block">
+                                                <div class="block-title">Python Code</div>
+                                                <pre><code>evens = [x for x in arr if x % 2 == 0]</code></pre>
+                                            </div>
+                                            <div class="code-compare-block c-block">
+                                                <div class="block-title">C Code</div>
+                                                <pre><code>int evens[100];
 int count = 0;
 for(int i = 0; i &lt; n; i++) {
     if(arr[i] % 2 == 0) {
         evens[count++] = arr[i];
     }
 }</code></pre>
-                                                    </div>
-                                                </div>
-                                                <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">Python's <strong>list comprehension</strong> mimics standard mathematical builder notation. C requires defining fixed buffers, tracking a size/index counter, and writing loop logic.</p>
                                             </div>
                                         </div>
+                                        <p
+                                            style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">
+                                            Python's <strong>list comprehension</strong> mimics standard mathematical
+                                            builder notation. C requires defining fixed buffers, tracking a size/index
+                                            counter, and writing loop logic.</p>
+                                    </div>
+                                </div>
 
-                                        <!-- <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; margin-top: 1.75rem; margin-bottom: 0.5rem; color: var(--text-primary);"><i class="fa-solid fa-scissors" style="color: var(--accent-blue);"></i> 4. Array Slicing: Extracting Sub-Arrays</h5>
+                                <!-- <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; margin-top: 1.75rem; margin-bottom: 0.5rem; color: var(--text-primary);"><i class="fa-solid fa-scissors" style="color: var(--accent-blue);"></i> 4. Array Slicing: Extracting Sub-Arrays</h5>
                                         <p style="margin-bottom: 1rem;">Consider extracting a portion of an array. Python uses the elegant slice notation <code>arr[start:end]</code>, which mirrors logical index intervals. In C, you must write a copy loop, manage target offset counters, and allocate sufficient contiguous elements.</p>
  
                                         <div class="code-compare-grid compact-compare">
@@ -494,9 +569,9 @@ print("Sliced Array:", slice_arr)</textarea>
                                                 <pre class="live-code-output" id="readability-py-output">Click Run Code to execute...</pre>
                                             </div>
                                         </div> -->
- 
-                                        <!-- Interactive Simulator 3 -->
-                                        <!-- <div class="simulator-box">
+
+                                <!-- Interactive Simulator 3 -->
+                                <!-- <div class="simulator-box">
                                             <span class="sim-title"><i class="fa-solid fa-desktop"></i> Interactive Array Slicing Simulator</span>
                                             <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Drag the sliders to change start and end slicing indices. See how C's for-loop indices and Python's range slicing update dynamically.</p>
                                             <div class="slice-blocks" id="slice-blocks-container">
@@ -585,7 +660,8 @@ print("Sliced Array:", slice_arr)</textarea>
                         </div>
                         <div class="mod-header-text">
                             <h2>Module 1: Python Basics</h2>
-                            <p>Learn how basic programming concepts map from static C syntax to dynamic Python semantics.</p>
+                            <p>Learn how basic programming concepts map from static C syntax to dynamic Python
+                                semantics.</p>
                         </div>
                     </div>
 
@@ -623,87 +699,144 @@ age = "twenty"   # Now refers to a string</code></pre>
                                 </div>
 
                                 <!-- Dynamic Typing Interactive Visualizer -->
-                                <div class="visualizer-simulator-box dynamic-typing-visualizer" id="dynamic-typing-visualizer-section" style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius-card); padding: 1.5rem; box-shadow: var(--shadow-sm); margin: 1.5rem 0;">
-                                    <div class="visualizer-header-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-                                        <h5 class="sim-title" style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
-                                            <i class="fa-solid fa-microchip" style="color: var(--accent-blue);"></i> Python Dynamic Typing
+                                <div class="visualizer-simulator-box dynamic-typing-visualizer"
+                                    id="dynamic-typing-visualizer-section"
+                                    style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius-card); padding: 1.5rem; box-shadow: var(--shadow-sm); margin: 1.5rem 0;">
+                                    <div class="visualizer-header-row"
+                                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+                                        <h5 class="sim-title"
+                                            style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                                            <i class="fa-solid fa-microchip" style="color: var(--accent-blue);"></i>
+                                            Python Dynamic Typing
                                         </h5>
                                         <div class="sim-controls" style="display: flex; gap: 8px;">
-                                            <button class="btn btn-secondary" id="typing-prev-btn" style="padding: 6px 12px; font-size: 12px;" disabled><i class="fa-solid fa-chevron-left"></i> Prev</button>
-                                            <button class="btn btn-primary" id="typing-next-btn" style="padding: 6px 12px; font-size: 12px;">Next Step <i class="fa-solid fa-chevron-right"></i></button>
-                                            <button class="btn btn-secondary" id="typing-reset-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                                            <button class="btn btn-secondary" id="typing-prev-btn"
+                                                style="padding: 6px 12px; font-size: 12px;" disabled><i
+                                                    class="fa-solid fa-chevron-left"></i> Prev</button>
+                                            <button class="btn btn-primary" id="typing-next-btn"
+                                                style="padding: 6px 12px; font-size: 12px;">Next Step <i
+                                                    class="fa-solid fa-chevron-right"></i></button>
+                                            <button class="btn btn-secondary" id="typing-reset-btn"
+                                                style="padding: 6px 12px; font-size: 12px;"><i
+                                                    class="fa-solid fa-rotate-left"></i> Reset</button>
                                         </div>
                                     </div>
-                                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0; line-height: 1.4;">
-                                        In Python, <strong>variables are name labels pointing to dynamic objects in memory</strong>, rather than storage boxes like in C. Click <strong>Next Step</strong> to step through code execution line by line and see variable references update.
+                                    <p
+                                        style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0; line-height: 1.4;">
+                                        In Python, <strong>variables are name labels pointing to dynamic objects in
+                                            memory</strong>, rather than storage boxes like in C. Click <strong>Next
+                                            Step</strong> to step through code execution line by line and see variable
+                                        references update.
                                     </p>
-                                    
-                                    <div class="visualizer-grid-2col" style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 1.5rem; min-height: 280px;">
+
+                                    <div class="visualizer-grid-2col"
+                                        style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 1.5rem; min-height: 280px;">
                                         <!-- Code Steps column -->
-                                        <div class="visualizer-code-steps-panel" style="padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+                                        <div class="visualizer-code-steps-panel"
+                                            style="padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
                                             <div>
-                                                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Active Code Trace</div>
-                                                <div class="visualizer-code-lines" style="display: flex; flex-direction: column; gap: 8px; font-family: 'Fira Code', monospace; font-size: 13px;">
-                                                    <div class="v-code-line" id="v-line-1" style="padding: 6px 10px; border-radius: 6px; border-left: 3px solid transparent; display: flex; justify-content: space-between; transition: var(--transition-fast); background-color: rgba(255,255,255,0.01);">
-                                                        <span><span style="color: var(--text-muted); margin-right: 12px;">1</span>age = 20</span>
+                                                <div
+                                                    style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">
+                                                    Active Code Trace</div>
+                                                <div class="visualizer-code-lines"
+                                                    style="display: flex; flex-direction: column; gap: 8px; font-family: 'Fira Code', monospace; font-size: 13px;">
+                                                    <div class="v-code-line" id="v-line-1"
+                                                        style="padding: 6px 10px; border-radius: 6px; border-left: 3px solid transparent; display: flex; justify-content: space-between; transition: var(--transition-fast); background-color: rgba(255,255,255,0.01);">
+                                                        <span><span
+                                                                style="color: var(--text-muted); margin-right: 12px;">1</span>age
+                                                            = 20</span>
                                                     </div>
-                                                    <div class="v-code-line" id="v-line-2" style="padding: 6px 10px; border-radius: 6px; border-left: 3px solid transparent; display: flex; justify-content: space-between; transition: var(--transition-fast); background-color: rgba(255,255,255,0.01);">
-                                                        <span><span style="color: var(--text-muted); margin-right: 12px;">2</span>gpa = 3.85</span>
+                                                    <div class="v-code-line" id="v-line-2"
+                                                        style="padding: 6px 10px; border-radius: 6px; border-left: 3px solid transparent; display: flex; justify-content: space-between; transition: var(--transition-fast); background-color: rgba(255,255,255,0.01);">
+                                                        <span><span
+                                                                style="color: var(--text-muted); margin-right: 12px;">2</span>gpa
+                                                            = 3.85</span>
                                                     </div>
-                                                    <div class="v-code-line" id="v-line-3" style="padding: 6px 10px; border-radius: 6px; border-left: 3px solid transparent; display: flex; justify-content: space-between; transition: var(--transition-fast); background-color: rgba(255,255,255,0.01);">
-                                                        <span><span style="color: var(--text-muted); margin-right: 12px;">3</span>grade = 'A'</span>
+                                                    <div class="v-code-line" id="v-line-3"
+                                                        style="padding: 6px 10px; border-radius: 6px; border-left: 3px solid transparent; display: flex; justify-content: space-between; transition: var(--transition-fast); background-color: rgba(255,255,255,0.01);">
+                                                        <span><span
+                                                                style="color: var(--text-muted); margin-right: 12px;">3</span>grade
+                                                            = 'A'</span>
                                                     </div>
-                                                    <div class="v-code-line" id="v-line-4" style="padding: 6px 10px; border-radius: 6px; border-left: 3px solid transparent; display: flex; justify-content: space-between; transition: var(--transition-fast); background-color: rgba(255,255,255,0.01);">
-                                                        <span><span style="color: var(--text-muted); margin-right: 12px;">4</span>age = "twenty"</span>
+                                                    <div class="v-code-line" id="v-line-4"
+                                                        style="padding: 6px 10px; border-radius: 6px; border-left: 3px solid transparent; display: flex; justify-content: space-between; transition: var(--transition-fast); background-color: rgba(255,255,255,0.01);">
+                                                        <span><span
+                                                                style="color: var(--text-muted); margin-right: 12px;">4</span>age
+                                                            = "twenty"</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <!-- Step Explanation Box -->
-                                            <div class="v-explanation-box" id="typing-explanation-box" style="background-color: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary); margin-top: 1rem; border-left: 3px solid var(--accent-blue);">
-                                                Click <strong>Next Step</strong> to begin the visual step-by-step code simulation.
+                                            <div class="v-explanation-box" id="typing-explanation-box"
+                                                style="background-color: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary); margin-top: 1rem; border-left: 3px solid var(--accent-blue);">
+                                                Click <strong>Next Step</strong> to begin the visual step-by-step code
+                                                simulation.
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Memory Graph column -->
-                                        <div class="visualizer-memory-panel" style="padding: 1rem; display: flex; flex-direction: column; position: relative; overflow: hidden; min-height: 280px;">
-                                            <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Dynamic Memory (Stack Namespace & Heap Objects)</div>
-                                            
-                                            <div class="memory-flex-layout" style="display: flex; justify-content: space-between; flex: 1; position: relative; min-height: 220px;">
-                                                
+                                        <div class="visualizer-memory-panel"
+                                            style="padding: 1rem; display: flex; flex-direction: column; position: relative; overflow: hidden; min-height: 280px;">
+                                            <div
+                                                style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">
+                                                Dynamic Memory (Stack Namespace & Heap Objects)</div>
+
+                                            <div class="memory-flex-layout"
+                                                style="display: flex; justify-content: space-between; flex: 1; position: relative; min-height: 220px;">
+
                                                 <!-- Stack namespace list -->
-                                                <div class="namespace-tags-col" id="namespace-tags-col" style="display: flex; flex-direction: column; gap: 20px; width: 30%; padding-top: 15px; z-index: 10;">
+                                                <div class="namespace-tags-col" id="namespace-tags-col"
+                                                    style="display: flex; flex-direction: column; gap: 20px; width: 30%; padding-top: 15px; z-index: 10;">
                                                     <!-- Generated dynamically by JS -->
                                                 </div>
-                                                
+
                                                 <!-- Connection SVG Overlay -->
-                                                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
-                                                    <svg id="dynamic-connections-svg" style="width: 100%; height: 100%; overflow: visible;">
+                                                <div
+                                                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
+                                                    <svg id="dynamic-connections-svg"
+                                                        style="width: 100%; height: 100%; overflow: visible;">
                                                         <defs>
-                                                            <marker id="marker-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--accent-blue)" />
+                                                            <marker id="marker-arrow" viewBox="0 0 10 10" refX="6"
+                                                                refY="5" markerWidth="6" markerHeight="6"
+                                                                orient="auto-start-reverse">
+                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z"
+                                                                    fill="var(--accent-blue)" />
                                                             </marker>
-                                                            <marker id="marker-arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--accent-cyan)" />
+                                                            <marker id="marker-arrow-cyan" viewBox="0 0 10 10" refX="6"
+                                                                refY="5" markerWidth="6" markerHeight="6"
+                                                                orient="auto-start-reverse">
+                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z"
+                                                                    fill="var(--accent-cyan)" />
                                                             </marker>
-                                                            <marker id="marker-arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--accent-purple)" />
+                                                            <marker id="marker-arrow-purple" viewBox="0 0 10 10"
+                                                                refX="6" refY="5" markerWidth="6" markerHeight="6"
+                                                                orient="auto-start-reverse">
+                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z"
+                                                                    fill="var(--accent-purple)" />
                                                             </marker>
-                                                            <marker id="marker-arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--accent-green)" />
+                                                            <marker id="marker-arrow-green" viewBox="0 0 10 10" refX="6"
+                                                                refY="5" markerWidth="6" markerHeight="6"
+                                                                orient="auto-start-reverse">
+                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z"
+                                                                    fill="var(--accent-green)" />
                                                             </marker>
-                                                            <marker id="marker-arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--accent-orange)" />
+                                                            <marker id="marker-arrow-orange" viewBox="0 0 10 10"
+                                                                refX="6" refY="5" markerWidth="6" markerHeight="6"
+                                                                orient="auto-start-reverse">
+                                                                <path d="M 0 1.5 L 10 5 L 0 8.5 z"
+                                                                    fill="var(--accent-orange)" />
                                                             </marker>
                                                         </defs>
                                                     </svg>
                                                 </div>
-                                                
+
                                                 <!-- Heap space list -->
-                                                <div class="heap-cards-col" id="heap-cards-col" style="display: flex; flex-direction: column; gap: 12px; width: 45%; align-items: flex-end; padding-top: 15px; z-index: 10;">
+                                                <div class="heap-cards-col" id="heap-cards-col"
+                                                    style="display: flex; flex-direction: column; gap: 12px; width: 45%; align-items: flex-end; padding-top: 15px; z-index: 10;">
                                                     <!-- Generated dynamically by JS -->
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -772,58 +905,83 @@ age = "twenty"   # Now refers to a string</code></pre>
                                 </div>
 
                                 <!-- Python Collections Explorer -->
-                                <div class="visualizer-simulator-box collections-explorer" id="collections-explorer-section" style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius-card); padding: 1.5rem; box-shadow: var(--shadow-sm); margin: 1.5rem 0;">
-                                    <div class="visualizer-header-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-                                        <h5 class="sim-title" style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
-                                            <i class="fa-solid fa-layer-group" style="color: var(--accent-purple);"></i> Python Collections Interactive Explorer
+                                <div class="visualizer-simulator-box collections-explorer"
+                                    id="collections-explorer-section"
+                                    style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius-card); padding: 1.5rem; box-shadow: var(--shadow-sm); margin: 1.5rem 0;">
+                                    <div class="visualizer-header-row"
+                                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+                                        <h5 class="sim-title"
+                                            style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                                            <i class="fa-solid fa-layer-group" style="color: var(--accent-purple);"></i>
+                                            Python Collections Interactive Explorer
                                         </h5>
                                     </div>
-                                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0; line-height: 1.4;">
-                                        Select a collection type and click actions to see how variables access and modify data structures, and how Python handles <strong>mutability vs immutability</strong>.
+                                    <p
+                                        style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0; line-height: 1.4;">
+                                        Select a collection type and click actions to see how variables access and
+                                        modify data structures, and how Python handles <strong>mutability vs
+                                            immutability</strong>.
                                     </p>
-                                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 24px; justify-content: space-between;">
-                                            <!-- Mini Tabs for selection -->
-                                            <div class="explorer-tabs" style="display: flex; gap: 4px; background: var(--bg-primary); padding: 3px; border-radius: 30px; border: 1px solid var(--border-color);">
-                                                <button class="explorer-tab-btn active" data-type="list">List</button>
-                                                <button class="explorer-tab-btn" data-type="tuple">Tuple</button>
-                                                <button class="explorer-tab-btn" data-type="dict">Dict</button>
-                                                <button class="explorer-tab-btn" data-type="str">String</button>
-                                            </div>
-                                            <!-- Reset Button -->
-                                            <button class="btn btn-secondary" id="explorer-reset-btn" style="padding: 4px 10px; font-size: 11px; height: 38px; border-radius: 20px;" title="Reset State"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                                    <div
+                                        style="display: flex; gap: 10px; align-items: center; margin-bottom: 24px; justify-content: space-between;">
+                                        <!-- Mini Tabs for selection -->
+                                        <div class="explorer-tabs"
+                                            style="display: flex; gap: 4px; background: var(--bg-primary); padding: 3px; border-radius: 30px; border: 1px solid var(--border-color);">
+                                            <button class="explorer-tab-btn active" data-type="list">List</button>
+                                            <button class="explorer-tab-btn" data-type="tuple">Tuple</button>
+                                            <button class="explorer-tab-btn" data-type="dict">Dict</button>
+                                            <button class="explorer-tab-btn" data-type="str">String</button>
                                         </div>
-                                    <div class="explorer-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; min-height: 260px;">
+                                        <!-- Reset Button -->
+                                        <button class="btn btn-secondary" id="explorer-reset-btn"
+                                            style="padding: 4px 10px; font-size: 11px; height: 38px; border-radius: 20px;"
+                                            title="Reset State"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                                    </div>
+                                    <div class="explorer-grid"
+                                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; min-height: 260px;">
                                         <!-- Control Column -->
-                                        <div class="explorer-control-panel" style="padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+                                        <div class="explorer-control-panel"
+                                            style="padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
                                             <div>
-                                                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Interactive Actions</div>
-                                                <div id="explorer-actions-container" style="display: flex; flex-direction: column; gap: 8px;">
+                                                <div
+                                                    style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">
+                                                    Interactive Actions</div>
+                                                <div id="explorer-actions-container"
+                                                    style="display: flex; flex-direction: column; gap: 8px;">
                                                     <!-- Generated dynamically by JS depending on selected type -->
                                                 </div>
                                             </div>
-                                            
+
                                             <!-- Code Syntax box -->
                                             <div class="explorer-syntax-box" style="margin-top: 1rem;">
-                                                <div style="font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Python Statement:</div>
+                                                <div
+                                                    style="font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">
+                                                    Python Statement:</div>
                                                 <pre><code id="explorer-statement-code" class="language-python" style="font-family: 'Fira Code', monospace; font-size: 12px;"># Click an action to execute</code></pre>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Display Column -->
-                                        <div class="explorer-display-panel" style="padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 250px;">
+                                        <div class="explorer-display-panel"
+                                            style="padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 250px;">
                                             <div>
-                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">
-                                                    <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Memory Visualization</span>
-                                                    <span id="explorer-mutability-tag" class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">MUTABLE</span>
+                                                <div
+                                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">
+                                                    <span
+                                                        style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Memory
+                                                        Visualization</span>
+                                                    <span id="explorer-mutability-tag" class="tag"
+                                                        style="background: rgba(16,185,129,0.1); color: var(--accent-green);">MUTABLE</span>
                                                 </div>
-                                                
+
                                                 <div id="explorer-memory-visual">
                                                     <!-- Filled dynamically by JS -->
                                                 </div>
                                             </div>
-                                            
+
                                             <!-- Console Explanation box -->
-                                            <div class="explorer-explanation-box" id="explorer-explanation-box" style="background-color: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; font-size: 0.825rem; line-height: 1.45; color: var(--text-secondary); border-left: 3px solid var(--accent-purple);">
+                                            <div class="explorer-explanation-box" id="explorer-explanation-box"
+                                                style="background-color: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; font-size: 0.825rem; line-height: 1.45; color: var(--text-secondary); border-left: 3px solid var(--accent-purple);">
                                                 Select a type tab to explore the structure and operations.
                                             </div>
                                         </div>
@@ -831,18 +989,27 @@ age = "twenty"   # Now refers to a string</code></pre>
                                 </div>
 
                                 <!-- Interactive Code Sandbox for Collections -->
-                                <div class="visualizer-simulator-box collections-sandbox" id="collections-sandbox-section" style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius-card); padding: 1.5rem; box-shadow: var(--shadow-sm); margin: 1.5rem 0;">
-                                    <div class="visualizer-header-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
-                                        <h5 class="sim-title" style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
-                                            <i class="fa-solid fa-terminal" style="color: var(--accent-green);"></i> Interactive Code Sandbox for Collections
+                                <div class="visualizer-simulator-box collections-sandbox"
+                                    id="collections-sandbox-section"
+                                    style="background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--border-radius-card); padding: 1.5rem; box-shadow: var(--shadow-sm); margin: 1.5rem 0;">
+                                    <div class="visualizer-header-row"
+                                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+                                        <h5 class="sim-title"
+                                            style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                                            <i class="fa-solid fa-terminal" style="color: var(--accent-green);"></i>
+                                            Interactive Code Sandbox for Collections
                                         </h5>
                                     </div>
-                                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0; line-height: 1.4;">
-                                        Run this code to inspect Python types and operations. Feel free to modify the list, tuple, and dictionary to observe dynamic output changes!
+                                    <p
+                                        style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem 0; line-height: 1.4;">
+                                        Run this code to inspect Python types and operations. Feel free to modify the
+                                        list, tuple, and dictionary to observe dynamic output changes!
                                     </p>
-                                    
-                                    <div class="embedded-editor-container" data-editor-id="collections-editor" style="margin-top: 0;">
-                                        <textarea class="editor-textarea live-code-textarea"># Let's explore Python structures
+
+                                    <div class="code-compare-block py-block live-editor-block" style="max-width: 100%; margin-top: 1rem;">
+                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i>Python Collections — Live Editor</div>
+                                        <div class="live-editor-wrapper">
+                                            <textarea class="live-code-textarea" id="collections-py-code" rows="15"># Let's explore Python structures
 point = (3, 4) # Tuple
 names = ["Alice", "Bob", "Charlie"] # List
 grades = {"Alice": "A", "Bob": "B"} # Dictionary
@@ -858,11 +1025,9 @@ print("Alice's Grade:", grades["Alice"])
 x, y = point
 print(f"Coordinates: x={x}, y={y}")
 </textarea>
-                                        <div class="editor-actions">
-                                            <button class="btn btn-success run-editor-btn"><i class="fa-solid fa-play"></i> Run Code</button>
+                                            <button class="btn-run-live" onclick="runLiveCode('collections-py-code', 'collections-py-output')"><i class="fa-solid fa-play"></i> Run Code</button>
                                         </div>
-                                        <div class="editor-output-header">Output:</div>
-                                        <pre class="editor-output">Click Run Code to see output...</pre>
+                                        <pre class="live-code-output" id="collections-py-output">Click Run Code to execute...</pre>
                                     </div>
                                 </div>
                             </div>
@@ -936,18 +1101,23 @@ for index, val in enumerate(arr):
                                 <div class="minigame-card" id="flow-simulator-card">
                                     <div class="minigame-header">
                                         <div class="minigame-title">
-                                            <i class="fa-solid fa-code-branch text-accent" style="color: var(--accent-cyan) !important;"></i>
+                                            <i class="fa-solid fa-code-branch text-accent"
+                                                style="color: var(--accent-cyan) !important;"></i>
                                             <span>Interactive Loops & Conditionals Simulator</span>
                                         </div>
-                                        <div class="minigame-subtitle">Control variables dynamically and step through executions to see how Python evaluates branches and loops.</div>
+                                        <div class="minigame-subtitle">Control variables dynamically and step through
+                                            executions to see how Python evaluates branches and loops.</div>
                                     </div>
                                     <div class="minigame-body">
                                         <!-- Tabs selectors -->
-                                        <div class="flow-tabs" style="display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
-                                            <button class="explorer-tab-btn active" id="flow-tab-cond" onclick="switchFlowTab('cond')">
+                                        <div class="flow-tabs"
+                                            style="display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+                                            <button class="explorer-tab-btn active" id="flow-tab-cond"
+                                                onclick="switchFlowTab('cond')">
                                                 <i class="fa-solid fa-filter"></i> Conditionals (if-elif-else)
                                             </button>
-                                            <button class="explorer-tab-btn" id="flow-tab-loop" onclick="switchFlowTab('loop')">
+                                            <button class="explorer-tab-btn" id="flow-tab-loop"
+                                                onclick="switchFlowTab('loop')">
                                                 <i class="fa-solid fa-rotate"></i> Loops (for & while)
                                             </button>
                                         </div>
@@ -962,7 +1132,8 @@ for index, val in enumerate(arr):
                                                         <span class="dot-yellow"></span>
                                                         <span class="dot-green"></span>
                                                     </span>
-                                                    <span class="window-title-text" id="flow-code-title">conditional_test.py</span>
+                                                    <span class="window-title-text"
+                                                        id="flow-code-title">conditional_test.py</span>
                                                 </div>
                                                 <div class="code-container" id="flow-code-display">
                                                     <!-- Dynamic Code with lines will be injected here -->
@@ -971,15 +1142,22 @@ for index, val in enumerate(arr):
 
                                             <!-- Panel Right: Controls & Output -->
                                             <div class="flow-control-panel">
-                                                
+
                                                 <!-- Dynamic Section: Conditionals Controls -->
                                                 <div id="flow-controls-cond">
-                                                    <h5 style="margin: 0 0 0.5rem 0; font-family: 'Outfit', sans-serif; color: var(--text-primary); font-size: 13px; font-weight: 700;">Set GPA Variable:</h5>
-                                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
-                                                        <input type="range" id="flow-gpa-slider" min="0.0" max="4.0" step="0.1" value="2.5" oninput="updateGpaBranches(this.value)" style="flex-grow: 1; cursor: pointer;">
-                                                        <span id="flow-gpa-val" style="font-size: 14px; font-weight: 700; color: var(--accent-cyan); width: 35px; text-align: right;">2.5</span>
+                                                    <h5
+                                                        style="margin: 0 0 0.5rem 0; font-family: 'Outfit', sans-serif; color: var(--text-primary); font-size: 13px; font-weight: 700;">
+                                                        Set GPA Variable:</h5>
+                                                    <div
+                                                        style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                                                        <input type="range" id="flow-gpa-slider" min="0.0" max="4.0"
+                                                            step="0.1" value="2.5"
+                                                            oninput="updateGpaBranches(this.value)"
+                                                            style="flex-grow: 1; cursor: pointer;">
+                                                        <span id="flow-gpa-val"
+                                                            style="font-size: 14px; font-weight: 700; color: var(--accent-cyan); width: 35px; text-align: right;">2.5</span>
                                                     </div>
-                                                    
+
                                                     <div class="flow-explanation-box" id="flow-cond-explanation">
                                                         GPA is 2.50. Evaluates True for `gpa >= 2.00` check.
                                                     </div>
@@ -987,22 +1165,40 @@ for index, val in enumerate(arr):
 
                                                 <!-- Dynamic Section: Loops Controls -->
                                                 <div id="flow-controls-loop" style="display: none;">
-                                                    <h5 style="margin: 0 0 0.5rem 0; font-family: 'Outfit', sans-serif; color: var(--text-primary); font-size: 13px; font-weight: 700;">Select Loop Type:</h5>
-                                                    <div class="loop-selector-grid" style="display: grid; grid-template-columns: 1fr; gap: 6px; margin-bottom: 1rem;">
-                                                        <button class="explorer-btn" id="loop-btn-range" onclick="selectLoopType('range')" style="width: 100%; border-radius: 6px; padding: 6px 10px; font-size: 11px;">
-                                                            <i class="fa-solid fa-arrow-down-1-9"></i> counting: for i in range(5)
+                                                    <h5
+                                                        style="margin: 0 0 0.5rem 0; font-family: 'Outfit', sans-serif; color: var(--text-primary); font-size: 13px; font-weight: 700;">
+                                                        Select Loop Type:</h5>
+                                                    <div class="loop-selector-grid"
+                                                        style="display: grid; grid-template-columns: 1fr; gap: 6px; margin-bottom: 1rem;">
+                                                        <button class="explorer-btn" id="loop-btn-range"
+                                                            onclick="selectLoopType('range')"
+                                                            style="width: 100%; border-radius: 6px; padding: 6px 10px; font-size: 11px;">
+                                                            <i class="fa-solid fa-arrow-down-1-9"></i> counting: for i
+                                                            in range(5)
                                                         </button>
-                                                        <button class="explorer-btn" id="loop-btn-list" onclick="selectLoopType('list')" style="width: 100%; border-radius: 6px; padding: 6px 10px; font-size: 11px;">
-                                                            <i class="fa-solid fa-list-ul"></i> iter list: for val in arr
+                                                        <button class="explorer-btn" id="loop-btn-list"
+                                                            onclick="selectLoopType('list')"
+                                                            style="width: 100%; border-radius: 6px; padding: 6px 10px; font-size: 11px;">
+                                                            <i class="fa-solid fa-list-ul"></i> iter list: for val in
+                                                            arr
                                                         </button>
-                                                        <button class="explorer-btn" id="loop-btn-while" onclick="selectLoopType('while')" style="width: 100%; border-radius: 6px; padding: 6px 10px; font-size: 11px;">
-                                                            <i class="fa-solid fa-arrows-spin"></i> conditional: while count &lt; 3
+                                                        <button class="explorer-btn" id="loop-btn-while"
+                                                            onclick="selectLoopType('while')"
+                                                            style="width: 100%; border-radius: 6px; padding: 6px 10px; font-size: 11px;">
+                                                            <i class="fa-solid fa-arrows-spin"></i> conditional: while
+                                                            count &lt; 3
                                                         </button>
                                                     </div>
 
                                                     <div style="display: flex; gap: 8px; margin-bottom: 1rem;">
-                                                        <button class="btn btn-secondary btn-sm" onclick="resetLoopSimulation()" style="flex: 1; font-size: 11px;"><i class="fa-solid fa-rotate-left"></i> Reset</button>
-                                                        <button class="btn btn-primary btn-sm" id="flow-step-btn" onclick="stepLoopSimulation()" style="flex: 1; font-size: 11px;"><i class="fa-solid fa-forward-step"></i> Step Loop</button>
+                                                        <button class="btn btn-secondary btn-sm"
+                                                            onclick="resetLoopSimulation()"
+                                                            style="flex: 1; font-size: 11px;"><i
+                                                                class="fa-solid fa-rotate-left"></i> Reset</button>
+                                                        <button class="btn btn-primary btn-sm" id="flow-step-btn"
+                                                            onclick="stepLoopSimulation()"
+                                                            style="flex: 1; font-size: 11px;"><i
+                                                                class="fa-solid fa-forward-step"></i> Step Loop</button>
                                                     </div>
                                                 </div>
 
@@ -1010,7 +1206,9 @@ for index, val in enumerate(arr):
                                                 <div class="console-output-box">
                                                     <div class="console-header">
                                                         <span>Output Console</span>
-                                                        <span id="loop-vars-tracker" style="color: var(--accent-cyan); font-weight: 500;">Active vars: (none)</span>
+                                                        <span id="loop-vars-tracker"
+                                                            style="color: var(--accent-cyan); font-weight: 500;">Active
+                                                            vars: (none)</span>
                                                     </div>
                                                     <div id="flow-console-text">
                                                         Console cleared.
@@ -1031,13 +1229,20 @@ for index, val in enumerate(arr):
                                 <span class="accordion-arrow"><i class="fa-solid fa-chevron-down"></i></span>
                             </button>
                             <div class="accordion-content">
-                                <p>In <strong>C</strong>, every function must declare its return type and parameter types at compile time. In <strong>Python</strong>, the <code>def</code> keyword creates a function without requiring type declarations — making it cleaner and faster to write, especially for algorithm design.</p>
+                                <p>In <strong>C</strong>, every function must declare its return type and parameter
+                                    types at compile time. In <strong>Python</strong>, the <code>def</code> keyword
+                                    creates a function without requiring type declarations — making it cleaner and
+                                    faster to write, especially for algorithm design.</p>
 
                                 <!-- 1. Basic def Syntax -->
-                                <h4><i class="fa-solid fa-pen-to-square" style="color:var(--accent-blue); margin-right:6px;"></i>1. Basic <code>def</code> Syntax</h4>
+                                <h4><i class="fa-solid fa-pen-to-square"
+                                        style="color:var(--accent-blue); margin-right:6px;"></i>1. Basic
+                                    <code>def</code> Syntax
+                                </h4>
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i>C: Typed Function</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright"
+                                                style="margin-right:5px;"></i>C: Typed Function</div>
                                         <pre><code>int add(int a, int b) {
     return a + b;
 }
@@ -1046,7 +1251,8 @@ for index, val in enumerate(arr):
 int result = add(3, 5); // result = 8</code></pre>
                                     </div>
                                     <div class="code-compare-block py-block">
-                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i>Python: def (No types required)</div>
+                                        <div class="block-title"><i class="fa-brands fa-python"
+                                                style="margin-right:5px;"></i>Python: def (No types required)</div>
                                         <pre><code>def add(a, b):
     return a + b
 
@@ -1056,11 +1262,15 @@ result = add(3, 5)  # result = 8</code></pre>
                                 </div>
 
                                 <!-- 2. Multiple Return Values -->
-                                <h4><i class="fa-solid fa-layer-group" style="color:var(--accent-purple); margin-right:6px;"></i>2. Multiple Return Values</h4>
-                                <p>Python functions can return multiple values at once via a <strong>tuple</strong>. In C you would need a struct or output pointer parameters.</p>
+                                <h4><i class="fa-solid fa-layer-group"
+                                        style="color:var(--accent-purple); margin-right:6px;"></i>2. Multiple Return
+                                    Values</h4>
+                                <p>Python functions can return multiple values at once via a <strong>tuple</strong>. In
+                                    C you would need a struct or output pointer parameters.</p>
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i>C: Output via pointer</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright"
+                                                style="margin-right:5px;"></i>C: Output via pointer</div>
                                         <pre><code>void min_max(int* arr, int n,
              int* out_min, int* out_max) {
     *out_min = arr[0];
@@ -1075,7 +1285,9 @@ int lo, hi;
 min_max(arr, n, &lo, &hi);</code></pre>
                                     </div>
                                     <div class="code-compare-block py-block">
-                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i>Python: Return multiple values (tuple)</div>
+                                        <div class="block-title"><i class="fa-brands fa-python"
+                                                style="margin-right:5px;"></i>Python: Return multiple values (tuple)
+                                        </div>
                                         <pre><code>def min_max(lst):
     return min(lst), max(lst)
 
@@ -1086,11 +1298,16 @@ print(lo, hi)  # 1 9</code></pre>
                                 </div>
 
                                 <!-- 3. Default Arguments -->
-                                <h4><i class="fa-solid fa-sliders" style="color:var(--accent-green); margin-right:6px;"></i>3. Default Arguments</h4>
-                                <p>Python lets you specify a <strong>default value</strong> for any parameter. If the caller omits that argument, Python uses the default. <strong>C has no equivalent</strong> — you must provide all arguments or use macros.</p>
+                                <h4><i class="fa-solid fa-sliders"
+                                        style="color:var(--accent-green); margin-right:6px;"></i>3. Default Arguments
+                                </h4>
+                                <p>Python lets you specify a <strong>default value</strong> for any parameter. If the
+                                    caller omits that argument, Python uses the default. <strong>C has no
+                                        equivalent</strong> — you must provide all arguments or use macros.</p>
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i>C: No default args (must pass all)</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright"
+                                                style="margin-right:5px;"></i>C: No default args (must pass all)</div>
                                         <pre><code>void greet(char* name, char* greeting) {
     printf("%s, %s!\n", greeting, name);
 }
@@ -1099,7 +1316,8 @@ greet("Alice", "Hello");
 greet("Bob",   "Hi");    // cannot omit greeting</code></pre>
                                     </div>
                                     <div class="code-compare-block py-block">
-                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i>Python: Default argument value</div>
+                                        <div class="block-title"><i class="fa-brands fa-python"
+                                                style="margin-right:5px;"></i>Python: Default argument value</div>
                                         <pre><code>def greet(name, greeting="Hello"):
     print(f"{greeting}, {name}!")
 
@@ -1109,8 +1327,11 @@ greet("Bob", "Hi")     # Hi, Bob!</code></pre>
                                 </div>
 
                                 <!-- 4. Keyword Arguments -->
-                                <h4><i class="fa-solid fa-key" style="color:var(--accent-cyan); margin-right:6px;"></i>4. Keyword Arguments</h4>
-                                <p>You can call a Python function with arguments in <strong>any order</strong> by naming them explicitly. This makes code much more readable at the call site.</p>
+                                <h4><i class="fa-solid fa-key"
+                                        style="color:var(--accent-cyan); margin-right:6px;"></i>4. Keyword Arguments
+                                </h4>
+                                <p>You can call a Python function with arguments in <strong>any order</strong> by naming
+                                    them explicitly. This makes code much more readable at the call site.</p>
                                 <pre><code style="display:block; background:#18181b; color:#e2e8f0; padding:16px; border-radius:8px; font-family:'Fira Code',monospace; font-size:12px;">def connect(host, port=3306, timeout=30):
     print(f"Connecting to {host}:{port} (timeout={timeout}s)")
 
@@ -1120,11 +1341,17 @@ connect(timeout=5, host="db.example.com", port=5432)
 connect("localhost")                    # uses defaults</code></pre>
 
                                 <!-- 5. *args and **kwargs -->
-                                <h4><i class="fa-solid fa-asterisk" style="color:var(--accent-orange); margin-right:6px;"></i>5. <code>*args</code> and <code>**kwargs</code></h4>
-                                <p><code>*args</code> collects extra positional arguments into a <strong>tuple</strong>. <code>**kwargs</code> collects extra keyword arguments into a <strong>dict</strong>. This is Python's equivalent of C's variadic <code>...</code> parameter.</p>
+                                <h4><i class="fa-solid fa-asterisk"
+                                        style="color:var(--accent-orange); margin-right:6px;"></i>5. <code>*args</code>
+                                    and <code>**kwargs</code></h4>
+                                <p><code>*args</code> collects extra positional arguments into a <strong>tuple</strong>.
+                                    <code>**kwargs</code> collects extra keyword arguments into a <strong>dict</strong>.
+                                    This is Python's equivalent of C's variadic <code>...</code> parameter.
+                                </p>
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i>C: Variadic with stdarg</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright"
+                                                style="margin-right:5px;"></i>C: Variadic with stdarg</div>
                                         <pre><code>#include &lt;stdarg.h&gt;
 int sum_all(int count, ...) {
     va_list args;
@@ -1139,7 +1366,8 @@ int sum_all(int count, ...) {
 sum_all(4, 1, 2, 3, 4);</code></pre>
                                     </div>
                                     <div class="code-compare-block py-block">
-                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i>Python: *args and **kwargs</div>
+                                        <div class="block-title"><i class="fa-brands fa-python"
+                                                style="margin-right:5px;"></i>Python: *args and **kwargs</div>
                                         <pre><code>def sum_all(*args):
     return sum(args)     # args is a tuple
 
@@ -1157,10 +1385,14 @@ log(user="Alice", score=95)
                                 </div>
 
                                 <!-- Live Editor -->
-                                <h4><i class="fa-solid fa-terminal" style="color:var(--accent-green); margin-right:6px;"></i>Try It Yourself</h4>
-                                <p style="font-size: 0.85rem; color: var(--text-muted);">Edit the function below and click <strong>Run Code</strong> to see the output. Try changing the default value, adding more arguments, or writing your own function.</p>
+                                <h4><i class="fa-solid fa-terminal"
+                                        style="color:var(--accent-green); margin-right:6px;"></i>Try It Yourself</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Edit the function below and
+                                    click <strong>Run Code</strong> to see the output. Try changing the default value,
+                                    adding more arguments, or writing your own function.</p>
                                 <div class="code-compare-block py-block live-editor-block" style="max-width: 100%;">
-                                    <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i>Python Functions — Live Editor</div>
+                                    <div class="block-title"><i class="fa-brands fa-python"
+                                            style="margin-right:5px;"></i>Python Functions — Live Editor</div>
                                     <div class="live-editor-wrapper">
                                         <textarea class="live-code-textarea" id="func-py-code" rows="10">def greet(name, greeting="Hello"):
     return f"{greeting}, {name}!"
@@ -1176,7 +1408,9 @@ print(greet("Alice"))
 print(greet("Bob", "Hi"))
 print(add(10, 25))
 print(sum_all(1, 2, 3, 4, 5))</textarea>
-                                        <button class="btn-run-live" onclick="runLiveCode('func-py-code', 'func-py-output')"><i class="fa-solid fa-play"></i> Run Code</button>
+                                        <button class="btn-run-live"
+                                            onclick="runLiveCode('func-py-code', 'func-py-output')"><i
+                                                class="fa-solid fa-play"></i> Run Code</button>
                                     </div>
                                     <pre class="live-code-output" id="func-py-output">Click Run Code to execute...</pre>
                                 </div>
@@ -1224,24 +1458,31 @@ except IOError:
                                 <div class="minigame-card" id="exception-explorer-card">
                                     <div class="minigame-header">
                                         <div class="minigame-title">
-                                            <i class="fa-solid fa-shield-halved text-accent" style="color: var(--accent-purple) !important;"></i>
+                                            <i class="fa-solid fa-shield-halved text-accent"
+                                                style="color: var(--accent-purple) !important;"></i>
                                             <span>Interactive Exception Explorer</span>
                                         </div>
-                                        <div class="minigame-subtitle">Select a common Python exception, toggle the try-except shield, and simulate the execution flow.</div>
+                                        <div class="minigame-subtitle">Select a common Python exception, toggle the
+                                            try-except shield, and simulate the execution flow.</div>
                                     </div>
                                     <div class="minigame-body">
                                         <!-- Tabs selectors -->
-                                        <div class="exception-tabs flow-tabs" style="display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                                            <button class="explorer-tab-btn active" id="exc-tab-ZeroDivisionError" onclick="switchExceptionScenario('ZeroDivisionError')">
+                                        <div class="exception-tabs flow-tabs"
+                                            style="display: flex; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                                            <button class="explorer-tab-btn active" id="exc-tab-ZeroDivisionError"
+                                                onclick="switchExceptionScenario('ZeroDivisionError')">
                                                 ZeroDivisionError
                                             </button>
-                                            <button class="explorer-tab-btn" id="exc-tab-ValueError" onclick="switchExceptionScenario('ValueError')">
+                                            <button class="explorer-tab-btn" id="exc-tab-ValueError"
+                                                onclick="switchExceptionScenario('ValueError')">
                                                 ValueError
                                             </button>
-                                            <button class="explorer-tab-btn" id="exc-tab-IndexError" onclick="switchExceptionScenario('IndexError')">
+                                            <button class="explorer-tab-btn" id="exc-tab-IndexError"
+                                                onclick="switchExceptionScenario('IndexError')">
                                                 IndexError
                                             </button>
-                                            <button class="explorer-tab-btn" id="exc-tab-KeyError" onclick="switchExceptionScenario('KeyError')">
+                                            <button class="explorer-tab-btn" id="exc-tab-KeyError"
+                                                onclick="switchExceptionScenario('KeyError')">
                                                 KeyError
                                             </button>
                                         </div>
@@ -1256,18 +1497,28 @@ except IOError:
                                                         <span class="dot-yellow"></span>
                                                         <span class="dot-green"></span>
                                                     </span>
-                                                    <span class="window-title-text" id="exc-filename">division_by_zero.py</span>
+                                                    <span class="window-title-text"
+                                                        id="exc-filename">division_by_zero.py</span>
                                                 </div>
-                                                
+
                                                 <!-- Shield Toggler Header -->
-                                                <div class="shield-toggler-bar" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background-color: rgba(255,255,255,0.01); border-bottom: 1px solid var(--border-color);">
-                                                    <span style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">try-except Shield:</span>
+                                                <div class="shield-toggler-bar"
+                                                    style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background-color: rgba(255,255,255,0.01); border-bottom: 1px solid var(--border-color);">
+                                                    <span
+                                                        style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">try-except
+                                                        Shield:</span>
                                                     <div>
-                                                        <button class="toggle-shield-btn active" id="shield-off-btn" onclick="setExceptionShieldState(false)">
-                                                            <i class="fa-solid fa-skull text-danger" style="margin-right: 4px; color: #ef4444;"></i> Off (Crashes)
+                                                        <button class="toggle-shield-btn active" id="shield-off-btn"
+                                                            onclick="setExceptionShieldState(false)">
+                                                            <i class="fa-solid fa-skull text-danger"
+                                                                style="margin-right: 4px; color: #ef4444;"></i> Off
+                                                            (Crashes)
                                                         </button>
-                                                        <button class="toggle-shield-btn" id="shield-on-btn" onclick="setExceptionShieldState(true)">
-                                                            <i class="fa-solid fa-shield-halved text-success" style="margin-right: 4px; color: #10b981;"></i> On (Safe)
+                                                        <button class="toggle-shield-btn" id="shield-on-btn"
+                                                            onclick="setExceptionShieldState(true)">
+                                                            <i class="fa-solid fa-shield-halved text-success"
+                                                                style="margin-right: 4px; color: #10b981;"></i> On
+                                                            (Safe)
                                                         </button>
                                                     </div>
                                                 </div>
@@ -1280,13 +1531,18 @@ except IOError:
                                             <!-- Panel Right: Controls & Terminal -->
                                             <div class="exception-control-panel flow-control-panel">
                                                 <div>
-                                                    <h5 id="exc-type-header" style="margin: 0 0 0.25rem 0; font-family: 'Outfit', sans-serif; color: var(--text-primary); font-size: 14px; font-weight: 700;">ZeroDivisionError</h5>
-                                                    <p id="exc-description" style="font-size: 11.5px; color: var(--text-secondary); margin: 0 0 1rem 0; line-height: 1.45;">
+                                                    <h5 id="exc-type-header"
+                                                        style="margin: 0 0 0.25rem 0; font-family: 'Outfit', sans-serif; color: var(--text-primary); font-size: 14px; font-weight: 700;">
+                                                        ZeroDivisionError</h5>
+                                                    <p id="exc-description"
+                                                        style="font-size: 11.5px; color: var(--text-secondary); margin: 0 0 1rem 0; line-height: 1.45;">
                                                         Occurs when dividing by zero.
                                                     </p>
-                                                    
+
                                                     <div style="margin-bottom: 1rem;">
-                                                        <button class="btn btn-primary btn-sm" id="exc-simulate-btn" onclick="runExceptionSimulation()" style="width: 100%; font-size: 11.5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                                        <button class="btn btn-primary btn-sm" id="exc-simulate-btn"
+                                                            onclick="runExceptionSimulation()"
+                                                            style="width: 100%; font-size: 11.5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
                                                             <i class="fa-solid fa-play"></i> Run Code Simulation
                                                         </button>
                                                     </div>
@@ -1296,7 +1552,8 @@ except IOError:
                                                 <div class="console-output-box" id="exc-console-box">
                                                     <div class="console-header">
                                                         <span>Terminal output</span>
-                                                        <span id="exc-console-status" style="color: var(--text-muted); font-size: 8.5px;">Idle</span>
+                                                        <span id="exc-console-status"
+                                                            style="color: var(--text-muted); font-size: 8.5px;">Idle</span>
                                                     </div>
                                                     <div id="exc-console-text">
                                                         Click "Run Code Simulation" to execute the script.
@@ -1304,9 +1561,10 @@ except IOError:
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Explanation block at bottom -->
-                                        <div class="flow-explanation-box" id="exc-explanation-card" style="margin-top: 1rem; display: none;">
+                                        <div class="flow-explanation-box" id="exc-explanation-card"
+                                            style="margin-top: 1rem; display: none;">
                                             <!-- Explanation text will go here -->
                                         </div>
                                     </div>
@@ -1324,24 +1582,29 @@ except IOError:
                         </div>
                         <div class="rec-header-text">
                             <h2>Module 2: Recursion & Memory Call Stack</h2>
-                            <p>Master how functions call themselves, trace recursive execution trees, and visualize the call stack memory.</p>
+                            <p>Master how functions call themselves, trace recursive execution trees, and visualize the
+                                call stack memory.</p>
                         </div>
                     </div>
 
                     <!-- Module 2 Sub-Navigation Tabs -->
                     <div class="flow-tabs" style="margin-bottom: 20px;">
                         <button class="explorer-tab-btn active" id="rec-tab-viz" onclick="switchRecursionTab('viz')">
-                            <i class="fa-solid fa-circle-play" style="color: var(--accent-cyan); margin-right: 6px;"></i> Understanding & Visualizing Recursion
+                            <i class="fa-solid fa-circle-play"
+                                style="color: var(--accent-cyan); margin-right: 6px;"></i> Understanding & Visualizing
+                            Recursion
                         </button>
                         <button class="explorer-tab-btn" id="rec-tab-vs" onclick="switchRecursionTab('vs')">
-                            <i class="fa-solid fa-code-compare" style="color: var(--accent-purple); margin-right: 6px;"></i> Recursion vs. Loops (Iteration)
+                            <i class="fa-solid fa-code-compare"
+                                style="color: var(--accent-purple); margin-right: 6px;"></i> Recursion vs. Loops
+                            (Iteration)
                         </button>
                     </div>
 
                     <!-- Tab 1: Understanding & Visualizing Recursion -->
                     <div id="rec-content-viz" class="recursion-tab-content">
                         <div class="grid-2col">
-                            
+
                             <!-- Card 1: Understanding Recursion -->
                             <div class="card glass rec-card-theory rec-card-cyan">
                                 <div class="card-header">
@@ -1349,8 +1612,11 @@ except IOError:
                                     <h3>Understanding Recursion</h3>
                                 </div>
                                 <div class="card-body">
-                                    <p class="rec-intro-text">A recursive function is an elegant programming technique where a function <strong>calls itself</strong> to solve a smaller sub-problem. In Data Structures & Algorithms, recursion is the foundation for traversing trees and graphs.</p>
-                                    
+                                    <p class="rec-intro-text">A recursive function is an elegant programming technique
+                                        where a function <strong>calls itself</strong> to solve a smaller sub-problem.
+                                        In Data Structures & Algorithms, recursion is the foundation for traversing
+                                        trees and graphs.</p>
+
                                     <div class="rec-requirements">
                                         <div class="rec-req-item base-case">
                                             <div class="req-icon-wrap">
@@ -1358,7 +1624,11 @@ except IOError:
                                             </div>
                                             <div class="req-details">
                                                 <h4>1. Base Case(s)</h4>
-                                                <p>The simplest input configuration where the result is computed immediately. Without this, recursion runs infinitely, leading to a <strong>Stack Overflow</strong> (in Python, a <code>RecursionError</code>).</p>
+                                                <p>The simplest input configuration where the result is computed
+                                                    immediately. Without this, recursion runs infinitely, leading to a
+                                                    <strong>Stack Overflow</strong> (in Python, a
+                                                    <code>RecursionError</code>).
+                                                </p>
                                             </div>
                                         </div>
                                         <div class="rec-req-item recursive-step">
@@ -1367,13 +1637,16 @@ except IOError:
                                             </div>
                                             <div class="req-details">
                                                 <h4>2. Recursive Step</h4>
-                                                <p>Reducing the problem size to move closer to the base case, and invoking the function recursively with the new parameters.</p>
+                                                <p>Reducing the problem size to move closer to the base case, and
+                                                    invoking the function recursively with the new parameters.</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="rec-note-box">
                                         <i class="fa-solid fa-circle-info"></i>
-                                        <span><strong>System Limit:</strong> Python restricts the recursion depth to 1,000 frames to prevent core stack memory crashes. C limits are determined by operating system stack allocation.</span>
+                                        <span><strong>System Limit:</strong> Python restricts the recursion depth to
+                                            1,000 frames to prevent core stack memory crashes. C limits are determined
+                                            by operating system stack allocation.</span>
                                     </div>
                                 </div>
                             </div>
@@ -1385,10 +1658,13 @@ except IOError:
                                     <h3>C vs Python Recursion Syntax</h3>
                                 </div>
                                 <div class="card-body">
-                                    <p class="rec-intro-text">Notice how Python eliminates curly braces <code>{}</code> and semicolons <code>;</code>, relying purely on indentation to represent recursive blocks.</p>
+                                    <p class="rec-intro-text">Notice how Python eliminates curly braces <code>{}</code>
+                                        and semicolons <code>;</code>, relying purely on indentation to represent
+                                        recursive blocks.</p>
                                     <div class="code-compare-grid">
                                         <div class="code-compare-block c-block">
-                                            <div class="block-title c-title"><i class="fa-solid fa-copyright"></i> C Code (Factorial)</div>
+                                            <div class="block-title c-title"><i class="fa-solid fa-copyright"></i> C
+                                                Code (Factorial)</div>
                                             <pre><code>int factorial(int n) {
     if (n <= 1) { // Base Case
         return 1;
@@ -1398,7 +1674,8 @@ except IOError:
 }</code></pre>
                                         </div>
                                         <div class="code-compare-block py-block">
-                                            <div class="block-title py-title"><i class="fa-brands fa-python"></i> Python Code (Factorial)</div>
+                                            <div class="block-title py-title"><i class="fa-brands fa-python"></i> Python
+                                                Code (Factorial)</div>
                                             <pre><code>def factorial(n):
     if n <= 1: # Base Case
         return 1
@@ -1416,17 +1693,23 @@ except IOError:
                                     <h3>How a Recursive Function Calls Itself</h3>
                                 </div>
                                 <div class="card-body">
-                                    <p class="rec-intro-text">Recursion happens when a function calls its own name from inside its body. Each call adds a new stack frame until the base case stops the chain.</p>
+                                    <p class="rec-intro-text">Recursion happens when a function calls its own name from
+                                        inside its body. Each call adds a new stack frame until the base case stops the
+                                        chain.</p>
 
                                     <div class="annotated-code-box">
-                                        <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.75rem; letter-spacing: 0.08em;">Annotated Example: factorial(n)</div>
-                                        <pre style="margin: 0; background: transparent; border: none; padding: 0; color: var(--text-primary); font-family: 'Fira Code', monospace; font-size: 12px; line-height: 1.7; white-space: pre-wrap;"><code>def factorial(n):              # function definition
+                                        <div
+                                            style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.75rem; letter-spacing: 0.08em;">
+                                            Annotated Example: factorial(n)</div>
+                                        <pre
+                                            style="margin: 0; background: transparent; border: none; padding: 0; color: var(--text-primary); font-family: 'Fira Code', monospace; font-size: 12px; line-height: 1.7; white-space: pre-wrap;"><code>def factorial(n):              # function definition
     if n <= 1:                 # base case: stop recursing
         return 1
     return n * factorial(n-1)  # recursive call: calls itself with smaller n</code></pre>
                                     </div>
 
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                                    <div
+                                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
                                         <div class="embedded-editor-container" style="margin-top: 0;">
                                             <div class="panel-subtitle">factorial(5) -> 120</div>
                                             <textarea class="editor-textarea live-code-textarea">def factorial(n):
@@ -1436,7 +1719,8 @@ except IOError:
 
 print(factorial(5))</textarea>
                                             <div class="editor-actions">
-                                                <button class="btn btn-success run-editor-btn"><i class="fa-solid fa-play"></i> Run Code</button>
+                                                <button class="btn btn-success run-editor-btn"><i
+                                                        class="fa-solid fa-play"></i> Run Code</button>
                                             </div>
                                             <div class="editor-output-header">Output:</div>
                                             <pre class="editor-output">Click Run Code to see output...</pre>
@@ -1451,7 +1735,8 @@ print(factorial(5))</textarea>
 
 print(sum_list([1, 2, 3, 4]))</textarea>
                                             <div class="editor-actions">
-                                                <button class="btn btn-success run-editor-btn"><i class="fa-solid fa-play"></i> Run Code</button>
+                                                <button class="btn btn-success run-editor-btn"><i
+                                                        class="fa-solid fa-play"></i> Run Code</button>
                                             </div>
                                             <div class="editor-output-header">Output:</div>
                                             <pre class="editor-output">Click Run Code to see output...</pre>
@@ -1466,7 +1751,8 @@ print(sum_list([1, 2, 3, 4]))</textarea>
 
 print(power(2, 8))</textarea>
                                             <div class="editor-actions">
-                                                <button class="btn btn-success run-editor-btn"><i class="fa-solid fa-play"></i> Run Code</button>
+                                                <button class="btn btn-success run-editor-btn"><i
+                                                        class="fa-solid fa-play"></i> Run Code</button>
                                             </div>
                                             <div class="editor-output-header">Output:</div>
                                             <pre class="editor-output">Click Run Code to see output...</pre>
@@ -1483,7 +1769,10 @@ print(power(2, 8))</textarea>
                                 <h3>Interactive Recursion Tree & Call Stack Visualizer</h3>
                             </div>
                             <div class="card-body">
-                                <p class="rec-intro-text">Select a recursive algorithm and N value below. Click <strong>Initialize</strong>, then step through the execution to visualize the recursive call tree, stack frames, and propagation of return values.</p>
+                                <p class="rec-intro-text">Select a recursive algorithm and N value below. Click
+                                    <strong>Initialize</strong>, then step through the execution to visualize the
+                                    recursive call tree, stack frames, and propagation of return values.
+                                </p>
 
                                 <div class="rec-visualizer-header">
                                     <div class="visualizer-controls-panel">
@@ -1492,22 +1781,27 @@ print(power(2, 8))</textarea>
                                             <div class="select-wrapper">
                                                 <select id="rec-algorithm" class="form-control premium-select">
                                                     <option value="factorial">Factorial (n!)</option>
-                                                    <option value="fibonacci">Fibonacci (Double branching recursion-tree)</option>
+                                                    <option value="fibonacci">Fibonacci (Double branching
+                                                        recursion-tree)</option>
                                                     <option value="sum">Recursive Sum (1 + 2 + ... + n)</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label for="rec-input">Input N</label>
-                                            <input type="number" id="rec-input" class="form-control premium-input" min="1" max="5" value="4">
+                                            <input type="number" id="rec-input" class="form-control premium-input"
+                                                min="1" max="5" value="4">
                                         </div>
                                         <div class="btn-group-visualizer">
-                                            <button class="btn btn-premium-init" id="rec-start-btn"><i class="fa-solid fa-play"></i> Initialize</button>
-                                            <button class="btn btn-premium-step" id="rec-step-btn" disabled><i class="fa-solid fa-angles-right"></i> Next Step</button>
-                                            <button class="btn btn-premium-reset" id="rec-reset-btn"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                                            <button class="btn btn-premium-init" id="rec-start-btn"><i
+                                                    class="fa-solid fa-play"></i> Initialize</button>
+                                            <button class="btn btn-premium-step" id="rec-step-btn" disabled><i
+                                                    class="fa-solid fa-angles-right"></i> Next Step</button>
+                                            <button class="btn btn-premium-reset" id="rec-reset-btn"><i
+                                                    class="fa-solid fa-rotate-left"></i> Reset</button>
                                         </div>
                                     </div>
-                                    
+
                                     <!-- Dynamic Explainer Box -->
                                     <div class="algo-explanation-box rec-explainer" id="rec-algo-explainer">
                                         <!-- Populated dynamically by JS -->
@@ -1523,21 +1817,27 @@ print(power(2, 8))</textarea>
                                                 <span class="dot yellow"></span>
                                                 <span class="dot green"></span>
                                             </div>
-                                            <span class="panel-tab-title"><i class="fa-brands fa-python"></i> call_stack_trace.py</span>
+                                            <span class="panel-tab-title"><i class="fa-brands fa-python"></i>
+                                                call_stack_trace.py</span>
                                         </div>
                                         <div class="panel-content">
-                                            <pre id="visualizer-code-display">Select an algorithm and click Initialize to begin...</pre>
+                                            <pre
+                                                id="visualizer-code-display">Select an algorithm and click Initialize to begin...</pre>
                                         </div>
                                     </div>
 
                                     <!-- Panel 2: Recursion Tree Canvas -->
                                     <div class="visualizer-panel tree-canvas-panel">
                                         <div class="panel-header">
-                                            <span class="panel-tab-title"><i class="fa-solid fa-network-wired"></i> Recursion Execution Tree</span>
+                                            <span class="panel-tab-title"><i class="fa-solid fa-network-wired"></i>
+                                                Recursion Execution Tree</span>
                                             <div class="tree-zoom-controls">
-                                                <button class="btn-zoom" onclick="zoomTree(0.15)" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
-                                                <button class="btn-zoom" onclick="zoomTree(-0.15)" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
-                                                <button class="btn-zoom" onclick="resetTreeZoom()" title="Reset Zoom"><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                <button class="btn-zoom" onclick="zoomTree(0.15)" title="Zoom In"><i
+                                                        class="fa-solid fa-plus"></i></button>
+                                                <button class="btn-zoom" onclick="zoomTree(-0.15)" title="Zoom Out"><i
+                                                        class="fa-solid fa-minus"></i></button>
+                                                <button class="btn-zoom" onclick="resetTreeZoom()" title="Reset Zoom"><i
+                                                        class="fa-solid fa-arrows-rotate"></i></button>
                                             </div>
                                         </div>
                                         <div class="panel-content canvas-bg-grid" id="stack-container">
@@ -1547,17 +1847,22 @@ print(power(2, 8))</textarea>
                                             </div>
                                         </div>
                                         <div class="tree-legend">
-                                            <span class="legend-item"><span class="legend-color color-active"></span> Active Call</span>
-                                            <span class="legend-item"><span class="legend-color color-waiting"></span> Stack Waiting</span>
-                                            <span class="legend-item"><span class="legend-color color-returned"></span> Returned Val</span>
-                                            <span class="legend-item text-bold accent-green"><i class="fa-solid fa-star"></i> Base Case</span>
+                                            <span class="legend-item"><span class="legend-color color-active"></span>
+                                                Active Call</span>
+                                            <span class="legend-item"><span class="legend-color color-waiting"></span>
+                                                Stack Waiting</span>
+                                            <span class="legend-item"><span class="legend-color color-returned"></span>
+                                                Returned Val</span>
+                                            <span class="legend-item text-bold accent-green"><i
+                                                    class="fa-solid fa-star"></i> Base Case</span>
                                         </div>
                                     </div>
 
                                     <!-- Panel 3: Console Logger -->
                                     <div class="visualizer-panel trace-console-panel">
                                         <div class="panel-header">
-                                            <span class="panel-tab-title"><i class="fa-solid fa-terminal"></i> Terminal Debug Logger</span>
+                                            <span class="panel-tab-title"><i class="fa-solid fa-terminal"></i> Terminal
+                                                Debug Logger</span>
                                         </div>
                                         <div class="panel-content log-terminal" id="trace-log">
                                             &gt; Initializing visual logs...
@@ -1567,97 +1872,112 @@ print(power(2, 8))</textarea>
                             </div> <!-- closes card-body of Card 3 -->
                         </div> <!-- closes card glass of Card 3 -->
                     </div> <!-- closes rec-content-viz -->
-            
-            <!-- Tab 2: Recursion vs. Loops -->
-            <div id="rec-content-vs" class="recursion-tab-content" style="display: none;">
-                <!-- Side-by-Side: Recursion vs. Loops Comparison -->
-                <div class="card glass rec-card-theory rec-card-vs" style="margin-top: 0; width: 100%;">
-                    <div class="card-header">
-                        <span class="card-icon"><i class="fa-solid fa-code-compare text-accent-purple"></i></span>
-                        <h3>Recursion vs. Loops (Iteration)</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="rec-intro-text">Almost any problem that can be solved recursively can also be solved iteratively using a loop (like <code>for</code> or <code>while</code>). Let's compare the two approaches side-by-side:</p>
-                        
-                        <div class="code-compare-grid" style="margin-bottom: 24px;">
-                            <div class="code-compare-block py-block rec-compare-item-recursive">
-                                <div class="block-title rec-compare-title-recursive">
-                                    <i class="fa-brands fa-python"></i> Recursive Factorial
-                                </div>
-                                <pre><code>def factorial_recursive(n):
+
+                    <!-- Tab 2: Recursion vs. Loops -->
+                    <div id="rec-content-vs" class="recursion-tab-content" style="display: none;">
+                        <!-- Side-by-Side: Recursion vs. Loops Comparison -->
+                        <div class="card glass rec-card-theory rec-card-vs" style="margin-top: 0; width: 100%;">
+                            <div class="card-header">
+                                <span class="card-icon"><i
+                                        class="fa-solid fa-code-compare text-accent-purple"></i></span>
+                                <h3>Recursion vs. Loops (Iteration)</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="rec-intro-text">Almost any problem that can be solved recursively can also be
+                                    solved iteratively using a loop (like <code>for</code> or <code>while</code>). Let's
+                                    compare the two approaches side-by-side:</p>
+
+                                <div class="code-compare-grid" style="margin-bottom: 24px;">
+                                    <div class="code-compare-block py-block rec-compare-item-recursive">
+                                        <div class="block-title rec-compare-title-recursive">
+                                            <i class="fa-brands fa-python"></i> Recursive Factorial
+                                        </div>
+                                        <pre><code>def factorial_recursive(n):
     if n <= 1: # Base Case
         return 1
     # Recursive Step
     return n * factorial_recursive(n - 1)</code></pre>
-                            </div>
-                            <div class="code-compare-block py-block rec-compare-item-iterative">
-                                <div class="block-title rec-compare-title-iterative">
-                                    <i class="fa-brands fa-python"></i> Iterative Factorial (Loop)
-                                </div>
-                                <pre><code>def factorial_iterative(n):
+                                    </div>
+                                    <div class="code-compare-block py-block rec-compare-item-iterative">
+                                        <div class="block-title rec-compare-title-iterative">
+                                            <i class="fa-brands fa-python"></i> Iterative Factorial (Loop)
+                                        </div>
+                                        <pre><code>def factorial_iterative(n):
     result = 1
     for i in range(2, n + 1):
         result *= i
     return result</code></pre>
+                                    </div>
+                                </div>
+
+                                <div class="table-container premium-comparison-container">
+                                    <table class="comparison-table premium-comparison-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 25%">Aspect</th>
+                                                <th style="width: 37.5%">Recursion</th>
+                                                <th style="width: 37.5%">Iteration / Loops</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="premium-row">
+                                                <td class="aspect-cell">
+                                                    <strong>1. Readability & Writing</strong><br>
+                                                </td>
+                                                <td class="rec-highlight">
+                                                    <span class="tag-status status-pro">Highly Elegant</span>
+                                                    Closer to the mathematical definition. Code is often shorter and
+                                                    cleaner, especially for complex structures like binary trees,
+                                                    graphs, or sorting algorithms (QuickSort/MergeSort).
+                                                </td>
+                                                <td class="iter-highlight">
+                                                    <span class="tag-status status-neutral">Straightforward</span>
+                                                    Follows a clear, sequential step-by-step logic. Often easier to
+                                                    trace line-by-line for beginners since it doesn't involve hidden
+                                                    function states.
+                                                </td>
+                                            </tr>
+                                            <tr class="premium-row">
+                                                <td class="aspect-cell">
+                                                    <strong>2. Performance & Speed</strong><br>
+                                                </td>
+                                                <td class="rec-highlight">
+                                                    <span class="tag-status status-con">Slower & More Memory</span>
+                                                    Every call creates a new **stack frame** in memory (stores variables
+                                                    and return address). Python has a high overhead for function calls,
+                                                    making recursion slower and heavier.
+                                                </td>
+                                                <td class="iter-highlight">
+                                                    <span class="tag-status status-pro">Faster & Leaner</span>
+                                                    Keeps execution inside a single stack frame. Variables are updated
+                                                    directly in-place. Highly efficient in CPU cycles and memory.
+                                                </td>
+                                            </tr>
+                                            <tr class="premium-row">
+                                                <td class="aspect-cell">
+                                                    <strong>3. Key Risks</strong><br>
+                                                </td>
+                                                <td class="rec-highlight">
+                                                    <span class="tag-status status-con">Stack Overflow (Crash)</span>
+                                                    If the base case is missing or incorrect, it calls itself infinitely
+                                                    until it crashes with a <code>RecursionError</code>. Max limit is
+                                                    usually 1000 frames.
+                                                </td>
+                                                <td class="iter-highlight">
+                                                    <span class="tag-status status-neutral">Infinite Loop
+                                                        (Freeze)</span>
+                                                    If the loop condition is never satisfied, the program hangs
+                                                    (freezes), but it does not consume stack memory rapidly or crash
+                                                    immediately.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="table-container premium-comparison-container">
-                            <table class="comparison-table premium-comparison-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 25%">Aspect</th>
-                                        <th style="width: 37.5%">Recursion</th>
-                                        <th style="width: 37.5%">Iteration / Loops</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="premium-row">
-                                        <td class="aspect-cell">
-                                            <strong>1. Readability & Writing</strong><br>
-                                        </td>
-                                        <td class="rec-highlight">
-                                            <span class="tag-status status-pro">Highly Elegant</span> 
-                                            Closer to the mathematical definition. Code is often shorter and cleaner, especially for complex structures like binary trees, graphs, or sorting algorithms (QuickSort/MergeSort).
-                                        </td>
-                                        <td class="iter-highlight">
-                                            <span class="tag-status status-neutral">Straightforward</span> 
-                                            Follows a clear, sequential step-by-step logic. Often easier to trace line-by-line for beginners since it doesn't involve hidden function states.
-                                        </td>
-                                    </tr>
-                                    <tr class="premium-row">
-                                        <td class="aspect-cell">
-                                            <strong>2. Performance & Speed</strong><br>
-                                        </td>
-                                        <td class="rec-highlight">
-                                            <span class="tag-status status-con">Slower & More Memory</span> 
-                                            Every call creates a new **stack frame** in memory (stores variables and return address). Python has a high overhead for function calls, making recursion slower and heavier.
-                                        </td>
-                                        <td class="iter-highlight">
-                                            <span class="tag-status status-pro">Faster & Leaner</span> 
-                                            Keeps execution inside a single stack frame. Variables are updated directly in-place. Highly efficient in CPU cycles and memory.
-                                        </td>
-                                    </tr>
-                                    <tr class="premium-row">
-                                        <td class="aspect-cell">
-                                            <strong>3. Key Risks</strong><br>
-                                        </td>
-                                        <td class="rec-highlight">
-                                            <span class="tag-status status-con">Stack Overflow (Crash)</span> 
-                                            If the base case is missing or incorrect, it calls itself infinitely until it crashes with a <code>RecursionError</code>. Max limit is usually 1000 frames.
-                                        </td>
-                                        <td class="iter-highlight">
-                                            <span class="tag-status status-neutral">Infinite Loop (Freeze)</span> 
-                                            If the loop condition is never satisfied, the program hangs (freezes), but it does not consume stack memory rapidly or crash immediately.
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
-                </div>
-            </div>
-        </section>
+                </section>
 
                 <!-- 5. MODULE 3: COMPLEXITY & TIMEIT -->
                 <section id="module3-section" class="content-section">
@@ -1667,7 +1987,8 @@ print(power(2, 8))</textarea>
                         </div>
                         <div class="mod-header-text">
                             <h2>Module 3: Complexity Analysis & timeit Module</h2>
-                            <p>Evaluate code performance theoretically using Big-O, and empirically using Python's timeit benchmark suite.</p>
+                            <p>Evaluate code performance theoretically using Big-O, and empirically using Python's
+                                timeit benchmark suite.</p>
                         </div>
                     </div>
 
@@ -1812,7 +2133,8 @@ print(power(2, 8))</textarea>
                         </div>
                         <div class="mod-header-text">
                             <h2>Module 4: Transition to Object-Oriented Programming (OOP)</h2>
-                            <p>Re-organize data structures from static C Structs to native Python Classes and master the mechanics of self.</p>
+                            <p>Re-organize data structures from static C Structs to native Python Classes and master the
+                                mechanics of self.</p>
                         </div>
                     </div>
 
@@ -1934,7 +2256,8 @@ print(f"Sound: {my_dog.speak()}")
                         </div>
                         <div class="mod-header-text">
                             <h2>C to Python Transition Quiz</h2>
-                            <p>Assess your structural understanding of how programming paradigms transition from low-level C code to Python abstractions.</p>
+                            <p>Assess your structural understanding of how programming paradigms transition from
+                                low-level C code to Python abstractions.</p>
                         </div>
                     </div>
 

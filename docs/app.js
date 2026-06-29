@@ -6,7 +6,7 @@ let currentOutputBuffer = "";
 
 // Helper to support Tab key indentation in textareas (inserts 4 spaces)
 function enableTabIndentation(textarea) {
-    textarea.addEventListener("keydown", function(e) {
+    textarea.addEventListener("keydown", function (e) {
         if (e.key === "Tab") {
             e.preventDefault();
             const start = this.selectionStart;
@@ -32,11 +32,11 @@ async function initPyodide() {
                 currentOutputBuffer += "Error: " + text + "\n";
             }
         });
-        
+
         statusText.textContent = "Python Ready (WASM)";
         statusDot.className = "status-dot ready";
         globalConsoleTerminal.textContent = ">>> Python Environment Initialized.\n>>> Type code above and click Execute.";
-        
+
         // Warm up Pyodide with an execution
         await pyodideInstance.runPythonAsync("print('Pyodide engine is active.')");
         currentOutputBuffer = ""; // Reset warm-up logs
@@ -76,7 +76,7 @@ function navigateToSection(sectionId) {
     // Hide all sections
     const sections = document.querySelectorAll(".content-section");
     sections.forEach(sec => sec.classList.remove("active"));
-    
+
     // Show targeted section
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Sidebar toggle trigger
     const sidebarToggleBtn = document.getElementById("sidebar-toggle-btn");
     const appContainer = document.querySelector(".app-container");
-    
+
     if (sidebarToggleBtn && appContainer) {
         sidebarToggleBtn.addEventListener("click", () => {
             appContainer.classList.toggle("collapsed");
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
         trigger.addEventListener("click", () => {
             const item = trigger.closest(".accordion-item");
             const isOpen = item.classList.contains("open");
-            
+
             // Close all other accordions in the same group
             const group = item.closest(".accordion-group");
             if (group) {
@@ -238,10 +238,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
             }
-            
+
             // Toggle current item
             item.classList.toggle("open", !isOpen);
-            
+
             // Trigger resize/sync for any live editors inside the newly opened accordion
             if (item.classList.contains("open")) {
                 item.querySelectorAll('.live-code-textarea').forEach(ta => {
@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", () => {
             whyTabs.forEach(t => t.classList.remove("active"));
             whyContents.forEach(c => c.classList.remove("active"));
-            
+
             btn.classList.add("active");
             const targetId = `why-content-${btn.getAttribute("data-tab")}`;
             const targetContent = document.getElementById(targetId);
@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (toggleConsoleBtn) toggleConsoleBtn.addEventListener("click", toggleDrawer);
     if (minimizeConsoleBtn) minimizeConsoleBtn.addEventListener("click", toggleDrawer);
-    
+
     // Clear terminal console
     if (clearConsoleBtn) {
         clearConsoleBtn.addEventListener("click", () => {
@@ -440,7 +440,7 @@ except Exception as e:
 
 function setupLabs() {
     const verifyButtons = document.querySelectorAll(".verify-editor-btn");
-    
+
     verifyButtons.forEach(btn => {
         btn.addEventListener("click", async () => {
             const labId = btn.getAttribute("data-lab");
@@ -448,20 +448,20 @@ function setupLabs() {
             const textarea = container.querySelector(".editor-textarea");
             const outputField = container.querySelector(".editor-output");
             const statusDiv = document.getElementById(labId + "-status");
-            
+
             outputField.textContent = "Verifying solution with tests...\n";
             statusDiv.style.display = "none";
-            
+
             if (!pyodideInstance) {
                 outputField.textContent = "Python interpreter is loading. Please try again shortly.";
                 return;
             }
-            
+
             // Combine user code and tests
             const executionCode = textarea.value + "\n" + labTests[labId].tests;
             const output = await runPythonCode(executionCode);
             outputField.textContent = output;
-            
+
             // Set verification UI feedback
             if (output.includes("Verification Passed")) {
                 statusDiv.className = "verification-status success";
@@ -479,7 +479,7 @@ function setupLabs() {
 function switchLabTab(tabId) {
     const tabs = document.querySelectorAll(".lab-tab");
     const contents = document.querySelectorAll(".lab-tab-content");
-    
+
     tabs.forEach(tab => {
         if (tab.getAttribute("onclick").includes(tabId)) {
             tab.classList.add("active");
@@ -487,7 +487,7 @@ function switchLabTab(tabId) {
             tab.classList.remove("active");
         }
     });
-    
+
     contents.forEach(content => {
         if (content.id === tabId) {
             content.classList.add("active");
@@ -506,7 +506,7 @@ function setupEditors() {
         const textarea = container.querySelector(".editor-textarea");
         const runBtn = container.querySelector(".run-editor-btn");
         const outputField = container.querySelector(".editor-output");
-        
+
         if (runBtn && textarea && outputField) {
             runBtn.addEventListener("click", async () => {
                 outputField.textContent = "Running code...";
@@ -650,29 +650,29 @@ function setupRecursionVisualizer() {
     const startBtn = document.getElementById("rec-start-btn");
     const stepBtn = document.getElementById("rec-step-btn");
     const resetBtn = document.getElementById("rec-reset-btn");
-    
+
     // Set initial template code and explanation
     updateRecCodeDisplay();
     updateRecExplanation();
-    
+
     algorithmSelect.addEventListener("change", () => {
         updateRecCodeDisplay();
         updateRecExplanation();
         resetRecursionVisualizer();
     });
-    
+
     startBtn.addEventListener("click", () => {
         initializeRecursionTrace();
     });
-    
+
     stepBtn.addEventListener("click", () => {
         stepRecursionTrace();
     });
-    
+
     resetBtn.addEventListener("click", () => {
         resetRecursionVisualizer();
     });
-    
+
     // Setup Drag-to-Pan support
     setupTreePan();
 }
@@ -685,10 +685,10 @@ function resetRecursionVisualizer() {
     const stackContainer = document.getElementById("stack-container");
     const traceLog = document.getElementById("trace-log");
     const stepBtn = document.getElementById("rec-step-btn");
-    
+
     stackContainer.innerHTML = '<div class="empty-stack-msg" id="empty-tree-msg">Tree is empty. Click Initialize.</div>';
     traceLog.innerHTML = 'Initializing visual logs...';
-    
+
     stepBtn.disabled = true;
     recursionSteps = [];
     currentRecStepIdx = -1;
@@ -700,20 +700,20 @@ function resetRecursionVisualizer() {
 function initializeRecursionTrace() {
     const algo = document.getElementById("rec-algorithm").value;
     const n = parseInt(document.getElementById("rec-input").value);
-    
+
     if (isNaN(n) || n < 1 || n > 5) {
         alert("Please enter a valid N between 1 and 5.");
         return;
     }
-    
+
     resetTreeZoom();
-    
+
     const stackContainer = document.getElementById("stack-container");
     stackContainer.innerHTML = '<svg id="rec-tree-svg" viewBox="0 0 540 240" preserveAspectRatio="xMidYMin meet" style="width: 100%; height: 100%;"></svg>';
-    
+
     recursionSteps = [];
     treeNodes = [];
-    
+
     if (algo === "factorial") {
         generateFactorialSteps(n);
     } else if (algo === "sum") {
@@ -721,7 +721,7 @@ function initializeRecursionTrace() {
     } else if (algo === "fibonacci") {
         generateFibonacciSteps(n);
     }
-    
+
     currentRecStepIdx = 0;
     document.getElementById("rec-step-btn").disabled = false;
     document.getElementById("trace-log").innerHTML = '<div class="log-entry info">Initialized visual tracker with parameters.</div>';
@@ -731,7 +731,7 @@ function initializeRecursionTrace() {
 // Generate traces
 function generateFactorialSteps(n) {
     let callId = 1;
-    
+
     function traceFact(val, parentFrameId) {
         let frameId = callId++;
         // Push call step
@@ -744,7 +744,7 @@ function generateFactorialSteps(n) {
             line: 1, // 'if n <= 1:' check
             desc: `Call factorial(${val}). Checking if n <= 1.`
         });
-        
+
         if (val <= 1) {
             recursionSteps.push({
                 type: "base",
@@ -758,7 +758,7 @@ function generateFactorialSteps(n) {
             });
             return 1;
         }
-        
+
         // Push recursive descent step
         recursionSteps.push({
             type: "descent",
@@ -769,10 +769,10 @@ function generateFactorialSteps(n) {
             line: 3, // 'return n * factorial(n - 1)'
             desc: `n (${val}) > 1. Needs value of factorial(${val - 1}) first. Spawning call...`
         });
-        
+
         let childVal = traceFact(val - 1, frameId);
         let myVal = val * childVal;
-        
+
         recursionSteps.push({
             type: "return",
             name: `factorial(${val})`,
@@ -783,16 +783,16 @@ function generateFactorialSteps(n) {
             retVal: myVal,
             desc: `Returned value: factorial(${val - 1}) = ${childVal}. Compute ${val} * ${childVal} = ${myVal}.`
         });
-        
+
         return myVal;
     }
-    
+
     traceFact(n, null);
 }
 
 function generateSumSteps(n) {
     let callId = 1;
-    
+
     function traceSum(val, parentFrameId) {
         let frameId = callId++;
         recursionSteps.push({
@@ -804,7 +804,7 @@ function generateSumSteps(n) {
             line: 1,
             desc: `Call sum_n(${val}). Checking base case condition.`
         });
-        
+
         if (val <= 0) {
             recursionSteps.push({
                 type: "base",
@@ -818,7 +818,7 @@ function generateSumSteps(n) {
             });
             return 0;
         }
-        
+
         recursionSteps.push({
             type: "descent",
             name: `sum_n(${val})`,
@@ -828,10 +828,10 @@ function generateSumSteps(n) {
             line: 3,
             desc: `n > 0. Must calculate sum_n(${val - 1}) first.`
         });
-        
+
         let childVal = traceSum(val - 1, frameId);
         let myVal = val + childVal;
-        
+
         recursionSteps.push({
             type: "return",
             name: `sum_n(${val})`,
@@ -842,7 +842,7 @@ function generateSumSteps(n) {
             retVal: myVal,
             desc: `Return bubble: sum_n(${val - 1}) returned ${childVal}. Return ${val} + ${childVal} = ${myVal}.`
         });
-        
+
         return myVal;
     }
     traceSum(n, null);
@@ -850,7 +850,7 @@ function generateSumSteps(n) {
 
 function generateFibonacciSteps(n) {
     let callId = 1;
-    
+
     function traceFib(val, parentFrameId) {
         let frameId = callId++;
         recursionSteps.push({
@@ -862,7 +862,7 @@ function generateFibonacciSteps(n) {
             line: 1,
             desc: `Call fib(${val}). Check if n <= 1.`
         });
-        
+
         if (val <= 1) {
             recursionSteps.push({
                 type: "base",
@@ -876,7 +876,7 @@ function generateFibonacciSteps(n) {
             });
             return val;
         }
-        
+
         recursionSteps.push({
             type: "descent",
             name: `fib(${val})`,
@@ -886,9 +886,9 @@ function generateFibonacciSteps(n) {
             line: 3,
             desc: `Branching left: Need value of fib(${val - 1}) first.`
         });
-        
+
         let left = traceFib(val - 1, frameId);
-        
+
         recursionSteps.push({
             type: "descent-right",
             name: `fib(${val})`,
@@ -898,10 +898,10 @@ function generateFibonacciSteps(n) {
             line: 3,
             desc: `Branching right: fib(${val - 1}) returned ${left}. Now need fib(${val - 2}).`
         });
-        
+
         let right = traceFib(val - 2, frameId);
         let myVal = left + right;
-        
+
         recursionSteps.push({
             type: "return",
             name: `fib(${val})`,
@@ -912,7 +912,7 @@ function generateFibonacciSteps(n) {
             retVal: myVal,
             desc: `Combine branches: fib(${val - 1}) = ${left}, fib(${val - 2}) = ${right}. Returns ${left} + ${right} = ${myVal}.`
         });
-        
+
         return myVal;
     }
     traceFib(n, null);
@@ -933,35 +933,35 @@ function stepRecursionTrace() {
 function renderRecursionStep() {
     const step = recursionSteps[currentRecStepIdx];
     const traceLog = document.getElementById("trace-log");
-    
+
     // Update logs
     let logClass = "info";
     if (step.type === "call") logClass = "call";
     else if (step.type === "descent" || step.type === "descent-right") logClass = "descent";
     else if (step.type === "base") logClass = "base";
     else if (step.type === "return") logClass = "return";
-    
+
     if (currentRecStepIdx === recursionSteps.length - 1 && step.type === "return") {
         logClass = "success";
     }
-    
+
     traceLog.innerHTML += `<div class="log-entry ${logClass}">[Step ${currentRecStepIdx + 1}] ${step.desc}</div>`;
     traceLog.scrollTop = traceLog.scrollHeight;
-    
+
     // Update Tree nodes data structure
     if (step.type === "call") {
         // Calculate tree positioning
         let depth = 0;
         let x = 270; // Center of 540px canvas
         let y = 20;
-        
+
         // Find parent
         if (step.parentFrameId !== null) {
             const parentNode = treeNodes.find(n => n.id === step.parentFrameId);
             if (parentNode) {
                 depth = parentNode.depth + 1;
                 y = parentNode.y + 38; // depth step
-                
+
                 const algo = document.getElementById("rec-algorithm").value;
                 if (algo === "fibonacci") {
                     // Binary tree horizontal offsets
@@ -970,7 +970,7 @@ function renderRecursionStep() {
                     else if (depth === 2) widthOffset = 55;
                     else if (depth === 3) widthOffset = 28;
                     else if (depth === 4) widthOffset = 14;
-                    
+
                     const siblings = treeNodes.filter(n => n.parentId === parentNode.id);
                     if (siblings.length === 0) {
                         x = parentNode.x - widthOffset; // Left branch
@@ -983,12 +983,12 @@ function renderRecursionStep() {
                 }
             }
         }
-        
+
         // Set other active nodes to waiting
         treeNodes.forEach(n => {
             if (n.state === "active") n.state = "waiting";
         });
-        
+
         // Push new node
         treeNodes.push({
             id: step.frameId,
@@ -1016,7 +1016,7 @@ function renderRecursionStep() {
                 node.isBase = true;
             }
         }
-        
+
         // Reactivate parent node
         if (step.parentFrameId !== null) {
             const parentNode = treeNodes.find(n => n.id === step.parentFrameId);
@@ -1025,10 +1025,10 @@ function renderRecursionStep() {
             }
         }
     }
-    
+
     // Draw the tree
     drawRecursionTree();
-    
+
     // Highlight code line
     highlightCodeLine(step.line);
 }
@@ -1036,20 +1036,20 @@ function renderRecursionStep() {
 function drawRecursionTree() {
     const svg = document.getElementById("rec-tree-svg");
     if (!svg) return;
-    
+
     // Clear SVG
     svg.innerHTML = "";
-    
+
     // Get container size dynamically
     const container = document.getElementById("stack-container");
     const width = 540; // Fixed width for viewBox
-    
+
     // Auto adjust root node x to center of container
     if (treeNodes.length > 0 && treeNodes[0].parentId === null && Math.abs(treeNodes[0].x - width / 2) > 5) {
         const deltaX = width / 2 - treeNodes[0].x;
         treeNodes.forEach(n => n.x += deltaX);
     }
-    
+
     // 1. Draw lines (edges)
     treeNodes.forEach(node => {
         if (node.parentId !== null) {
@@ -1064,17 +1064,17 @@ function drawRecursionTree() {
             }
         }
     });
-    
+
     // 2. Draw nodes (rounded rects)
     treeNodes.forEach(node => {
         const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        
+
         // Node dimensions
         const rectW = 26;
         const rectH = 13;
         const rx = node.x - rectW / 2;
         const ry = node.y - rectH / 2;
-        
+
         // Rect element
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         rect.setAttribute("x", rx);
@@ -1083,12 +1083,12 @@ function drawRecursionTree() {
         rect.setAttribute("height", rectH);
         rect.setAttribute("rx", "3");
         rect.setAttribute("ry", "3");
-        
+
         // Select colors based on node state
         let fill = "rgba(148, 163, 184, 0.1)"; // default waiting/inactive
         let stroke = "var(--border-color)";
         let glow = "none";
-        
+
         if (node.state === "active") {
             fill = "rgba(6, 182, 212, 0.15)"; // Cyan active
             stroke = "var(--accent-cyan)";
@@ -1100,7 +1100,7 @@ function drawRecursionTree() {
             fill = "rgba(16, 185, 129, 0.15)"; // Green returned
             stroke = "var(--accent-green)";
         }
-        
+
         rect.setAttribute("fill", fill);
         rect.setAttribute("stroke", stroke);
         rect.setAttribute("stroke-width", "1.5");
@@ -1108,7 +1108,7 @@ function drawRecursionTree() {
             rect.setAttribute("style", `filter: drop-shadow(${glow});`);
         }
         group.appendChild(rect);
-        
+
         // Text inside node
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.setAttribute("x", node.x);
@@ -1118,7 +1118,7 @@ function drawRecursionTree() {
         text.setAttribute("font-size", "7px");
         text.setAttribute("font-family", "monospace");
         text.setAttribute("font-weight", "600");
-        
+
         // Shorten name if needed, e.g. factorial(4) -> fact(4)
         let displayName = node.name;
         if (displayName.startsWith("factorial")) {
@@ -1128,10 +1128,10 @@ function drawRecursionTree() {
         } else if (displayName.startsWith("fibonacci")) {
             displayName = displayName.replace("fibonacci", "fib");
         }
-        
+
         text.textContent = displayName;
         group.appendChild(text);
-        
+
         // Draw Base Case label under the node
         if (node.isBase) {
             const baseText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -1145,14 +1145,14 @@ function drawRecursionTree() {
             baseText.textContent = "★ Base";
             group.appendChild(baseText);
         }
-        
+
         // If node has returned a value, draw a small value badge on top right corner
         if (node.state === "returned" && node.retVal !== null) {
             const badgeGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-            
+
             const badgeX = node.x + rectW / 2 - 1;
             const badgeY = node.y - rectH / 2 + 1;
-            
+
             // Badge background circle
             const badgeCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             badgeCircle.setAttribute("cx", badgeX);
@@ -1160,7 +1160,7 @@ function drawRecursionTree() {
             badgeCircle.setAttribute("r", "5");
             badgeCircle.setAttribute("fill", "var(--accent-green)");
             badgeGroup.appendChild(badgeCircle);
-            
+
             // Badge text value
             const badgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
             badgeText.setAttribute("x", badgeX);
@@ -1172,13 +1172,13 @@ function drawRecursionTree() {
             badgeText.setAttribute("font-weight", "bold");
             badgeText.textContent = node.retVal;
             badgeGroup.appendChild(badgeText);
-            
+
             group.appendChild(badgeGroup);
         }
-        
+
         svg.appendChild(group);
     });
-    
+
 
 }
 
@@ -1186,7 +1186,7 @@ function highlightCodeLine(lineIdx) {
     const algo = document.getElementById("rec-algorithm").value;
     const rawLines = recCodeTemplate[algo].code.split("\n");
     const container = document.getElementById("visualizer-code-display");
-    
+
     container.innerHTML = "";
     rawLines.forEach((line, idx) => {
         const span = document.createElement("span");
@@ -1204,7 +1204,7 @@ function highlightCodeLine(lineIdx) {
 function setupBigOSlider() {
     const slider = document.getElementById("n-slider");
     const valText = document.getElementById("n-val");
-    
+
     slider.addEventListener("input", (e) => {
         const val = parseInt(e.target.value);
         valText.textContent = val;
@@ -1215,22 +1215,22 @@ function setupBigOSlider() {
 function updateBigOGraph(N) {
     const svg = document.getElementById("bigo-svg");
     if (!svg) return;
-    
+
     const width = 400;
     const height = 250;
     const originX = 40;
     const originY = 210;
     const chartW = width - originX - 20;
     const chartH = originY - 20;
-    
+
     // Clean interactive indicators first (vertical indicator lines)
     const oldIndicators = svg.querySelectorAll(".indicator-elem");
     oldIndicators.forEach(elem => elem.remove());
-    
+
     // Slider N position
     const sliderPct = (N - 5) / 95;
     const xPos = originX + sliderPct * chartW;
-    
+
     // Create horizontal/vertical reference projection line
     const vLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
     vLine.setAttribute("x1", xPos);
@@ -1249,21 +1249,21 @@ function updateBigOGraph(N) {
             const progress = (xVal - 5) / 95;
             const x = originX + progress * chartW;
             const yVal = equation(xVal);
-            
+
             // Cap height to chart boundary
             const y = Math.max(20, originY - yVal * (chartH / 100));
             pathData += ` L ${x} ${y}`;
         }
         return pathData;
     }
-    
+
     // Equations mapping N to chart values (scaled)
     document.getElementById("curve-constant").setAttribute("d", generatePath(n => 5)); // O(1)
     document.getElementById("curve-log").setAttribute("d", generatePath(n => Math.log2(n) * 4)); // O(log N)
     document.getElementById("curve-linear").setAttribute("d", generatePath(n => n * 0.7)); // O(N)
     document.getElementById("curve-nlogn").setAttribute("d", generatePath(n => n * Math.log2(n) * 0.12)); // O(N log N)
     document.getElementById("curve-quadratic").setAttribute("d", generatePath(n => (n * n) * 0.012)); // O(N2)
-    
+
     // Plot intersection dots for visual reference
     const intersectionPoints = [
         { id: "O(1)", val: 5, color: "#10b981" },
@@ -1272,10 +1272,10 @@ function updateBigOGraph(N) {
         { id: "O(N log N)", val: N * Math.log2(N) * 0.12, color: "#a855f7" },
         { id: "O(N²)", val: (N * N) * 0.012, color: "#f43f5e" }
     ];
-    
+
     intersectionPoints.forEach(point => {
         const y = Math.max(20, originY - point.val * (chartH / 100));
-        
+
         // Add glowing point intersection circle
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         circle.setAttribute("cx", xPos);
@@ -1298,17 +1298,17 @@ async function runLiveBenchmark() {
     const benchmarkType = document.getElementById("benchmark-type").value;
     const terminal = document.getElementById("benchmark-terminal");
     const runBtn = document.getElementById("run-benchmark-btn");
-    
+
     if (!pyodideInstance) {
         terminal.textContent = "WASM Python environment is loading, benchmark cannot run yet.";
         return;
     }
-    
+
     runBtn.disabled = true;
     terminal.textContent = `>>> Bootstrapping timeit performance suite...\n>>> Target: ${benchmarkType.toUpperCase()} algorithms\n`;
-    
+
     let pythonScript = "";
-    
+
     // Configure algorithms scripts
     if (benchmarkType === "search") {
         pythonScript = `
@@ -1362,7 +1362,7 @@ for size in sizes:
 print(f"LINEAR_BENCH={linear_times}")
 print(f"BINARY_BENCH={binary_times}")
 `;
-    } 
+    }
     else if (benchmarkType === "sort") {
         pythonScript = `
 import time
@@ -1410,42 +1410,42 @@ print(f"BUBBLE_BENCH={bubble_times}")
 print(f"TIMSORT_BENCH={timsort_times}")
 `;
     }
-    
+
     // Execute python script
     terminal.textContent += `>>> Running iterations on sizes...\n`;
-    
+
     const response = await runPythonCode(pythonScript);
     terminal.textContent += response;
-    
+
     // Parse benchmark results from outputs
     let results = { path1: [], path2: [] };
     let sizesUsed = [];
-    
+
     if (benchmarkType === "search") {
         sizesUsed = [500, 2000, 5000, 10000];
         const linMatch = response.match(/LINEAR_BENCH=\[(.*?)\]/);
         const binMatch = response.match(/BINARY_BENCH=\[(.*?)\]/);
-        
+
         if (linMatch && binMatch) {
             results.path1 = linMatch[1].split(',').map(Number);
             results.path2 = binMatch[1].split(',').map(Number);
         }
-        
+
         plotEmpiricalGraph(sizesUsed, results.path1, results.path2, "Linear Search O(N)", "Binary Search O(log N)");
-    } 
+    }
     else if (benchmarkType === "sort") {
         sizesUsed = [50, 150, 300, 500];
         const bubbleMatch = response.match(/BUBBLE_BENCH=\[(.*?)\]/);
         const timMatch = response.match(/TIMSORT_BENCH=\[(.*?)\]/);
-        
+
         if (bubbleMatch && timMatch) {
             results.path1 = bubbleMatch[1].split(',').map(Number);
             results.path2 = timMatch[1].split(',').map(Number);
         }
-        
+
         plotEmpiricalGraph(sizesUsed, results.path1, results.path2, "Bubble Sort O(N²)", "Built-in Sort O(N log N)");
     }
-    
+
     runBtn.disabled = false;
 }
 
@@ -1453,51 +1453,51 @@ function plotEmpiricalGraph(sizes, times1, times2, label1, label2) {
     const svg = document.getElementById("empirical-svg");
     const path1 = document.getElementById("emp-path-1");
     const path2 = document.getElementById("emp-path-2");
-    
+
     // Update legend titles
     document.getElementById("emp-legend-lbl1").textContent = label1;
     document.getElementById("emp-legend-lbl2").textContent = label2;
-    
+
     if (!times1 || !times2 || times1.length === 0) return;
-    
+
     const width = 400;
     const height = 220;
     const originX = 40;
     const originY = 180;
     const chartW = width - originX - 20;
     const chartH = originY - 20;
-    
+
     // Clean old data points first
     const oldDots = svg.querySelectorAll(".bench-dot");
     oldDots.forEach(d => d.remove());
-    
+
     // Scale max height based on worst timings
-    const maxTime = Math.max(...times1, ...times2, 0.001); 
+    const maxTime = Math.max(...times1, ...times2, 0.001);
     const minSize = sizes[0];
     const maxSize = sizes[sizes.length - 1];
-    
+
     function scaleX(size) {
         return originX + ((size - minSize) / (maxSize - minSize)) * chartW;
     }
-    
+
     function scaleY(time) {
         return originY - (time / maxTime) * chartH;
     }
-    
+
     // Draw paths
     let p1Data = `M ${scaleX(sizes[0])} ${scaleY(times1[0])}`;
     let p2Data = `M ${scaleX(sizes[0])} ${scaleY(times2[0])}`;
-    
+
     for (let i = 0; i < sizes.length; i++) {
         const x = scaleX(sizes[i]);
         const y1 = scaleY(times1[i]);
         const y2 = scaleY(times2[i]);
-        
+
         if (i > 0) {
             p1Data += ` L ${x} ${y1}`;
             p2Data += ` L ${x} ${y2}`;
         }
-        
+
         // Draw actual data dots on plot
         const dot1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         dot1.setAttribute("cx", x);
@@ -1505,18 +1505,18 @@ function plotEmpiricalGraph(sizes, times1, times2, label1, label2) {
         dot1.setAttribute("r", 4);
         dot1.setAttribute("fill", "#f43f5e");
         dot1.setAttribute("class", "bench-dot");
-        
+
         const dot2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         dot2.setAttribute("cx", x);
         dot2.setAttribute("cy", y2);
         dot2.setAttribute("r", 4);
         dot2.setAttribute("fill", "#10b981");
         dot2.setAttribute("class", "bench-dot");
-        
+
         svg.appendChild(dot1);
         svg.appendChild(dot2);
     }
-    
+
     path1.setAttribute("d", p1Data);
     path2.setAttribute("d", p2Data);
 }
@@ -1593,32 +1593,32 @@ let userAnswers = Array(quizQuestions.length).fill(null);
 function loadQuizQuestion() {
     const container = document.getElementById("quiz-container");
     if (!container) return;
-    
+
     if (currentQuizIdx >= quizQuestions.length) {
         showQuizResults();
         return;
     }
-    
+
     const q = quizQuestions[currentQuizIdx];
     const prevAnswer = userAnswers[currentQuizIdx];
     const isAnswered = (prevAnswer !== null);
-    
+
     container.innerHTML = `
         <div class="quiz-question-card glass">
             <div class="quiz-q-num">Question ${q.num} of ${quizQuestions.length}</div>
             <div class="quiz-q-text">${q.question}</div>
             <div class="quiz-options">
                 ${q.options.map((opt, i) => {
-                    let extraClass = "";
-                    if (isAnswered) {
-                        if (i === q.answer) {
-                            extraClass = " correct";
-                        } else if (i === prevAnswer) {
-                            extraClass = " incorrect";
-                        }
-                    }
-                    return `<button class="quiz-option${extraClass}" ${isAnswered ? 'disabled' : ''} onclick="selectQuizOption(${i})">${opt}</button>`;
-                }).join('')}
+        let extraClass = "";
+        if (isAnswered) {
+            if (i === q.answer) {
+                extraClass = " correct";
+            } else if (i === prevAnswer) {
+                extraClass = " incorrect";
+            }
+        }
+        return `<button class="quiz-option${extraClass}" ${isAnswered ? 'disabled' : ''} onclick="selectQuizOption(${i})">${opt}</button>`;
+    }).join('')}
             </div>
             <div class="quiz-explanation ${isAnswered ? (prevAnswer === q.answer ? 'correct-explain' : 'incorrect-explain') : ''}" id="quiz-explanation-box" style="display: ${isAnswered ? 'block' : 'none'};">
                 ${isAnswered ? `
@@ -1644,15 +1644,15 @@ function loadQuizQuestion() {
 function selectQuizOption(optionIdx) {
     const q = quizQuestions[currentQuizIdx];
     const options = document.querySelectorAll(".quiz-option");
-    
+
     // Disable all options from clicks
     options.forEach(opt => opt.disabled = true);
-    
+
     // Mark selection
     userAnswers[currentQuizIdx] = optionIdx;
-    
+
     const isCorrect = (optionIdx === q.answer);
-    
+
     // Set styles
     options.forEach((opt, idx) => {
         if (idx === q.answer) {
@@ -1661,7 +1661,7 @@ function selectQuizOption(optionIdx) {
             opt.classList.add("incorrect");
         }
     });
-    
+
     // Render explanation
     const explainBox = document.getElementById("quiz-explanation-box");
     explainBox.style.display = "block";
@@ -1678,7 +1678,7 @@ function selectQuizOption(optionIdx) {
             <p>${q.explanation}</p>
         `;
     }
-    
+
     // Show Next Button
     document.getElementById("quiz-next-btn").style.display = "inline-flex";
 }
@@ -1703,10 +1703,10 @@ window.resetQuiz = resetQuiz;
 function showQuizResults() {
     const container = document.getElementById("quiz-container");
     container.style.display = "none";
-    
+
     const summaryCard = document.getElementById("quiz-summary-card");
     summaryCard.style.display = "flex";
-    
+
     // Compute Score
     let score = 0;
     userAnswers.forEach((ans, idx) => {
@@ -1714,10 +1714,10 @@ function showQuizResults() {
             score++;
         }
     });
-    
+
     document.getElementById("quiz-score-num").textContent = score;
     document.getElementById("quiz-score-total").textContent = quizQuestions.length;
-    
+
     const fbText = document.getElementById("quiz-feedback-text");
     if (score === quizQuestions.length) {
         fbText.textContent = "Spectacular! You are fully prepared to teach the DSA curriculum in Python. You've mastered C to Python syntax structures!";
@@ -1731,11 +1731,11 @@ function showQuizResults() {
 function resetQuiz() {
     currentQuizIdx = 0;
     userAnswers = Array(quizQuestions.length).fill(null);
-    
+
     document.getElementById("quiz-summary-card").style.display = "none";
     const container = document.getElementById("quiz-container");
     container.style.display = "block";
-    
+
     loadQuizQuestion();
 }
 
@@ -1744,10 +1744,10 @@ async function runLiveCode(textareaId, outputId) {
     const textarea = document.getElementById(textareaId);
     const output = document.getElementById(outputId);
     if (!textarea || !output) return;
-    
+
     output.textContent = "Running code in WebAssembly Python environment...\n";
     output.className = "live-code-output running";
-    
+
     // We reuse the page's runPythonCode helper
     const result = await runPythonCode(textarea.value);
     output.textContent = result || "Execution finished (no printed output).";
@@ -1816,7 +1816,7 @@ function setupWhyPythonSimulators() {
                     memNewRow.style.display = "flex";
                 }
                 memStatusText.innerHTML = `<span style="color: var(--accent-red);"><i class="fa-solid fa-triangle-exclamation"></i> C Array overflow! Allocating new block of size 10...</span>`;
-                
+
                 // Python resizes and appends elements instantly
                 updatePythonMemory(6);
 
@@ -1906,14 +1906,14 @@ function setupWhyPythonSimulators() {
             const nodes = document.querySelectorAll(".hash-node");
             const arrow = document.getElementById("arrow-David");
             const pyRows = document.querySelectorAll(".py-dict-row");
-            
+
             // Clear highlights
             nodes.forEach(n => n.className = "hash-node");
             if (arrow) arrow.style.display = "none";
             pyRows.forEach(r => r.className = "py-dict-row");
-            
+
             hashStatusText.innerHTML = `Computing hash for "${name}"...`;
-            
+
             if (name === "Alice") {
                 const node = document.getElementById("node-Alice");
                 const pyRow = document.getElementById("py-dict-Alice");
@@ -1938,7 +1938,7 @@ function setupWhyPythonSimulators() {
                     nodeAlice.classList.add("active-search");
                     pyRowAlice.classList.add("active-search");
                     hashStatusText.innerHTML = `<strong>C Table Trace:</strong> Hash("David") % 5 = <strong>Bucket 1</strong>. Bucket 1 head is "Alice" (Mismatch). Collision!`;
-                    
+
                     setTimeout(() => {
                         nodeAlice.classList.remove("active-search");
                         pyRowAlice.classList.remove("active-search");
@@ -1947,7 +1947,7 @@ function setupWhyPythonSimulators() {
                         pyRowDavid.classList.add("active-search");
                         hashStatusText.innerHTML = `<strong>C Table Trace:</strong> Hash("David") % 5 = Bucket 1. Traversing collision link pointer to "David" (Match!). Found Value: <strong>B+</strong>.`;
                     }, 1000);
-                    
+
                     setTimeout(() => {
                         nodeDavid.classList.remove("active-search");
                         nodeDavid.classList.add("found");
@@ -2137,28 +2137,28 @@ function setupDynamicTypingVisualizer() {
     const prevBtn = document.getElementById("typing-prev-btn");
     const nextBtn = document.getElementById("typing-next-btn");
     const resetBtn = document.getElementById("typing-reset-btn");
-    
+
     if (!prevBtn || !nextBtn || !resetBtn) return;
-    
+
     prevBtn.addEventListener("click", () => {
         if (currentTypingStep > 0) {
             currentTypingStep--;
             renderTypingStep();
         }
     });
-    
+
     nextBtn.addEventListener("click", () => {
         if (currentTypingStep < typingSteps.length - 1) {
             currentTypingStep++;
             renderTypingStep();
         }
     });
-    
+
     resetBtn.addEventListener("click", () => {
         currentTypingStep = 0;
         renderTypingStep();
     });
-    
+
     // Add window resize trigger to recalculate line coords
     window.addEventListener("resize", () => {
         if (document.getElementById("dynamic-typing-visualizer-section")) {
@@ -2183,31 +2183,31 @@ function getStrokeColorForMarker(markerId) {
 function updateTypingConnections() {
     const svg = document.getElementById("dynamic-connections-svg");
     if (!svg) return;
-    
+
     // Clear old path lines
     const oldPaths = svg.querySelectorAll("path");
     oldPaths.forEach(path => path.remove());
-    
+
     const containerRect = svg.getBoundingClientRect();
     if (containerRect.width === 0 || containerRect.height === 0) return; // container hidden
-    
+
     const activeStep = typingSteps[currentTypingStep];
     activeStep.links.forEach(link => {
         const fromEl = document.getElementById(link.from);
         const toEl = document.getElementById(link.to);
-        
+
         if (fromEl && toEl) {
             const fromRect = fromEl.getBoundingClientRect();
             const toRect = toEl.getBoundingClientRect();
-            
+
             // From middle right of the variable tag
             const x1 = fromRect.right - containerRect.left;
             const y1 = fromRect.top + fromRect.height / 2 - containerRect.top;
-            
+
             // To middle left of the heap object card
             const x2 = toRect.left - containerRect.left;
             const y2 = toRect.top + toRect.height / 2 - containerRect.top;
-            
+
             // Bezier curve control points
             const dx = Math.abs(x2 - x1) * 0.4;
             const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -2216,7 +2216,7 @@ function updateTypingConnections() {
             path.setAttribute("stroke-width", "2.5");
             path.setAttribute("fill", "none");
             path.setAttribute("marker-end", `url(#${link.marker})`);
-            
+
             svg.appendChild(path);
         }
     });
@@ -2228,15 +2228,15 @@ function renderTypingStep() {
     const explanationBox = document.getElementById("typing-explanation-box");
     const namespaceCol = document.getElementById("namespace-tags-col");
     const heapCol = document.getElementById("heap-cards-col");
-    
+
     if (!namespaceCol || !heapCol || !explanationBox) return;
-    
+
     const activeStep = typingSteps[currentTypingStep];
-    
+
     // Enable/disable navigation buttons
     prevBtn.disabled = (currentTypingStep === 0);
     nextBtn.disabled = (currentTypingStep === typingSteps.length - 1);
-    
+
     // 1. Update Code Highlights
     for (let i = 1; i <= 4; i++) {
         const lineDiv = document.getElementById(`v-line-${i}`);
@@ -2248,7 +2248,7 @@ function renderTypingStep() {
             }
         }
     }
-    
+
     // 2. Update Explanation
     explanationBox.innerHTML = activeStep.explanation;
     if (currentTypingStep === 4) {
@@ -2256,19 +2256,19 @@ function renderTypingStep() {
     } else {
         explanationBox.style.borderLeftColor = "var(--accent-blue)";
     }
-    
+
     // 3. Render Variables
     namespaceCol.innerHTML = "";
     activeStep.variables.forEach(v => {
         const varDiv = document.createElement("div");
         varDiv.className = "var-tag";
         varDiv.id = v.id;
-        
+
         let borderRightColor = "var(--accent-blue)";
         if (v.name === "gpa") borderRightColor = "var(--accent-cyan)";
         if (v.name === "grade") borderRightColor = "var(--accent-purple)";
         if (v.name === "age" && currentTypingStep === 4) borderRightColor = "var(--accent-orange)";
-        
+
         varDiv.style.borderRightColor = borderRightColor;
         varDiv.innerHTML = `
             <span>${v.name}</span>
@@ -2276,7 +2276,7 @@ function renderTypingStep() {
         `;
         namespaceCol.appendChild(varDiv);
     });
-    
+
     // 4. Render Heap Objects
     heapCol.innerHTML = "";
     activeStep.objects.forEach(obj => {
@@ -2284,12 +2284,12 @@ function renderTypingStep() {
         objDiv.className = "heap-obj-card";
         if (obj.orphan) objDiv.classList.add("orphan");
         objDiv.id = obj.id;
-        
+
         let typeColor = "var(--accent-blue)";
         if (obj.type === "float") typeColor = "var(--accent-cyan)";
         if (obj.type === "str") typeColor = "var(--accent-purple)";
         if (obj.type === "str" && obj.val === "'twenty'") typeColor = "var(--accent-orange)";
-        
+
         objDiv.innerHTML = `
             <div class="heap-obj-type" style="color: ${typeColor};">${obj.type}</div>
             <div class="heap-obj-val">${obj.val}</div>
@@ -2300,7 +2300,7 @@ function renderTypingStep() {
         `;
         heapCol.appendChild(objDiv);
     });
-    
+
     // 5. Redraw Connections (with a tiny timeout to ensure browser paints first)
     setTimeout(updateTypingConnections, 50);
 }
@@ -2316,7 +2316,7 @@ let colStrState = "Hello";
 
 function setupCollectionsExplorer() {
     const tabs = document.querySelectorAll(".explorer-tab-btn");
-    
+
     tabs.forEach(tab => {
         tab.addEventListener("click", () => {
             tabs.forEach(t => t.classList.remove("active"));
@@ -2326,7 +2326,7 @@ function setupCollectionsExplorer() {
             renderCollectionExplorer();
         });
     });
-    
+
     // Reset Button logic
     const resetBtn = document.getElementById("explorer-reset-btn");
     if (resetBtn) {
@@ -2339,7 +2339,7 @@ function setupCollectionsExplorer() {
             }
         });
     }
-    
+
     // Initial Render
     resetCollectionExplorerStates();
     renderCollectionExplorer();
@@ -2350,12 +2350,12 @@ function resetCollectionExplorerStates() {
     colTupleState = [10, 20, 30];
     colDictState = { name: "Alice", role: "admin" };
     colStrState = "Hello";
-    
+
     const statementCode = document.getElementById("explorer-statement-code");
     if (statementCode) {
         statementCode.innerHTML = highlightPythonSyntax(`# Initializing collection:\n${getInitialStatement()}`);
     }
-    
+
     const explanationBox = document.getElementById("explorer-explanation-box");
     if (explanationBox) {
         explanationBox.innerHTML = `Select an action button to perform operations on the Python <strong>${colActiveTab}</strong> object.`;
@@ -2377,9 +2377,9 @@ function renderCollectionExplorer() {
     const actionsContainer = document.getElementById("explorer-actions-container");
     const mutabilityTag = document.getElementById("explorer-mutability-tag");
     const memoryVisual = document.getElementById("explorer-memory-visual");
-    
+
     if (!actionsContainer || !mutabilityTag || !memoryVisual) return;
-    
+
     // Update Mutability Tag
     const isMutable = (colActiveTab === "list" || colActiveTab === "dict");
     if (isMutable) {
@@ -2391,7 +2391,7 @@ function renderCollectionExplorer() {
         mutabilityTag.style.background = "rgba(239, 68, 68, 0.1)";
         mutabilityTag.style.color = "var(--accent-red)";
     }
-    
+
     // Render Actions
     actionsContainer.innerHTML = "";
     const actions = getCollectionActions();
@@ -2404,7 +2404,7 @@ function renderCollectionExplorer() {
         });
         actionsContainer.appendChild(btn);
     });
-    
+
     // Render Memory Visual
     renderCollectionMemory();
 }
@@ -2445,9 +2445,9 @@ function getCollectionActions() {
 function renderCollectionMemory(highlightIdx = null, unpackActive = false, concatStrVal = null, lookupKey = null) {
     const memoryVisual = document.getElementById("explorer-memory-visual");
     if (!memoryVisual) return;
-    
+
     memoryVisual.innerHTML = "";
-    
+
     if (colActiveTab === "list") {
         const container = document.createElement("div");
         container.style.display = "flex";
@@ -2455,7 +2455,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
         container.style.flexWrap = "wrap";
         container.style.justifyContent = "center";
         container.style.alignItems = "center";
-        
+
         colListState.forEach((val, idx) => {
             const box = document.createElement("div");
             box.className = "col-item-box";
@@ -2469,7 +2469,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
             container.appendChild(box);
         });
         memoryVisual.appendChild(container);
-    } 
+    }
     else if (colActiveTab === "tuple") {
         if (unpackActive) {
             // Render unpacked variables
@@ -2478,7 +2478,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
             container.style.flexDirection = "column";
             container.style.gap = "15px";
             container.style.width = "100%";
-            
+
             // Tuple elements
             const tplRow = document.createElement("div");
             tplRow.style.display = "flex";
@@ -2494,7 +2494,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
                 `;
             });
             container.appendChild(tplRow);
-            
+
             // Unpacked Vars
             const varRow = document.createElement("div");
             varRow.style.display = "flex";
@@ -2515,7 +2515,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
             const container = document.createElement("div");
             container.style.display = "flex";
             container.style.gap = "10px";
-            
+
             colTupleState.forEach((val, idx) => {
                 const box = document.createElement("div");
                 box.className = "col-item-box locked";
@@ -2532,11 +2532,11 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
             });
             memoryVisual.appendChild(container);
         }
-    } 
+    }
     else if (colActiveTab === "dict") {
         const container = document.createElement("div");
         container.className = "dict-table-container";
-        
+
         let rowsHtml = "";
         Object.entries(colDictState).forEach(([key, val]) => {
             const isHighlight = (lookupKey && lookupKey === key);
@@ -2548,7 +2548,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
                 </tr>
             `;
         });
-        
+
         container.innerHTML = `
             <table class="dict-table">
                 <thead>
@@ -2564,7 +2564,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
             </table>
         `;
         memoryVisual.appendChild(container);
-    } 
+    }
     else if (colActiveTab === "str") {
         if (concatStrVal !== null) {
             const container = document.createElement("div");
@@ -2572,7 +2572,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
             container.style.flexDirection = "column";
             container.style.gap = "12px";
             container.style.width = "100%";
-            
+
             const origDiv = document.createElement("div");
             origDiv.style.display = "flex";
             origDiv.style.gap = "6px";
@@ -2582,7 +2582,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
                 origDiv.innerHTML += `<div class="col-item-box locked" style="padding: 4px 8px; min-width: 32px;"><span class="col-item-val" style="font-size:11px;">'${char}'</span></div>`;
             });
             container.appendChild(origDiv);
-            
+
             const concatDiv = document.createElement("div");
             concatDiv.style.display = "flex";
             concatDiv.style.gap = "6px";
@@ -2602,7 +2602,7 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
             const container = document.createElement("div");
             container.style.display = "flex";
             container.style.gap = "6px";
-            
+
             [...colStrState].forEach((char, idx) => {
                 const box = document.createElement("div");
                 box.className = "col-item-box locked";
@@ -2626,13 +2626,13 @@ function renderCollectionMemory(highlightIdx = null, unpackActive = false, conca
 function executeCollectionAction(action) {
     const statementCode = document.getElementById("explorer-statement-code");
     const explanationBox = document.getElementById("explorer-explanation-box");
-    
+
     if (statementCode) {
         statementCode.innerHTML = highlightPythonSyntax(action.syntax);
     }
-    
+
     explanationBox.style.borderLeftColor = "var(--accent-purple)";
-    
+
     if (colActiveTab === "list") {
         if (action.type === "append") {
             if (colListState.length >= 4) {
@@ -2642,7 +2642,7 @@ function executeCollectionAction(action) {
             colListState.push("date");
             renderCollectionMemory(colListState.length - 1);
             explanationBox.innerHTML = `<strong>list.append(x) executes in O(1) time:</strong> Appends the element to the end of the array. Because lists are <strong>mutable</strong>, this operation alters the array directly in place.`;
-        } 
+        }
         else if (action.type === "pop") {
             if (colListState.length === 0) {
                 explanationBox.innerHTML = `<strong>Error:</strong> List is already empty. Nothing to pop!`;
@@ -2651,7 +2651,7 @@ function executeCollectionAction(action) {
             const popped = colListState.pop();
             renderCollectionMemory();
             explanationBox.innerHTML = `<strong>list.pop() executes in O(1) time:</strong> Removes and returns the last element of the list (<code>"${popped}"</code>). The list size shrinks dynamically in memory.`;
-        } 
+        }
         else if (action.type === "modify") {
             if (colListState.length < 2) {
                 explanationBox.innerHTML = `<strong>Error:</strong> List needs at least 2 elements to perform this modification. Click Reset first.`;
@@ -2660,7 +2660,7 @@ function executeCollectionAction(action) {
             colListState[1] = "blueberry";
             renderCollectionMemory(1);
             explanationBox.innerHTML = `<strong>list[idx] = val executes in O(1) time:</strong> Modifies the index reference directly. Lists are <strong>mutable</strong>, so <code>"banana"</code> is replaced by <code>"blueberry"</code> in-place.`;
-        } 
+        }
         else if (action.type === "slice") {
             const subIndices = [];
             colListState.forEach((val, idx) => {
@@ -2670,12 +2670,12 @@ function executeCollectionAction(action) {
             const sliceRes = colListState.slice(1, 3);
             explanationBox.innerHTML = `<strong>Slicing list[1:3] (interval [1, 3)):</strong> Extracts elements at index 1 and 2. Returns a <strong>new</strong> list object containing <code>${JSON.stringify(sliceRes)}</code>.`;
         }
-    } 
+    }
     else if (colActiveTab === "tuple") {
         if (action.type === "access") {
             renderCollectionMemory(0);
             explanationBox.innerHTML = `<strong>tuple[idx] executes in O(1) time:</strong> Retrieves the value stored at index 0. Reading values from a tuple is identical to reading from a standard array.`;
-        } 
+        }
         else if (action.type === "modify_error") {
             renderCollectionMemory();
             const memoryVisual = document.getElementById("explorer-memory-visual");
@@ -2684,30 +2684,30 @@ function executeCollectionAction(action) {
                 firstBox.classList.add("type-error-flash");
                 setTimeout(() => firstBox.classList.remove("type-error-flash"), 500);
             }
-            
+
             explanationBox.style.borderLeftColor = "var(--accent-red)";
             explanationBox.innerHTML = `<span style="color: var(--accent-red); font-weight:700;"><i class="fa-solid fa-circle-xmark"></i> TypeError: 'tuple' object does not support item assignment</span><br>This demonstrates <strong>Immutability</strong>. Once created, a tuple's structure and values cannot be altered. If you need a collection that can be changed, you must use a <strong>List</strong> instead.`;
-        } 
+        }
         else if (action.type === "unpack") {
             renderCollectionMemory(null, true);
             explanationBox.innerHTML = `<strong>Tuple Unpacking:</strong> Destructures the tuple's elements and assigns them to multiple local variables (<code>x</code>, <code>y</code>, and <code>z</code>) simultaneously. This is a very clean syntax feature common in Python algorithms.`;
         }
-    } 
+    }
     else if (colActiveTab === "dict") {
         if (action.type === "lookup") {
             renderCollectionMemory(null, false, null, "role");
             explanationBox.innerHTML = `<strong>dict[key] executes in O(1) average time:</strong> Python hashes the key string <code>"role"</code> and accesses its value slot instantly. This is a O(1) Hash Map lookup.`;
-        } 
+        }
         else if (action.type === "insert") {
             colDictState["age"] = 21;
             renderCollectionMemory(null, false, null, "age");
             explanationBox.innerHTML = `<strong>dict[new_key] = val executes in O(1) time:</strong> Adds a new key-value pair <code>"age": 21</code> directly to the table. Python dictionaries automatically grow in capacity.`;
-        } 
+        }
         else if (action.type === "modify") {
             colDictState["role"] = "user";
             renderCollectionMemory(null, false, null, "role");
             explanationBox.innerHTML = `<strong>dict[existing_key] = new_val executes in O(1) time:</strong> Modifies the value associated with key <code>"role"</code>. Dictionaries are <strong>mutable</strong> collections.`;
-        } 
+        }
         else if (action.type === "delete") {
             if (!colDictState.hasOwnProperty("role")) {
                 explanationBox.innerHTML = `<strong>Error:</strong> Key "role" has already been deleted! Reset to test again.`;
@@ -2717,12 +2717,12 @@ function executeCollectionAction(action) {
             renderCollectionMemory();
             explanationBox.innerHTML = `<strong>del dict[key] executes in O(1) time:</strong> Deletes the key-value association, freeing up the key reference from the dictionary structure.`;
         }
-    } 
+    }
     else if (colActiveTab === "str") {
         if (action.type === "access") {
             renderCollectionMemory(1);
             explanationBox.innerHTML = `<strong>str[idx] executes in O(1) time:</strong> Retrieves the character at index 1. Strings behave like immutable character arrays.`;
-        } 
+        }
         else if (action.type === "modify_error") {
             renderCollectionMemory();
             const memoryVisual = document.getElementById("explorer-memory-visual");
@@ -2731,10 +2731,10 @@ function executeCollectionAction(action) {
                 firstBox.classList.add("type-error-flash");
                 setTimeout(() => firstBox.classList.remove("type-error-flash"), 500);
             }
-            
+
             explanationBox.style.borderLeftColor = "var(--accent-red)";
             explanationBox.innerHTML = `<span style="color: var(--accent-red); font-weight:700;"><i class="fa-solid fa-circle-xmark"></i> TypeError: 'str' object does not support item assignment</span><br>Strings in Python are <strong>immutable</strong> sequences of characters. You cannot modify a string element in-place.`;
-        } 
+        }
         else if (action.type === "concat") {
             const concatVal = colStrState + " World";
             renderCollectionMemory(null, false, concatVal);
@@ -2753,7 +2753,7 @@ let flowActiveTab = 'cond';
 
 function switchFlowTab(tabId) {
     flowActiveTab = tabId;
-    
+
     const tabCond = document.getElementById("flow-tab-cond");
     const tabLoop = document.getElementById("flow-tab-loop");
     if (tabCond && tabLoop) {
@@ -2765,14 +2765,14 @@ function switchFlowTab(tabId) {
             tabLoop.classList.add("active");
         }
     }
-    
+
     const ctrlCond = document.getElementById("flow-controls-cond");
     const ctrlLoop = document.getElementById("flow-controls-loop");
     if (ctrlCond && ctrlLoop) {
         ctrlCond.style.display = tabId === 'cond' ? 'block' : 'none';
         ctrlLoop.style.display = tabId === 'loop' ? 'block' : 'none';
     }
-    
+
     const varsTracker = document.getElementById("loop-vars-tracker");
     if (tabId === 'cond') {
         document.getElementById("flow-code-title").textContent = "conditional_test.py";
@@ -2804,11 +2804,11 @@ function updateGpaBranches(gpaVal) {
     if (sliderValSpan) {
         sliderValSpan.textContent = gpaFloat.toFixed(1);
     }
-    
+
     let activeLines = [1];
     let output = "";
     let explanation = "";
-    
+
     if (gpaFloat >= 3.50) {
         activeLines.push(3, 4);
         output = "Honor Roll";
@@ -2822,20 +2822,20 @@ function updateGpaBranches(gpaVal) {
         output = "Fail";
         explanation = `GPA ${gpaFloat.toFixed(2)} is &lt; 2.00. Both <code>if</code> and <code>elif</code> check expressions evaluate <strong>False</strong>. The fallback <code>else</code> block is executed, outputting <code>"Fail"</code>.`;
     }
-    
+
     renderFlowCode(condCodeTemplate, activeLines, { "[val]": gpaFloat.toFixed(2) });
-    
+
     const consoleText = document.getElementById("flow-console-text");
     if (consoleText) {
         consoleText.textContent = `>>> gpa = ${gpaFloat.toFixed(2)}\n>>> running conditional_test.py...\n${output}`;
     }
-    
+
     const explanationEl = document.getElementById("flow-cond-explanation");
     if (explanationEl) {
         explanationEl.innerHTML = explanation;
         explanationEl.style.borderLeftColor = gpaFloat >= 3.50 ? 'var(--accent-green)' : (gpaFloat >= 2.00 ? 'var(--accent-cyan)' : 'var(--accent-red)');
     }
-    
+
     const varsTracker = document.getElementById("loop-vars-tracker");
     if (varsTracker) {
         varsTracker.textContent = `Active vars: gpa = ${gpaFloat.toFixed(2)}`;
@@ -2910,7 +2910,7 @@ const loopTemplates = {
 function selectLoopType(loopType) {
     currentLoopType = loopType;
     loopSimStep = 0;
-    
+
     ['range', 'list', 'while'].forEach(type => {
         const btn = document.getElementById("loop-btn-" + type);
         if (btn) {
@@ -2927,43 +2927,43 @@ function selectLoopType(loopType) {
             }
         }
     });
-    
+
     const stepBtn = document.getElementById("flow-step-btn");
     if (stepBtn) {
         stepBtn.disabled = false;
         stepBtn.innerHTML = '<i class="fa-solid fa-forward-step"></i> Step Loop';
     }
-    
+
     const template = loopTemplates[loopType];
     renderFlowCode(template.code, template.steps[0].activeLines);
-    
+
     const consoleText = document.getElementById("flow-console-text");
     if (consoleText) {
         consoleText.textContent = template.steps[0].output;
     }
-    
+
     updateVarsTracker(template.steps[0].vars);
 }
 
 function stepLoopSimulation() {
     const template = loopTemplates[currentLoopType];
     loopSimStep++;
-    
+
     if (loopSimStep >= template.steps.length) {
         resetLoopSimulation();
         return;
     }
-    
+
     const step = template.steps[loopSimStep];
     renderFlowCode(template.code, step.activeLines);
-    
+
     const consoleText = document.getElementById("flow-console-text");
     if (consoleText) {
         consoleText.textContent = step.output;
     }
-    
+
     updateVarsTracker(step.vars);
-    
+
     if (loopSimStep === template.steps.length - 1) {
         const stepBtn = document.getElementById("flow-step-btn");
         if (stepBtn) {
@@ -2994,27 +2994,27 @@ function escapeHtml(text) {
 
 function highlightPythonLine(text) {
     if (!text) return "";
-    
+
     // Check if it is a whole comment line
     if (text.trim().startsWith("#")) {
         return `<span class="code-comment">${escapeHtml(text)}</span>`;
     }
-    
+
     let i = 0;
     let result = "";
-    
+
     const keywords = new Set(['if', 'elif', 'else', 'for', 'in', 'while', 'try', 'except', 'as', 'with', 'def', 'class', 'return', 'import', 'from', 'pass', 'and', 'or', 'not', 'is', 'lambda', 'None', 'True', 'False']);
     const builtins = new Set(['print', 'int', 'float', 'str', 'range', 'len', 'enumerate', 'list', 'dict', 'tuple', 'assert']);
-    
+
     while (i < text.length) {
         const char = text[i];
-        
+
         // 1. Comments
         if (char === '#') {
             result += `<span class="code-comment">${escapeHtml(text.substring(i))}</span>`;
             break;
         }
-        
+
         // 2. String literals
         if (char === '"' || char === "'") {
             const quote = char;
@@ -3032,7 +3032,7 @@ function highlightPythonLine(text) {
             result += `<span class="code-string">${escapeHtml(strVal)}</span>`;
             continue;
         }
-        
+
         // 3. Numbers (integers or floats)
         const numMatch = text.substring(i).match(/^(\d+(\.\d+)?)\b/);
         if (numMatch) {
@@ -3041,7 +3041,7 @@ function highlightPythonLine(text) {
             i += numStr.length;
             continue;
         }
-        
+
         // 4. Identifiers / Keywords / Builtins
         const wordMatch = text.substring(i).match(/^([a-zA-Z_][a-zA-Z0-9_]*)/);
         if (wordMatch) {
@@ -3056,38 +3056,38 @@ function highlightPythonLine(text) {
             i += word.length;
             continue;
         }
-        
+
         // 5. Normal characters
         result += escapeHtml(char);
         i++;
     }
-    
+
     return result;
 }
 
 function highlightCLine(text) {
     if (!text) return "";
-    
+
     if (text.trim().startsWith("//")) {
         return `<span class="code-comment">${escapeHtml(text)}</span>`;
     }
-    
+
     let i = 0;
     let result = "";
-    
+
     const keywords = new Set(['if', 'else', 'for', 'while', 'do', 'switch', 'case', 'break', 'continue', 'return', 'struct', 'typedef', 'sizeof', 'int', 'char', 'float', 'double', 'long', 'short', 'unsigned', 'void', 'const', 'static', 'bool', 'true', 'false']);
     const builtins = new Set(['printf', 'scanf', 'malloc', 'free', 'realloc', 'calloc', 'fopen', 'fclose', 'perror', 'exit', 'NULL']);
     const preprocessors = new Set(['#include', '#define', '#ifdef', '#ifndef', '#endif', '#pragma']);
-    
+
     while (i < text.length) {
         const char = text[i];
-        
+
         // 1. Comments
-        if (char === '/' && text[i+1] === '/') {
+        if (char === '/' && text[i + 1] === '/') {
             result += `<span class="code-comment">${escapeHtml(text.substring(i))}</span>`;
             break;
         }
-        if (char === '/' && text[i+1] === '*') {
+        if (char === '/' && text[i + 1] === '*') {
             const endIdx = text.indexOf("*/", i + 2);
             if (endIdx !== -1) {
                 const comment = text.substring(i, endIdx + 2);
@@ -3096,7 +3096,7 @@ function highlightCLine(text) {
                 continue;
             }
         }
-        
+
         // 2. Preprocessor directive
         if (char === '#') {
             const prepMatch = text.substring(i).match(/^(#[a-zA-Z_][a-zA-Z0-9_]*)/);
@@ -3107,7 +3107,7 @@ function highlightCLine(text) {
                 continue;
             }
         }
-        
+
         // 3. String literals
         if (char === '"' || char === "'") {
             const quote = char;
@@ -3125,7 +3125,7 @@ function highlightCLine(text) {
             result += `<span class="code-string">${escapeHtml(strVal)}</span>`;
             continue;
         }
-        
+
         // 4. Numbers
         const numMatch = text.substring(i).match(/^(\d+(\.\d+)?)\b/);
         if (numMatch) {
@@ -3134,7 +3134,7 @@ function highlightCLine(text) {
             i += numStr.length;
             continue;
         }
-        
+
         // 5. Identifiers / Keywords / Builtins
         const wordMatch = text.substring(i).match(/^([a-zA-Z_][a-zA-Z0-9_]*)/);
         if (wordMatch) {
@@ -3149,11 +3149,11 @@ function highlightCLine(text) {
             i += word.length;
             continue;
         }
-        
+
         result += escapeHtml(char);
         i++;
     }
-    
+
     return result;
 }
 
@@ -3164,15 +3164,15 @@ function highlightAllStaticCode() {
         if (block.closest(".flow-code-panel") || block.closest(".exception-code-window") || block.id === "exc-code-display" || block.id === "flow-code-display") {
             return;
         }
-        
+
         const isC = block.closest(".c-block") || block.classList.contains("language-c");
         const isPython = block.closest(".py-block") || block.classList.contains("language-python") || block.closest(".python-block");
-        
+
         const rawText = block.textContent;
         // Split by newlines, highlight each line, and join
         const lines = rawText.split("\n");
         let highlightedHtml = "";
-        
+
         if (isC) {
             highlightedHtml = lines.map(line => highlightCLine(line)).join("\n");
         } else if (isPython) {
@@ -3181,7 +3181,7 @@ function highlightAllStaticCode() {
             // Default to Python highlighter if unspecified
             highlightedHtml = lines.map(line => highlightPythonLine(line)).join("\n");
         }
-        
+
         block.innerHTML = highlightedHtml;
     });
 }
@@ -3189,14 +3189,14 @@ function highlightAllStaticCode() {
 function renderFlowCode(codeArr, activeLines, replacements = {}) {
     const container = document.getElementById("flow-code-display");
     if (!container) return;
-    
+
     let html = "";
     codeArr.forEach(lineObj => {
         let lineText = lineObj.text;
         for (let key in replacements) {
             lineText = lineText.replace(key, replacements[key]);
         }
-        
+
         const highlighted = highlightPythonLine(lineText);
         const isActive = activeLines.includes(lineObj.line);
         if (lineObj.isCode) {
@@ -3205,7 +3205,7 @@ function renderFlowCode(codeArr, activeLines, replacements = {}) {
             html += `<span class="flow-code-comment" style="padding: 3px 8px; display: block;">${highlighted}</span>`;
         }
     });
-    
+
     container.innerHTML = html;
 }
 
@@ -3378,7 +3378,7 @@ let excShieldActive = false;
 
 function switchExceptionScenario(scenarioKey) {
     currentExcScenario = scenarioKey;
-    
+
     // Toggle active tab buttons
     ['ZeroDivisionError', 'ValueError', 'IndexError', 'KeyError'].forEach(key => {
         const tabBtn = document.getElementById("exc-tab-" + key);
@@ -3390,36 +3390,36 @@ function switchExceptionScenario(scenarioKey) {
             }
         }
     });
-    
+
     const scenario = exceptionScenarios[scenarioKey];
     if (!scenario) return;
-    
+
     // Update labels
     document.getElementById("exc-filename").textContent = scenario.filename;
     document.getElementById("exc-type-header").textContent = scenario.title;
     document.getElementById("exc-description").textContent = scenario.desc;
-    
+
     // Hide explanation box and reset console
     document.getElementById("exc-explanation-card").style.display = "none";
     document.getElementById("exc-console-text").textContent = "Click \"Run Code Simulation\" to execute the script.";
     document.getElementById("exc-console-status").textContent = "Idle";
     document.getElementById("exc-console-status").style.color = "var(--text-muted)";
-    
+
     // Reset console box styling
     const consoleBox = document.getElementById("exc-console-box");
     if (consoleBox) {
         consoleBox.style.borderColor = "var(--border-color)";
     }
-    
+
     renderExceptionCode();
 }
 
 function setExceptionShieldState(isActive) {
     excShieldActive = isActive;
-    
+
     const offBtn = document.getElementById("shield-off-btn");
     const onBtn = document.getElementById("shield-on-btn");
-    
+
     if (offBtn && onBtn) {
         if (isActive) {
             onBtn.classList.add("active");
@@ -3429,57 +3429,57 @@ function setExceptionShieldState(isActive) {
             onBtn.classList.remove("active");
         }
     }
-    
+
     // Reset console and hide explanation
     document.getElementById("exc-explanation-card").style.display = "none";
     document.getElementById("exc-console-text").textContent = "Click \"Run Code Simulation\" to execute the script.";
     document.getElementById("exc-console-status").textContent = "Idle";
     document.getElementById("exc-console-status").style.color = "var(--text-muted)";
-    
+
     const consoleBox = document.getElementById("exc-console-box");
     if (consoleBox) {
         consoleBox.style.borderColor = "var(--border-color)";
     }
-    
+
     renderExceptionCode();
 }
 
 function renderExceptionCode(highlightLines = [], isCrashRun = false) {
     const container = document.getElementById("exc-code-display");
     if (!container) return;
-    
+
     const scenario = exceptionScenarios[currentExcScenario];
     const codeArr = excShieldActive ? scenario.codeShielded : scenario.codeRaw;
-    
+
     let html = "";
     codeArr.forEach(lineObj => {
         const lineText = lineObj.text;
         const highlighted = highlightPythonLine(lineText);
-        
+
         let lineClass = "flow-code-line";
         if (highlightLines.includes(lineObj.line)) {
             lineClass += isCrashRun && lineObj.isCrash ? " crash" : " active";
         }
-        
+
         if (lineObj.isCode) {
             html += `<span class="${lineClass}">${highlighted}</span>`;
         } else {
             html += `<span class="flow-code-comment" style="padding: 3px 8px; display: block;">${highlighted}</span>`;
         }
     });
-    
+
     container.innerHTML = html;
 }
 
 function runExceptionSimulation() {
     const scenario = exceptionScenarios[currentExcScenario];
     if (!scenario) return;
-    
+
     const consoleText = document.getElementById("exc-console-text");
     const consoleStatus = document.getElementById("exc-console-status");
     const consoleBox = document.getElementById("exc-console-box");
     const explanationCard = document.getElementById("exc-explanation-card");
-    
+
     if (excShieldActive) {
         // Run shielded code
         if (consoleText) consoleText.textContent = scenario.shieldedOutput;
@@ -3490,10 +3490,10 @@ function runExceptionSimulation() {
         if (consoleBox) {
             consoleBox.style.borderColor = "var(--accent-green)";
         }
-        
+
         // Highlight try, except and handler lines
         renderExceptionCode([3, 8, 9, 11], false);
-        
+
         if (explanationCard) {
             explanationCard.style.display = "block";
             explanationCard.style.borderLeftColor = "var(--accent-green)";
@@ -3511,14 +3511,14 @@ function runExceptionSimulation() {
             consoleBox.classList.add("type-error-flash");
             setTimeout(() => consoleBox.classList.remove("type-error-flash"), 400);
         }
-        
+
         // Find crash line number
         const crashLineObj = scenario.codeRaw.find(l => l.isCrash);
         const crashLineNum = crashLineObj ? crashLineObj.line : null;
-        
+
         // Highlight line that crashed
         renderExceptionCode(crashLineNum ? [crashLineNum] : [], true);
-        
+
         if (explanationCard) {
             explanationCard.style.display = "block";
             explanationCard.style.borderLeftColor = "var(--accent-red)";
@@ -3558,20 +3558,20 @@ function applyViewBox() {
 
 function zoomTree(delta) {
     const zoomFactor = delta > 0 ? 0.8 : 1.25;
-    
+
     // Limits viewBox width between 150 (max zoom) and 1000 (min zoom)
     const newWidth = Math.max(150, Math.min(1000, viewBoxState.width * zoomFactor));
     const newHeight = newWidth * (240 / 540); // Keep aspect ratio
-    
+
     // Zoom in relative to current center
     const centerX = viewBoxState.minX + viewBoxState.width / 2;
     const centerY = viewBoxState.minY + viewBoxState.height / 2;
-    
+
     viewBoxState.minX = centerX - newWidth / 2;
     viewBoxState.minY = centerY - newHeight / 2;
     viewBoxState.width = newWidth;
     viewBoxState.height = newHeight;
-    
+
     applyViewBox();
 }
 
@@ -3588,11 +3588,11 @@ function resetTreeZoom() {
 function setupTreePan() {
     const container = document.getElementById("stack-container");
     if (!container) return;
-    
+
     container.addEventListener("mousedown", (e) => {
         const svg = document.getElementById("rec-tree-svg");
         if (!svg) return;
-        
+
         isPanning = true;
         container.style.cursor = "grabbing";
         startPanMouseX = e.clientX;
@@ -3600,27 +3600,27 @@ function setupTreePan() {
         startPanMinX = viewBoxState.minX;
         startPanMinY = viewBoxState.minY;
     });
-    
+
     window.addEventListener("mousemove", (e) => {
         if (!isPanning) return;
-        
+
         const svg = document.getElementById("rec-tree-svg");
         if (!svg) return;
-        
+
         const deltaMouseX = e.clientX - startPanMouseX;
         const deltaMouseY = e.clientY - startPanMouseY;
-        
+
         const svgClientWidth = svg.clientWidth || 300;
         const svgClientHeight = svg.clientHeight || 200;
         const scaleX = viewBoxState.width / svgClientWidth;
         const scaleY = viewBoxState.height / svgClientHeight;
-        
+
         viewBoxState.minX = startPanMinX - deltaMouseX * scaleX;
         viewBoxState.minY = startPanMinY - deltaMouseY * scaleY;
-        
+
         applyViewBox();
     });
-    
+
     window.addEventListener("mouseup", () => {
         if (isPanning) {
             isPanning = false;
@@ -3639,9 +3639,9 @@ function switchRecursionTab(tabName) {
     const vsTab = document.getElementById("rec-tab-vs");
     const vizContent = document.getElementById("rec-content-viz");
     const vsContent = document.getElementById("rec-content-vs");
-    
+
     if (!vizTab || !vsTab || !vizContent || !vsContent) return;
-    
+
     if (tabName === "viz") {
         vizTab.classList.add("active");
         vsTab.classList.remove("active");
@@ -3659,15 +3659,15 @@ window.switchRecursionTab = switchRecursionTab;
 function runStaticCCode(outputId) {
     const outputEl = document.getElementById(outputId);
     if (!outputEl) return;
-    
+
     // Clear previous interval if any
     if (outputEl.dataset.intervalId) {
         clearInterval(parseInt(outputEl.dataset.intervalId));
     }
-    
+
     outputEl.style.display = "block";
     outputEl.innerHTML = "Compiling with gcc...\nRunning program...\n\n";
-    
+
     let finalOutput = "";
     if (outputId === "logic-c-output") {
         finalOutput = "Array resized from 5 to 10 elements.\nOriginal elements preserved.\nMemory safely deallocated.\n\n[Process completed with exit code 0]";
@@ -3676,7 +3676,7 @@ function runStaticCCode(outputId) {
     } else if (outputId === "readability-c-output") {
         finalOutput = "Extracted slice from index 2 to 5:\nslice[0] = 30\nslice[1] = 40\nslice[2] = 50\n\n[Process completed with exit code 0]";
     }
-    
+
     let i = 0;
     const intervalId = setInterval(() => {
         outputEl.innerHTML += finalOutput[i];
@@ -3686,7 +3686,7 @@ function runStaticCCode(outputId) {
             outputEl.removeAttribute("data-interval-id");
         }
     }, 15);
-    
+
     outputEl.dataset.intervalId = intervalId;
 }
 window.runStaticCCode = runStaticCCode;
