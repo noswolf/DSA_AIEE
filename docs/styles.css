@@ -1,8 +1,8 @@
 /* Reset & Base Variables */
 :root {
-    --bg-primary: #090d16;
+    --bg-primary: #02040a;
     --bg-secondary: #0f1626;
-    --bg-sidebar: #0b0f1a;
+    --bg-sidebar: rgba(11, 15, 26, 0.85);
     --border-color: rgba(255, 255, 255, 0.08);
     --border-accent: rgba(59, 130, 246, 0.15);
     --bg-card: rgba(15, 22, 38, 0.65);
@@ -93,6 +93,8 @@ body {
 .sidebar {
     width: var(--sidebar-width);
     background-color: var(--bg-sidebar);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
@@ -252,7 +254,6 @@ body.light-mode .sidebar-toggle-btn:hover {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* transition: var(--transition-fast); */
 }
 
 .nav-item i {
@@ -267,11 +268,13 @@ body.light-mode .sidebar-toggle-btn:hover {
 }
 
 .nav-item.active {
-    color: #fff;
-    background-color: var(--accent-blue-glow);
-    border: 1px solid var(--border-accent);
-    text-shadow: 0 0 6px rgba(255, 255, 255, 0.1);
+    color: var(--accent-blue);
+    background-color: rgba(59, 130, 246, 0.1);
+    border: 1px solid var(--accent-blue);
+    font-weight: 600;
 }
+
+
 
 .sidebar-footer {
     padding: 16px 20px;
@@ -398,6 +401,14 @@ body.light-mode .sidebar-toggle-btn:hover {
     border: 1px solid transparent;
 }
 
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
 .btn-primary {
     background-color: var(--accent-blue);
     color: #fff;
@@ -417,6 +428,7 @@ body.light-mode .sidebar-toggle-btn:hover {
 
 .btn-secondary:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* Header Action Buttons (Static) */
@@ -468,6 +480,8 @@ body.light-mode .main-header .btn:hover {
     color: var(--accent-blue);
     border-color: var(--accent-blue);
 }
+
+
 
 .btn-success {
     background-color: var(--accent-green);
@@ -731,7 +745,7 @@ body.light-mode .main-header .btn:hover {
 }
 
 .accordion-trigger:hover {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(255, 255, 255, 0.06);
 }
 
 .accordion-trigger i {
@@ -1983,13 +1997,14 @@ body.light-mode .card.glass {
 }
 
 body.light-mode .nav-item:hover {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 body.light-mode .nav-item.active {
-    background-color: rgba(59, 130, 246, 0.1);
-    color: var(--accent-blue);
-    border-color: rgba(59, 130, 246, 0.3);
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    font-weight: 600;
 }
 
 body.light-mode .nav-section-title {
@@ -3622,25 +3637,25 @@ body.light-mode .explorer-btn:hover {
 .toggle-shield-btn {
     background: none;
     border: none;
-    padding: 5px 12px;
-    font-size: 11px;
+    padding: 6px 16px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-secondary);
-    border-radius: 8px;
-    /* Consistent 8px radius */
+    border-radius: 20px;
     cursor: pointer;
     transition: all var(--transition-fast);
 }
 
 .toggle-shield-btn.active {
-    background-color: rgba(255, 255, 255, 0.08) !important;
+    background-color: #334155 !important;
     color: #ffffff !important;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3) !important;
 }
 
 .light-mode .toggle-shield-btn.active {
-    background-color: rgba(0, 0, 0, 0.06) !important;
-    color: var(--text-primary) !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
 }
 
 #flow-console-text,
@@ -3699,15 +3714,17 @@ body.light-mode .explorer-syntax-box pre {
 .shield-toggler-bar div {
     display: flex;
     gap: 4px;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 3px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .light-mode .shield-toggler-bar div {
-    background: rgb(255, 255, 255);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
 
 /* Code Syntax Highlighting */
@@ -3936,7 +3953,7 @@ body.light-mode .explorer-syntax-box pre {
 } */
 
 .rec-card-cyan {
-    border-top: 3px solid var(--accent-cyan);
+    border-left: 4px solid var(--accent-cyan);
 }
 
 .rec-card-cyan:hover {
@@ -3944,7 +3961,7 @@ body.light-mode .explorer-syntax-box pre {
 }
 
 .rec-card-purple {
-    border-top: 3px solid var(--accent-purple);
+    border-left: 4px solid var(--accent-purple);
 }
 
 .rec-card-purple:hover {
@@ -3952,7 +3969,7 @@ body.light-mode .explorer-syntax-box pre {
 }
 
 .rec-card-vs {
-    border-top: 3px solid var(--accent-purple);
+    border-left: 4px solid var(--accent-purple);
 }
 
 .rec-card-vs:hover {
@@ -4617,7 +4634,7 @@ body.light-mode .tree-legend {
 .why-tab-btn.active {
     background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15)) !important;
     border: 1px solid rgba(6, 182, 212, 0.4) !important;
-    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2) !important;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2), inset 0 -3px 0 rgba(6, 182, 212, 0.8) !important;
 }
 
 .tab-btn-text {
@@ -5379,4 +5396,177 @@ body.light-mode .visualizer-simulator-box,
 body.light-mode .minigame-card {
     border: 1px solid rgba(168, 85, 247, 0.3) !important;
     background-color: rgba(168, 85, 247, 0.04) !important;
+}
+/* Custom Input Range */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    cursor: pointer;
+    margin-top: -6px;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+    transition: transform 0.1s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+}
+body.light-mode input[type="range"]::-webkit-slider-runnable-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Standardized Terminal/Console Outputs */
+.console-output-box,
+.editor-output,
+.terminal-body,
+.live-code-output {
+    background-color: #0b0f19 !important;
+    color: #e2e8f0 !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.light-mode .console-output-box,
+body.light-mode .editor-output,
+body.light-mode .terminal-body,
+body.light-mode .live-code-output {
+    background-color: #0b0f19 !important; /* Always dark */
+    color: #e2e8f0 !important;
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Alternating Row Colors for Premium Table */
+tr.premium-row:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+body.light-mode tr.premium-row:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+/* Module Spacing */
+.module-section {
+    margin-bottom: 3rem !important;
+}
+
+/* Step 5: Quiz Flashcards & Global Console */
+.quiz-question-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+}
+.quiz-question-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+.quiz-option {
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
+    border-radius: 8px;
+}
+.quiz-option:not(:disabled):hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+body.light-mode .quiz-option:not(:disabled):hover {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.console-header {
+    background-color: #0b0f19 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+body.light-mode .console-header {
+    background-color: #f8fafc !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.console-drawer {
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+body.light-mode .console-drawer {
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Fix Code Block Scrollbars */
+.live-code-textarea {
+    field-sizing: content;
+    min-height: 250px !important;
+    overflow-y: hidden !important;
+}
+.code-compare-block pre {
+    height: auto !important;
+    min-height: 250px !important;
+    max-height: none !important;
+    overflow-y: hidden !important;
+}
+.explorer-syntax-box pre {
+    height: auto !important;
+    max-height: none !important;
+    overflow-y: hidden !important;
+}
+.compact-compare pre {
+    min-height: auto !important; /* pseudo-code doesn't need to be 250px */
+}
+
+/* Fix Light Mode Pseudo-Code Color */
+body.light-mode .compact-compare .code-compare-block:not(.c-block):not(.py-block) pre,
+body.light-mode .compact-compare .code-compare-block:not(.c-block):not(.py-block) code,
+body.light-mode .compact-compare .code-compare-block:not(.c-block):not(.py-block) .block-title {
+    color: var(--text-primary) !important;
+}
+
+/* Fix Compact Compare VS Badges */
+.code-compare-grid.compact-compare::after {
+    display: none !important; /* Hide the single centered VS badge */
+}
+
+@media (min-width: 769px) {
+    .compact-compare .code-compare-block:not(:last-child) {
+        position: relative;
+        overflow: visible !important; /* allow the VS badge to overflow the box */
+    }
+    .compact-compare .code-compare-block:not(:last-child)::after {
+        content: "VS";
+        position: absolute;
+        top: 50%;
+        right: -22px;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        background-color: #0b0f19;
+        border: 1px solid var(--border-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    body.light-mode .compact-compare .code-compare-block:not(:last-child)::after {
+        background-color: #ffffff;
+        border-color: rgba(0, 0, 0, 0.1);
+        color: var(--text-muted);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
 }

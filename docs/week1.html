@@ -159,7 +159,7 @@
 
                                 <div class="code-compare-grid compact-compare">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title">C Dynamic Array</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Dynamic Array</div>
                                         <div class="live-editor-wrapper">
                                             <pre><code>// Resize array from 5 to 10
 int *arr = malloc(5 * sizeof(int));
@@ -175,8 +175,9 @@ free(arr); // Don't forget!</code></pre>
                                         <pre class="live-code-output"
                                             id="logic-c-output">Click Run Code to execute...</pre>
                                     </div>
-                                    <div class="code-compare-block py-block live-editor-block">
-                                        <div class="block-title">Python List Resizing (Live Editor)</div>
+                                    
+<div class="code-compare-block py-block live-editor-block">
+                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python List Resizing (Live Editor)</div>
                                         <div class="live-editor-wrapper">
                                             <textarea class="live-code-textarea" id="logic-py-code" rows="5"># Automatic allocation and resizing
 arr = [1, 2, 3, 4, 5]
@@ -273,7 +274,7 @@ print("Length:", len(arr))</textarea>
 
                                 <div class="code-compare-grid compact-compare">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title">C Hash Map (Custom)</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Hash Map (Custom)</div>
                                         <div class="live-editor-wrapper">
                                             <pre><code>// Requires writing hash function, 
 // structs, handling collisions, etc.
@@ -292,8 +293,9 @@ while(node != NULL) {
                                         <pre class="live-code-output"
                                             id="types-c-output">Click Run Code to execute...</pre>
                                     </div>
-                                    <div class="code-compare-block py-block live-editor-block">
-                                        <div class="block-title">Python native Dict (Live Editor)</div>
+                                    
+<div class="code-compare-block py-block live-editor-block">
+                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python native Dict (Live Editor)</div>
                                         <div class="live-editor-wrapper">
                                             <textarea class="live-code-textarea" id="types-py-code" rows="5"># Native O(1) Hash Map (Dictionary)
 grades = {"Alice": "A", "Bob": "B", "Charlie": "C", "David": "B+"}
@@ -435,16 +437,18 @@ print("David's Grade:", grades.get("David"))</textarea>
                                                 </div>
                                                 <pre><code>swap(a, b)</code></pre>
                                             </div>
-                                            <div class="code-compare-block py-block">
-                                                <div class="block-title">Python Code</div>
+                                            
+<div class="code-compare-block py-block">
+                                                <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python Code</div>
                                                 <pre><code>a, b = b, a</code></pre>
                                             </div>
                                             <div class="code-compare-block c-block">
-                                                <div class="block-title">C Code</div>
+                                                <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Code</div>
                                                 <pre><code>int temp = a;
 a = b;
 b = temp;</code></pre>
-                                            </div>
+                                        <pre class="live-code-output" id="c-output-sim-1" style="display:none;"></pre>
+                                    </div>
                                         </div>
                                         <p
                                             style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">
@@ -474,12 +478,13 @@ b = temp;</code></pre>
                                                 </div>
                                                 <pre><code>if target is in array</code></pre>
                                             </div>
-                                            <div class="code-compare-block py-block">
-                                                <div class="block-title">Python Code</div>
+                                            
+<div class="code-compare-block py-block">
+                                                <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python Code</div>
                                                 <pre><code>if target in arr:</code></pre>
                                             </div>
                                             <div class="code-compare-block c-block">
-                                                <div class="block-title">C Code</div>
+                                                <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Code</div>
                                                 <pre><code>bool found = false;
 for(int i = 0; i &lt; n; i++) {
     if(arr[i] == target) {
@@ -487,7 +492,8 @@ for(int i = 0; i &lt; n; i++) {
         break;
     }
 }</code></pre>
-                                            </div>
+                                        <pre class="live-code-output" id="c-output-sim-2" style="display:none;"></pre>
+                                    </div>
                                         </div>
                                         <p
                                             style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">
@@ -517,12 +523,13 @@ for(int i = 0; i &lt; n; i++) {
                                                 </div>
                                                 <pre><code>filter even elements from arr</code></pre>
                                             </div>
-                                            <div class="code-compare-block py-block">
-                                                <div class="block-title">Python Code</div>
+                                            
+<div class="code-compare-block py-block">
+                                                <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python Code</div>
                                                 <pre><code>evens = [x for x in arr if x % 2 == 0]</code></pre>
                                             </div>
                                             <div class="code-compare-block c-block">
-                                                <div class="block-title">C Code</div>
+                                                <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Code</div>
                                                 <pre><code>int evens[100];
 int count = 0;
 for(int i = 0; i &lt; n; i++) {
@@ -530,7 +537,8 @@ for(int i = 0; i &lt; n; i++) {
         evens[count++] = arr[i];
     }
 }</code></pre>
-                                            </div>
+                                        <pre class="live-code-output" id="c-output-sim-3" style="display:none;"></pre>
+                                    </div>
                                         </div>
                                         <p
                                             style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 0.75rem; margin-bottom: 0;">
@@ -545,7 +553,7 @@ for(int i = 0; i &lt; n; i++) {
  
                                         <div class="code-compare-grid compact-compare">
                                             <div class="code-compare-block c-block">
-                                                <div class="block-title">C Array Slicing</div>
+                                                <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Array Slicing</div>
                                                 <div class="live-editor-wrapper">
                                                     <pre><code id="c-slice-code">// Slice array indices 2 to 5 (3 elements)
 int slice[3];
@@ -557,8 +565,9 @@ for(int i = 2; i &lt; 5; i++) {
                                                 </div>
                                                 <pre class="live-code-output" id="readability-c-output">Click Run Code to execute...</pre>
                                             </div>
-                                            <div class="code-compare-block py-block live-editor-block">
-                                                <div class="block-title">Python Slicing (Live Editor)</div>
+                                            
+<div class="code-compare-block py-block live-editor-block">
+                                                <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python Slicing (Live Editor)</div>
                                                 <div class="live-editor-wrapper">
                                                     <textarea class="live-code-textarea" id="readability-py-code" rows="5"># Slice indices 2 to 5 instantly
 arr = [10, 20, 30, 40, 50, 60, 70, 80]
@@ -681,15 +690,17 @@ print("Sliced Array:", slice_arr)</textarea>
 
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title">C Code</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Code</div>
                                         <pre><code>int age = 20;
 double gpa = 3.85;
 char grade = 'A';
 // Types cannot be changed!
 age = "twenty"; // COMPILE ERROR!</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-4" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
-                                        <div class="block-title">Python Code</div>
+                                    
+<div class="code-compare-block py-block">
+                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python Code</div>
                                         <pre><code>age = 20         # Inferred as int
 gpa = 3.85       # Inferred as float
 grade = 'A'      # Inferred as str
@@ -1046,7 +1057,7 @@ print(f"Coordinates: x={x}, y={y}")
 
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title">C Code</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Code</div>
                                         <pre><code>if (gpa >= 3.50) {
     printf("Honor Roll\n");
 } else if (gpa >= 2.00) {
@@ -1058,9 +1069,11 @@ print(f"Coordinates: x={x}, y={y}")
 for (int i = 0; i < 5; i++) {
     printf("%d\n", i);
 }</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-5" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
-                                        <div class="block-title">Python Code</div>
+                                    
+<div class="code-compare-block py-block">
+                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python Code</div>
                                         <pre><code>if gpa >= 3.50:
     print("Honor Roll")
 elif gpa >= 2.00:  # Note 'elif' instead of 'else if'
@@ -1077,15 +1090,17 @@ for i in range(5): # range(5) yields 0, 1, 2, 3, 4
                                 <h4>Looping through collections: C vs Python</h4>
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title">C: Looping by index</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C: Looping by index</div>
                                         <pre><code>int arr[] = {10, 20, 30};
 int n = sizeof(arr)/sizeof(arr[0]);
 for (int i = 0; i < n; i++) {
     printf("Val: %d\n", arr[i]);
 }</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-6" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
-                                        <div class="block-title">Python: Looping directly over collection</div>
+                                    
+<div class="code-compare-block py-block">
+                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python: Looping directly over collection</div>
                                         <pre><code>arr = [10, 20, 30]
 # Directly fetch elements!
 for val in arr:
@@ -1249,8 +1264,10 @@ for index, val in enumerate(arr):
 
 // Calling the function
 int result = add(3, 5); // result = 8</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-7" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
+                                    
+<div class="code-compare-block py-block">
                                         <div class="block-title"><i class="fa-brands fa-python"
                                                 style="margin-right:5px;"></i>Python: def (No types required)</div>
                                         <pre><code>def add(a, b):
@@ -1283,8 +1300,10 @@ result = add(3, 5)  # result = 8</code></pre>
 // Calling:
 int lo, hi;
 min_max(arr, n, &lo, &hi);</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-8" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
+                                    
+<div class="code-compare-block py-block">
                                         <div class="block-title"><i class="fa-brands fa-python"
                                                 style="margin-right:5px;"></i>Python: Return multiple values (tuple)
                                         </div>
@@ -1314,8 +1333,10 @@ print(lo, hi)  # 1 9</code></pre>
 // Must always pass both:
 greet("Alice", "Hello");
 greet("Bob",   "Hi");    // cannot omit greeting</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-9" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
+                                    
+<div class="code-compare-block py-block">
                                         <div class="block-title"><i class="fa-brands fa-python"
                                                 style="margin-right:5px;"></i>Python: Default argument value</div>
                                         <pre><code>def greet(name, greeting="Hello"):
@@ -1364,8 +1385,10 @@ int sum_all(int count, ...) {
 }
 // count must be passed manually
 sum_all(4, 1, 2, 3, 4);</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-10" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
+                                    
+<div class="code-compare-block py-block">
                                         <div class="block-title"><i class="fa-brands fa-python"
                                                 style="margin-right:5px;"></i>Python: *args and **kwargs</div>
                                         <pre><code>def sum_all(*args):
@@ -1433,7 +1456,7 @@ print(sum_all(1, 2, 3, 4, 5))</textarea>
 
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title">C Error Checking</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Error Checking</div>
                                         <pre><code>FILE *f = fopen("data.txt", "r");
 if (f == NULL) {
     perror("Error opening file");
@@ -1441,9 +1464,11 @@ if (f == NULL) {
 }
 // Read code...
 fclose(f);</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-11" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
-                                        <div class="block-title">Python Exception Handling</div>
+                                    
+<div class="code-compare-block py-block">
+                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python Exception Handling</div>
                                         <pre><code>try:
     with open("data.txt", "r") as f:
         content = f.read()
@@ -1672,8 +1697,10 @@ except IOError:
     // Recursive Step
     return n * factorial(n - 1);
 }</code></pre>
-                                        </div>
-                                        <div class="code-compare-block py-block">
+                                        <pre class="live-code-output" id="c-output-sim-12" style="display:none;"></pre>
+                                    </div>
+                                        
+<div class="code-compare-block py-block">
                                             <div class="block-title py-title"><i class="fa-brands fa-python"></i> Python
                                                 Code (Factorial)</div>
                                             <pre><code>def factorial(n):
@@ -1718,12 +1745,7 @@ except IOError:
     return n * factorial(n - 1)
 
 print(factorial(5))</textarea>
-                                            <div class="editor-actions">
-                                                <button class="btn btn-success run-editor-btn"><i
-                                                        class="fa-solid fa-play"></i> Run Code</button>
-                                            </div>
                                             <div class="editor-output-header">Output:</div>
-                                            <pre class="editor-output">Click Run Code to see output...</pre>
                                         </div>
 
                                         <div class="embedded-editor-container" style="margin-top: 0;">
@@ -1734,12 +1756,7 @@ print(factorial(5))</textarea>
     return items[0] + sum_list(items[1:])
 
 print(sum_list([1, 2, 3, 4]))</textarea>
-                                            <div class="editor-actions">
-                                                <button class="btn btn-success run-editor-btn"><i
-                                                        class="fa-solid fa-play"></i> Run Code</button>
-                                            </div>
                                             <div class="editor-output-header">Output:</div>
-                                            <pre class="editor-output">Click Run Code to see output...</pre>
                                         </div>
 
                                         <div class="embedded-editor-container" style="margin-top: 0;">
@@ -1750,12 +1767,7 @@ print(sum_list([1, 2, 3, 4]))</textarea>
     return base * power(base, exponent - 1)
 
 print(power(2, 8))</textarea>
-                                            <div class="editor-actions">
-                                                <button class="btn btn-success run-editor-btn"><i
-                                                        class="fa-solid fa-play"></i> Run Code</button>
-                                            </div>
                                             <div class="editor-output-header">Output:</div>
-                                            <pre class="editor-output">Click Run Code to see output...</pre>
                                         </div>
                                     </div>
                                 </div>
@@ -1898,7 +1910,8 @@ print(power(2, 8))</textarea>
     # Recursive Step
     return n * factorial_recursive(n - 1)</code></pre>
                                     </div>
-                                    <div class="code-compare-block py-block rec-compare-item-iterative">
+                                    
+<div class="code-compare-block py-block rec-compare-item-iterative">
                                         <div class="block-title rec-compare-title-iterative">
                                             <i class="fa-brands fa-python"></i> Iterative Factorial (Loop)
                                         </div>
@@ -2169,7 +2182,7 @@ print(power(2, 8))</textarea>
                             <div class="card-body">
                                 <div class="code-compare-grid">
                                     <div class="code-compare-block c-block">
-                                        <div class="block-title">C Struct & Function</div>
+                                        <div class="block-title"><i class="fa-solid fa-copyright" style="margin-right:5px;"></i> C Struct & Function</div>
                                         <pre><code>struct Point {
     int x;
     int y;
@@ -2183,9 +2196,11 @@ void move(struct Point *p, int dx, int dy) {
 // Usage
 struct Point pt = {10, 20};
 move(&pt, 5, -5);</code></pre>
+                                        <pre class="live-code-output" id="c-output-sim-13" style="display:none;"></pre>
                                     </div>
-                                    <div class="code-compare-block py-block">
-                                        <div class="block-title">Python Class & Method</div>
+                                    
+<div class="code-compare-block py-block">
+                                        <div class="block-title"><i class="fa-brands fa-python" style="margin-right:5px;"></i> Python Class & Method</div>
                                         <pre><code>class Point:
     def __init__(self, x, y):
         self.x = x # Attributes
@@ -2237,12 +2252,7 @@ print(f"Name: {my_dog.name}")
 print(f"Breed: {my_dog.breed}")
 print(f"Sound: {my_dog.speak()}")
 </textarea>
-                                <div class="editor-actions">
-                                    <button class="btn btn-success run-editor-btn"><i class="fa-solid fa-play"></i> Run
-                                        Code</button>
-                                </div>
                                 <div class="editor-output-header">Output Console:</div>
-                                <pre class="editor-output">Click Run Code to see output...</pre>
                             </div>
                         </div>
                     </div>
@@ -2284,7 +2294,7 @@ print(f"Sound: {my_dog.speak()}")
 
     <!-- Collapsible Interactive Console Drawer -->
     <div class="console-drawer" id="console-drawer">
-        <div class="console-header" id="minimize-console-btn">
+        <div class="console-header">
             <div class="console-title">
                 <i class="fa-solid fa-terminal"></i> Global Python Interpreter Playground
             </div>

@@ -3677,6 +3677,10 @@ function runStaticCCode(outputId) {
         finalOutput = "Extracted slice from index 2 to 5:\nslice[0] = 30\nslice[1] = 40\nslice[2] = 50\n\n[Process completed with exit code 0]";
     }
 
+    if (!finalOutput) {
+        finalOutput = "[Process completed with exit code 0]";
+    }
+
     let i = 0;
     const intervalId = setInterval(() => {
         outputEl.innerHTML += finalOutput[i];
