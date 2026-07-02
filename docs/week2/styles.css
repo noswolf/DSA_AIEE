@@ -621,6 +621,12 @@ body.light-mode .main-header .btn:hover {
     gap: 24px;
 }
 
+@media (min-width: 769px) {
+    .grid-2col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 
 /* Comparison Tables */
 .table-container {

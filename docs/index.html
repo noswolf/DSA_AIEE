@@ -342,7 +342,7 @@
         /* Course Weeks Grid */
         .weeks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
         }
 
@@ -552,6 +552,17 @@
             animation: fadeIn 0.4s ease forwards;
         }
 
+        .weeks-grid a {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .weeks-grid a .week-card {
+            flex: 1;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .header-container {
@@ -599,92 +610,65 @@
             <div class="filter-container">
                 <button class="filter-btn active" data-filter="all">All Materials</button>
                 <button class="filter-btn" data-filter="basics">Basics & Recursion</button>
-                <button class="filter-btn" data-filter="complexity">Complexity & Sorting</button>
+                <!-- <button class="filter-btn" data-filter="complexity">Complexity & Sorting</button>
                 <button class="filter-btn" data-filter="lists">Linked Lists, Stacks & Queues</button>
-                <button class="filter-btn" data-filter="trees">Trees & Graphs</button>
+                <button class="filter-btn" data-filter="trees">Trees & Graphs</button> -->
             </div>
         </section>
 
         <!-- Weeks Interactive Grid -->
         <section class="weeks-grid" id="weeks-grid">
-            
             <!-- Week 1 -->
-            <div class="week-card" data-category="basics" data-tags="basics">
-                <div class="week-card-header">
-                    <span class="week-badge">Week 01</span>
+            <a href="week1/week1.html" target="_blank">
+                <div class="week-card" data-category="basics" data-tags="basics">
+                    <div class="week-card-header">
+                        <span class="week-badge">Week 01</span>
+                    </div>
+                    <h3 class="card-title">Introduction & Basic Python</h3>
+                    <p class="card-desc">Transitioning from C language concepts to Python programming syntax, dynamic structures, and interpreter engines.</p>
                 </div>
-                <h3 class="card-title">Introduction & Basic Python</h3>
-                <p class="card-desc">Transitioning from C language concepts to Python programming syntax, dynamic structures, and interpreter engines.</p>
-                <div class="materials-container">
-                    <a href="week1.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Python Interactive Guide</a>
-                    <a href="Week1/DSA_Week1.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Week 1 Intro Slides (PDF)</a>
-                    <a href="Week1/DSA-Colab-Tutorial.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Colab Tutorial Sheet (PDF)</a>
-                    <a href="Week1/Getting-Started-with-VS-Code.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> VS Code Guide (PDF)</a>
-                    <a href="Week1/DSA_Python_Crash_Course_stu.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Python Crash Course (PDF)</a>
-                    <a href="Week1/DSA_Lab_1_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 1 Student (Notebook)</a>
-                    <a href="Week1/DSA_Lab_1_Challenge.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 1 Challenge (Notebook)</a>
-                </div>
-            </div>
+            </a>
 
             <!-- Week 2 -->
-            <div class="week-card" data-category="basics" data-tags="basics">
-                <div class="week-card-header">
-                    <span class="week-badge">Week 02</span>
+            <a href="week2/week2.html" target="_blank">
+                <div class="week-card" data-category="basics" data-tags="basics">
+                    <div class="week-card-header">
+                        <span class="week-badge">Week 02</span>
+                    </div>
+                    <h3 class="card-title">Complexity & Dynamic Arrays</h3>
+                    <p class="card-desc">Computational cost analysis using Big-O curves, contiguous memory array representation, and dynamic array resizing strategies.</p>
                 </div>
-                <h3 class="card-title">Recursion & Memory Call Stack</h3>
-                <p class="card-desc">Core components of recursive operations, base cases, recursion limits, and stack frames trace.</p>
-                <div class="materials-container">
-                    <a href="Week2/Recursion_Interactive_Guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Recursion Interactive Guide</a>
-                    <a href="Week2/Tutorial_Week2_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Timeit & Globals Tutorial (Notebook)</a>
-                    <a href="Week2/DSA_HW-1.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Homework 1 (Notebook)</a>
-                </div>
-            </div>
+            </a>
 
             <!-- Week 3 -->
-            <div class="week-card" data-category="complexity" data-tags="complexity">
+            <!-- <div class="week-card" data-category="complexity" data-tags="complexity">
                 <div class="week-card-header">
                     <span class="week-badge">Week 03</span>
                 </div>
                 <h3 class="card-title">Algorithm Analysis & Big-O</h3>
                 <p class="card-desc">Theoretical analysis of runtimes, growth rates of functions, and evaluating operations via Big-O curves.</p>
-                <div class="materials-container">
-                    <a href="Week3/DSA_Week3.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Algorithm Analysis Slides (PDF)</a>
-                    <a href="Week3/Big-O_Interactive_Guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Big-O Interactive Guide</a>
-                    <a href="Week3/DSA_Lab_2_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 2 Student (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 4 -->
-            <div class="week-card" data-category="complexity" data-tags="complexity">
+            <!-- <div class="week-card" data-category="complexity" data-tags="complexity">
                 <div class="week-card-header">
                     <span class="week-badge">Week 04</span>
                 </div>
                 <h3 class="card-title">Arrays & Object-Oriented Basics</h3>
                 <p class="card-desc">Contiguous memory representation, Python list implementation details, and basic OOP namespaces.</p>
-                <div class="materials-container">
-                    <a href="Week4/DSA_Week4.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Arrays & Python List Slides (PDF)</a>
-                    <a href="Week4/Array_Interactive_Guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Array Insertion Interactive Guide</a>
-                    <a href="Week4/Tutorial_Week4_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> OOP Tutorial (Notebook)</a>
-                    <a href="Week4/DSA_Lab_3_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 3 Student (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 5 -->
-            <div class="week-card" data-category="complexity" data-tags="complexity">
+            <!-- <div class="week-card" data-category="complexity" data-tags="complexity">
                 <div class="week-card-header">
                     <span class="week-badge">Week 05</span>
                 </div>
                 <h3 class="card-title">Searching Algorithms</h3>
                 <p class="card-desc">Linear search, binary search, and the complexity bounds of lookup algorithms in ordered arrays.</p>
-                <div class="materials-container">
-                    <a href="Week5/DSA_Week5.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Searching Slides (PDF)</a>
-                    <a href="Week5/DSA_Lab_4_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 4 Student (Notebook)</a>
-                    <a href="Week5/DSA_Lab_4_challenge.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 4 Challenge (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 6 (Holiday) -->
-            <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="holiday">
+            <!-- <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="holiday">
                 <div class="week-card-header">
                     <span class="week-badge">Week 06</span>
                 </div>
@@ -693,25 +677,19 @@
                     <i class="fa-solid fa-umbrella-beach"></i>
                     <span>No Class - Holiday & Self-Study Period</span>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Week 7 -->
-            <div class="week-card" data-category="complexity" data-tags="complexity">
+            <!-- <div class="week-card" data-category="complexity" data-tags="complexity">
                 <div class="week-card-header">
                     <span class="week-badge">Week 07</span>
                 </div>
                 <h3 class="card-title">Sorting Algorithms</h3>
                 <p class="card-desc">Bubble sort, selection sort, insertion sort, and comparative benchmarks of quadratic processes.</p>
-                <div class="materials-container">
-                    <a href="https://github.com/noswolf/DSA_BIT/blob/DSA_24_Term2/Week10/DSA_Week10.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Sorting Slides (GitHub PDF)</a>
-                    <a href="Week7/Sorting_Interactive_Guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Sorting Interactive Guide</a>
-                    <a href="Week7/DSA_Lab_5_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 5 Student (Notebook)</a>
-                    <a href="Week7/DSA_Lab_5_challenge.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 5 Challenge (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 8 (Commencement Ceremony) -->
-            <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="holiday">
+            <!-- <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="holiday">
                 <div class="week-card-header">
                     <span class="week-badge">Week 08</span>
                 </div>
@@ -720,10 +698,10 @@
                     <i class="fa-solid fa-user-graduate"></i>
                     <span>No Class - Graduation Commencement Ceremony</span>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Midterm Exam -->
-            <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="midterm">
+            <!-- <div class="week-card special-card" data-category="basics" data-tags="basics" data-special="midterm">
                 <div class="week-card-header">
                     <span class="week-badge">Mid-Term</span>
                 </div>
@@ -732,81 +710,55 @@
                     <i class="fa-solid fa-file-signature"></i>
                     <span>Midterm Exam Week (Weeks 1-7 Syllabus)</span>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Week 9 -->
-            <div class="week-card" data-category="lists" data-tags="lists">
+            <!-- <div class="week-card" data-category="lists" data-tags="lists">
                 <div class="week-card-header">
                     <span class="week-badge">Week 09</span>
                 </div>
                 <h3 class="card-title">Singly Linked Lists</h3>
                 <p class="card-desc">Singly linked structures, node dereferencing, head/tail insertion, traversal loops, and deletion logic.</p>
-                <div class="materials-container">
-                    <a href="Week9/DSA_Week9.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Singly Linked List Slides (PDF)</a>
-                    <a href="Week9/Linked_list_guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Linked List Interactive Guide</a>
-                    <a href="Week9/DSA_Lab_6_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 6 Student (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 10 -->
-            <div class="week-card" data-category="lists" data-tags="lists">
+            <!-- <div class="week-card" data-category="lists" data-tags="lists">
                 <div class="week-card-header">
                     <span class="week-badge">Week 10</span>
                 </div>
                 <h3 class="card-title">Doubly Linked Lists, Stacks & Queues</h3>
                 <p class="card-desc">Double linking nodes, sentinel values, LIFO Stack structures, and FIFO linear Queue pipelines.</p>
-                <div class="materials-container">
-                    <a href="Week10/Doubly_LL_guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Doubly Linked List Guide</a>
-                    <a href="Week10/stack_queue_guide.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Stack & Queue Interactive Guide</a>
-                    <a href="Week10/DSA_Lab_7_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 7 Student (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 11 -->
-            <div class="week-card" data-category="trees" data-tags="trees">
+            <!-- <div class="week-card" data-category="trees" data-tags="trees">
                 <div class="week-card-header">
                     <span class="week-badge">Week 11</span>
                 </div>
                 <h3 class="card-title">Trees & Traversals</h3>
                 <p class="card-desc">Hierarchical data structures, root node, height limits, preorder, inorder, and postorder recursive traversals.</p>
-                <div class="materials-container">
-                    <a href="Week11/DSA_Week11.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Tree Structures Slides (PDF)</a>
-                    <a href="Week11/Tree_traversals.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Tree Traversals Interactive Guide</a>
-                    <a href="Week11/DSA_Lab_8_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 8 Student (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 12 -->
-            <div class="week-card" data-category="trees" data-tags="trees">
+            <!-- <div class="week-card" data-category="trees" data-tags="trees">
                 <div class="week-card-header">
                     <span class="week-badge">Week 12</span>
                 </div>
                 <h3 class="card-title">Binary Search Trees (BST)</h3>
                 <p class="card-desc">BST property constraints, near-optimal lookup logic, dynamic leaf insertion, and node deletion cases.</p>
-                <div class="materials-container">
-                    <a href="Week12/DSA_Week12.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> BST Operations Slides (PDF)</a>
-                    <a href="Week12/BST_operations.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> BST Interactive Guide</a>
-                    <a href="Week12/DSA_Lab_9_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 9 Student (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 13 -->
-            <div class="week-card" data-category="trees" data-tags="trees">
+            <!-- <div class="week-card" data-category="trees" data-tags="trees">
                 <div class="week-card-header">
                     <span class="week-badge">Week 13</span>
                 </div>
                 <h3 class="card-title">Graphs & Graph Algorithms</h3>
                 <p class="card-desc">Adjacency matrices, adjacency lists, depth-first search (DFS) recursion, and breadth-first search (BFS).</p>
-                <div class="materials-container">
-                    <a href="Week13/DSA_Week13.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Graph Algorithms Slides (PDF)</a>
-                    <a href="Week13/DSA_DFS_recursive.pdf" class="material-link" target="_blank"><i class="fa-regular fa-file-pdf"></i> Recursive DFS Slides (PDF)</a>
-                    <a href="Week13/Graph_Algorithms.html" class="material-link" target="_blank"><i class="fa-solid fa-laptop-code"></i> Graph Algorithms Guide</a>
-                    <a href="Week13/DSA_Lab_10_student.ipynb" class="material-link" download><i class="fa-solid fa-book-open"></i> Lab 10 Student (Notebook)</a>
-                </div>
-            </div>
+            </div> -->
 
             <!-- Week 14 (Bridge Holiday) -->
-            <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="holiday">
+            <!-- <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="holiday">
                 <div class="week-card-header">
                     <span class="week-badge">Week 14</span>
                 </div>
@@ -815,10 +767,10 @@
                     <i class="fa-solid fa-calendar-day"></i>
                     <span>No Class - Unofficial Bridge Holiday</span>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Week 15 (No Class) -->
-            <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="holiday">
+            <!-- <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="holiday">
                 <div class="week-card-header">
                     <span class="week-badge">Week 15</span>
                 </div>
@@ -827,10 +779,10 @@
                     <i class="fa-solid fa-book-reader"></i>
                     <span>No Class - Revision & Study Period</span>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Final Exam -->
-            <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="final">
+            <!-- <div class="week-card special-card" data-category="trees" data-tags="trees" data-special="final">
                 <div class="week-card-header">
                     <span class="week-badge">Finals</span>
                 </div>
@@ -839,7 +791,7 @@
                     <i class="fa-solid fa-award"></i>
                     <span>Final Exam Week (Comprehensive Syllabus)</span>
                 </div>
-            </div>
+            </div> -->
 
         </section>
 

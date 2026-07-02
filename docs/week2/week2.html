@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complexity & Dynamic Arrays: Interactive Guide | DSA AIEE</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Pyodide (WASM Python interpreter) -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <style>
+        /* Custom animations and styling for Week 2 Complexity Visualizer */
+        .curve-toggle-row {
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .curve-toggle-row:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            filter: brightness(1.02);
+        }
+        .curve-toggle-row:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+
+<body class="light-mode">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <span class="logo-icon"><i class="fa-solid fa-chart-line"></i></span>
+                    <div class="logo-text">
+                        <h1>Week 2</h1>
+                        <span class="subtitle">Complexity & Arrays</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Toggle Sidebar">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-section-title">Module Sections</span>
+                <button class="nav-item active" data-target="welcome-section">
+                    <i class="fa-solid fa-book-open"></i> Course Introduction
+                </button>
+
+                <button class="nav-item" data-target="complexity-section">
+                    <i class="fa-solid fa-arrow-up-right-dots"></i> <span>Module 1: Big-O Curves</span>
+                </button>
+
+                <button class="nav-item" data-target="indexing-section">
+                    <i class="fa-solid fa-bolt"></i> <span>Module 2: List Indexing</span>
+                </button>
+
+                <button class="nav-item" data-target="dynamic-array-section">
+                    <i class="fa-solid fa-database"></i> <span>Module 3: Dynamic Arrays</span>
+                </button>
+
+                <!-- <button class="nav-item" data-target="labs-section">
+                    <i class="fa-solid fa-laptop-code"></i> <span>Challenge Labs</span>
+                </button> -->
+
+                <button class="nav-item" data-target="quiz-section">
+                    <i class="fa-solid fa-clipboard-question"></i> <span>Transition Quiz</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="interpreter-status">
+                    <span class="status-dot loading" id="status-dot"></span>
+                    <span class="status-text" id="status-text">Python Loading...</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left" style="display: flex; align-items: center; gap: 16px;">
+                    <div>
+                        <span class="breadcrumb">Algorithm Efficiency & Memory</span>
+                        <h2 id="current-section-title">Course Introduction</h2>
+                    </div>
+                </div>
+                <div class="header-right" style="display: flex; gap: 12px;">
+                    <a href="../index.html" class="btn btn-secondary" id="back-dashboard-btn" title="Back to Dashboard">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <button class="btn btn-secondary" id="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button class="btn btn-secondary toggle-console-btn" id="toggle-console-btn"
+                        title="Toggle Terminal Console">
+                        <i class="fa-solid fa-terminal"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Frame -->
+            <div class="content-body">
+
+                <!-- 1. WELCOME SECTION -->
+                <section id="welcome-section" class="content-section active">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap">
+                                <i class="fa-solid fa-brain mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Algorithm Complexity & Memory Structures</h2>
+                                <p>Learn how to analyze computational cost using Big-O runtime complexities and explore how standard list structures represent and resize themselves in memory.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2col" style="margin-top: 1.5rem;">
+                        <div class="card glass">
+                            <div class="card-body">
+                                <h3 class="card-title"><i class="fa-solid fa-arrow-up-right-dots"></i> Analyzing Computational Growth</h3>
+                                <p>When writing code to solve a problem, we must know how it scales when the size of input <code>n</code> grows. In computer science, we use <strong>Big-O notation</strong> to model upper bounds of resource consumption (time & memory).</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Time Complexity</span>
+                                    <span class="tag" style="background: rgba(6,182,212,0.1); color: var(--accent-cyan);">Space Complexity</span>
+                                    <span class="tag" style="background: rgba(168,85,247,0.1); color: var(--accent-purple);">Scalability</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card glass">
+                            <div class="card-body">
+                                <h3 class="card-title"><i class="fa-solid fa-memory"></i> 2. Direct Memory Arrays</h3>
+                                <p>Memory is arranged as a sequence of addressable slots. Underneath high-level Python collections like <code>lists</code> are raw <strong>Arrays</strong> that store references in contiguous memory. This structural choice is what gives them fast retrieval speeds.</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(249,115,22,0.1); color: var(--accent-orange);">Contiguous Memory</span>
+                                    <span class="tag" style="background: rgba(6,182,212,0.1); color: var(--accent-cyan);">O(1) Access</span>
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Amortized Cost</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card glass" style="margin-top: 1.5rem;">
+                        <div class="card-body">
+                            <h3>Course Syllabus for Week 2</h3>
+                            <p>Here are the key interactive visual explorations you will engage with in this guide:</p>
+                            <ul style="margin-top: 12px; padding-left: 20px; line-height: 1.6;">
+                                <li><strong>Big-O Curves Plotter:</strong> Visually trace O(1), O(log n), O(n), O(n log n), O(n²), and O(2ⁿ) complexity slopes as inputs scale.</li>
+                                <li><strong>List Indexing Memory Simulator:</strong> Click cell indices to watch how the pointer offsets calculate instantly.</li>
+                                <li><strong>Dynamic Array Resizer:</strong> Simulate append operations and watch how the backing array doubles itself or resizes by constant increments.</li>
+                                <!-- <li><strong>Challenge Labs:</strong> Code and run linear search, intersect finders, and dynamic arrays directly with our integrated WASM interpreter.</li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. COMPLEXITY MODULE -->
+                <section id="complexity-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap">
+                                <i class="fa-solid fa-arrow-up-right-dots mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2> Analyzing Computational Growth</h2>
+                                <p>When writing code to solve a problem, we must know how it scales when the size of input <code>n</code> grows. In computer science, we use <strong>Big-O notation</strong> to model upper bounds of resource consumption (time & memory).</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Time Complexity</span>
+                                    <span class="tag" style="background: rgba(6,182,212,0.1); color: var(--accent-cyan);">Space Complexity</span>
+                                    <span class="tag" style="background: rgba(168,85,247,0.1); color: var(--accent-purple);">Scalability</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="header-block" style="margin-top: 1.5rem;">
+                        <h3>Module 1: Big-O Curves Visualizer</h3>
+                        <p>Click on any row in the "Growth Rates Compared" list to toggle (show/hide) that curve on the chart. Adjust the slider to see how curves diverge as input sizes scale.</p>
+                    </div>
+                    <div class="grid-2col">
+                        <div class="card glass">
+                            <div class="card-body">
+                                <h4>Complexity Functions Plot</h4>
+                                <div class="visualizer-container" style="background: var(--bg-primary); border-radius: 8px; padding: 10px; border: 1px solid var(--border-color); height: 280px; position: relative;">
+                                    <svg id="bigo-svg" viewBox="0 0 400 250" style="width: 100%; height: 100%; overflow: visible;"></svg>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 12px; margin-top: 15px;">
+                                    <label for="n-slider" style="font-weight:600; font-size: 13px;">Input size (n): <span id="n-val" style="color: var(--accent-blue);">20</span></label>
+                                    <input type="range" id="n-slider" min="1" max="50" value="20" style="flex: 1; accent-color: var(--accent-blue);">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card glass">
+                            <div class="card-body">
+                                <h4>Growth Rates Compared</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+                                    <div class="curve-toggle-row" data-curve="constant" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                        <span style="font-weight: 600; color: #64748b;"><i class="fa-solid fa-circle" style="color: #64748b; font-size: 10px; margin-right: 6px;"></i> Constant O(1)</span>
+                                        <span class="growth-val" id="val-constant">1</span>
+                                    </div>
+                                    <div class="curve-toggle-row" data-curve="logarithmic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                        <span style="font-weight: 600; color: #10b981;"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 10px; margin-right: 6px;"></i> Logarithmic O(log n)</span>
+                                        <span class="growth-val" id="val-logarithmic">3</span>
+                                    </div>
+                                    <div class="curve-toggle-row" data-curve="linear" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                        <span style="font-weight: 600; color: #06b6d4;"><i class="fa-solid fa-circle" style="color: #06b6d4; font-size: 10px; margin-right: 6px;"></i> Linear O(n)</span>
+                                        <span class="growth-val" id="val-linear">20</span>
+                                    </div>
+                                    <div class="curve-toggle-row" data-curve="linearithmic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                        <span style="font-weight: 600; color: #8b5cf6;"><i class="fa-solid fa-circle" style="color: #8b5cf6; font-size: 10px; margin-right: 6px;"></i> Linearithmic O(n log n)</span>
+                                        <span class="growth-val" id="val-linearithmic">86</span>
+                                    </div>
+                                    <div class="curve-toggle-row" data-curve="quadratic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                        <span style="font-weight: 600; color: #f97316;"><i class="fa-solid fa-circle" style="color: #f97316; font-size: 10px; margin-right: 6px;"></i> Quadratic O(n²)</span>
+                                        <span class="growth-val" id="val-quadratic">400</span>
+                                    </div>
+                                    <div class="curve-toggle-row" data-curve="exponential" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                        <span style="font-weight: 600; color: #ef4444;"><i class="fa-solid fa-circle" style="color: #ef4444; font-size: 10px; margin-right: 6px;"></i> Exponential O(2ⁿ)</span>
+                                        <span class="growth-val" id="val-exponential" style="color: #ef4444; font-weight:700;">1,048,576</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card glass" style="margin-top: 1.5rem;">
+                        <div class="card-body">
+                            <h4>Try Testing Time Complexity Live</h4>
+                            <p>Run this script to measure how long Python takes to sum ranges of increasing sizes. Check the output chart by executing the code below:</p>
+                            <div class="embedded-editor-container" style="margin-top:12px;">
+                                <div class="live-editor-wrapper">
+                                    <textarea class="editor-textarea live-code-textarea" id="complexity-sample-code" rows="7">import timeit
+# Compare time of summing elements in lists of size 1,000 vs 100,000
+time_small = timeit.timeit('sum(range(1000))', number=500)
+time_large = timeit.timeit('sum(range(100000))', number=500)
+
+print(f"Summing 1,000 elements (500 times): {time_small:.4f} seconds")
+print(f"Summing 100,000 elements (500 times): {time_large:.4f} seconds")
+print(f"Ratio (should scale near linear O(n)): {time_large/time_small:.1f}x time increase")</textarea>
+                                </div>
+                                <div class="editor-actions" style="margin-top:10px;">
+                                    <button class="btn btn-primary run-editor-btn"><i class="fa-solid fa-play"></i> Run Code</button>
+                                </div>
+                                <pre class="editor-output" style="margin-top: 10px;">Click Run Code to execute...</pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. INDEXING MODULE -->
+                <section id="indexing-section" class="content-section">
+                    <div class="header-block">
+                        <h3>Module 2: List Indexing Memory Simulator</h3>
+                        <p>How does a list retrieve any item in constant time? Learn how the underlying array computes physical memory offsets dynamically.</p>
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="card glass">
+                            <div class="card-body">
+                                <h4>Interactive Memory Tape</h4>
+                                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Select an index on the array to calculate its address calculation sequence:</p>
+                                
+                                <div class="memory-grid-container" style="display: flex; gap: 8px; justify-content: center; margin: 20px 0;">
+                                    <!-- Slots generated in js -->
+                                </div>
+
+                                <div class="calculation-box" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 12px; font-family: 'Fira Code', monospace; font-size: 13px;">
+                                    <div><strong>Base Address (Array Start):</strong> <span id="base-addr-lbl" style="color: var(--accent-orange);">0x1000</span></div>
+                                    <div><strong>Reference Pointer Width:</strong> <span id="width-lbl" style="color: var(--accent-cyan);">8 bytes</span> (64-bit Address)</div>
+                                    <div style="margin: 10px 0; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+                                        <strong>Address Formula:</strong><br>
+                                        <span style="color: #cbd5e1;">Target Address = Base + (Index × Pointer Width)</span>
+                                    </div>
+                                    <div id="calc-step-lbl" style="color: var(--accent-blue); font-weight: bold; font-size: 14px;">
+                                        Select an index cell to calculate.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card glass">
+                            <div class="card-body">
+                                <h4>Why Indexing is Constant O(1) Time</h4>
+                                <p>To load an item from a list at index <code>i</code>, the computer does not traverse from the beginning. Instead, it performs a simple arithmetic operation: multiplying the index by the address reference offset and adding it to the starting address.</p>
+                                <p style="margin-top: 10px;">This multiplication and addition take a <strong>fixed number of CPU cycles</strong>, regardless of whether you access index 0, index 500, or index 1,000,000. Hence, it executes in constant <code>O(1)</code> time.</p>
+                                
+                                <div style="margin-top: 16px; background: rgba(6,182,212,0.06); border-radius: 8px; border: 1px solid rgba(6,182,212,0.15); padding: 12px;">
+                                    <h5 style="color: var(--accent-cyan); font-weight:700;"><i class="fa-solid fa-lightbulb"></i> Key Takeaway</h5>
+                                    <p style="font-size: 12.5px; margin-top: 6px;">Python Lists are stored as arrays of pointers. The array contains the addresses of the actual objects. Because the addresses are of a fixed width (8 bytes), calculating the offset is direct and instant.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. DYNAMIC ARRAY MODULE -->
+                <section id="dynamic-array-section" class="content-section">
+                    <div class="header-block">
+                        <h3>Module 3: Dynamic Array Appending Visualizer</h3>
+                        <p>Simulate appending values to a dynamic array. Notice what happens when the current capacity overflows.</p>
+                    </div>
+
+                    <div class="grid-2col">
+                        <div class="card glass">
+                            <div class="card-body">
+                                <h4>Array Append Simulator</h4>
+                                <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+                                    <label for="resize-strategy" style="font-size: 13px; font-weight:600;">Resize Strategy:</label>
+                                    <select id="resize-strategy" class="form-control" style="background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 5px; border-radius: 4px;">
+                                        <option value="double">Doubling Capacity (Amortized O(1))</option>
+                                        <option value="fixed">Fixed Capacity Increase (+4 Slots)</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                                    <button class="btn btn-primary" id="sim-append-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-plus"></i> Append Element</button>
+                                    <button class="btn btn-danger" id="sim-reset-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-rotate-left"></i> Reset Simulator</button>
+                                </div>
+
+                                <div class="arr-visualizer-box" style="margin-top: 15px;">
+                                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:12px; font-weight:600;">
+                                        <span>Backing Array Slots:</span>
+                                        <div>
+                                            <span style="margin-right:10px;">Size (n): <span id="arr-size-lbl" style="color:var(--accent-blue);">0</span></span>
+                                            <span>Capacity: <span id="arr-cap-lbl" style="color:var(--accent-orange);">1</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="array-slots-row" id="array-slots-row" style="display:flex; flex-wrap:wrap; gap:6px; min-height:50px; background:var(--bg-primary); padding:10px; border-radius:8px; border:1px solid var(--border-color); align-content:center;">
+                                        <!-- slots generated in JS -->
+                                    </div>
+                                </div>
+
+                                <div class="resize-activity-log" id="resize-activity-log" style="background: rgba(249,115,22,0.05); border: 1px solid rgba(249,115,22,0.15); border-radius: 8px; padding: 12px; font-size: 12.5px; margin-top: 12px; min-height: 50px;">
+                                    Simulator initialized. Click "Append Element" to start.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card glass">
+                            <div class="card-body">
+                                <h4>Amortized Time vs Linear Resize Cost</h4>
+                                <p>When a dynamic array is full, appending an element forces the system to perform a resize:</p>
+                                <ol style="margin-top: 8px; padding-left: 20px; font-size: 13px; line-height: 1.5;">
+                                    <li>Allocate a new contiguous memory block of larger capacity.</li>
+                                    <li>Copy all current elements to the new block (takes <code>O(n)</code> copies).</li>
+                                    <li>Reassign reference pointer and add the new element.</li>
+                                </ol>
+                                <p style="margin-top: 10px;">By **Doubling** the capacity on resize, copy cost is spread out: resizing becomes rare. In the long run, appending elements costs <strong>O(1) on average (amortized)</strong>.</p>
+                                <p style="margin-top: 8px;">If we only increase capacity by a **fixed size** (e.g. +1000 slots), the number of resizes grows linearly with `n`. More resizes mean we perform O(n²) total copies, making the average append run much slower.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 6. QUIZ SECTION -->
+                <section id="quiz-section" class="content-section">
+                    <div class="header-block">
+                        <h3>Complexity & Arrays Quiz</h3>
+                        <p>Test your knowledge of Big-O notations, array storage layouts, and resizing behaviors.</p>
+                    </div>
+
+                    <div class="card glass">
+                        <div class="card-body" id="quiz-card-body">
+                            <div class="quiz-question-number" id="quiz-qnum" style="font-weight: bold; color: var(--accent-blue); font-size: 13px; text-transform: uppercase;">Question 1 of 5</div>
+                            <h4 id="quiz-qtext" style="margin-top: 6px; font-weight:700;">Which complexity growth function scales slowest for large values of input n?</h4>
+                            
+                            <div class="quiz-options-list" id="quiz-options" style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">
+                                <!-- Options populated dynamically in JS -->
+                            </div>
+
+                            <div class="quiz-feedback-box" id="quiz-feedback" style="display:none; padding: 12px; border-radius: 8px; font-size:13px; line-height: 1.5; margin-bottom: 15px;"></div>
+
+                            <button class="btn btn-primary" id="quiz-submit-btn" style="padding: 8px 16px;">Check Answer</button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Python Console Drawer -->
+        <div class="console-drawer" id="console-drawer">
+            <div class="console-header" id="console-drawer-header">
+                <div class="console-title">
+                    <i class="fa-solid fa-terminal"></i> <span>Python WASM Interactive Terminal</span>
+                </div>
+                <div class="console-actions">
+                    <button class="console-btn" id="clear-console-btn" title="Clear Console"><i
+                            class="fa-solid fa-trash-can"></i></button>
+                    <button class="console-btn" id="minimize-console-btn" title="Toggle Console"><i
+                            class="fa-solid fa-chevron-down"></i></button>
+                </div>
+            </div>
+            <div class="console-content">
+                <div class="console-workspace">
+                    <div class="console-editor-section">
+                        <div class="panel-subtitle">Write Python Code:</div>
+                        <textarea id="global-console-textarea" class="console-textarea"># Try writing Python code here!
+import math
+n = 100
+print("Input size n:", n)
+print("Log2(n):", math.log2(n))
+print("Quadratic (n^2):", n**2)
+</textarea>
+                        <button class="btn btn-success" id="run-global-console-btn"><i class="fa-solid fa-play"></i> Execute
+                            Code</button>
+                    </div>
+                    <div class="console-terminal-section">
+                        <div class="panel-subtitle">Standard Output (stdout):</div>
+                        <pre class="terminal-body" id="global-console-terminal">Python Environment is preparing...</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Entry -->
+    <script src="app.js?v=2"></script>
+</body>
+
+</html>
