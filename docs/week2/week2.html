@@ -302,13 +302,52 @@ print(f"Ratio (should scale near linear O(n)): {time_large/time_small:.1f}x time
 
                         <div class="card glass">
                             <div class="card-body">
-                                <h4>Why Indexing is Constant O(1) Time</h4>
-                                <p>To load an item from a list at index <code>i</code>, the computer does not traverse from the beginning. Instead, it performs a simple arithmetic operation: multiplying the index by the address reference offset and adding it to the starting address.</p>
-                                <p style="margin-top: 10px;">This multiplication and addition take a <strong>fixed number of CPU cycles</strong>, regardless of whether you access index 0, index 500, or index 1,000,000. Hence, it executes in constant <code>O(1)</code> time.</p>
+                                <h4 style="margin-top: 0; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                                    <i class="fa-solid fa-clock" style="color: var(--accent-orange);"></i> Why Indexing is Constant O(1) Time
+                                </h4>
+                                <p style="font-size: 13px; line-height: 1.5; color: var(--text-secondary); margin-bottom: 16px;">
+                                    Many beginners wonder why accessing list elements is so fast. Here is how Python achieves instant retrieval:
+                                </p>
                                 
-                                <div style="margin-top: 16px; background: rgba(6,182,212,0.06); border-radius: 8px; border: 1px solid rgba(6,182,212,0.15); padding: 12px;">
-                                    <h5 style="color: var(--accent-cyan); font-weight:700;"><i class="fa-solid fa-lightbulb"></i> Key Takeaway</h5>
-                                    <p style="font-size: 12.5px; margin-top: 6px;">Python Lists are stored as arrays of pointers. The array contains the addresses of the actual objects. Because the addresses are of a fixed width (8 bytes), calculating the offset is direct and instant.</p>
+                                <div style="display: flex; flex-direction: column; gap: 12px;">
+                                    <!-- Box 1: Math Formula -->
+                                    <div style="display: flex; gap: 12px; background: rgba(6, 182, 212, 0.04); border-left: 3px solid var(--accent-cyan); padding: 12px 14px; border-radius: 0 6px 6px 0;">
+                                        <div style="font-size: 16px; color: var(--accent-cyan); margin-top: 2px;">
+                                            <i class="fa-solid fa-calculator"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">Direct Address Calculation</div>
+                                            <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                Instead of traversing the list cell-by-cell, the computer calculates the target address instantly in a single mathematical step: <code>Target = Base + (Index * 8 bytes)</code>.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Box 2: CPU Cycles -->
+                                    <div style="display: flex; gap: 12px; background: rgba(249, 115, 22, 0.04); border-left: 3px solid var(--accent-orange); padding: 12px 14px; border-radius: 0 6px 6px 0;">
+                                        <div style="font-size: 16px; color: var(--accent-orange); margin-top: 2px;">
+                                            <i class="fa-solid fa-microchip"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">Constant CPU Cycles</div>
+                                            <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                This multiplication and addition take a fixed number of CPU instructions. Whether you are accessing index <code>0</code> or index <code>1,000,000</code>, the calculation time remains identical: <code>O(1)</code>.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Box 3: Fixed width -->
+                                    <div style="display: flex; gap: 12px; background: rgba(168, 85, 247, 0.04); border-left: 3px solid var(--accent-purple); padding: 12px 14px; border-radius: 0 6px 6px 0;">
+                                        <div style="font-size: 16px; color: var(--accent-purple); margin-top: 2px;">
+                                            <i class="fa-solid fa-code-merge"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">Fixed-Width Referential Pointers</div>
+                                            <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                Python lists store 64-bit memory addresses (pointers) of elements, not the objects themselves. Since every pointer is exactly <code>8 bytes</code>, the step size is always identical regardless of the object type.
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
