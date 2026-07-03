@@ -5610,3 +5610,102 @@ body.light-mode .compact-compare .code-compare-block:not(.c-block):not(.py-block
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 }
+
+/* --- Interactive Memory Tape (Module 2) Light/Dark Mode Support --- */
+.memory-grid-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+    background: rgba(9, 13, 22, 0.4);
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+}
+body.light-mode .memory-grid-container {
+    background: rgba(0, 0, 0, 0.02) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.ref-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 4px;
+    transition: all 0.3s ease;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+body.light-mode .ref-cell {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.ref-cell.active {
+    border-color: var(--accent-blue) !important;
+    background: rgba(59, 130, 246, 0.12) !important;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    transform: translateY(-1px);
+}
+body.light-mode .ref-cell.active {
+    background: rgba(59, 130, 246, 0.08) !important;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.15);
+}
+
+.ref-cell.searching {
+    border-color: var(--accent-blue) !important;
+    background: rgba(59, 130, 246, 0.06) !important;
+}
+body.light-mode .ref-cell.searching {
+    background: rgba(59, 130, 246, 0.04) !important;
+}
+
+.pointer-arrow {
+    color: var(--border-color);
+    transition: all 0.3s ease;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+body.light-mode .pointer-arrow {
+    color: rgba(0, 0, 0, 0.15) !important;
+}
+
+.pointer-arrow.active {
+    color: var(--accent-cyan) !important;
+    transform: scaleY(1.3);
+}
+
+.heap-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1.5px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px 4px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+body.light-mode .heap-cell {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.heap-cell.active {
+    border-color: var(--accent-green) !important;
+    background: rgba(16, 185, 129, 0.12) !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    transform: translateY(2px);
+}
+body.light-mode .heap-cell.active {
+    background: rgba(16, 185, 129, 0.08) !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+}

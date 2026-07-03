@@ -491,9 +491,7 @@ function setupIndexingVisualizer() {
         });
     }
 
-    updateSelectorButtons();
-
-    function renderGrid() {
+    updateSelectorButtons();    function renderGrid() {
         container.innerHTML = `
             <div style="max-width: 720px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 15px;">
                 <!-- Row 1: Python List (Array of Reference Pointers) -->
@@ -504,7 +502,7 @@ function setupIndexingVisualizer() {
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;" id="list-ref-row">
                         ${values.map((_, idx) => `
-                            <div class="ref-cell" id="ref-cell-${idx}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.03); border: 1.5px solid var(--border-color); border-radius: 6px; padding: 8px 4px; transition: all 0.3s ease; text-align: center; cursor: pointer; user-select: none;">
+                            <div class="ref-cell" id="ref-cell-${idx}">
                                 <span style="font-size: 9px; color: var(--text-muted); font-weight:700;">[${idx}]</span>
                                 <span style="font-family: 'Fira Code', monospace; font-size: 10.5px; color: var(--accent-cyan); margin-top: 3px; font-weight: 600;">${heapAddresses[idx]}</span>
                                 <span style="font-family: 'Fira Code', monospace; font-size: 8px; color: var(--text-muted); margin-top: 3px;">0x${(0x1000 + idx * 8).toString(16).toUpperCase()}</span>
@@ -516,7 +514,7 @@ function setupIndexingVisualizer() {
                 <!-- Row 2: Downward Connectors -->
                 <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; height: 16px; text-align: center;">
                     ${values.map((_, idx) => `
-                        <div id="pointer-arrow-${idx}" style="color: var(--border-color); transition: all 0.3s ease; font-size: 12px; display: flex; align-items: center; justify-content: center;">
+                        <div class="pointer-arrow" id="pointer-arrow-${idx}">
                             <i class="fa-solid fa-arrow-down"></i>
                         </div>
                     `).join("")}
@@ -529,7 +527,7 @@ function setupIndexingVisualizer() {
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;" id="heap-obj-row">
                         ${values.map((val, idx) => `
-                            <div class="heap-cell" id="heap-cell-${idx}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.02); border: 1.5px solid var(--border-color); border-radius: 6px; padding: 10px 4px; transition: all 0.3s ease; text-align: center;">
+                            <div class="heap-cell" id="heap-cell-${idx}">
                                 <span style="font-family: 'Fira Code', monospace; font-size: 8.5px; color: var(--text-muted); margin-bottom: 3px;">${heapAddresses[idx]}</span>
                                 <strong style="font-size: 12px; color: var(--text-primary); font-family: 'Outfit', sans-serif;">"${val}"</strong>
                                 <span style="font-size: 7.5px; color: var(--accent-green); margin-top: 3px; font-weight: 700; text-transform: uppercase; opacity: 0; transition: opacity 0.3s ease;">LOADED</span>
@@ -570,23 +568,16 @@ function setupIndexingVisualizer() {
         clearTimeout(traceTimeout3);
 
         container.querySelectorAll(".ref-cell").forEach(cell => {
-            cell.style.borderColor = "var(--border-color)";
-            cell.style.background = "rgba(255, 255, 255, 0.03)";
-            cell.style.boxShadow = "none";
-            cell.style.transform = "none";
+            cell.className = "ref-cell";
         });
         container.querySelectorAll(".heap-cell").forEach(cell => {
-            cell.style.borderColor = "var(--border-color)";
-            cell.style.background = "rgba(255, 255, 255, 0.02)";
-            cell.style.boxShadow = "none";
-            cell.style.transform = "none";
+            cell.className = "heap-cell";
             cell.querySelector("span:last-child").style.opacity = "0";
         });
         for (let i = 0; i < 8; i++) {
             const arrow = container.querySelector(`#pointer-arrow-${i}`);
             if (arrow) {
-                arrow.style.color = "var(--border-color)";
-                arrow.style.transform = "none";
+                arrow.className = "pointer-arrow";
             }
         }
 
@@ -600,20 +591,13 @@ function setupIndexingVisualizer() {
             const arrow = container.querySelector(`#pointer-arrow-${idx}`);
 
             if (refCell) {
-                refCell.style.borderColor = "var(--accent-blue)";
-                refCell.style.background = "rgba(59, 130, 246, 0.12)";
-                refCell.style.boxShadow = "0 0 10px rgba(59, 130, 246, 0.3)";
-                refCell.style.transform = "translateY(-1px)";
+                refCell.classList.add("active");
             }
             if (arrow) {
-                arrow.style.color = "var(--accent-cyan)";
-                arrow.style.transform = "scaleY(1.2)";
+                arrow.classList.add("active");
             }
             if (heapCell) {
-                heapCell.style.borderColor = "var(--accent-green)";
-                heapCell.style.background = "rgba(16, 185, 129, 0.12)";
-                heapCell.style.boxShadow = "0 0 10px rgba(16, 185, 129, 0.3)";
-                heapCell.style.transform = "translateY(1px)";
+                heapCell.classList.add("active");
                 heapCell.querySelector("span:last-child").style.opacity = "1";
             }
 
@@ -634,8 +618,7 @@ function setupIndexingVisualizer() {
 
             const activeRef = container.querySelector(`#ref-cell-${idx}`);
             if (activeRef) {
-                activeRef.style.borderColor = "var(--accent-blue)";
-                activeRef.style.background = "rgba(59, 130, 246, 0.06)";
+                activeRef.classList.add("searching");
             }
 
             traceTimeout1 = setTimeout(() => {
@@ -645,14 +628,12 @@ function setupIndexingVisualizer() {
                     Load 64-bit reference pointer stored inside: <strong><code>${refAddr}</code></strong>.
                 `;
                 if (activeRef) {
-                    activeRef.style.background = "rgba(59, 130, 246, 0.15)";
-                    activeRef.style.boxShadow = "0 0 12px rgba(59, 130, 246, 0.4)";
-                    activeRef.style.transform = "translateY(-2px)";
+                    activeRef.classList.remove("searching");
+                    activeRef.classList.add("active");
                 }
                 const arrow = container.querySelector(`#pointer-arrow-${idx}`);
                 if (arrow) {
-                    arrow.style.color = "var(--accent-cyan)";
-                    arrow.style.transform = "scaleY(1.3)";
+                    arrow.classList.add("active");
                 }
 
                 traceTimeout2 = setTimeout(() => {
@@ -664,13 +645,10 @@ function setupIndexingVisualizer() {
                     `;
                     const activeHeap = container.querySelector(`#heap-cell-${idx}`);
                     if (activeHeap) {
-                        activeHeap.style.borderColor = "var(--accent-green)";
-                        activeHeap.style.background = "rgba(16, 185, 129, 0.15)";
-                        activeHeap.style.boxShadow = "0 0 12px rgba(16, 185, 129, 0.4)";
-                        activeHeap.style.transform = "translateY(2px)";
+                        activeHeap.classList.add("active");
                         activeHeap.querySelector("span:last-child").style.opacity = "1";
                     }
-                }, 1000);
+                }, 1200);
 
             }, 1000);
         }
