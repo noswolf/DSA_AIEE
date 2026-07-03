@@ -247,6 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupBigOGraphVisualizer();
     setupIndexingVisualizer();
     setupDynamicArrayVisualizer();
+    setupOOPVisualizer();
     setupSectionNavigation();
     loadQuizQuestion();
     initLiveEditorHighlighting();
@@ -432,57 +433,250 @@ function updateBigOGraph(n) {
 // -------------------------------------------------------------
 function setupIndexingVisualizer() {
     const container = document.querySelector(".memory-grid-container");
-    if (!container) return;
+    const btnContainer = document.getElementById("idx-btn-container");
+    const sliderVal = document.getElementById("idx-slider-val");
+    const btnTrace = document.getElementById("btn-trace-lookup");
+    const stepTitle = document.getElementById("calc-step-title");
+    const stepDesc = document.getElementById("calc-step-desc");
 
-    const values = [45, 12, 89, 34, 76, 90, 21, 55];
-    container.innerHTML = "";
+    if (!container || !btnContainer || !sliderVal || !btnTrace) return;
 
-    values.forEach((val, idx) => {
-        const cell = document.createElement("div");
-        cell.className = "memory-cell-item";
-        cell.style.cssText = `
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+    const values = ["BMW", "Audi", "Porsche", "Ferrari", "Tesla", "Bentley", "Aston", "Lambo"];
+    const heapAddresses = ["0x7FA0", "0x8B1C", "0x9E08", "0xA6D2", "0xB50F", "0xC834", "0xD2A8", "0xE9F0"];
+    
+    let currentIdx = 3;
+
+    // Render selector buttons
+    btnContainer.innerHTML = "";
+    for (let i = 0; i < 8; i++) {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-secondary";
+        btn.textContent = i;
+        btn.style.cssText = `
+            padding: 4px 10px;
+            font-size: 11.5px;
+            font-family: 'Fira Code', monospace;
+            border-radius: 4px;
+            font-weight: 700;
+            min-width: 32px;
             border: 1px solid var(--border-color);
-            background: var(--bg-card);
-            border-radius: 6px;
-            padding: 8px 12px;
-            cursor: pointer;
+            background: rgba(255,255,255,0.02);
             transition: all var(--transition-fast);
-            min-width: 60px;
-            text-align: center;
+            color: var(--text-secondary);
+            cursor: pointer;
         `;
-        cell.innerHTML = `
-            <span style="font-size: 10px; color: var(--text-muted);">[${idx}]</span>
-            <strong style="font-size: 16px; color: var(--text-primary); margin-top: 4px;">${val}</strong>
-            <span style="font-size: 9px; color: var(--accent-orange); margin-top: 4px; font-family: monospace;">0x${(0x1000 + idx * 8).toString(16).toUpperCase()}</span>
-        `;
-
-        cell.addEventListener("click", () => {
-            // Reset active states
-            document.querySelectorAll(".memory-cell-item").forEach(c => {
-                c.style.borderColor = "var(--border-color)";
-                c.style.background = "var(--bg-card)";
-                c.style.transform = "none";
-            });
-
-            // Highlight selected
-            cell.style.borderColor = "var(--accent-blue)";
-            cell.style.background = "rgba(6,182,212,0.06)";
-            cell.style.transform = "translateY(-2px)";
-
-            // Update formula explanation label
-            const addressHex = "0x" + (0x1000 + idx * 8).toString(16).toUpperCase();
-            const stepText = `Index [${idx}] Address: 0x1000 + (${idx} × 8) = 0x1000 + ${idx * 8} = ${addressHex}`;
-            document.getElementById("calc-step-lbl").innerHTML = `
-                <i class="fa-solid fa-calculator" style="color:var(--accent-blue); margin-right:6px;"></i> ${stepText}<br>
-                <span style="color:var(--accent-green); font-size:12px; font-weight:normal;">Loaded element: <strong>${val}</strong> in exactly 1 operational step!</span>
-            `;
+        btn.addEventListener("click", () => {
+            currentIdx = i;
+            sliderVal.textContent = i;
+            updateSelectorButtons();
+            triggerTrace(i);
         });
+        btnContainer.appendChild(btn);
+    }
 
-        container.appendChild(cell);
+    function updateSelectorButtons() {
+        const buttons = btnContainer.querySelectorAll("button");
+        buttons.forEach((btn, i) => {
+            if (i === currentIdx) {
+                btn.style.background = "var(--accent-blue)";
+                btn.style.borderColor = "var(--accent-blue)";
+                btn.style.color = "#ffffff";
+                btn.style.boxShadow = "0 0 8px rgba(59, 130, 246, 0.4)";
+            } else {
+                btn.style.background = "rgba(255, 255, 255, 0.02)";
+                btn.style.borderColor = "var(--border-color)";
+                btn.style.color = "var(--text-secondary)";
+                btn.style.boxShadow = "none";
+            }
+        });
+    }
+
+    updateSelectorButtons();
+
+    function renderGrid() {
+        container.innerHTML = `
+            <div style="max-width: 720px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 15px;">
+                <!-- Row 1: Python List (Array of Reference Pointers) -->
+                <div>
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-blue); font-weight: 700; margin-bottom: 8px; display: flex; justify-content: space-between;">
+                        <span>Python List (Reference Array)</span>
+                        <span style="font-family: monospace; font-size: 10px; color: var(--text-muted);">Base Address: 0x1000</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;" id="list-ref-row">
+                        ${values.map((_, idx) => `
+                            <div class="ref-cell" id="ref-cell-${idx}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.03); border: 1.5px solid var(--border-color); border-radius: 6px; padding: 8px 4px; transition: all 0.3s ease; text-align: center; cursor: pointer; user-select: none;">
+                                <span style="font-size: 9px; color: var(--text-muted); font-weight:700;">[${idx}]</span>
+                                <span style="font-family: 'Fira Code', monospace; font-size: 10.5px; color: var(--accent-cyan); margin-top: 3px; font-weight: 600;">${heapAddresses[idx]}</span>
+                                <span style="font-family: 'Fira Code', monospace; font-size: 8px; color: var(--text-muted); margin-top: 3px;">0x${(0x1000 + idx * 8).toString(16).toUpperCase()}</span>
+                            </div>
+                        `).join("")}
+                    </div>
+                </div>
+
+                <!-- Row 2: Downward Connectors -->
+                <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; height: 16px; text-align: center;">
+                    ${values.map((_, idx) => `
+                        <div id="pointer-arrow-${idx}" style="color: var(--border-color); transition: all 0.3s ease; font-size: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </div>
+                    `).join("")}
+                </div>
+
+                <!-- Row 3: Heap Storage (Actual Objects) -->
+                <div>
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-green); font-weight: 700; margin-bottom: 8px;">
+                        Heap Memory (Actual Objects)
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;" id="heap-obj-row">
+                        ${values.map((val, idx) => `
+                            <div class="heap-cell" id="heap-cell-${idx}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.02); border: 1.5px solid var(--border-color); border-radius: 6px; padding: 10px 4px; transition: all 0.3s ease; text-align: center;">
+                                <span style="font-family: 'Fira Code', monospace; font-size: 8.5px; color: var(--text-muted); margin-bottom: 3px;">${heapAddresses[idx]}</span>
+                                <strong style="font-size: 12px; color: var(--text-primary); font-family: 'Outfit', sans-serif;">"${val}"</strong>
+                                <span style="font-size: 7.5px; color: var(--accent-green); margin-top: 3px; font-weight: 700; text-transform: uppercase; opacity: 0; transition: opacity 0.3s ease;">LOADED</span>
+                            </div>
+                        `).join("")}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    renderGrid();
+
+    // Re-bind click event to cells directly
+    values.forEach((_, idx) => {
+        const refCell = container.querySelector(`#ref-cell-${idx}`);
+        if (refCell) {
+            refCell.addEventListener("click", () => {
+                currentIdx = idx;
+                sliderVal.textContent = idx;
+                updateSelectorButtons();
+                triggerTrace(idx);
+            });
+        }
     });
+
+    btnTrace.addEventListener("click", () => {
+        triggerTrace(currentIdx, true);
+    });
+
+    let traceTimeout1 = null;
+    let traceTimeout2 = null;
+    let traceTimeout3 = null;
+
+    function triggerTrace(idx, animate = false) {
+        clearTimeout(traceTimeout1);
+        clearTimeout(traceTimeout2);
+        clearTimeout(traceTimeout3);
+
+        container.querySelectorAll(".ref-cell").forEach(cell => {
+            cell.style.borderColor = "var(--border-color)";
+            cell.style.background = "rgba(255, 255, 255, 0.03)";
+            cell.style.boxShadow = "none";
+            cell.style.transform = "none";
+        });
+        container.querySelectorAll(".heap-cell").forEach(cell => {
+            cell.style.borderColor = "var(--border-color)";
+            cell.style.background = "rgba(255, 255, 255, 0.02)";
+            cell.style.boxShadow = "none";
+            cell.style.transform = "none";
+            cell.querySelector("span:last-child").style.opacity = "0";
+        });
+        for (let i = 0; i < 8; i++) {
+            const arrow = container.querySelector(`#pointer-arrow-${i}`);
+            if (arrow) {
+                arrow.style.color = "var(--border-color)";
+                arrow.style.transform = "none";
+            }
+        }
+
+        const addressHex = "0x" + (0x1000 + idx * 8).toString(16).toUpperCase();
+        const refAddr = heapAddresses[idx];
+        const valName = values[idx];
+
+        if (!animate) {
+            const refCell = container.querySelector(`#ref-cell-${idx}`);
+            const heapCell = container.querySelector(`#heap-cell-${idx}`);
+            const arrow = container.querySelector(`#pointer-arrow-${idx}`);
+
+            if (refCell) {
+                refCell.style.borderColor = "var(--accent-blue)";
+                refCell.style.background = "rgba(59, 130, 246, 0.12)";
+                refCell.style.boxShadow = "0 0 10px rgba(59, 130, 246, 0.3)";
+                refCell.style.transform = "translateY(-1px)";
+            }
+            if (arrow) {
+                arrow.style.color = "var(--accent-cyan)";
+                arrow.style.transform = "scaleY(1.2)";
+            }
+            if (heapCell) {
+                heapCell.style.borderColor = "var(--accent-green)";
+                heapCell.style.background = "rgba(16, 185, 129, 0.12)";
+                heapCell.style.boxShadow = "0 0 10px rgba(16, 185, 129, 0.3)";
+                heapCell.style.transform = "translateY(1px)";
+                heapCell.querySelector("span:last-child").style.opacity = "1";
+            }
+
+            stepTitle.innerHTML = `<i class="fa-solid fa-calculator" style="color:var(--accent-blue); margin-right:6px;"></i> Lookup Results for Index [${idx}]`;
+            stepDesc.innerHTML = `
+                Target Address = <strong>0x1000 + (${idx} × 8) = ${addressHex}</strong><br>
+                1. Read reference pointer stored at index cell address <code>${addressHex}</code>: <code>${refAddr}</code>.<br>
+                2. Direct memory jump to heap address <code>${refAddr}</code>. Read object string <strong>"${valName}"</strong>.<br>
+                <span style="color:var(--accent-green); font-weight:700;">Instantly retrieved in a single O(1) mathematical step!</span>
+            `;
+        } else {
+            stepTitle.innerHTML = `<i class="fa-solid fa-spinner fa-spin" style="color:var(--accent-blue); margin-right:6px;"></i> Step 1: Compute Offset`;
+            stepDesc.innerHTML = `
+                Array base starts at address <code>0x1000</code>.<br>
+                Multiply index by width of memory reference (8 bytes):<br>
+                Offset = <strong>${idx} × 8 = ${idx * 8} bytes</strong>.
+            `;
+
+            const activeRef = container.querySelector(`#ref-cell-${idx}`);
+            if (activeRef) {
+                activeRef.style.borderColor = "var(--accent-blue)";
+                activeRef.style.background = "rgba(59, 130, 246, 0.06)";
+            }
+
+            traceTimeout1 = setTimeout(() => {
+                stepTitle.innerHTML = `<i class="fa-solid fa-location-crosshairs" style="color:var(--accent-cyan); margin-right:6px;"></i> Step 2: Access Reference Cell`;
+                stepDesc.innerHTML = `
+                    Compute physical address: <strong>0x1000 + ${idx * 8} = ${addressHex}</strong>.<br>
+                    Load 64-bit reference pointer stored inside: <strong><code>${refAddr}</code></strong>.
+                `;
+                if (activeRef) {
+                    activeRef.style.background = "rgba(59, 130, 246, 0.15)";
+                    activeRef.style.boxShadow = "0 0 12px rgba(59, 130, 246, 0.4)";
+                    activeRef.style.transform = "translateY(-2px)";
+                }
+                const arrow = container.querySelector(`#pointer-arrow-${idx}`);
+                if (arrow) {
+                    arrow.style.color = "var(--accent-cyan)";
+                    arrow.style.transform = "scaleY(1.3)";
+                }
+
+                traceTimeout2 = setTimeout(() => {
+                    stepTitle.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--accent-green); margin-right:6px;"></i> Step 3: Dereference Heap Object`;
+                    stepDesc.innerHTML = `
+                        Jump directly to heap address <strong><code>${refAddr}</code></strong>.<br>
+                        Read value stored at that location: <strong style="color:var(--accent-green); font-size:13.5px;">"${valName}"</strong>.<br>
+                        <strong>Done!</strong> Constant O(1) time - no elements scanned!
+                    `;
+                    const activeHeap = container.querySelector(`#heap-cell-${idx}`);
+                    if (activeHeap) {
+                        activeHeap.style.borderColor = "var(--accent-green)";
+                        activeHeap.style.background = "rgba(16, 185, 129, 0.15)";
+                        activeHeap.style.boxShadow = "0 0 12px rgba(16, 185, 129, 0.4)";
+                        activeHeap.style.transform = "translateY(2px)";
+                        activeHeap.querySelector("span:last-child").style.opacity = "1";
+                    }
+                }, 1000);
+
+            }, 1000);
+        }
+    }
+
+    triggerTrace(3);
 }
 
 // -------------------------------------------------------------
@@ -492,6 +686,7 @@ let simSize = 0;
 let simCapacity = 1;
 let simData = [null];
 let resizeCount = 0;
+let totalCopies = 0;
 
 function setupDynamicArrayVisualizer() {
     const appendBtn = document.getElementById("sim-append-btn");
@@ -510,29 +705,38 @@ function renderSimArray() {
     row.innerHTML = "";
     document.getElementById("arr-size-lbl").textContent = simSize;
     document.getElementById("arr-cap-lbl").textContent = simCapacity;
+    document.getElementById("arr-resizes-lbl").textContent = resizeCount;
+    document.getElementById("arr-copies-lbl").textContent = totalCopies;
+
+    // Update progress bar & label
+    const pct = Math.round((simSize / simCapacity) * 100);
+    const progress = document.getElementById("capacity-progress");
+    const utilLbl = document.getElementById("util-percentage-lbl");
+    if (progress) progress.style.width = `${pct}%`;
+    if (utilLbl) utilLbl.textContent = `${pct}% Used (${simSize}/${simCapacity} slots)`;
 
     for (let i = 0; i < simCapacity; i++) {
         const slot = document.createElement("div");
         const val = simData[i];
         slot.style.cssText = `
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 700;
             transition: all 0.3s ease;
         `;
 
         if (i < simSize) {
-            slot.style.background = "var(--accent-blue-glow)";
+            slot.style.background = "rgba(59, 130, 246, 0.15)";
             slot.style.border = "1.5px solid var(--accent-blue)";
             slot.style.color = "var(--accent-blue)";
             slot.textContent = val;
         } else {
-            slot.style.background = "var(--bg-primary)";
+            slot.style.background = "rgba(255, 255, 255, 0.02)";
             slot.style.border = "1px dashed var(--border-color)";
             slot.style.color = "var(--text-muted)";
             slot.textContent = "-";
@@ -545,7 +749,21 @@ function renderSimArray() {
 function appendSimElement() {
     const strategy = document.getElementById("resize-strategy").value;
     const log = document.getElementById("resize-activity-log");
+    const appendBtn = document.getElementById("sim-append-btn");
     const randomVal = Math.floor(Math.random() * 90) + 10;
+
+    // Check if next append exceeds cap of 32 elements
+    if (simSize >= 32) {
+        if (log) {
+            log.style.color = "var(--accent-red)";
+            log.innerHTML = `
+                <strong><i class="fa-solid fa-ban"></i> Max Limit Reached (32 Slots)!</strong><br>
+                For visualization clarity, this simulator is capped at 32 slots. Please reset the simulator to try again.
+            `;
+        }
+        if (appendBtn) appendBtn.disabled = true;
+        return;
+    }
 
     let resizeTriggered = false;
     let copies = 0;
@@ -555,12 +773,13 @@ function appendSimElement() {
         resizeTriggered = true;
         resizeCount++;
         copies = simSize;
+        totalCopies += copies;
 
         // Doubling vs Fixed strategies
         if (strategy === "double") {
             simCapacity *= 2;
         } else {
-            simCapacity += 4; // Use +4 slots instead of +1000 for visual clarity
+            simCapacity += 4;
         }
 
         // Expand backing array elements
@@ -569,6 +788,19 @@ function appendSimElement() {
             newData[i] = simData[i];
         }
         simData = newData;
+
+        // Visual flash effect on resize re-allocation
+        const slotsRow = document.getElementById("array-slots-row");
+        if (slotsRow) {
+            slotsRow.style.transform = "scale(1.03)";
+            slotsRow.style.borderColor = "var(--accent-orange)";
+            slotsRow.style.boxShadow = "0 0 15px rgba(249, 115, 22, 0.4)";
+            setTimeout(() => {
+                slotsRow.style.transform = "none";
+                slotsRow.style.borderColor = "var(--border-color)";
+                slotsRow.style.boxShadow = "none";
+            }, 500);
+        }
     }
 
     // Insert element
@@ -581,16 +813,22 @@ function appendSimElement() {
     if (resizeTriggered) {
         log.style.color = "var(--accent-orange)";
         log.innerHTML = `
-            <strong><i class="fa-solid fa-triangle-exclamation"></i> Capacity reached!</strong><br>
-            Allocating new array. Capacity: ${oldCapacity} ➔ ${simCapacity}.<br>
-            Copied ${copies} elements to new memory slots. Appended element ${randomVal}.
+            <strong><i class="fa-solid fa-triangle-exclamation"></i> Array is FULL! Resizing Triggered (O(n) work):</strong><br>
+            1. Allocated new contiguous memory array of capacity <strong>${simCapacity}</strong>.<br>
+            2. Copied <strong>${copies}</strong> elements to new slots (takes ${copies} operations).<br>
+            3. Appended <strong>${randomVal}</strong> at index ${simSize - 1}.
         `;
     } else {
-        log.style.color = "var(--text-primary)";
+        log.style.color = "var(--text-secondary)";
         log.innerHTML = `
-            <i class="fa-solid fa-circle-info" style="color:var(--accent-blue);"></i> Appended element ${randomVal} at index ${simSize - 1}.<br>
-            No resize needed. Next index occupies empty pre-allocated slot.
+            <strong><i class="fa-solid fa-circle-check" style="color:var(--accent-green);"></i> Append Successful (O(1) work):</strong><br>
+            Appended element <strong>${randomVal}</strong> directly into empty slot at index ${simSize - 1}. No resizing needed!
         `;
+    }
+
+    // Auto-disable if we just reached the 32 slot limit
+    if (simSize >= 32 && appendBtn) {
+        appendBtn.disabled = true;
     }
 }
 
@@ -599,10 +837,14 @@ function resetSimArray() {
     simCapacity = 1;
     simData = [null];
     resizeCount = 0;
+    totalCopies = 0;
+
+    const appendBtn = document.getElementById("sim-append-btn");
+    if (appendBtn) appendBtn.disabled = false;
 
     const log = document.getElementById("resize-activity-log");
     if (log) {
-        log.style.color = "var(--text-primary)";
+        log.style.color = "var(--text-secondary)";
         log.innerHTML = "Simulator reset. Click 'Append Element' to start.";
     }
 
@@ -867,4 +1109,567 @@ function initLiveEditorHighlighting() {
         });
         ta.addEventListener('keydown', () => setTimeout(syncHighlight, 0));
     });
+}
+
+// -------------------------------------------------------------
+// Module 4: Object-Oriented Programming (OOP) Basics Visualizer
+// -------------------------------------------------------------
+function setupOOPVisualizer() {
+    // --- Collapsible Topic Accordion Behavior ---
+    const topicHeaders = document.querySelectorAll(".oop-topic-header");
+    topicHeaders.forEach(header => {
+        header.addEventListener("click", () => {
+            const body = header.nextElementSibling;
+            const chevron = header.querySelector(".toggle-chevron");
+            const isCollapsed = body.style.display === "none" || body.style.display === "";
+
+            // Close other headers to make it clean accordion
+            document.querySelectorAll(".oop-topic-body").forEach(b => {
+                if (b !== body) {
+                    b.style.display = "none";
+                    const otherHeader = b.previousElementSibling;
+                    const otherChevron = otherHeader.querySelector(".toggle-chevron");
+                    if (otherChevron) otherChevron.style.transform = "rotate(0deg)";
+                    const otherItem = b.closest(".accordion-item");
+                    if (otherItem) otherItem.classList.remove("open");
+                }
+            });
+
+            const parentItem = header.closest(".accordion-item");
+
+            if (isCollapsed) {
+                body.style.display = "block";
+                if (parentItem) parentItem.classList.add("open");
+                if (chevron) chevron.style.transform = "rotate(180deg)";
+                // Smooth scroll to the top of the header
+                setTimeout(() => {
+                    header.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 100);
+            } else {
+                body.style.display = "none";
+                if (parentItem) parentItem.classList.remove("open");
+                if (chevron) chevron.style.transform = "rotate(0deg)";
+            }
+        });
+    });
+
+    // --- Visualizer 1: Class Namespace vs Instance Namespace ---
+    const createList1Btn = document.getElementById("oop-create-list1-btn");
+    const createList2Btn = document.getElementById("oop-create-list2-btn");
+    const modifyAttrBtn = document.getElementById("oop-modify-attr-btn");
+    const modifyClassBtn = document.getElementById("oop-modify-class-btn");
+    const resetNsBtn = document.getElementById("oop-reset-ns-btn");
+
+    const inst1Card = document.getElementById("oop-inst1-card");
+    const inst2Card = document.getElementById("oop-inst2-card");
+
+    const inst1Size = document.getElementById("oop-inst1-val-size");
+    const inst1Data = document.getElementById("oop-inst1-val-data");
+    const inst1Max = document.getElementById("oop-inst1-val-inherited-maxsize");
+
+    const inst2Size = document.getElementById("oop-inst2-val-size");
+    const inst2Data = document.getElementById("oop-inst2-val-data");
+    const inst2Max = document.getElementById("oop-inst2-val-inherited-maxsize");
+
+    const classMax = document.getElementById("oop-class-val-maxsize");
+    const sandboxGuide = document.getElementById("oop-sandbox-guide");
+
+    let isList1Active = false;
+    let isList2Active = false;
+    let list1SizeVal = 0;
+    let classMaxSizeVal = 100;
+
+    function updateSandboxGuide() {
+        if (!sandboxGuide) return;
+        if (!isList1Active && !isList2Active && classMaxSizeVal === 100) {
+            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 1:</strong> Start by clicking <strong>Instantiate list1</strong> under Instantiation to create your first object in memory!`;
+            sandboxGuide.style.background = "rgba(59, 130, 246, 0.05)";
+            sandboxGuide.style.borderColor = "var(--accent-blue)";
+        } else if (isList1Active && !isList2Active && list1SizeVal === 0) {
+            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 2:</strong> Good! Now try clicking <strong>Set list1.size = 5</strong> to see how attributes are stored locally inside list1, or click <strong>Instantiate list2</strong> to create another independent object.`;
+            sandboxGuide.style.background = "rgba(59, 130, 246, 0.05)";
+            sandboxGuide.style.borderColor = "var(--accent-blue)";
+        } else if (isList1Active && !isList2Active && list1SizeVal === 5) {
+            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 3:</strong> Notice how <code>list1.size</code> updated to 5, but the Class namespace variables didn't change! Now click <strong>Instantiate list2</strong> to see what a second blank object looks like.`;
+            sandboxGuide.style.background = "rgba(59, 130, 246, 0.05)";
+            sandboxGuide.style.borderColor = "var(--accent-blue)";
+        } else if (isList1Active && isList2Active && classMaxSizeVal === 100) {
+            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 4:</strong> Both objects are in memory! Now try clicking <strong>Set ArrayList.max_size = 500</strong> to observe how modifying a class variable updates the shared value for BOTH objects simultaneously!`;
+            sandboxGuide.style.background = "rgba(168, 85, 247, 0.05)";
+            sandboxGuide.style.borderColor = "var(--accent-purple)";
+        } else if (classMaxSizeVal === 500) {
+            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--accent-green); margin-right: 6px;"></i> <strong>Completed:</strong> Amazing! You modified the class variable <code>max_size</code>, and all objects instantly inherited the new value. Click <strong>Reset Sandbox</strong> to try again!`;
+            sandboxGuide.style.background = "rgba(16, 185, 129, 0.05)";
+            sandboxGuide.style.borderColor = "var(--accent-green)";
+        }
+    }
+
+    if (createList1Btn) {
+        createList1Btn.addEventListener("click", () => {
+            isList1Active = true;
+            inst1Card.style.opacity = "1";
+            inst1Card.style.borderColor = "var(--accent-purple)";
+            inst1Size.textContent = list1SizeVal;
+            inst1Data.textContent = "ArrayList([None])";
+            inst1Max.textContent = classMaxSizeVal;
+            modifyAttrBtn.removeAttribute("disabled");
+            createList1Btn.setAttribute("disabled", "true");
+            updateSandboxGuide();
+        });
+    }
+
+    if (createList2Btn) {
+        createList2Btn.addEventListener("click", () => {
+            isList2Active = true;
+            inst2Card.style.opacity = "1";
+            inst2Card.style.borderColor = "var(--border-color)";
+            inst2Size.textContent = "0";
+            inst2Data.textContent = "ArrayList([None])";
+            inst2Max.textContent = classMaxSizeVal;
+            createList2Btn.setAttribute("disabled", "true");
+            updateSandboxGuide();
+        });
+    }
+
+    if (modifyAttrBtn) {
+        modifyAttrBtn.addEventListener("click", () => {
+            if (!isList1Active) return;
+            list1SizeVal = 5;
+            inst1Size.textContent = list1SizeVal;
+            inst1Size.style.color = "var(--accent-cyan)";
+            setTimeout(() => { inst1Size.style.color = "var(--accent-green)"; }, 1000);
+            modifyAttrBtn.setAttribute("disabled", "true");
+            updateSandboxGuide();
+        });
+    }
+
+    if (modifyClassBtn) {
+        modifyClassBtn.addEventListener("click", () => {
+            classMaxSizeVal = 500;
+            classMax.textContent = classMaxSizeVal;
+            classMax.style.color = "var(--accent-cyan)";
+            setTimeout(() => { classMax.style.color = "var(--accent-green)"; }, 1000);
+
+            if (isList1Active) {
+                inst1Max.textContent = classMaxSizeVal;
+                inst1Max.style.color = "var(--accent-cyan)";
+                setTimeout(() => { inst1Max.style.color = "var(--accent-cyan)"; }, 1000);
+            }
+            if (isList2Active) {
+                inst2Max.textContent = classMaxSizeVal;
+                inst2Max.style.color = "var(--accent-cyan)";
+                setTimeout(() => { inst2Max.style.color = "var(--accent-cyan)"; }, 1000);
+            }
+            modifyClassBtn.setAttribute("disabled", "true");
+            updateSandboxGuide();
+        });
+    }
+
+    if (resetNsBtn) {
+        resetNsBtn.addEventListener("click", () => {
+            isList1Active = false;
+            isList2Active = false;
+            list1SizeVal = 0;
+            classMaxSizeVal = 100;
+
+            createList1Btn.removeAttribute("disabled");
+            createList2Btn.removeAttribute("disabled");
+            modifyAttrBtn.setAttribute("disabled", "true");
+            modifyClassBtn.removeAttribute("disabled");
+
+            inst1Card.style.opacity = "0.35";
+            inst1Card.style.borderColor = "var(--border-color)";
+            inst2Card.style.opacity = "0.35";
+            inst2Card.style.borderColor = "var(--border-color)";
+
+            inst1Size.textContent = "--";
+            inst1Data.textContent = "--";
+            inst1Max.textContent = "--";
+            inst2Size.textContent = "--";
+            inst2Data.textContent = "--";
+            inst2Max.textContent = "--";
+
+            classMax.textContent = "100";
+            classMax.style.color = "var(--accent-green)";
+            updateSandboxGuide();
+        });
+    }
+
+
+    // --- Visualizer 2: The Constructor (__init__ & self) Tracer ---
+    const initPrevBtn = document.getElementById("oop-init-prev-btn");
+    const initNextBtn = document.getElementById("oop-init-next-btn");
+    const initExpl = document.getElementById("oop-init-explanation");
+    const heapObj = document.getElementById("oop-heap-object");
+    const heapTitle = document.getElementById("oop-heap-title");
+    const heapAddr = document.getElementById("oop-heap-address");
+    const heapProps = document.getElementById("oop-heap-props");
+
+    let currentInitStep = 0;
+    const initSteps = [
+        {
+            lineId: "oop-init-line-7",
+            explanation: "Click <strong>Next Step</strong> to find and allocate an empty block of memory in the Heap for our new object.",
+            heapState: { title: "No Object Allocated", addr: "", props: "", background: "transparent", border: "1px dashed var(--border-color)" }
+        },
+        {
+            lineId: "oop-init-line-7",
+            explanation: "<strong>Step 1: Memory Allocated.</strong> Python creates an empty <code>ArrayList</code> instance in RAM at memory address <code>0x7F8E</code>. Right now, this object is a blank box with no local variables inside it.",
+            heapState: { title: "ArrayList Object", addr: "0x7F8E", props: "<span style='color:var(--text-muted); font-style:italic;'>(empty namespace)</span>", background: "rgba(255,255,255,0.02)", border: "1px solid var(--border-color)" }
+        },
+        {
+            lineId: "oop-init-line-2",
+            explanation: "<strong>Step 2: Calling Constructor.</strong> Python automatically jumps into the <code>__init__(self)</code> method. The parameter <code>self</code> acts as a remote control pointing directly to our newly allocated box at address <code>0x7F8E</code>.",
+            heapState: { title: "ArrayList (self ➔ 0x7F8E)", addr: "0x7F8E", props: "<span style='color:var(--accent-purple);'>self ➔ active binding</span>", background: "rgba(168,85,247,0.05)", border: "1.5px solid var(--accent-purple)" }
+        },
+        {
+            lineId: "oop-init-line-4",
+            explanation: "<strong>Step 3: Setting Attributes.</strong> Python runs <code>self.size = 0</code>. This creates a property named <code>size</code> inside our box at <code>0x7F8E</code> and sets its initial value to <code>0</code>.",
+            heapState: { title: "ArrayList (self ➔ 0x7F8E)", addr: "0x7F8E", props: "<div>size: <span style='color:var(--accent-green);'>0</span></div>", background: "rgba(168,85,247,0.05)", border: "1.5px solid var(--accent-purple)" }
+        },
+        {
+            lineId: "oop-init-line-5",
+            explanation: "<strong>Step 4: Allocating Backing Data.</strong> Python runs <code>self.data = np.empty(1)</code>. This adds a second property named <code>data</code> inside our box, pointing to a contiguous array block elsewhere in memory. The object is now fully set up!",
+            heapState: { title: "ArrayList (self ➔ 0x7F8E)", addr: "0x7F8E", props: "<div>size: <span style='color:var(--accent-green);'>0</span></div><div>data: <span style='color:var(--accent-cyan);'>[None]</span></div>", background: "rgba(168,85,247,0.05)", border: "1.5px solid var(--accent-purple)" }
+        },
+        {
+            lineId: "oop-init-line-7",
+            explanation: "<strong>Step 5: Reference Returned.</strong> The setup finishes. Python returns the memory address reference <code>0x7F8E</code> and binds it to the variable <code>obj</code>. You can now use <code>obj</code> to control this object!",
+            heapState: { title: "obj = ArrayList()", addr: "0x7F8E", props: "<div>size: <span style='color:var(--accent-green);'>0</span></div><div>data: <span style='color:var(--accent-cyan);'>[None]</span></div>", background: "rgba(6,182,212,0.04)", border: "1.5px solid var(--accent-cyan)" }
+        }
+    ];
+
+    function updateInitTracer() {
+        // Reset all code lines highlight
+        for (let i = 1; i <= 7; i++) {
+            const el = document.getElementById(`oop-init-line-${i}`);
+            if (el) {
+                el.style.borderLeftColor = "transparent";
+                el.style.backgroundColor = "rgba(255,255,255,0.01)";
+            }
+        }
+
+        const step = initSteps[currentInitStep];
+        const activeLine = document.getElementById(step.lineId);
+        if (activeLine) {
+            activeLine.style.borderLeftColor = "var(--accent-cyan)";
+            activeLine.style.backgroundColor = "rgba(6,182,212,0.08)";
+        }
+
+        initExpl.innerHTML = step.explanation;
+        heapTitle.textContent = step.heapState.title;
+        heapAddr.textContent = step.heapState.addr;
+        heapProps.innerHTML = step.heapState.props;
+        heapObj.style.background = step.heapState.background;
+        heapObj.style.borderColor = step.heapState.border;
+
+        // Button state
+        initPrevBtn.disabled = currentInitStep === 0;
+        initNextBtn.innerHTML = currentInitStep === initSteps.length - 1 ? `Restart Tracer <i class="fa-solid fa-rotate-left"></i>` : `Next Step <i class="fa-solid fa-chevron-right"></i>`;
+    }
+
+    if (initNextBtn) {
+        initNextBtn.addEventListener("click", () => {
+            if (currentInitStep === initSteps.length - 1) {
+                currentInitStep = 0;
+            } else {
+                currentInitStep++;
+            }
+            updateInitTracer();
+        });
+    }
+
+    if (initPrevBtn) {
+        initPrevBtn.addEventListener("click", () => {
+            if (currentInitStep > 0) {
+                currentInitStep--;
+                updateInitTracer();
+            }
+        });
+    }
+
+
+    // --- Visualizer 3: Inheritance & MRO Lookup Tracer ---
+    const mroBtns = document.querySelectorAll(".oop-mro-btn");
+    const mroLog = document.getElementById("oop-mro-log");
+    const nodeBase = document.getElementById("mro-node-base");
+    const nodeSub = document.getElementById("mro-node-sub");
+    const nodeInst = document.getElementById("mro-node-inst");
+
+    const mroControls = document.getElementById("oop-mro-controls");
+    const mroStepLbl = document.getElementById("oop-mro-step-lbl");
+    const mroPrevBtn = document.getElementById("oop-mro-prev-btn");
+    const mroNextBtn = document.getElementById("oop-mro-next-btn");
+
+    let currentMroQuery = null;
+    let currentMroStepIndex = 0;
+
+    const mroData = {
+        insertFront: [
+            {
+                status: "searching",
+                title: "Step 1: Check 'list1' instance dictionary",
+                desc: "Searching for local attributes initialized directly in the object's constructor.",
+                nodeHighlights: { inst: "searching", sub: "normal", base: "normal" }
+            },
+            {
+                status: "success",
+                title: "Step 2: Check subclass namespace ('SinglyLinkedList')",
+                desc: "Found method 'insertFront(self, data)' inside the class namespace. Calling function.",
+                nodeHighlights: { inst: "failed", sub: "found", base: "normal" }
+            }
+        ],
+        getSize: [
+            {
+                status: "searching",
+                title: "Step 1: Check 'list1' instance dictionary",
+                desc: "Searching for local attributes initialized directly in the object's constructor.",
+                nodeHighlights: { inst: "searching", sub: "normal", base: "normal" }
+            },
+            {
+                status: "searching",
+                title: "Step 2: Check subclass namespace ('SinglyLinkedList')",
+                desc: "Searching subclass for 'getSize' method...",
+                nodeHighlights: { inst: "failed", sub: "searching", base: "normal" }
+            },
+            {
+                status: "success",
+                title: "Step 3: Check grandparent class namespace ('SinglyLinkedListBase')",
+                desc: "Found method 'getSize(self)' inherited from parent class SinglyLinkedListBase. Calling function.",
+                nodeHighlights: { inst: "failed", sub: "failed", base: "found" }
+            }
+        ],
+        count: [
+            {
+                status: "searching",
+                title: "Step 1: Check 'list1' instance dictionary",
+                desc: "Searching for local attributes initialized directly in the object's constructor.",
+                nodeHighlights: { inst: "searching", sub: "normal", base: "normal" }
+            },
+            {
+                status: "searching",
+                title: "Step 2: Check subclass namespace ('SinglyLinkedList')",
+                desc: "Searching subclass for '_count' variable...",
+                nodeHighlights: { inst: "failed", sub: "searching", base: "normal" }
+            },
+            {
+                status: "success",
+                title: "Step 3: Check grandparent class namespace ('SinglyLinkedListBase')",
+                desc: "Found attribute '_count' inside grandparent base class SinglyLinkedListBase. Accessing variable.",
+                nodeHighlights: { inst: "failed", sub: "failed", base: "found" }
+            }
+        ],
+        invalid: [
+            {
+                status: "searching",
+                title: "Step 1: Check 'list1' instance dictionary",
+                desc: "Searching for local attributes initialized directly in the object's constructor.",
+                nodeHighlights: { inst: "searching", sub: "normal", base: "normal" }
+            },
+            {
+                status: "searching",
+                title: "Step 2: Check subclass namespace ('SinglyLinkedList')",
+                desc: "Searching subclass for 'deleteNode' method...",
+                nodeHighlights: { inst: "failed", sub: "searching", base: "normal" }
+            },
+            {
+                status: "searching",
+                title: "Step 3: Check grandparent class namespace ('SinglyLinkedListBase')",
+                desc: "Searching grandparent class for 'deleteNode' method...",
+                nodeHighlights: { inst: "failed", sub: "failed", base: "searching" }
+            },
+            {
+                status: "searching",
+                title: "Step 4: Check Python's built-in root base class ('object')",
+                desc: "Searching Python's root object namespace...",
+                nodeHighlights: { inst: "failed", sub: "failed", base: "failed" }
+            },
+            {
+                status: "error",
+                title: "AttributeError: 'SinglyLinkedList' has no attribute 'deleteNode'",
+                desc: "Search failed. Requested attribute does not exist anywhere in the inheritance tree.",
+                nodeHighlights: { inst: "error", sub: "error", base: "error" }
+            }
+        ]
+    };
+
+    function addStep(status, title, desc) {
+        const stepDiv = document.createElement("div");
+        stepDiv.style.cssText = "display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); transition: all 0.3s ease; animation: fadeIn 0.3s ease;";
+        
+        let iconHtml = "";
+        if (status === "searching") {
+            stepDiv.style.background = "rgba(59, 130, 246, 0.04)";
+            stepDiv.style.borderColor = "rgba(59, 130, 246, 0.15)";
+            iconHtml = `<i class="fa-solid fa-spinner fa-spin" style="color: var(--accent-blue);"></i>`;
+        } else if (status === "failed") {
+            stepDiv.style.background = "rgba(239, 68, 68, 0.02)";
+            stepDiv.style.borderColor = "rgba(239, 68, 68, 0.08)";
+            stepDiv.style.opacity = "0.7";
+            iconHtml = `<i class="fa-solid fa-circle-xmark" style="color: var(--accent-red);"></i>`;
+        } else if (status === "success") {
+            stepDiv.style.background = "rgba(16, 185, 129, 0.05)";
+            stepDiv.style.borderColor = "rgba(16, 185, 129, 0.15)";
+            iconHtml = `<i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i>`;
+        } else if (status === "error") {
+            stepDiv.style.background = "rgba(239, 68, 68, 0.06)";
+            stepDiv.style.borderColor = "rgba(239, 68, 68, 0.2)";
+            iconHtml = `<i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-red);"></i>`;
+        }
+
+        stepDiv.innerHTML = `
+            <div style="font-size: 13.5px; margin-top: 1px;">${iconHtml}</div>
+            <div style="flex-grow: 1;">
+                <div class="step-title" style="font-size: 12px; font-weight: 700; color: var(--text-primary); ${status === 'failed' ? 'text-decoration: line-through;' : ''}">${title}</div>
+                <div class="step-desc" style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${desc}</div>
+            </div>
+        `;
+        mroLog.appendChild(stepDiv);
+    }
+
+    function updateMroTracer() {
+        if (!currentMroQuery) return;
+        const steps = mroData[currentMroQuery];
+        const step = steps[currentMroStepIndex];
+
+        // Update control labels
+        if (mroStepLbl) mroStepLbl.textContent = `Step ${currentMroStepIndex + 1} of ${steps.length}`;
+        if (mroPrevBtn) mroPrevBtn.disabled = currentMroStepIndex === 0;
+        if (mroNextBtn) {
+            mroNextBtn.innerHTML = currentMroStepIndex === steps.length - 1 
+                ? `Finish <i class="fa-solid fa-check"></i>` 
+                : `Next Step <i class="fa-solid fa-chevron-right"></i>`;
+        }
+
+        // Render steps logs
+        mroLog.innerHTML = "";
+        for (let i = 0; i <= currentMroStepIndex; i++) {
+            const s = steps[i];
+            const isCurrent = (i === currentMroStepIndex);
+            
+            let status = s.status;
+            let desc = s.desc;
+            if (!isCurrent) {
+                status = "failed";
+                if (i === 0) desc = "Not found locally in the 'list1' instance dictionary.";
+                else if (i === 1) desc = "Not found in the 'SinglyLinkedList' subclass methods.";
+                else if (i === 2) desc = "Not found in the 'SinglyLinkedListBase' grandparent methods.";
+                else if (i === 3) desc = "Not found in built-in 'object' methods.";
+            }
+            
+            addStep(status, s.title, desc);
+        }
+
+        // Reset highlights
+        [nodeInst, nodeSub, nodeBase].forEach(n => {
+            if (n) {
+                n.className = "mro-node-box";
+                n.style.borderColor = "var(--border-color)";
+                n.style.boxShadow = "none";
+                n.style.background = "var(--bg-primary)";
+            }
+        });
+
+        // Apply active highlights based on step
+        const hl = step.nodeHighlights;
+        if (nodeInst) {
+            if (hl.inst === "searching") {
+                nodeInst.style.borderColor = "var(--accent-blue)";
+                nodeInst.style.background = "rgba(59, 130, 246, 0.05)";
+                nodeInst.style.boxShadow = "0 0 10px rgba(59, 130, 246, 0.2)";
+            } else if (hl.inst === "error") {
+                nodeInst.style.borderColor = "var(--accent-red)";
+                nodeInst.style.background = "rgba(239, 68, 68, 0.04)";
+            }
+        }
+
+        if (nodeSub) {
+            if (hl.sub === "searching") {
+                nodeSub.style.borderColor = "var(--accent-blue)";
+                nodeSub.style.background = "rgba(59, 130, 246, 0.05)";
+                nodeSub.style.boxShadow = "0 0 10px rgba(59, 130, 246, 0.2)";
+            } else if (hl.sub === "found") {
+                nodeSub.style.borderColor = "var(--accent-green)";
+                nodeSub.style.background = "rgba(16, 185, 129, 0.05)";
+                nodeSub.style.boxShadow = "0 0 10px rgba(16, 185, 129, 0.2)";
+            } else if (hl.sub === "error") {
+                nodeSub.style.borderColor = "var(--accent-red)";
+                nodeSub.style.background = "rgba(239, 68, 68, 0.04)";
+            }
+        }
+
+        if (nodeBase) {
+            if (hl.base === "searching") {
+                nodeBase.style.borderColor = "var(--accent-blue)";
+                nodeBase.style.background = "rgba(59, 130, 246, 0.05)";
+                nodeBase.style.boxShadow = "0 0 10px rgba(59, 130, 246, 0.2)";
+            } else if (hl.base === "found") {
+                nodeBase.style.borderColor = "var(--accent-green)";
+                nodeBase.style.background = "rgba(16, 185, 129, 0.05)";
+                nodeBase.style.boxShadow = "0 0 10px rgba(16, 185, 129, 0.2)";
+            } else if (hl.base === "error") {
+                nodeBase.style.borderColor = "var(--accent-red)";
+                nodeBase.style.background = "rgba(239, 68, 68, 0.04)";
+            }
+        }
+    }
+
+    mroBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            mroBtns.forEach(b => {
+                b.classList.remove("btn-primary");
+                b.classList.add("btn-secondary");
+            });
+            btn.classList.remove("btn-secondary");
+            btn.classList.add("btn-primary");
+
+            const attr = btn.getAttribute("data-attr");
+            currentMroQuery = attr;
+            currentMroStepIndex = 0;
+
+            if (mroControls) mroControls.style.display = "flex";
+            updateMroTracer();
+        });
+    });
+
+    if (mroNextBtn) {
+        mroNextBtn.addEventListener("click", () => {
+            if (!currentMroQuery) return;
+            const steps = mroData[currentMroQuery];
+            if (currentMroStepIndex < steps.length - 1) {
+                currentMroStepIndex++;
+                updateMroTracer();
+            } else {
+                // Done / Finish
+                mroControls.style.display = "none";
+                mroBtns.forEach(b => {
+                    b.classList.remove("btn-primary");
+                    b.classList.add("btn-secondary");
+                });
+                currentMroQuery = null;
+                mroLog.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; border: 1px dashed var(--border-color); border-radius: 6px; background: rgba(255,255,255,0.01);">
+                        <i class="fa-solid fa-circle-info" style="margin-right: 6px; color: var(--accent-blue);"></i> Select a lookup command above to watch the attribute search process step-by-step.
+                    </div>
+                `;
+                [nodeInst, nodeSub, nodeBase].forEach(n => {
+                    if (n) {
+                        n.className = "mro-node-box";
+                        n.style.borderColor = "var(--border-color)";
+                        n.style.boxShadow = "none";
+                        n.style.background = "var(--bg-primary)";
+                    }
+                });
+            }
+        });
+    }
+
+    if (mroPrevBtn) {
+        mroPrevBtn.addEventListener("click", () => {
+            if (currentMroStepIndex > 0) {
+                currentMroStepIndex--;
+                updateMroTracer();
+            }
+        });
+    }
 }

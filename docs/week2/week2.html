@@ -22,6 +22,7 @@
         .curve-toggle-row {
             transition: all 0.2s ease;
             user-select: none;
+            font-size: 12px;
         }
         .curve-toggle-row:hover {
             transform: translateY(-1px);
@@ -30,6 +31,26 @@
         }
         .curve-toggle-row:active {
             transform: scale(0.98);
+        }
+
+        /* OOP Visualizer Styles */
+        .oop-mro-chain-visualizer .mro-node-box {
+            transition: all 0.3s ease;
+        }
+        .oop-mro-chain-visualizer .mro-node-box.searching {
+            border-color: var(--accent-blue) !important;
+            box-shadow: 0 0 12px var(--accent-blue-glow);
+            background: rgba(59, 130, 246, 0.05) !important;
+        }
+        .oop-mro-chain-visualizer .mro-node-box.found {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 12px var(--accent-green-glow);
+            background: rgba(16, 185, 129, 0.05) !important;
+        }
+        .oop-mro-chain-visualizer .mro-node-box.failed {
+            border-color: var(--accent-red) !important;
+            box-shadow: 0 0 12px var(--accent-red-glow);
+            background: rgba(239, 68, 68, 0.05) !important;
         }
     </style>
 </head>
@@ -53,11 +74,7 @@
 
             <nav class="sidebar-nav">
                 <span class="nav-section-title">Module Sections</span>
-                <button class="nav-item active" data-target="welcome-section">
-                    <i class="fa-solid fa-book-open"></i> Course Introduction
-                </button>
-
-                <button class="nav-item" data-target="complexity-section">
+                <button class="nav-item active" data-target="complexity-section">
                     <i class="fa-solid fa-arrow-up-right-dots"></i> <span>Module 1: Big-O Curves</span>
                 </button>
 
@@ -67,6 +84,10 @@
 
                 <button class="nav-item" data-target="dynamic-array-section">
                     <i class="fa-solid fa-database"></i> <span>Module 3: Dynamic Arrays</span>
+                </button>
+
+                <button class="nav-item" data-target="oop-section">
+                    <i class="fa-solid fa-cubes"></i> <span>Module 4: OOP Basics</span>
                 </button>
 
                 <!-- <button class="nav-item" data-target="labs-section">
@@ -114,62 +135,8 @@
             <!-- Scrollable Content Frame -->
             <div class="content-body">
 
-                <!-- 1. WELCOME SECTION -->
-                <section id="welcome-section" class="content-section active">
-                    <div class="header-block">
-                        <div class="module-header-block welcome-header-block">
-                            <div class="mod-header-icon-wrap">
-                                <i class="fa-solid fa-brain mod-glow-icon"></i>
-                            </div>
-                            <div class="mod-header-text">
-                                <h2>Algorithm Complexity & Memory Structures</h2>
-                                <p>Learn how to analyze computational cost using Big-O runtime complexities and explore how standard list structures represent and resize themselves in memory.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid-2col" style="margin-top: 1.5rem;">
-                        <div class="card glass">
-                            <div class="card-body">
-                                <h3 class="card-title"><i class="fa-solid fa-arrow-up-right-dots"></i> Analyzing Computational Growth</h3>
-                                <p>When writing code to solve a problem, we must know how it scales when the size of input <code>n</code> grows. In computer science, we use <strong>Big-O notation</strong> to model upper bounds of resource consumption (time & memory).</p>
-                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
-                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Time Complexity</span>
-                                    <span class="tag" style="background: rgba(6,182,212,0.1); color: var(--accent-cyan);">Space Complexity</span>
-                                    <span class="tag" style="background: rgba(168,85,247,0.1); color: var(--accent-purple);">Scalability</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card glass">
-                            <div class="card-body">
-                                <h3 class="card-title"><i class="fa-solid fa-memory"></i> 2. Direct Memory Arrays</h3>
-                                <p>Memory is arranged as a sequence of addressable slots. Underneath high-level Python collections like <code>lists</code> are raw <strong>Arrays</strong> that store references in contiguous memory. This structural choice is what gives them fast retrieval speeds.</p>
-                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
-                                    <span class="tag" style="background: rgba(249,115,22,0.1); color: var(--accent-orange);">Contiguous Memory</span>
-                                    <span class="tag" style="background: rgba(6,182,212,0.1); color: var(--accent-cyan);">O(1) Access</span>
-                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Amortized Cost</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card glass" style="margin-top: 1.5rem;">
-                        <div class="card-body">
-                            <h3>Course Syllabus for Week 2</h3>
-                            <p>Here are the key interactive visual explorations you will engage with in this guide:</p>
-                            <ul style="margin-top: 12px; padding-left: 20px; line-height: 1.6;">
-                                <li><strong>Big-O Curves Plotter:</strong> Visually trace O(1), O(log n), O(n), O(n log n), O(n²), and O(2ⁿ) complexity slopes as inputs scale.</li>
-                                <li><strong>List Indexing Memory Simulator:</strong> Click cell indices to watch how the pointer offsets calculate instantly.</li>
-                                <li><strong>Dynamic Array Resizer:</strong> Simulate append operations and watch how the backing array doubles itself or resizes by constant increments.</li>
-                                <!-- <li><strong>Challenge Labs:</strong> Code and run linear search, intersect finders, and dynamic arrays directly with our integrated WASM interpreter.</li> -->
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
                 <!-- 2. COMPLEXITY MODULE -->
-                <section id="complexity-section" class="content-section">
+                <section id="complexity-section" class="content-section active">
                     <div class="header-block">
                         <div class="module-header-block welcome-header-block">
                             <div class="mod-header-icon-wrap">
@@ -186,65 +153,72 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="header-block" style="margin-top: 1.5rem;">
-                        <h3>Module 1: Big-O Curves Visualizer</h3>
-                        <p>Click on any row in the "Growth Rates Compared" list to toggle (show/hide) that curve on the chart. Adjust the slider to see how curves diverge as input sizes scale.</p>
-                    </div>
-                    <div class="grid-2col">
-                        <div class="card glass">
-                            <div class="card-body">
-                                <h4>Complexity Functions Plot</h4>
-                                <div class="visualizer-container" style="background: var(--bg-primary); border-radius: 8px; padding: 10px; border: 1px solid var(--border-color); height: 280px; position: relative;">
-                                    <svg id="bigo-svg" viewBox="0 0 400 250" style="width: 100%; height: 100%; overflow: visible;"></svg>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 12px; margin-top: 15px;">
-                                    <label for="n-slider" style="font-weight:600; font-size: 13px;">Input size (n): <span id="n-val" style="color: var(--accent-blue);">20</span></label>
-                                    <input type="range" id="n-slider" min="1" max="50" value="20" style="flex: 1; accent-color: var(--accent-blue);">
-                                </div>
-                            </div>
+                    <div class="card glass">
+                        <div class="card-header">
+                            <i class="fa-solid fa-chart-line card-icon"></i>
+                            <h3>Big-O Curves Visualizer</h3>
                         </div>
-
-                        <div class="card glass">
-                            <div class="card-body">
-                                <h4>Growth Rates Compared</h4>
-                                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
-                                    <div class="curve-toggle-row" data-curve="constant" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
-                                        <span style="font-weight: 600; color: #64748b;"><i class="fa-solid fa-circle" style="color: #64748b; font-size: 10px; margin-right: 6px;"></i> Constant O(1)</span>
-                                        <span class="growth-val" id="val-constant">1</span>
-                                    </div>
-                                    <div class="curve-toggle-row" data-curve="logarithmic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
-                                        <span style="font-weight: 600; color: #10b981;"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 10px; margin-right: 6px;"></i> Logarithmic O(log n)</span>
-                                        <span class="growth-val" id="val-logarithmic">3</span>
-                                    </div>
-                                    <div class="curve-toggle-row" data-curve="linear" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
-                                        <span style="font-weight: 600; color: #06b6d4;"><i class="fa-solid fa-circle" style="color: #06b6d4; font-size: 10px; margin-right: 6px;"></i> Linear O(n)</span>
-                                        <span class="growth-val" id="val-linear">20</span>
-                                    </div>
-                                    <div class="curve-toggle-row" data-curve="linearithmic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
-                                        <span style="font-weight: 600; color: #8b5cf6;"><i class="fa-solid fa-circle" style="color: #8b5cf6; font-size: 10px; margin-right: 6px;"></i> Linearithmic O(n log n)</span>
-                                        <span class="growth-val" id="val-linearithmic">86</span>
-                                    </div>
-                                    <div class="curve-toggle-row" data-curve="quadratic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
-                                        <span style="font-weight: 600; color: #f97316;"><i class="fa-solid fa-circle" style="color: #f97316; font-size: 10px; margin-right: 6px;"></i> Quadratic O(n²)</span>
-                                        <span class="growth-val" id="val-quadratic">400</span>
-                                    </div>
-                                    <div class="curve-toggle-row" data-curve="exponential" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
-                                        <span style="font-weight: 600; color: #ef4444;"><i class="fa-solid fa-circle" style="color: #ef4444; font-size: 10px; margin-right: 6px;"></i> Exponential O(2ⁿ)</span>
-                                        <span class="growth-val" id="val-exponential" style="color: #ef4444; font-weight:700;">1,048,576</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card glass" style="margin-top: 1.5rem;">
                         <div class="card-body">
-                            <h4>Try Testing Time Complexity Live</h4>
-                            <p>Run this script to measure how long Python takes to sum ranges of increasing sizes. Check the output chart by executing the code below:</p>
-                            <div class="embedded-editor-container" style="margin-top:12px;">
-                                <div class="live-editor-wrapper">
-                                    <textarea class="editor-textarea live-code-textarea" id="complexity-sample-code" rows="7">import timeit
+                            <p>Click on any row in the "Growth Rates Compared" list to toggle (show/hide) that curve on the chart. Adjust the slider to see how curves diverge as input sizes scale.</p>
+                            <div class="grid-2col">
+                                <div class="card glass">
+                                    <div class="card-header">
+                                        <h4 style="margin: 0;">Complexity Functions Plot</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="visualizer-container" style="background: var(--bg-primary); border-radius: 8px; padding: 10px; border: 1px solid var(--border-color); height: 280px; position: relative;">
+                                            <svg id="bigo-svg" viewBox="0 0 400 250" style="width: 100%; height: 100%; overflow: visible;"></svg>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 12px; margin-top: 15px;">
+                                            <label for="n-slider" style="font-weight:600; font-size: 13px;">Input size (n): <span id="n-val" style="color: var(--accent-blue);">20</span></label>
+                                            <input type="range" id="n-slider" min="1" max="50" value="20" style="flex: 1; accent-color: var(--accent-blue);">
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="card glass">
+                                    <div class="card-header">
+                                        <h4 style="margin: 0;">Growth Rates Compared</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+                                            <div class="curve-toggle-row" data-curve="constant" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                                <span style="font-weight: 600; color: #64748b;"><i class="fa-solid fa-circle" style="color: #64748b; font-size: 10px; margin-right: 6px;"></i> Constant O(1)</span>
+                                                <span class="growth-val" id="val-constant">1</span>
+                                            </div>
+                                            <div class="curve-toggle-row" data-curve="logarithmic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                                <span style="font-weight: 600; color: #10b981;"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 10px; margin-right: 6px;"></i> Logarithmic O(log n)</span>
+                                                <span class="growth-val" id="val-logarithmic">3</span>
+                                            </div>
+                                            <div class="curve-toggle-row" data-curve="linear" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                                <span style="font-weight: 600; color: #06b6d4;"><i class="fa-solid fa-circle" style="color: #06b6d4; font-size: 10px; margin-right: 6px;"></i> Linear O(n)</span>
+                                                <span class="growth-val" id="val-linear">20</span>
+                                            </div>
+                                            <div class="curve-toggle-row" data-curve="linearithmic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                                <span style="font-weight: 600; color: #8b5cf6;"><i class="fa-solid fa-circle" style="color: #8b5cf6; font-size: 10px; margin-right: 6px;"></i> Linearithmic O(n log n)</span>
+                                                <span class="growth-val" id="val-linearithmic">86</span>
+                                            </div>
+                                            <div class="curve-toggle-row" data-curve="quadratic" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                                <span style="font-weight: 600; color: #f97316;"><i class="fa-solid fa-circle" style="color: #f97316; font-size: 10px; margin-right: 6px;"></i> Quadratic O(n²)</span>
+                                                <span class="growth-val" id="val-quadratic">400</span>
+                                            </div>
+                                            <div class="curve-toggle-row" data-curve="exponential" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color);">
+                                                <span style="font-weight: 600; color: #ef4444;"><i class="fa-solid fa-circle" style="color: #ef4444; font-size: 10px; margin-right: 6px;"></i> Exponential O(2ⁿ)</span>
+                                                <span class="growth-val" id="val-exponential" style="color: #ef4444; font-weight:700;">1,048,576</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card glass" id="big-o-interactive" style="margin-top: 1.5rem;">
+                                <div class="card-body">
+                                    <div class="visualizer-header-row">
+                                        <h4 style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-terminal" style="color: var(--accent-purple);"></i> Try Testing Time Complexity Live</h4>
+                                    </div>
+                                    <p>Run this script to measure how long Python takes to sum ranges of increasing sizes. Check the output chart by executing the code below:</p>
+                                    <div class="embedded-editor-container" style="margin-top:12px;">
+                                        <div class="live-editor-wrapper">
+                                            <textarea class="editor-textarea live-code-textarea" id="complexity-sample-code" rows="7">import timeit
 # Compare time of summing elements in lists of size 1,000 vs 100,000
 time_small = timeit.timeit('sum(range(1000))', number=500)
 time_large = timeit.timeit('sum(range(100000))', number=500)
@@ -252,42 +226,75 @@ time_large = timeit.timeit('sum(range(100000))', number=500)
 print(f"Summing 1,000 elements (500 times): {time_small:.4f} seconds")
 print(f"Summing 100,000 elements (500 times): {time_large:.4f} seconds")
 print(f"Ratio (should scale near linear O(n)): {time_large/time_small:.1f}x time increase")</textarea>
+                                        </div>
+                                        <div class="editor-actions" style="margin-top:10px;">
+                                            <button class="btn btn-primary run-editor-btn"><i class="fa-solid fa-play"></i> Run Code</button>
+                                        </div>
+                                        <pre class="editor-output" style="margin-top: 10px;">Click Run Code to execute...</pre>
+                                    </div>
                                 </div>
-                                <div class="editor-actions" style="margin-top:10px;">
-                                    <button class="btn btn-primary run-editor-btn"><i class="fa-solid fa-play"></i> Run Code</button>
-                                </div>
-                                <pre class="editor-output" style="margin-top: 10px;">Click Run Code to execute...</pre>
                             </div>
                         </div>
                     </div>
+
                 </section>
 
                 <!-- 3. INDEXING MODULE -->
                 <section id="indexing-section" class="content-section">
                     <div class="header-block">
-                        <h3>Module 2: List Indexing Memory Simulator</h3>
-                        <p>How does a list retrieve any item in constant time? Learn how the underlying array computes physical memory offsets dynamically.</p>
+                        <div class="module-header-block welcome-header-block" style="border-left: 4px solid var(--accent-blue);">
+                            <div class="mod-header-icon-wrap">
+                                <i class="fa-solid fa-bolt mod-glow-icon" style="color: var(--accent-blue); text-shadow: 0 0 10px rgba(59,130,246,0.4);"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 2: List Indexing Memory Simulator</h2>
+                                <p>How does a list retrieve any item in constant time? Learn how the underlying array computes physical memory offsets dynamically.</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(59,130,246,0.1); color: var(--accent-blue);">Contiguous Memory</span>
+                                    <span class="tag" style="background: rgba(6,182,212,0.1); color: var(--accent-cyan);">Pointer Arithmetic</span>
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">O(1) Lookup</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="grid-2col">
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
                         <div class="card glass">
+                            <div class="card-header">
+                                <h4 style="margin: 0;">Interactive Memory Tape</h4>
+                            </div>
                             <div class="card-body">
-                                <h4>Interactive Memory Tape</h4>
-                                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Select an index on the array to calculate its address calculation sequence:</p>
-                                
-                                <div class="memory-grid-container" style="display: flex; gap: 8px; justify-content: center; margin: 20px 0;">
-                                    <!-- Slots generated in js -->
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); flex-wrap: wrap; gap: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                        <span style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Select List Index:</span>
+                                        <div style="display: flex; gap: 6px;" id="idx-btn-container">
+                                            <!-- Dynamically generated index selector buttons in app.js -->
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 15px;">
+                                        <div style="text-align: right; min-width: 60px;">
+                                            <span style="font-size: 9px; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Active Index</span>
+                                            <strong id="idx-slider-val" style="font-size: 18px; color: var(--accent-blue);">3</strong>
+                                        </div>
+                                        <button class="btn btn-primary" id="btn-trace-lookup" style="background-color: var(--accent-blue); box-shadow: 0 4px 12px rgba(59,130,246,0.25); font-size: 12px; padding: 8px 14px; font-weight: 600;"><i class="fa-solid fa-play"></i> Trace Steps</button>
+                                    </div>
                                 </div>
 
-                                <div class="calculation-box" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 12px; font-family: 'Fira Code', monospace; font-size: 13px;">
-                                    <div><strong>Base Address (Array Start):</strong> <span id="base-addr-lbl" style="color: var(--accent-orange);">0x1000</span></div>
-                                    <div><strong>Reference Pointer Width:</strong> <span id="width-lbl" style="color: var(--accent-cyan);">8 bytes</span> (64-bit Address)</div>
-                                    <div style="margin: 10px 0; border-top: 1px dashed var(--border-color); padding-top: 10px;">
-                                        <strong>Address Formula:</strong><br>
-                                        <span style="color: #cbd5e1;">Target Address = Base + (Index × Pointer Width)</span>
+                                <div class="memory-grid-container" style="display: flex; flex-direction: column; gap: 15px; margin: 20px 0; background: rgba(0,0,0,0.1); border-radius: 8px; padding: 16px; border: 1px solid var(--border-color);">
+                                    <!-- Populated dynamically in app.js -->
+                                </div>
+
+                                <div class="calculation-box" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 12px; font-family: 'Fira Code', monospace; font-size: 12.5px; line-height: 1.5;">
+                                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                                        <div><strong>Base Address:</strong> <span id="base-addr-lbl" style="color: var(--accent-orange);">0x1000</span></div>
+                                        <div><strong>Pointer Width:</strong> <span id="width-lbl" style="color: var(--accent-cyan);">8 bytes</span></div>
+                                        <div><strong>Formula:</strong> <span style="color: var(--text-muted);">Base + (Index × 8)</span></div>
                                     </div>
-                                    <div id="calc-step-lbl" style="color: var(--accent-blue); font-weight: bold; font-size: 14px;">
-                                        Select an index cell to calculate.
+                                    <div style="margin: 10px 0; border-top: 1px dashed var(--border-color); padding-top: 10px;">
+                                        <div id="calc-step-title" style="color: var(--accent-blue); font-weight: 700; margin-bottom: 4px;">Trace Status</div>
+                                        <div id="calc-step-desc" style="color: var(--text-secondary); font-size: 12px; min-height: 48px;">
+                                            Click cell above or press "Trace Lookup" to watch the memory lookup process in action.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -311,58 +318,544 @@ print(f"Ratio (should scale near linear O(n)): {time_large/time_small:.1f}x time
                 <!-- 4. DYNAMIC ARRAY MODULE -->
                 <section id="dynamic-array-section" class="content-section">
                     <div class="header-block">
-                        <h3>Module 3: Dynamic Array Appending Visualizer</h3>
-                        <p>Simulate appending values to a dynamic array. Notice what happens when the current capacity overflows.</p>
+                        <div class="module-header-block welcome-header-block" style="border-left: 4px solid var(--accent-orange);">
+                            <div class="mod-header-icon-wrap">
+                                <i class="fa-solid fa-database mod-glow-icon" style="color: var(--accent-orange); text-shadow: 0 0 10px rgba(249,115,22,0.4);"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 3: Dynamic Array Appending Visualizer</h2>
+                                <p>Simulate appending values to a dynamic array. Notice what happens when the current capacity overflows.</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(249,115,22,0.1); color: var(--accent-orange);">Dynamic Resizing</span>
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Amortized Analysis</span>
+                                    <span class="tag" style="background: rgba(168,85,247,0.1); color: var(--accent-purple);">Memory Allocation</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="grid-2col">
+                        <!-- Card 1: Interactive Append Simulator -->
                         <div class="card glass">
+                            <div class="card-header">
+                                <h4 style="margin: 0;"><i class="fa-solid fa-play"></i> Array Append Simulator</h4>
+                            </div>
                             <div class="card-body">
-                                <h4>Array Append Simulator</h4>
-                                <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
-                                    <label for="resize-strategy" style="font-size: 13px; font-weight:600;">Resize Strategy:</label>
-                                    <select id="resize-strategy" class="form-control" style="background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 5px; border-radius: 4px;">
-                                        <option value="double">Doubling Capacity (Amortized O(1))</option>
-                                        <option value="fixed">Fixed Capacity Increase (+4 Slots)</option>
-                                    </select>
-                                </div>
-                                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
-                                    <button class="btn btn-primary" id="sim-append-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-plus"></i> Append Element</button>
-                                    <button class="btn btn-danger" id="sim-reset-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-rotate-left"></i> Reset Simulator</button>
+                                <div style="display: flex; gap: 12px; margin-bottom: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                                    <div style="display: flex; gap: 10px; align-items: center;">
+                                        <label for="resize-strategy" style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Resize Strategy:</label>
+                                        <select id="resize-strategy" class="form-control" style="background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12.5px;">
+                                            <option value="double">Doubling Capacity (Amortized O(1))</option>
+                                            <option value="fixed">Fixed Capacity Increase (+4 Slots)</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; gap: 8px;">
+                                        <button class="btn btn-primary" id="sim-append-btn" style="padding: 8px 14px; font-size: 12.5px; background-color: var(--accent-orange); box-shadow: 0 4px 12px rgba(249,115,22,0.25); font-weight: 600;"><i class="fa-solid fa-plus"></i> Append Element</button>
+                                        <button class="btn btn-danger" id="sim-reset-btn" style="padding: 8px 14px; font-size: 12.5px; font-weight: 600;"><i class="fa-solid fa-rotate-left"></i> Reset Simulator</button>
+                                    </div>
                                 </div>
 
-                                <div class="arr-visualizer-box" style="margin-top: 15px;">
-                                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:12px; font-weight:600;">
-                                        <span>Backing Array Slots:</span>
-                                        <div>
-                                            <span style="margin-right:10px;">Size (n): <span id="arr-size-lbl" style="color:var(--accent-blue);">0</span></span>
-                                            <span>Capacity: <span id="arr-cap-lbl" style="color:var(--accent-orange);">1</span></span>
-                                        </div>
+                                <!-- Dynamic Array Live Metrics -->
+                                <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                                    <div style="flex: 1; min-width: 140px; background: rgba(59, 130, 246, 0.04); padding: 10px; border-radius: 6px; border: 1.5px solid var(--border-color); text-align: center; transition: all 0.3s ease;">
+                                        <span style="font-size: 9.5px; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Size (n)</span>
+                                        <strong id="arr-size-lbl" style="font-size: 20px; color: var(--accent-blue);">0</strong>
                                     </div>
-                                    <div class="array-slots-row" id="array-slots-row" style="display:flex; flex-wrap:wrap; gap:6px; min-height:50px; background:var(--bg-primary); padding:10px; border-radius:8px; border:1px solid var(--border-color); align-content:center;">
+                                    <div style="flex: 1; min-width: 140px; background: rgba(249, 115, 22, 0.04); padding: 10px; border-radius: 6px; border: 1.5px solid var(--border-color); text-align: center; transition: all 0.3s ease;">
+                                        <span style="font-size: 9.5px; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Capacity</span>
+                                        <strong id="arr-cap-lbl" style="font-size: 20px; color: var(--accent-orange);">1</strong>
+                                    </div>
+                                    <div style="flex: 1; min-width: 140px; background: rgba(168, 85, 247, 0.04); padding: 10px; border-radius: 6px; border: 1.5px solid var(--border-color); text-align: center; transition: all 0.3s ease;">
+                                        <span style="font-size: 9.5px; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Resizes Triggered</span>
+                                        <strong id="arr-resizes-lbl" style="font-size: 20px; color: var(--accent-purple);">0</strong>
+                                    </div>
+                                    <div style="flex: 1; min-width: 140px; background: rgba(239, 68, 68, 0.04); padding: 10px; border-radius: 6px; border: 1.5px solid var(--border-color); text-align: center; transition: all 0.3s ease;">
+                                        <span style="font-size: 9.5px; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Copies Performed</span>
+                                        <strong id="arr-copies-lbl" style="font-size: 20px; color: var(--accent-red);">0</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Capacity visual progress bar -->
+                                <div style="margin-bottom: 20px;">
+                                    <div style="display:flex; justify-content:space-between; font-size: 11px; color:var(--text-muted); margin-bottom: 5px; font-weight:600;">
+                                        <span>Capacity Utilization Meter:</span>
+                                        <span id="util-percentage-lbl">0% Used</span>
+                                    </div>
+                                    <div style="width: 100%; height: 8px; background: var(--bg-primary); border-radius: 4px; overflow: hidden; border: 1px solid var(--border-color);">
+                                        <div id="capacity-progress" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-blue), var(--accent-orange)); transition: width 0.3s ease; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Backing memory slots layout -->
+                                <div class="arr-visualizer-box" style="margin-top: 15px;">
+                                    <div style="font-size:12px; font-weight:700; margin-bottom:8px; color: var(--text-primary); text-transform:uppercase; letter-spacing:0.5px;">
+                                        Backing Array Slots (Contiguous Address Space)
+                                    </div>
+                                    <div class="array-slots-row" id="array-slots-row" style="display:flex; flex-wrap:wrap; gap:8px; min-height:60px; background:var(--bg-primary); padding:12px; border-radius:8px; border:1px solid var(--border-color); align-content:center; justify-content:center;">
                                         <!-- slots generated in JS -->
                                     </div>
                                 </div>
 
-                                <div class="resize-activity-log" id="resize-activity-log" style="background: rgba(249,115,22,0.05); border: 1px solid rgba(249,115,22,0.15); border-radius: 8px; padding: 12px; font-size: 12.5px; margin-top: 12px; min-height: 50px;">
+                                <!-- Log Feedback Panel -->
+                                <div class="resize-activity-log" id="resize-activity-log" style="background: rgba(255, 255, 255, 0.01); border: 1.5px solid var(--border-color); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.5; margin-top: 16px; min-height: 54px; color: var(--text-secondary);">
                                     Simulator initialized. Click "Append Element" to start.
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Card 2: Conceptual & Analogy Explanation -->
                         <div class="card glass">
+                            <div class="card-header">
+                                <h4 style="margin: 0;"><i class="fa-solid fa-book-open"></i> How Dynamic Arrays Work: The Bus Tour Analogy</h4>
+                            </div>
                             <div class="card-body">
-                                <h4>Amortized Time vs Linear Resize Cost</h4>
-                                <p>When a dynamic array is full, appending an element forces the system to perform a resize:</p>
-                                <ol style="margin-top: 8px; padding-left: 20px; font-size: 13px; line-height: 1.5;">
-                                    <li>Allocate a new contiguous memory block of larger capacity.</li>
-                                    <li>Copy all current elements to the new block (takes <code>O(n)</code> copies).</li>
-                                    <li>Reassign reference pointer and add the new element.</li>
-                                </ol>
-                                <p style="margin-top: 10px;">By **Doubling** the capacity on resize, copy cost is spread out: resizing becomes rare. In the long run, appending elements costs <strong>O(1) on average (amortized)</strong>.</p>
-                                <p style="margin-top: 8px;">If we only increase capacity by a **fixed size** (e.g. +1000 slots), the number of resizes grows linearly with `n`. More resizes mean we perform O(n²) total copies, making the average append run much slower.</p>
+                                <p style="font-size: 13.5px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 20px;">
+                                    Memory is like a parking lot. A standard <strong>Array</strong> is a contiguous block of reserved parking spots. If you want to grow an array but the adjacent memory spots are occupied, you cannot just expand in-place. You must move to a new, larger location!
+                                </p>
+
+                                <div style="display: flex; flex-direction: column; gap: 14px;">
+                                    <!-- Core Problem -->
+                                    <div style="display: flex; gap: 12px; background: rgba(239, 68, 68, 0.04); border-left: 3px solid var(--accent-red); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+                                        <div style="font-size: 18px; color: var(--accent-red); margin-top: 2px;">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 13.5px; color: var(--text-primary); margin-bottom: 4px;">The Resizing Overhead (O(n))</div>
+                                            <div style="font-size: 12.5px; line-height: 1.5; color: var(--text-secondary);">
+                                                When a dynamic array runs out of capacity, it must allocate a brand-new backing array elsewhere in memory, copy all existing elements one by one (taking <code>O(n)</code> operations), and release the old array. This copy step is expensive.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Option A: Fixed Resizing -->
+                                    <div style="display: flex; gap: 12px; background: rgba(168, 85, 247, 0.04); border-left: 3px solid var(--accent-purple); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+                                        <div style="font-size: 18px; color: var(--accent-purple); margin-top: 2px;">
+                                            <i class="fa-solid fa-bus"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 13.5px; color: var(--text-primary); margin-bottom: 4px;">Fixed Resizing: Mini-Bus Tour (+4 seats)</div>
+                                            <div style="font-size: 12.5px; line-height: 1.5; color: var(--text-secondary);">
+                                                Imagine buying a bus that only adds 4 seats when full. If you have 100 passengers, you will have to buy new buses and copy everyone over <strong>25 times</strong>! You waste massive amounts of time copying passengers over and over, resulting in slow <strong>quadratic O(n²) total copies</strong>.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Option B: Doubling Resizing -->
+                                    <div style="display: flex; gap: 12px; background: rgba(249, 115, 22, 0.04); border-left: 3px solid var(--accent-orange); padding: 12px 16px; border-radius: 0 8px 8px 0;">
+                                        <div style="font-size: 18px; color: var(--accent-orange); margin-top: 2px;">
+                                            <i class="fa-solid fa-plane-departure"></i>
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 13.5px; color: var(--text-primary); margin-bottom: 4px;">Doubling Capacity: Double Resizing (Amortized O(1))</div>
+                                            <div style="font-size: 12.5px; line-height: 1.5; color: var(--text-secondary);">
+                                                Instead of tiny increments, we <strong>double the capacity</strong> every time we run out of seats (e.g. 1 ➔ 2 ➔ 4 ➔ 8 ➔ 16 ➔ 32...). Resizes become extremely rare. Most elements sit down instantly in pre-reserved empty seats. The copy cost is spread out, making each append run in <strong>O(1) on average (Amortized Constant Time)</strong>.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </section>
+
+
+                <!-- 5. OOP MODULE -->
+                <section id="oop-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block" style="border-left: 4px solid var(--accent-purple);">
+                            <div class="mod-header-icon-wrap">
+                                <i class="fa-solid fa-cubes mod-glow-icon" style="color: var(--accent-purple); text-shadow: 0 0 10px rgba(168,85,247,0.4);"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 4: Object-Oriented Programming (OOP) Basics</h2>
+                                <p>Understand how Classes serve as blueprints, how objects manage their own state (namespaces), and how inheritance shares attributes and methods.</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(168,85,247,0.1); color: var(--accent-purple);">Classes & Objects</span>
+                                    <span class="tag" style="background: rgba(6,182,212,0.1); color: var(--accent-cyan);">Instance vs Class Namespace</span>
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Inheritance</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible Topics Stack -->
+                    <div class="oop-topics-stack" style="display: flex; flex-direction: column; gap: 1rem;">
+                        
+                        <!-- Topic 1: Class vs Instance -->
+                        <div class="accordion-item glass oop-topic-card" id="oop-topic-1">
+                            <div class="accordion-trigger oop-topic-header">
+                                <span style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fa-solid fa-folder-tree" style="color: var(--accent-blue);"></i> Class vs Instance Namespace Explorer
+                                </span>
+                                <i class="fa-solid fa-chevron-down toggle-chevron" style="transition: transform 0.3s ease; color: var(--text-muted);"></i>
+                            </div>
+                            <div class="accordion-content oop-topic-body" style="display: none;">
+                                    <!-- Explanation Panel -->
+                                    <div class="card" style="border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02); padding: 20px; margin-bottom: 20px;">
+                                        <h4 style="color: var(--accent-blue); margin-top: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
+                                            <i class="fa-solid fa-book-open"></i> Core Analogy: The Neighborhood Project
+                                        </h4>
+                                        <p style="font-size: 13px; line-height: 1.5; color: var(--text-secondary); margin-bottom: 16px;">
+                                            Think of Object-Oriented Programming (OOP) like constructing houses in a residential neighborhood.
+                                        </p>
+                                        
+                                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                                            <!-- Class Definition -->
+                                            <div style="display: flex; gap: 12px; background: rgba(59, 130, 246, 0.04); border-left: 3px solid var(--accent-blue); padding: 10px 14px; border-radius: 0 6px 6px 0;">
+                                                <div style="font-size: 16px; color: var(--accent-blue); margin-top: 2px;">
+                                                    <i class="fa-solid fa-compass-drafting"></i>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">Class (The Blueprint)</div>
+                                                    <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                        A Class (like <code>ArrayList</code>) is a <strong>house blueprint</strong>. It defines what attributes and methods the houses will have, but it is not a physical house itself.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Instance Definition -->
+                                            <div style="display: flex; gap: 12px; background: rgba(6, 182, 212, 0.04); border-left: 3px solid var(--accent-cyan); padding: 10px 14px; border-radius: 0 6px 6px 0;">
+                                                <div style="font-size: 16px; color: var(--accent-cyan); margin-top: 2px;">
+                                                    <i class="fa-solid fa-house-chimney"></i>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">Instance (The House)</div>
+                                                    <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                        An Instance is a <strong>real house</strong> built from that blueprint (like <code>list1</code> and <code>list2</code>). Each house has its own individual furniture and rooms (instance variables like <code>size</code> and <code>data</code>) that belong only to that house.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Class Variable Definition -->
+                                            <div style="display: flex; gap: 12px; background: rgba(168, 85, 247, 0.04); border-left: 3px solid var(--accent-purple); padding: 10px 14px; border-radius: 0 6px 6px 0;">
+                                                <div style="font-size: 16px; color: var(--accent-purple); margin-top: 2px;">
+                                                    <i class="fa-solid fa-scale-balanced"></i>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">Class Variable (HOA Bylaws)</div>
+                                                    <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                        A Class Variable (like <code>max_size</code>) is like <strong>neighborhood association bylaws</strong> that apply to all houses. If the HOA updates a rule, every house is instantly affected by it.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Interactive Panel -->
+                                    <div class="card" style="border: 1px solid var(--border-color); background: var(--bg-primary); padding: 20px;">
+                                        <h4 style="margin-top: 0; color: var(--text-primary); display: flex; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem; gap:10px;"><i class="fa-solid fa-sliders" style="color: var(--accent-blue);"></i> Interactive Sandbox</h4>
+                                        
+                                        <!-- Dynamic Sandbox Tutorial Help Box -->
+                                        <div id="oop-sandbox-guide" style="background: rgba(59, 130, 246, 0.05); border-left: 3px solid var(--accent-blue); padding: 10px 14px; border-radius: 0 6px 6px 0; margin-bottom: 16px; font-size: 12px; line-height: 1.45; color: var(--text-secondary); transition: all 0.3s ease;">
+                                            <i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 1:</strong> Start by clicking <strong>Instantiate list1</strong> under Instantiation to create your first object in memory!
+                                        </div>
+
+                                        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                                            <!-- Group 1: Instantiation -->
+                                            <div style="display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 6px; background: rgba(255,255,255,0.01);">
+                                                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">1. Instantiation (Create Objects)</div>
+                                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                                    <button class="btn btn-primary" id="oop-create-list1-btn" style="padding: 6px 12px; font-size: 12px; background-color: var(--accent-purple); box-shadow: 0 4px 12px rgba(168,85,247,0.25);"><i class="fa-solid fa-plus"></i> Instantiate list1</button>
+                                                    <button class="btn btn-secondary" id="oop-create-list2-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-plus"></i> Instantiate list2</button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Group 2: Modifying state -->
+                                            <div style="display: flex; flex-direction: column; gap: 6px; border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 6px; background: rgba(255,255,255,0.01);">
+                                                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">2. Modify Attributes (Observe Namespace Separation)</div>
+                                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                                    <button class="btn btn-secondary" id="oop-modify-attr-btn" style="padding: 6px 12px; font-size: 12px;" disabled><i class="fa-solid fa-pen"></i> Set list1.size = 5</button>
+                                                    <button class="btn btn-secondary" id="oop-modify-class-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-sliders"></i> Set ArrayList.max_size = 500</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Reset Button -->
+                                            <div style="display: flex; justify-content: flex-end;">
+                                                <button class="btn btn-danger" id="oop-reset-ns-btn" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-rotate-left"></i> Reset Sandbox</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="oop-namespace-visualizer" style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                                            <!-- Class Namespace -->
+                                            <div class="card" style="border: 1px solid rgba(168,85,247,0.2); background: var(--bg-purple-light, rgba(168,85,247,0.02)); border-radius: 8px; padding: 12px;">
+                                                <div style="font-weight: 700; color: var(--accent-purple); font-size: 13px; display: flex; justify-content: space-between;">
+                                                    <span>CLASS: ArrayList Namespace</span>
+                                                    <span style="font-size: 10px; color: var(--text-muted);">Shared in memory</span>
+                                                </div>
+                                                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-family: 'Fira Code', monospace; font-size: 12px;">
+                                                    <div style="display: flex; justify-content: space-between; padding: 4px 8px; background: var(--bg-primary); border-radius: 4px;">
+                                                        <span style="color: var(--accent-cyan);">max_size (Class Var)</span>
+                                                        <span id="oop-class-val-maxsize" style="color: var(--accent-green);">100</span>
+                                                    </div>
+                                                    <div style="display: flex; justify-content: space-between; padding: 4px 8px; background: var(--bg-primary); border-radius: 4px;">
+                                                        <span style="color: var(--accent-purple);">__init__(self)</span>
+                                                        <span style="color: var(--text-muted); font-size:11px;">Method</span>
+                                                    </div>
+                                                    <div style="display: flex; justify-content: space-between; padding: 4px 8px; background: var(--bg-primary); border-radius: 4px;">
+                                                        <span style="color: var(--accent-purple);">append(self, value)</span>
+                                                        <span style="color: var(--text-muted); font-size:11px;">Method</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Instances Grid -->
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                                <!-- Instance 1 -->
+                                                <div class="card" id="oop-inst1-card" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; opacity: 0.35; transition: all 0.3s ease;">
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary);">list1 = ArrayList()</div>
+                                                    <div style="font-size: 10px; color: var(--accent-purple); font-family: monospace; margin-top: 2px;">__class__ ➔ ArrayList</div>
+                                                    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-family: 'Fira Code', monospace; font-size: 11.5px;">
+                                                        <div style="display: flex; justify-content: space-between; padding: 3px 6px; background: var(--bg-primary); border-radius: 4px;">
+                                                            <span style="color: var(--accent-blue);">size</span>
+                                                            <span id="oop-inst1-val-size" style="color: var(--accent-green);">--</span>
+                                                        </div>
+                                                        <div style="display: flex; justify-content: space-between; padding: 3px 6px; background: var(--bg-primary); border-radius: 4px;">
+                                                            <span style="color: var(--accent-blue);">data</span>
+                                                            <span id="oop-inst1-val-data" style="color: var(--accent-green);">--</span>
+                                                        </div>
+                                                        <div style="display: flex; justify-content: space-between; padding: 3px 6px; background: var(--bg-primary); border-radius: 4px; opacity: 0.7;">
+                                                            <span style="color: var(--text-muted);">max_size (Inherited)</span>
+                                                            <span id="oop-inst1-val-inherited-maxsize" style="color: var(--accent-cyan);">--</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Instance 2 -->
+                                                <div class="card" id="oop-inst2-card" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; opacity: 0.35; transition: all 0.3s ease;">
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary);">list2 = ArrayList()</div>
+                                                    <div style="font-size: 10px; color: var(--accent-purple); font-family: monospace; margin-top: 2px;">__class__ ➔ ArrayList</div>
+                                                    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; font-family: 'Fira Code', monospace; font-size: 11.5px;">
+                                                        <div style="display: flex; justify-content: space-between; padding: 3px 6px; background: var(--bg-primary); border-radius: 4px;">
+                                                            <span style="color: var(--accent-blue);">size</span>
+                                                            <span id="oop-inst2-val-size" style="color: var(--accent-green);">--</span>
+                                                        </div>
+                                                        <div style="display: flex; justify-content: space-between; padding: 3px 6px; background: var(--bg-primary); border-radius: 4px;">
+                                                            <span style="color: var(--accent-blue);">data</span>
+                                                            <span id="oop-inst2-val-data" style="color: var(--accent-green);">--</span>
+                                                        </div>
+                                                        <div style="display: flex; justify-content: space-between; padding: 3px 6px; background: var(--bg-primary); border-radius: 4px; opacity: 0.7;">
+                                                            <span style="color: var(--text-muted);">max_size (Inherited)</span>
+                                                            <span id="oop-inst2-val-inherited-maxsize" style="color: var(--accent-cyan);">--</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <!-- Topic 2: Constructor & self -->
+                        <div class="accordion-item glass oop-topic-card" id="oop-topic-2">
+                            <div class="accordion-trigger oop-topic-header">
+                                <span style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-blue);"></i> The Constructor & self Tracer
+                                </span>
+                                <i class="fa-solid fa-chevron-down toggle-chevron" style="transition: transform 0.3s ease; color: var(--text-muted);"></i>
+                            </div>
+                            <div class="accordion-content oop-topic-body" style="display: none;">
+                                <div>
+                                    <!-- Explanation Panel -->
+                                    <div class="card" style="border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02); padding: 20px; margin-bottom: 20px;">
+                                        <h4 style="color: var(--accent-cyan); margin-top: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
+                                            <i class="fa-solid fa-book-open"></i> Core Analogy: The Factory Setup & ID Badge
+                                        </h4>
+                                        <p style="font-size: 13px; line-height: 1.5; color: var(--text-secondary); margin-bottom: 16px;">
+                                            When you instantiate an object via <code>obj = ArrayList()</code>, two key things happen:
+                                        </p>
+                                        
+                                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                                            <!-- Constructor Definition -->
+                                            <div style="display: flex; gap: 12px; background: rgba(6, 182, 212, 0.04); border-left: 3px solid var(--accent-cyan); padding: 10px 14px; border-radius: 0 6px 6px 0;">
+                                                <div style="font-size: 16px; color: var(--accent-cyan); margin-top: 2px;">
+                                                    <i class="fa-solid fa-gears"></i>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">__init__ (The Setup Assembly Line)</div>
+                                                    <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                        This is a special constructor function that runs automatically the moment a new object is born in memory. It populates the blank object with default parameters (like <code>size = 0</code> and <code>data</code>).
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Self Definition -->
+                                            <div style="display: flex; gap: 12px; background: rgba(59, 130, 246, 0.04); border-left: 3px solid var(--accent-blue); padding: 10px 14px; border-radius: 0 6px 6px 0;">
+                                                <div style="font-size: 16px; color: var(--accent-blue); margin-top: 2px;">
+                                                    <i class="fa-solid fa-id-badge"></i>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">self (The ID Badge Pointer)</div>
+                                                    <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                        This is a pointer reference. Since you can build multiple separate objects, Python needs to know which specific object is running the code. <code>self</code> translates to "this specific instance right here."
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Interactive Panel -->
+                                    <div class="card" style="border: 1px solid var(--border-color); background: var(--bg-primary); padding: 20px; display:flex; flex-direction:column; justify-content:space-between; min-height: 320px;">
+                                        <div>
+                                            <h4 style="margin-top: 0; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem; gap:10px;"><i class="fa-solid fa-code-branch" style="color: var(--accent-cyan);"></i>Live Tracer</h4>
+                                            <div class="oop-tracer-box" style="display:grid; grid-template-columns: 1.2fr 1fr; gap:12px; margin-top:12px; min-height: 200px;">
+                                                <!-- Code block tracer -->
+                                                <div style="background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color); padding: 10px; font-family: 'Fira Code', monospace; font-size: 11px; display:flex; flex-direction:column; gap:6px;">
+                                                    <div id="oop-init-line-1" style="padding: 2px 6px; border-radius:4px; border-left:3px solid transparent;">class ArrayList:</div>
+                                                    <div id="oop-init-line-2" style="padding: 2px 6px 2px 18px; border-radius:4px; border-left:3px solid transparent; color: var(--accent-purple);">def __init__(self):</div>
+                                                    <div id="oop-init-line-3" style="padding: 2px 6px 2px 30px; border-radius:4px; border-left:3px solid transparent; opacity:0.8;"># self points to empty object</div>
+                                                    <div id="oop-init-line-4" style="padding: 2px 6px 2px 30px; border-radius:4px; border-left:3px solid transparent;">self.size = 0</div>
+                                                    <div id="oop-init-line-5" style="padding: 2px 6px 2px 30px; border-radius:4px; border-left:3px solid transparent;">self.data = np.empty(1)</div>
+                                                    <div id="oop-init-line-6" style="padding: 2px 6px; border-radius:4px; border-left:3px solid transparent; margin-top:8px; color: var(--text-muted);"># Instantiate:</div>
+                                                    <div id="oop-init-line-7" style="padding: 2px 6px; border-radius:4px; border-left:3px solid transparent; color: var(--accent-cyan);">obj = ArrayList()</div>
+                                                </div>
+
+                                                <!-- Memory/Heap visual representation -->
+                                                <div style="background: var(--bg-primary); border-radius: 6px; border: 1px solid var(--border-color); padding: 10px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                                                    <div style="font-size: 9px; text-transform:uppercase; color:var(--text-muted); font-weight:700; margin-bottom:8px;">Heap memory (self)</div>
+                                                    <div id="oop-heap-object" style="width: 100%; border: 1px dashed var(--border-color); border-radius: 8px; padding: 10px; text-align:center; transition: all 0.3s ease; background: transparent;">
+                                                        <div id="oop-heap-title" style="font-weight:700; font-size:11px; color:var(--text-muted);">No Object Allocated</div>
+                                                        <div id="oop-heap-address" style="font-family: monospace; font-size: 9px; color: var(--accent-orange); margin-top:2px;"></div>
+                                                        <div id="oop-heap-props" style="display:flex; flex-direction:column; gap:4px; margin-top:8px; font-family:'Fira Code', monospace; font-size:10px; text-align:left;">
+                                                            <!-- Properties populated here -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 15px; border-top:1px dashed var(--border-color); padding-top:12px;">
+                                            <div id="oop-init-explanation" style="font-size:12px; color:var(--text-secondary); max-width:65%;">Click Next Step to begin trace.</div>
+                                            <div style="display:flex; gap:6px;">
+                                                <button class="btn btn-secondary" id="oop-init-prev-btn" style="padding:4px 8px; font-size:11px;" disabled><i class="fa-solid fa-chevron-left"></i></button>
+                                                <button class="btn btn-primary" id="oop-init-next-btn" style="padding:4px 10px; font-size:11px; background-color:var(--accent-cyan); box-shadow: 0 4px 12px rgba(6,182,212,0.25);">Next Step <i class="fa-solid fa-chevron-right"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Topic 3: Inheritance & MRO -->
+                        <div class="accordion-item glass oop-topic-card" id="oop-topic-3">
+                            <div class="accordion-trigger oop-topic-header">
+                                <span style="display: flex; align-items: center; gap: 10px;">
+                                    <i class="fa-solid fa-network-wired" style="color: var(--accent-blue);"></i> Inheritance & Attribute Resolution (MRO)
+                                </span>
+                                <i class="fa-solid fa-chevron-down toggle-chevron" style="transition: transform 0.3s ease; color: var(--text-muted);"></i>
+                            </div>
+                            <div class="accordion-content oop-topic-body" style="display: none;">
+                                    <!-- Explanation Panel -->
+                                    <div class="card" style="border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02); padding: 20px; margin-bottom: 20px;">
+                                        <h4 style="color: var(--accent-green); margin-top: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
+                                            <i class="fa-solid fa-book-open"></i> Core Analogy: Family Tree Inheritance & Searching
+                                        </h4>
+                                        <p style="font-size: 13px; line-height: 1.5; color: var(--text-secondary); margin-bottom: 16px;">
+                                            Let's look at how attributes and functions are inherited and resolved:
+                                        </p>
+                                        
+                                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                                            <!-- Inheritance Definition -->
+                                            <div style="display: flex; gap: 12px; background: rgba(16, 185, 129, 0.04); border-left: 3px solid var(--accent-green); padding: 10px 14px; border-radius: 0 6px 6px 0;">
+                                                <div style="font-size: 16px; color: var(--accent-green); margin-top: 2px;">
+                                                    <i class="fa-solid fa-people-roof"></i>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">Inheritance (Parent to Child Traits)</div>
+                                                    <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                        A subclass (like <code>SinglyLinkedList</code>) inherits all traits and functions from its parent base class (like <code>SinglyLinkedListBase</code>). This allows code reuse without rewriting it.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- MRO Definition -->
+                                            <div style="display: flex; gap: 12px; background: rgba(249, 115, 22, 0.04); border-left: 3px solid var(--accent-orange); padding: 10px 14px; border-radius: 0 6px 6px 0;">
+                                                <div style="font-size: 16px; color: var(--accent-orange); margin-top: 2px;">
+                                                    <i class="fa-solid fa-sitemap"></i>
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 700; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;">MRO (Method Resolution Order)</div>
+                                                    <div style="font-size: 12px; line-height: 1.45; color: var(--text-secondary);">
+                                                        Think of MRO like searching for an item in the house. Python first checks the object's bedroom (<strong>Instance Dictionary</strong>) ➔ If not found, it checks the child's class namespace (<strong>SinglyLinkedList</strong>) ➔ If still not found, it climbs to check the parent's namespace (<strong>SinglyLinkedListBase</strong>) until it resolves the attribute or throws an error.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Interactive Panel -->
+                                    <div class="card" style="border: 1px solid var(--border-color); background: var(--bg-primary); padding: 20px;">
+                                        <h4 style="display: flex; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 0.75rem; gap:10px;"><i class="fa-solid fa-magnifying-glass" style="color: var(--accent-green);"></i> Lookup Tracer</h4>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                            <div style="border: 1px solid var(--border-color); padding: 15px; background: rgba(16,185,129,0.01); border-radius: 6px;">
+                                                <h5 style="margin-bottom: 8px; color: var(--accent-green); font-size: 13px;">Attributes Lookup Tracer</h5>
+                                                <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 12px;">Select an attribute or method to watch how Python resolves it by climbing the class inheritance chain:</p>
+                                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                                    <button class="btn btn-secondary oop-mro-btn" data-attr="insertFront" style="padding: 5px 10px; font-size: 11.5px; font-family:'Fira Code', monospace;">list1.insertFront("A")</button>
+                                                    <button class="btn btn-secondary oop-mro-btn" data-attr="getSize" style="padding: 5px 10px; font-size: 11.5px; font-family:'Fira Code', monospace;">list1.getSize()</button>
+                                                    <button class="btn btn-secondary oop-mro-btn" data-attr="count" style="padding: 5px 10px; font-size: 11.5px; font-family:'Fira Code', monospace;">list1._count</button>
+                                                    <button class="btn btn-secondary oop-mro-btn" data-attr="invalid" style="padding: 5px 10px; font-size: 11.5px; font-family:'Fira Code', monospace;">list1.deleteNode()</button>
+                                                </div>
+                                                
+                                                <!-- Step Controls -->
+                                                <div id="oop-mro-controls" style="display: none; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
+                                                    <span style="font-size: 11.5px; color: var(--text-muted);" id="oop-mro-step-lbl">Step 1 of 3</span>
+                                                    <div style="display: flex; gap: 6px;">
+                                                        <button class="btn btn-secondary" id="oop-mro-prev-btn" style="padding: 4px 8px; font-size: 11px;"><i class="fa-solid fa-chevron-left"></i> Back</button>
+                                                        <button class="btn btn-primary" id="oop-mro-next-btn" style="padding: 4px 10px; font-size: 11px; background-color: var(--accent-green); box-shadow: 0 4px 12px rgba(16,185,129,0.25);">Next Step <i class="fa-solid fa-chevron-right"></i></button>
+                                                    </div>
+                                                </div>
+
+                                                <div id="oop-mro-log" style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px; min-height: 140px;">
+                                                    <div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; border: 1px dashed var(--border-color); border-radius: 6px; background: rgba(255,255,255,0.01);">
+                                                        <i class="fa-solid fa-circle-info" style="margin-right: 6px; color: var(--accent-blue);"></i> Select a lookup command above to watch the attribute search process step-by-step.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="oop-mro-chain-visualizer" style="display: flex; flex-direction: column; gap: 10px; padding-left: 10px; padding-right: 10px;">
+                                                <!-- Base Class Namespace -->
+                                                <div class="mro-node-box" id="mro-node-base" style="border: 1.5px solid var(--border-color); border-radius: 8px; padding: 10px; background: var(--bg-primary); transition: all 0.3s ease;">
+                                                    <div style="font-weight:700; font-size:11.5px; color: var(--accent-cyan); display:flex; justify-content:space-between;">
+                                                        <span>BASE CLASS: SinglyLinkedListBase</span>
+                                                        <span style="font-size: 8.5px; color: var(--text-muted);">Grandparent Namespace</span>
+                                                    </div>
+                                                    <div style="display:flex; gap:8px; margin-top:6px; font-family:'Fira Code', monospace; font-size:10px;">
+                                                        <span style="background: rgba(255,255,255,0.03); padding: 2px 6px; border-radius:3px;">_count</span>
+                                                        <span style="background: rgba(255,255,255,0.03); padding: 2px 6px; border-radius:3px;">_head</span>
+                                                        <span style="background: rgba(255,255,255,0.03); padding: 2px 6px; border-radius:3px;">__init__</span>
+                                                    </div>
+                                                </div>
+
+                                                <div style="text-align:center; color: var(--text-muted); font-size: 11px;"><i class="fa-solid fa-arrow-up"></i> Inherits from</div>
+
+                                                <!-- Sub Class Namespace -->
+                                                <div class="mro-node-box" id="mro-node-sub" style="border: 1.5px solid var(--border-color); border-radius: 8px; padding: 10px; background: var(--bg-primary); transition: all 0.3s ease;">
+                                                    <div style="font-weight:700; font-size:11.5px; color: var(--accent-purple); display:flex; justify-content:space-between;">
+                                                        <span>CLASS: SinglyLinkedList</span>
+                                                        <span style="font-size: 8.5px; color: var(--text-muted);">Parent Namespace</span>
+                                                    </div>
+                                                    <div style="display:flex; gap:8px; margin-top:6px; font-family:'Fira Code', monospace; font-size:10px; flex-wrap:wrap;">
+                                                        <span style="background: rgba(255,255,255,0.03); padding: 2px 6px; border-radius:3px;">traverse()</span>
+                                                        <span style="background: rgba(255,255,255,0.03); padding: 2px 6px; border-radius:3px;">insertFront()</span>
+                                                        <span style="background: rgba(255,255,255,0.03); padding: 2px 6px; border-radius:3px;">access()</span>
+                                                        <span style="background: rgba(255,255,255,0.03); padding: 2px 6px; border-radius:3px;">getSize()</span>
+                                                    </div>
+                                                </div>
+
+                                                <div style="text-align:center; color: var(--text-muted); font-size: 11px;"><i class="fa-solid fa-arrow-up"></i> Instantiated from</div>
+
+                                                <!-- Instance Namespace -->
+                                                <div class="mro-node-box" id="mro-node-inst" style="border: 1.5px solid var(--border-color); border-radius: 8px; padding: 10px; background: var(--bg-primary); transition: all 0.3s ease;">
+                                                    <div style="font-weight:700; font-size:11.5px; color: var(--accent-orange); display:flex; justify-content:space-between;">
+                                                        <span>INSTANCE: list1</span>
+                                                        <span style="font-size: 8.5px; color: var(--text-muted);">Instance Dictionary</span>
+                                                    </div>
+                                                    <div style="display:flex; gap:8px; margin-top:6px; font-family:'Fira Code', monospace; font-size:10px;">
+                                                        <span style="background: rgba(255,255,255,0.03); padding: 2px 6px; border-radius:3px; color: var(--text-muted); font-style:italic;">(empty - has no instance attributes initialized)</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
 
@@ -370,8 +863,20 @@ print(f"Ratio (should scale near linear O(n)): {time_large/time_small:.1f}x time
                 <!-- 6. QUIZ SECTION -->
                 <section id="quiz-section" class="content-section">
                     <div class="header-block">
-                        <h3>Complexity & Arrays Quiz</h3>
-                        <p>Test your knowledge of Big-O notations, array storage layouts, and resizing behaviors.</p>
+                        <div class="module-header-block welcome-header-block" style="border-left: 4px solid var(--accent-blue);">
+                            <div class="mod-header-icon-wrap">
+                                <i class="fa-solid fa-clipboard-question mod-glow-icon" style="color: var(--accent-blue); text-shadow: 0 0 10px rgba(59,130,246,0.4);"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Complexity & Arrays Quiz</h2>
+                                <p>Test your knowledge of Big-O notations, array storage layouts, and resizing behaviors.</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(59,130,246,0.1); color: var(--accent-blue);">Knowledge Check</span>
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Time Complexity</span>
+                                    <span class="tag" style="background: rgba(168,85,247,0.1); color: var(--accent-purple);">Array Structures</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="card glass">
