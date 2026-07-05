@@ -898,92 +898,157 @@ const quizQuestions = [
 ];
 
 let currentQuizIdx = 0;
+let userAnswers = Array(quizQuestions.length).fill(null);
 
 function loadQuizQuestion() {
-    const q = quizQuestions[currentQuizIdx];
-    document.getElementById("quiz-qnum").textContent = q.qnum;
-    document.getElementById("quiz-qtext").textContent = q.question;
+    const container = document.getElementById("quiz-container");
+    if (!container) return;
 
-    const optionsContainer = document.getElementById("quiz-options");
-    optionsContainer.innerHTML = "";
-
-    q.options.forEach((opt, idx) => {
-        const row = document.createElement("div");
-        row.className = "quiz-option-row";
-        row.style.cssText = `
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: var(--transition-fast);
-        `;
-        row.innerHTML = `
-            <input type="radio" name="quiz-ans" id="opt-${idx}" value="${idx}" style="cursor: pointer; accent-color: var(--accent-blue);">
-            <label for="opt-${idx}" style="cursor: pointer; font-size: 13px; font-weight: 500; flex: 1;">${opt}</label>
-        `;
-
-        row.addEventListener("click", () => {
-            row.querySelector("input").checked = true;
-            document.querySelectorAll(".quiz-option-row").forEach(r => {
-                r.style.borderColor = "var(--border-color)";
-                r.style.background = "var(--bg-primary)";
-            });
-            row.style.borderColor = "var(--accent-blue)";
-            row.style.background = "rgba(6,182,212,0.03)";
-        });
-
-        optionsContainer.appendChild(row);
-    });
-
-    const fb = document.getElementById("quiz-feedback");
-    fb.style.display = "none";
-
-    const submitBtn = document.getElementById("quiz-submit-btn");
-    submitBtn.textContent = "Check Answer";
-    submitBtn.onclick = checkQuizAnswer;
-}
-
-function checkQuizAnswer() {
-    const q = quizQuestions[currentQuizIdx];
-    const selected = document.querySelector('input[name="quiz-ans"]:checked');
-
-    if (!selected) {
-        alert("Please select an option first.");
+    if (currentQuizIdx >= quizQuestions.length) {
+        showQuizResults();
         return;
     }
 
-    const val = parseInt(selected.value);
-    const fb = document.getElementById("quiz-feedback");
+    const q = quizQuestions[currentQuizIdx];
+    const prevAnswer = userAnswers[currentQuizIdx];
+    const isAnswered = (prevAnswer !== null);
 
-    if (val === q.correct) {
-        fb.className = "quiz-feedback-box success";
-        fb.style.cssText = "display: block; background: rgba(16,185,129,0.08); border: 1.5px solid var(--accent-green); color: var(--accent-green);";
-        fb.innerHTML = `<strong><i class="fa-solid fa-circle-check"></i> Correct!</strong><br>${q.explanation}`;
+    container.innerHTML = `
+        <div class="quiz-question-card glass">
+            <div class="quiz-q-num">Question ${currentQuizIdx + 1} of ${quizQuestions.length}</div>
+            <div class="quiz-q-text">${q.question}</div>
+            <div class="quiz-options">
+                ${q.options.map((opt, i) => {
+                    let extraClass = "";
+                    if (isAnswered) {
+                        if (i === q.correct) {
+                            extraClass = " correct";
+                        } else if (i === prevAnswer) {
+                            extraClass = " incorrect";
+                        }
+                    }
+                    return `<button class="quiz-option${extraClass}" ${isAnswered ? 'disabled' : ''} onclick="selectQuizOption(${i})">${opt}</button>`;
+                }).join('')}
+            </div>
+            <div class="quiz-explanation ${isAnswered ? (prevAnswer === q.correct ? 'correct-explain' : 'incorrect-explain') : ''}" id="quiz-explanation-box" style="display: ${isAnswered ? 'block' : 'none'};">
+                ${isAnswered ? `
+                    <h5 class="${prevAnswer === q.correct ? 'correct-title' : 'incorrect-title'}">
+                        <i class="fa-solid ${prevAnswer === q.correct ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> 
+                        ${prevAnswer === q.correct ? 'Correct!' : 'Incorrect'}
+                    </h5>
+                    <p>${q.explanation}</p>
+                ` : ''}
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 16px; align-items: center; width: 100%;">
+                <div>
+                    ${currentQuizIdx > 0 ? `<button class="btn btn-secondary" id="quiz-prev-btn" onclick="prevQuizQuestion()"><i class="fa-solid fa-chevron-left"></i> Back</button>` : ''}
+                </div>
+                <div>
+                    <button class="btn btn-primary" id="quiz-next-btn" style="display: ${isAnswered ? 'inline-flex' : 'none'};" onclick="nextQuizQuestion()">Next Question <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function selectQuizOption(optionIdx) {
+    const q = quizQuestions[currentQuizIdx];
+    const options = document.querySelectorAll(".quiz-option");
+
+    // Disable all options from clicks
+    options.forEach(opt => opt.disabled = true);
+
+    // Mark selection
+    userAnswers[currentQuizIdx] = optionIdx;
+
+    const isCorrect = (optionIdx === q.correct);
+
+    // Set styles
+    options.forEach((opt, idx) => {
+        if (idx === q.correct) {
+            opt.classList.add("correct");
+        } else if (idx === optionIdx) {
+            opt.classList.add("incorrect");
+        }
+    });
+
+    // Render explanation
+    const explainBox = document.getElementById("quiz-explanation-box");
+    explainBox.style.display = "block";
+    if (isCorrect) {
+        explainBox.className = "quiz-explanation correct-explain";
+        explainBox.innerHTML = `
+            <h5 class="correct-title"><i class="fa-solid fa-circle-check"></i> Correct!</h5>
+            <p>${q.explanation}</p>
+        `;
     } else {
-        fb.className = "quiz-feedback-box failed";
-        fb.style.cssText = "display: block; background: rgba(239,68,68,0.08); border: 1.5px solid var(--accent-red); color: var(--accent-red);";
-        fb.innerHTML = `<strong><i class="fa-solid fa-circle-xmark"></i> Incorrect.</strong><br>${q.explanation}`;
+        explainBox.className = "quiz-explanation incorrect-explain";
+        explainBox.innerHTML = `
+            <h5 class="incorrect-title"><i class="fa-solid fa-circle-xmark"></i> Incorrect</h5>
+            <p>${q.explanation}</p>
+        `;
     }
 
-    const submitBtn = document.getElementById("quiz-submit-btn");
-    if (currentQuizIdx < quizQuestions.length - 1) {
-        submitBtn.textContent = "Next Question";
-        submitBtn.onclick = () => {
-            currentQuizIdx++;
-            loadQuizQuestion();
-        };
-    } else {
-        submitBtn.textContent = "Reset Quiz";
-        submitBtn.onclick = () => {
-            currentQuizIdx = 0;
-            loadQuizQuestion();
-        };
+    // Show Next Button
+    document.getElementById("quiz-next-btn").style.display = "inline-flex";
+}
+
+function nextQuizQuestion() {
+    currentQuizIdx++;
+    loadQuizQuestion();
+}
+
+function prevQuizQuestion() {
+    if (currentQuizIdx > 0) {
+        currentQuizIdx--;
+        loadQuizQuestion();
     }
 }
+
+function showQuizResults() {
+    const container = document.getElementById("quiz-container");
+    container.style.display = "none";
+
+    const summaryCard = document.getElementById("quiz-summary-card");
+    summaryCard.style.display = "flex";
+
+    // Compute Score
+    let score = 0;
+    userAnswers.forEach((ans, idx) => {
+        if (ans === quizQuestions[idx].correct) {
+            score++;
+        }
+    });
+
+    document.getElementById("quiz-score-num").textContent = score;
+    document.getElementById("quiz-score-total").textContent = quizQuestions.length;
+
+    const fbText = document.getElementById("quiz-feedback-text");
+    if (score === quizQuestions.length) {
+        fbText.textContent = "Spectacular! You've mastered all the time complexities, array indexing math, and OOP concepts of Week 2!";
+    } else if (score >= 3) {
+        fbText.textContent = "Great job! You have a solid understanding of complexities and array structures. Review the explanations to perfect your knowledge.";
+    } else {
+        fbText.textContent = "Keep reviewing! Understanding memory indexing and time complexity structures is essential to dynamic lists.";
+    }
+}
+
+function resetQuiz() {
+    currentQuizIdx = 0;
+    userAnswers = Array(quizQuestions.length).fill(null);
+
+    document.getElementById("quiz-summary-card").style.display = "none";
+    const container = document.getElementById("quiz-container");
+    container.style.display = "block";
+
+    loadQuizQuestion();
+}
+
+// Bind to window to allow HTML onclick access
+window.prevQuizQuestion = prevQuizQuestion;
+window.selectQuizOption = selectQuizOption;
+window.nextQuizQuestion = nextQuizQuestion;
+window.resetQuiz = resetQuiz;
 
 /* ─── Live Editor: Real-time Python Syntax Highlighting ─── */
 function highlightPythonSyntax(code) {
@@ -1152,33 +1217,211 @@ function setupOOPVisualizer() {
     const classMax = document.getElementById("oop-class-val-maxsize");
     const sandboxGuide = document.getElementById("oop-sandbox-guide");
 
+    // Output visual elements selectors for highlighting
+    const classCard = document.getElementById("oop-class-card");
+    const classRowMax = document.getElementById("oop-class-row-maxsize");
+    const inst1RowSize = document.getElementById("oop-inst1-row-size");
+    const inst1RowMax = document.getElementById("oop-inst1-row-maxsize");
+    const inst2RowSize = document.getElementById("oop-inst2-row-size");
+    const inst2RowMax = document.getElementById("oop-inst2-row-maxsize");
+
     let isList1Active = false;
     let isList2Active = false;
     let list1SizeVal = 0;
     let classMaxSizeVal = 100;
+    let sandboxStep = 1;
 
-    function updateSandboxGuide() {
+    function highlightButton(btn, colorVar, glowColor) {
+        btn.removeAttribute("disabled");
+        btn.style.backgroundColor = `var(${colorVar})`;
+        btn.style.color = "#ffffff";
+        btn.style.borderColor = `var(${colorVar})`;
+        btn.style.boxShadow = `0 0 12px ${glowColor}`;
+        btn.style.transform = "scale(1.03)";
+        btn.style.transition = "all 0.3s ease";
+        btn.style.cursor = "pointer";
+        btn.style.opacity = "1";
+    }
+
+    function resetButton(btn) {
+        btn.setAttribute("disabled", "true");
+        btn.style.backgroundColor = "rgba(255, 255, 255, 0.03)";
+        btn.style.color = "var(--text-muted, #64748b)";
+        btn.style.borderColor = "var(--border-color, rgba(255,255,255,0.1))";
+        btn.style.boxShadow = "none";
+        btn.style.transform = "none";
+        btn.style.cursor = "not-allowed";
+        btn.style.opacity = "0.5";
+    }
+
+    function resetAllVisualizerHighlights() {
+        if (classCard) {
+            classCard.style.borderColor = "rgba(168,85,247,0.2)";
+            classCard.style.boxShadow = "none";
+            classCard.style.transform = "none";
+        }
+        if (inst1Card) {
+            inst1Card.style.borderColor = "var(--border-color)";
+            inst1Card.style.boxShadow = "none";
+            inst1Card.style.transform = "none";
+            inst1Card.style.opacity = isList1Active ? "1" : "0.35";
+        }
+        if (inst2Card) {
+            inst2Card.style.borderColor = "var(--border-color)";
+            inst2Card.style.boxShadow = "none";
+            inst2Card.style.transform = "none";
+            inst2Card.style.opacity = isList2Active ? "1" : "0.35";
+        }
+        if (classRowMax) {
+            classRowMax.style.background = "var(--bg-primary)";
+            classRowMax.style.boxShadow = "none";
+            classRowMax.style.borderColor = "transparent";
+            classRowMax.style.transform = "none";
+        }
+        if (inst1RowSize) {
+            inst1RowSize.style.background = "var(--bg-primary)";
+            inst1RowSize.style.boxShadow = "none";
+            inst1RowSize.style.borderColor = "transparent";
+            inst1RowSize.style.transform = "none";
+        }
+        if (inst1RowMax) {
+            inst1RowMax.style.background = "var(--bg-primary)";
+            inst1RowMax.style.boxShadow = "none";
+            inst1RowMax.style.borderColor = "transparent";
+            inst1RowMax.style.transform = "none";
+        }
+        if (inst2RowSize) {
+            inst2RowSize.style.background = "var(--bg-primary)";
+            inst2RowSize.style.boxShadow = "none";
+            inst2RowSize.style.borderColor = "transparent";
+            inst2RowSize.style.transform = "none";
+        }
+        if (inst2RowMax) {
+            inst2RowMax.style.background = "var(--bg-primary)";
+            inst2RowMax.style.boxShadow = "none";
+            inst2RowMax.style.borderColor = "transparent";
+            inst2RowMax.style.transform = "none";
+        }
+    }
+
+    function updateSandboxUI() {
         if (!sandboxGuide) return;
-        if (!isList1Active && !isList2Active && classMaxSizeVal === 100) {
-            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 1:</strong> Start by clicking <strong>Instantiate list1</strong> under Instantiation to create your first object in memory!`;
-            sandboxGuide.style.background = "rgba(59, 130, 246, 0.05)";
-            sandboxGuide.style.borderColor = "var(--accent-blue)";
-        } else if (isList1Active && !isList2Active && list1SizeVal === 0) {
-            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 2:</strong> Good! Now try clicking <strong>Set list1.size = 5</strong> to see how attributes are stored locally inside list1, or click <strong>Instantiate list2</strong> to create another independent object.`;
-            sandboxGuide.style.background = "rgba(59, 130, 246, 0.05)";
-            sandboxGuide.style.borderColor = "var(--accent-blue)";
-        } else if (isList1Active && !isList2Active && list1SizeVal === 5) {
+
+        // Reset default states for resetBtn
+        if (resetNsBtn) {
+            resetNsBtn.style.backgroundColor = "var(--accent-red)";
+            resetNsBtn.style.color = "#ffffff";
+            resetNsBtn.style.boxShadow = "none";
+            resetNsBtn.style.transform = "none";
+            resetNsBtn.style.cursor = "pointer";
+            resetNsBtn.style.opacity = "1";
+        }
+
+        // Clean all old visual highlights first
+        resetAllVisualizerHighlights();
+
+        if (sandboxStep === 1) {
+            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-purple); margin-right: 6px;"></i> <strong>Step 1:</strong> Start by clicking <strong>Instantiate list1</strong> to create your first object in memory!`;
+            sandboxGuide.style.background = "rgba(168, 85, 247, 0.05)";
+            sandboxGuide.style.borderColor = "var(--accent-purple)";
+
+            if (createList1Btn) highlightButton(createList1Btn, "--accent-purple", "rgba(168,85,247,0.4)");
+            if (modifyAttrBtn) resetButton(modifyAttrBtn);
+            if (createList2Btn) resetButton(createList2Btn);
+            if (modifyClassBtn) resetButton(modifyClassBtn);
+
+        } else if (sandboxStep === 2) {
+            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-cyan); margin-right: 6px;"></i> <strong>Step 2:</strong> Good! Now click <strong>Set list1.size = 5</strong> to observe how attributes are stored locally inside list1's instance namespace.`;
+            sandboxGuide.style.background = "rgba(6, 182, 212, 0.05)";
+            sandboxGuide.style.borderColor = "var(--accent-cyan)";
+
+            if (createList1Btn) resetButton(createList1Btn);
+            if (modifyAttrBtn) highlightButton(modifyAttrBtn, "--accent-cyan", "rgba(6,182,212,0.4)");
+            if (createList2Btn) resetButton(createList2Btn);
+            if (modifyClassBtn) resetButton(modifyClassBtn);
+
+            // Highlight the newly created list1 card
+            if (inst1Card) {
+                inst1Card.style.borderColor = "var(--accent-purple)";
+                inst1Card.style.boxShadow = "0 0 15px rgba(168,85,247,0.25)";
+                inst1Card.style.transform = "translateY(-2px)";
+                inst1Card.style.opacity = "1";
+            }
+
+        } else if (sandboxStep === 3) {
             sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 3:</strong> Notice how <code>list1.size</code> updated to 5, but the Class namespace variables didn't change! Now click <strong>Instantiate list2</strong> to see what a second blank object looks like.`;
             sandboxGuide.style.background = "rgba(59, 130, 246, 0.05)";
             sandboxGuide.style.borderColor = "var(--accent-blue)";
-        } else if (isList1Active && isList2Active && classMaxSizeVal === 100) {
-            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-blue); margin-right: 6px;"></i> <strong>Step 4:</strong> Both objects are in memory! Now try clicking <strong>Set ArrayList.max_size = 500</strong> to observe how modifying a class variable updates the shared value for BOTH objects simultaneously!`;
-            sandboxGuide.style.background = "rgba(168, 85, 247, 0.05)";
-            sandboxGuide.style.borderColor = "var(--accent-purple)";
-        } else if (classMaxSizeVal === 500) {
+
+            if (createList1Btn) resetButton(createList1Btn);
+            if (modifyAttrBtn) resetButton(modifyAttrBtn);
+            if (createList2Btn) highlightButton(createList2Btn, "--accent-blue", "rgba(59,130,246,0.4)");
+            if (modifyClassBtn) resetButton(modifyClassBtn);
+
+            // Highlight the modified size row inside list1 to show local attribute change
+            if (inst1RowSize) {
+                inst1RowSize.style.background = "rgba(6, 182, 212, 0.08)";
+                inst1RowSize.style.boxShadow = "inset 0 0 8px rgba(6, 182, 212, 0.15)";
+                inst1RowSize.style.borderColor = "rgba(6, 182, 212, 0.3)";
+                inst1RowSize.style.transform = "scale(1.02)";
+            }
+
+        } else if (sandboxStep === 4) {
+            sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-info" style="color: var(--accent-orange); margin-right: 6px;"></i> <strong>Step 4:</strong> Both objects are in memory! Now click <strong>Set ArrayList.max_size = 500</strong> to observe how modifying a class variable updates the shared value for BOTH objects simultaneously!`;
+            sandboxGuide.style.background = "rgba(249, 115, 22, 0.05)";
+            sandboxGuide.style.borderColor = "var(--accent-orange)";
+
+            if (createList1Btn) resetButton(createList1Btn);
+            if (modifyAttrBtn) resetButton(modifyAttrBtn);
+            if (createList2Btn) resetButton(createList2Btn);
+            if (modifyClassBtn) highlightButton(modifyClassBtn, "--accent-orange", "rgba(249,115,22,0.4)");
+
+            // Highlight the newly created list2 card
+            if (inst2Card) {
+                inst2Card.style.borderColor = "var(--accent-blue)";
+                inst2Card.style.boxShadow = "0 0 15px rgba(59, 130, 246, 0.25)";
+                inst2Card.style.transform = "translateY(-2px)";
+                inst2Card.style.opacity = "1";
+            }
+
+        } else if (sandboxStep === 5) {
             sandboxGuide.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--accent-green); margin-right: 6px;"></i> <strong>Completed:</strong> Amazing! You modified the class variable <code>max_size</code>, and all objects instantly inherited the new value. Click <strong>Reset Sandbox</strong> to try again!`;
             sandboxGuide.style.background = "rgba(16, 185, 129, 0.05)";
             sandboxGuide.style.borderColor = "var(--accent-green)";
+
+            if (createList1Btn) resetButton(createList1Btn);
+            if (modifyAttrBtn) resetButton(modifyAttrBtn);
+            if (createList2Btn) resetButton(createList2Btn);
+            if (modifyClassBtn) resetButton(modifyClassBtn);
+
+            // Highlight Class max_size variable row
+            if (classRowMax) {
+                classRowMax.style.background = "rgba(249, 115, 22, 0.08)";
+                classRowMax.style.boxShadow = "inset 0 0 8px rgba(249, 115, 22, 0.15)";
+                classRowMax.style.borderColor = "rgba(249, 115, 22, 0.3)";
+                classRowMax.style.transform = "scale(1.02)";
+            }
+
+            // Highlight Inherited max_size rows in BOTH Instance 1 and Instance 2
+            if (inst1RowMax) {
+                inst1RowMax.style.background = "rgba(249, 115, 22, 0.08)";
+                inst1RowMax.style.boxShadow = "inset 0 0 8px rgba(249, 115, 22, 0.15)";
+                inst1RowMax.style.borderColor = "rgba(249, 115, 22, 0.3)";
+                inst1RowMax.style.transform = "scale(1.02)";
+            }
+            if (inst2RowMax) {
+                inst2RowMax.style.background = "rgba(249, 115, 22, 0.08)";
+                inst2RowMax.style.boxShadow = "inset 0 0 8px rgba(249, 115, 22, 0.15)";
+                inst2RowMax.style.borderColor = "rgba(249, 115, 22, 0.3)";
+                inst2RowMax.style.transform = "scale(1.02)";
+            }
+
+            // Highlight reset button at the end
+            if (resetNsBtn) {
+                resetNsBtn.style.boxShadow = "0 0 15px rgba(239,68,68,0.5)";
+                resetNsBtn.style.transform = "scale(1.03)";
+                resetNsBtn.style.transition = "all 0.3s ease";
+            }
         }
     }
 
@@ -1190,9 +1433,8 @@ function setupOOPVisualizer() {
             inst1Size.textContent = list1SizeVal;
             inst1Data.textContent = "ArrayList([None])";
             inst1Max.textContent = classMaxSizeVal;
-            modifyAttrBtn.removeAttribute("disabled");
-            createList1Btn.setAttribute("disabled", "true");
-            updateSandboxGuide();
+            sandboxStep = 2;
+            updateSandboxUI();
         });
     }
 
@@ -1204,8 +1446,8 @@ function setupOOPVisualizer() {
             inst2Size.textContent = "0";
             inst2Data.textContent = "ArrayList([None])";
             inst2Max.textContent = classMaxSizeVal;
-            createList2Btn.setAttribute("disabled", "true");
-            updateSandboxGuide();
+            sandboxStep = 4;
+            updateSandboxUI();
         });
     }
 
@@ -1216,8 +1458,8 @@ function setupOOPVisualizer() {
             inst1Size.textContent = list1SizeVal;
             inst1Size.style.color = "var(--accent-cyan)";
             setTimeout(() => { inst1Size.style.color = "var(--accent-green)"; }, 1000);
-            modifyAttrBtn.setAttribute("disabled", "true");
-            updateSandboxGuide();
+            sandboxStep = 3;
+            updateSandboxUI();
         });
     }
 
@@ -1238,8 +1480,8 @@ function setupOOPVisualizer() {
                 inst2Max.style.color = "var(--accent-cyan)";
                 setTimeout(() => { inst2Max.style.color = "var(--accent-cyan)"; }, 1000);
             }
-            modifyClassBtn.setAttribute("disabled", "true");
-            updateSandboxGuide();
+            sandboxStep = 5;
+            updateSandboxUI();
         });
     }
 
@@ -1249,11 +1491,6 @@ function setupOOPVisualizer() {
             isList2Active = false;
             list1SizeVal = 0;
             classMaxSizeVal = 100;
-
-            createList1Btn.removeAttribute("disabled");
-            createList2Btn.removeAttribute("disabled");
-            modifyAttrBtn.setAttribute("disabled", "true");
-            modifyClassBtn.removeAttribute("disabled");
 
             inst1Card.style.opacity = "0.35";
             inst1Card.style.borderColor = "var(--border-color)";
@@ -1269,9 +1506,13 @@ function setupOOPVisualizer() {
 
             classMax.textContent = "100";
             classMax.style.color = "var(--accent-green)";
-            updateSandboxGuide();
+            sandboxStep = 1;
+            updateSandboxUI();
         });
     }
+
+    // Initialize UI on load
+    updateSandboxUI();
 
 
     // --- Visualizer 2: The Constructor (__init__ & self) Tracer ---
@@ -1381,6 +1622,45 @@ function setupOOPVisualizer() {
 
     let currentMroQuery = null;
     let currentMroStepIndex = 0;
+
+    const mroSequence = ["insertFront", "getSize", "count", "invalid"];
+    let currentMroSequenceIndex = 0;
+
+    function updateMroButtonsUI() {
+        mroBtns.forEach(btn => {
+            const attr = btn.getAttribute("data-attr");
+            const isActive = (attr === mroSequence[currentMroSequenceIndex]);
+            
+            if (currentMroQuery !== null) {
+                btn.setAttribute("disabled", "true");
+                btn.style.backgroundColor = "rgba(255, 255, 255, 0.03)";
+                btn.style.color = "var(--text-muted, #64748b)";
+                btn.style.borderColor = "var(--border-color, rgba(255,255,255,0.1))";
+                btn.style.boxShadow = "none";
+                btn.style.transform = "none";
+                btn.style.cursor = "not-allowed";
+                btn.style.opacity = "0.5";
+            } else if (isActive) {
+                btn.removeAttribute("disabled");
+                btn.style.backgroundColor = "var(--accent-green)";
+                btn.style.color = "#ffffff";
+                btn.style.borderColor = "var(--accent-green)";
+                btn.style.boxShadow = "0 0 12px rgba(16,185,129,0.45)";
+                btn.style.transform = "scale(1.02)";
+                btn.style.cursor = "pointer";
+                btn.style.opacity = "1";
+            } else {
+                btn.setAttribute("disabled", "true");
+                btn.style.backgroundColor = "rgba(255, 255, 255, 0.03)";
+                btn.style.color = "var(--text-muted, #64748b)";
+                btn.style.borderColor = "var(--border-color, rgba(255,255,255,0.1))";
+                btn.style.boxShadow = "none";
+                btn.style.transform = "none";
+                btn.style.cursor = "not-allowed";
+                btn.style.opacity = "0.5";
+            }
+        });
+    }
 
     const mroData = {
         insertFront: [
@@ -1594,19 +1874,13 @@ function setupOOPVisualizer() {
 
     mroBtns.forEach(btn => {
         btn.addEventListener("click", () => {
-            mroBtns.forEach(b => {
-                b.classList.remove("btn-primary");
-                b.classList.add("btn-secondary");
-            });
-            btn.classList.remove("btn-secondary");
-            btn.classList.add("btn-primary");
-
             const attr = btn.getAttribute("data-attr");
             currentMroQuery = attr;
             currentMroStepIndex = 0;
 
             if (mroControls) mroControls.style.display = "flex";
             updateMroTracer();
+            updateMroButtonsUI();
         });
     });
 
@@ -1620,14 +1894,14 @@ function setupOOPVisualizer() {
             } else {
                 // Done / Finish
                 mroControls.style.display = "none";
-                mroBtns.forEach(b => {
-                    b.classList.remove("btn-primary");
-                    b.classList.add("btn-secondary");
-                });
                 currentMroQuery = null;
+                
+                // Increment current MRO sequence index
+                currentMroSequenceIndex = (currentMroSequenceIndex + 1) % mroSequence.length;
+
                 mroLog.innerHTML = `
                     <div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px 0; border: 1px dashed var(--border-color); border-radius: 6px; background: rgba(255,255,255,0.01);">
-                        <i class="fa-solid fa-circle-info" style="margin-right: 6px; color: var(--accent-blue);"></i> Select a lookup command above to watch the attribute search process step-by-step.
+                        <i class="fa-solid fa-circle-info" style="margin-right: 6px; color: var(--accent-blue);"></i> Select the highlighted lookup command above to watch the attribute search process step-by-step.
                     </div>
                 `;
                 [nodeInst, nodeSub, nodeBase].forEach(n => {
@@ -1638,6 +1912,7 @@ function setupOOPVisualizer() {
                         n.style.background = "var(--bg-primary)";
                     }
                 });
+                updateMroButtonsUI();
             }
         });
     }
@@ -1650,4 +1925,7 @@ function setupOOPVisualizer() {
             }
         });
     }
+
+    // Initialize MRO button states on load
+    updateMroButtonsUI();
 }

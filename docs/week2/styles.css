@@ -5506,16 +5506,11 @@ body.light-mode tr.premium-row:nth-child(even) {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-radius: 12px;
 }
-.quiz-question-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-}
 .quiz-option {
     transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
     border-radius: 8px;
 }
 .quiz-option:not(:disabled):hover {
-    transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     background-color: rgba(255, 255, 255, 0.08) !important;
 }
