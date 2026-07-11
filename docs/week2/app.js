@@ -252,6 +252,23 @@ document.addEventListener("DOMContentLoaded", () => {
     loadQuizQuestion();
     initLiveEditorHighlighting();
 
+    // Tabs toggle for Module 3 (Dynamic Arrays & Insertion)
+    const whyTabs = document.querySelectorAll(".why-tab-btn");
+    const whyContents = document.querySelectorAll(".why-tab-content");
+    whyTabs.forEach(btn => {
+        btn.addEventListener("click", () => {
+            whyTabs.forEach(t => t.classList.remove("active"));
+            whyContents.forEach(c => c.classList.remove("active"));
+
+            btn.classList.add("active");
+            const targetId = `why-content-${btn.getAttribute("data-tab")}`;
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                targetContent.classList.add("active");
+            }
+        });
+    });
+
     // Setup run button for embedded code sandboxes
     document.querySelectorAll(".run-editor-btn").forEach(btn => {
         btn.addEventListener("click", async () => {
@@ -441,14 +458,14 @@ function setupIndexingVisualizer() {
 
     if (!container || !btnContainer || !sliderVal || !btnTrace) return;
 
-    const values = ["BMW", "Audi", "Porsche", "Ferrari", "Tesla", "Bentley", "Aston", "Lambo"];
-    const heapAddresses = ["0x7FA0", "0x8B1C", "0x9E08", "0xA6D2", "0xB50F", "0xC834", "0xD2A8", "0xE9F0"];
+    const values = ["BMW", "Audi", "Porsche", "Ferrari"];
+    const heapAddresses = ["0x7FA0", "0x8B1C", "0x9E08", "0xA6D2"];
     
     let currentIdx = 3;
 
     // Render selector buttons
     btnContainer.innerHTML = "";
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < values.length; i++) {
         const btn = document.createElement("button");
         btn.className = "btn btn-secondary";
         btn.textContent = i;
@@ -500,7 +517,7 @@ function setupIndexingVisualizer() {
                         <span>Python List (Reference Array)</span>
                         <span style="font-family: monospace; font-size: 10px; color: var(--text-muted);">Base Address: 0x1000</span>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;" id="list-ref-row">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;" id="list-ref-row">
                         ${values.map((_, idx) => `
                             <div class="ref-cell" id="ref-cell-${idx}">
                                 <span style="font-size: 9px; color: var(--text-muted); font-weight:700;">[${idx}]</span>
@@ -512,7 +529,7 @@ function setupIndexingVisualizer() {
                 </div>
 
                 <!-- Row 2: Downward Connectors -->
-                <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; height: 16px; text-align: center;">
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 16px; text-align: center;">
                     ${values.map((_, idx) => `
                         <div class="pointer-arrow" id="pointer-arrow-${idx}">
                             <i class="fa-solid fa-arrow-down"></i>
@@ -525,7 +542,7 @@ function setupIndexingVisualizer() {
                     <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-green); font-weight: 700; margin-bottom: 8px;">
                         Heap Memory (Actual Objects)
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;" id="heap-obj-row">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;" id="heap-obj-row">
                         ${values.map((val, idx) => `
                             <div class="heap-cell" id="heap-cell-${idx}">
                                 <span style="font-family: 'Fira Code', monospace; font-size: 8.5px; color: var(--text-muted); margin-bottom: 3px;">${heapAddresses[idx]}</span>
@@ -541,32 +558,15 @@ function setupIndexingVisualizer() {
 
     renderGrid();
 
-    // Re-bind click event to cells directly
-    values.forEach((_, idx) => {
-        const refCell = container.querySelector(`#ref-cell-${idx}`);
-        if (refCell) {
-            refCell.addEventListener("click", () => {
-                currentIdx = idx;
-                sliderVal.textContent = idx;
-                updateSelectorButtons();
-                triggerTrace(idx);
-            });
-        }
-    });
+    let currentTapeStep = 0;
 
-    btnTrace.addEventListener("click", () => {
-        triggerTrace(currentIdx, true);
-    });
+    const tapeControls = document.getElementById("tape-trace-controls");
+    const tapeStepLbl = document.getElementById("tape-step-lbl");
+    const btnTapePrev = document.getElementById("btn-tape-prev");
+    const btnTapeNext = document.getElementById("btn-tape-next");
 
-    let traceTimeout1 = null;
-    let traceTimeout2 = null;
-    let traceTimeout3 = null;
-
-    function triggerTrace(idx, animate = false) {
-        clearTimeout(traceTimeout1);
-        clearTimeout(traceTimeout2);
-        clearTimeout(traceTimeout3);
-
+    function updateTapeTracer() {
+        // Reset classes
         container.querySelectorAll(".ref-cell").forEach(cell => {
             cell.className = "ref-cell";
         });
@@ -574,87 +574,144 @@ function setupIndexingVisualizer() {
             cell.className = "heap-cell";
             cell.querySelector("span:last-child").style.opacity = "0";
         });
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < values.length; i++) {
             const arrow = container.querySelector(`#pointer-arrow-${i}`);
             if (arrow) {
                 arrow.className = "pointer-arrow";
             }
         }
 
-        const addressHex = "0x" + (0x1000 + idx * 8).toString(16).toUpperCase();
-        const refAddr = heapAddresses[idx];
-        const valName = values[idx];
+        const addressHex = "0x" + (0x1000 + currentIdx * 8).toString(16).toUpperCase();
+        const refAddr = heapAddresses[currentIdx];
+        const valName = values[currentIdx];
 
-        if (!animate) {
-            const refCell = container.querySelector(`#ref-cell-${idx}`);
-            const heapCell = container.querySelector(`#heap-cell-${idx}`);
-            const arrow = container.querySelector(`#pointer-arrow-${idx}`);
+        if (currentTapeStep === 0) {
+            if (tapeControls) tapeControls.style.display = "none";
+            btnTrace.style.display = "inline-flex";
 
-            if (refCell) {
-                refCell.classList.add("active");
-            }
-            if (arrow) {
-                arrow.classList.add("active");
-            }
+            const refCell = container.querySelector(`#ref-cell-${currentIdx}`);
+            const heapCell = container.querySelector(`#heap-cell-${currentIdx}`);
+            const arrow = container.querySelector(`#pointer-arrow-${currentIdx}`);
+
+            if (refCell) refCell.classList.add("active");
+            if (arrow) arrow.classList.add("active");
             if (heapCell) {
                 heapCell.classList.add("active");
                 heapCell.querySelector("span:last-child").style.opacity = "1";
             }
 
-            stepTitle.innerHTML = `<i class="fa-solid fa-calculator" style="color:var(--accent-blue); margin-right:6px;"></i> Lookup Results for Index [${idx}]`;
+            stepTitle.innerHTML = `<i class="fa-solid fa-calculator" style="color:var(--accent-blue); margin-right:6px;"></i> Lookup Results for Index [${currentIdx}]`;
             stepDesc.innerHTML = `
-                Target Address = <strong>0x1000 + (${idx} × 8) = ${addressHex}</strong><br>
+                Target Address = <strong>0x1000 + (${currentIdx} × 8) = ${addressHex}</strong><br>
                 1. Read reference pointer stored at index cell address <code>${addressHex}</code>: <code>${refAddr}</code>.<br>
                 2. Direct memory jump to heap address <code>${refAddr}</code>. Read object string <strong>"${valName}"</strong>.<br>
                 <span style="color:var(--accent-green); font-weight:700;">Instantly retrieved in a single O(1) mathematical step!</span>
             `;
-        } else {
+        } else if (currentTapeStep === 1) {
+            if (tapeControls) tapeControls.style.display = "flex";
+            btnTrace.style.display = "none";
+            if (tapeStepLbl) tapeStepLbl.textContent = "Step 1 of 3";
+            if (btnTapePrev) btnTapePrev.disabled = true;
+            if (btnTapeNext) btnTapeNext.innerHTML = `Next Step <i class="fa-solid fa-chevron-right"></i>`;
+
+            const refCell = container.querySelector(`#ref-cell-${currentIdx}`);
+            if (refCell) refCell.classList.add("searching");
+
             stepTitle.innerHTML = `<i class="fa-solid fa-spinner fa-spin" style="color:var(--accent-blue); margin-right:6px;"></i> Step 1: Compute Offset`;
             stepDesc.innerHTML = `
                 Array base starts at address <code>0x1000</code>.<br>
                 Multiply index by width of memory reference (8 bytes):<br>
-                Offset = <strong>${idx} × 8 = ${idx * 8} bytes</strong>.
+                Offset = <strong>${currentIdx} × 8 = ${currentIdx * 8} bytes</strong>.
             `;
+        } else if (currentTapeStep === 2) {
+            if (tapeControls) tapeControls.style.display = "flex";
+            btnTrace.style.display = "none";
+            if (tapeStepLbl) tapeStepLbl.textContent = "Step 2 of 3";
+            if (btnTapePrev) btnTapePrev.disabled = false;
+            if (btnTapeNext) btnTapeNext.innerHTML = `Next Step <i class="fa-solid fa-chevron-right"></i>`;
 
-            const activeRef = container.querySelector(`#ref-cell-${idx}`);
-            if (activeRef) {
-                activeRef.classList.add("searching");
+            const refCell = container.querySelector(`#ref-cell-${currentIdx}`);
+            const arrow = container.querySelector(`#pointer-arrow-${currentIdx}`);
+            if (refCell) refCell.classList.add("active");
+            if (arrow) arrow.classList.add("active");
+
+            stepTitle.innerHTML = `<i class="fa-solid fa-location-crosshairs" style="color:var(--accent-cyan); margin-right:6px;"></i> Step 2: Access Reference Cell`;
+            stepDesc.innerHTML = `
+                Compute physical address: <strong>0x1000 + ${currentIdx * 8} = ${addressHex}</strong>.<br>
+                Load 64-bit reference pointer stored inside: <strong><code>${refAddr}</code></strong>.
+            `;
+        } else if (currentTapeStep === 3) {
+            if (tapeControls) tapeControls.style.display = "flex";
+            btnTrace.style.display = "none";
+            if (tapeStepLbl) tapeStepLbl.textContent = "Step 3 of 3";
+            if (btnTapePrev) btnTapePrev.disabled = false;
+            if (btnTapeNext) btnTapeNext.innerHTML = `Finish <i class="fa-solid fa-check"></i>`;
+
+            const refCell = container.querySelector(`#ref-cell-${currentIdx}`);
+            const arrow = container.querySelector(`#pointer-arrow-${currentIdx}`);
+            const heapCell = container.querySelector(`#heap-cell-${currentIdx}`);
+
+            if (refCell) refCell.classList.add("active");
+            if (arrow) arrow.classList.add("active");
+            if (heapCell) {
+                heapCell.classList.add("active");
+                heapCell.querySelector("span:last-child").style.opacity = "1";
             }
 
-            traceTimeout1 = setTimeout(() => {
-                stepTitle.innerHTML = `<i class="fa-solid fa-location-crosshairs" style="color:var(--accent-cyan); margin-right:6px;"></i> Step 2: Access Reference Cell`;
-                stepDesc.innerHTML = `
-                    Compute physical address: <strong>0x1000 + ${idx * 8} = ${addressHex}</strong>.<br>
-                    Load 64-bit reference pointer stored inside: <strong><code>${refAddr}</code></strong>.
-                `;
-                if (activeRef) {
-                    activeRef.classList.remove("searching");
-                    activeRef.classList.add("active");
-                }
-                const arrow = container.querySelector(`#pointer-arrow-${idx}`);
-                if (arrow) {
-                    arrow.classList.add("active");
-                }
-
-                traceTimeout2 = setTimeout(() => {
-                    stepTitle.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--accent-green); margin-right:6px;"></i> Step 3: Dereference Heap Object`;
-                    stepDesc.innerHTML = `
-                        Jump directly to heap address <strong><code>${refAddr}</code></strong>.<br>
-                        Read value stored at that location: <strong style="color:var(--accent-green); font-size:13.5px;">"${valName}"</strong>.<br>
-                        <strong>Done!</strong> Constant O(1) time - no elements scanned!
-                    `;
-                    const activeHeap = container.querySelector(`#heap-cell-${idx}`);
-                    if (activeHeap) {
-                        activeHeap.classList.add("active");
-                        activeHeap.querySelector("span:last-child").style.opacity = "1";
-                    }
-                }, 1200);
-
-            }, 1000);
+            stepTitle.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--accent-green); margin-right:6px;"></i> Step 3: Dereference Heap Object`;
+            stepDesc.innerHTML = `
+                Jump directly to heap address <strong><code>${refAddr}</code></strong>.<br>
+                Read value stored at that location: <strong style="color:var(--accent-green); font-size:13.5px;">"${valName}"</strong>.<br>
+                <strong>Done!</strong> Constant O(1) time - no elements scanned!
+            `;
         }
     }
 
-    triggerTrace(3);
+    // Re-bind click event to cells directly
+    values.forEach((_, idx) => {
+        const refCell = container.querySelector(`#ref-cell-${idx}`);
+        if (refCell) {
+            refCell.addEventListener("click", () => {
+                currentIdx = idx;
+                currentTapeStep = 0;
+                sliderVal.textContent = idx;
+                updateSelectorButtons();
+                updateTapeTracer();
+            });
+        }
+    });
+
+    btnTrace.addEventListener("click", () => {
+        currentTapeStep = 1;
+        updateTapeTracer();
+    });
+
+    if (btnTapePrev) {
+        btnTapePrev.addEventListener("click", () => {
+            if (currentTapeStep > 1) {
+                currentTapeStep--;
+                updateTapeTracer();
+            }
+        });
+    }
+
+    if (btnTapeNext) {
+        btnTapeNext.addEventListener("click", () => {
+            if (currentTapeStep < 3) {
+                currentTapeStep++;
+                updateTapeTracer();
+            } else {
+                currentTapeStep = 0;
+                updateTapeTracer();
+            }
+        });
+    }
+
+    // Initialize Default State
+    currentIdx = 3;
+    currentTapeStep = 0;
+    updateSelectorButtons();
+    updateTapeTracer();
 }
 
 // -------------------------------------------------------------

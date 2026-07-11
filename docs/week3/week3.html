@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searching, Sorting & Hashing: Interactive Guide | DSA AIEE</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Pyodide (WASM Python interpreter) -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        /* Custom visualizer styles for Week 3 */
+        .search-bar-item {
+            transition: all 0.3s ease;
+        }
+
+        /* Flowchart styling */
+        .flowchart-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(9, 13, 22, 0.4);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        body.light-mode .flowchart-box {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        .flowchart-node {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 11px;
+            font-family: 'Fira Code', monospace;
+            text-align: center;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        body.light-mode .flowchart-node {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #475569;
+        }
+
+        .flowchart-node.active {
+            border-color: var(--accent-blue) !important;
+            background: rgba(59, 130, 246, 0.12) !important;
+            color: var(--text-primary) !important;
+            box-shadow: 0 0 10px var(--accent-blue-glow);
+            font-weight: 600;
+        }
+
+        body.light-mode .flowchart-node.active {
+            background: rgba(59, 130, 246, 0.08) !important;
+            color: var(--accent-blue) !important;
+        }
+
+        .flowchart-arrow {
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-muted);
+            margin: -2px 0;
+            user-select: none;
+        }
+
+        /* Speed buttons */
+        .speed-btn {
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .speed-btn.active {
+            background: var(--accent-blue) !important;
+            border-color: var(--accent-blue) !important;
+            color: white !important;
+        }
+
+        /* Sorting Bar element styling */
+        .sort-bar {
+            width: 100%;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            border: 1px solid;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        /* Hash bucket styles */
+        .hash-bucket-cell {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition-normal);
+        }
+
+        body.light-mode .hash-bucket-cell {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+        }
+
+        body.light-mode .hash-bucket-cell.occupied {
+            background: rgba(239, 68, 68, 0.04) !important;
+            border-color: rgba(239, 68, 68, 0.2) !important;
+        }
+
+        .hash-bucket-cell.probing {
+            border-color: var(--accent-orange) !important;
+            background: rgba(249, 115, 22, 0.1) !important;
+            box-shadow: 0 0 8px var(--accent-orange-glow);
+        }
+
+        body.light-mode .hash-bucket-cell.probing {
+            background: rgba(249, 115, 22, 0.08) !important;
+            color: #c2410c !important;
+        }
+
+        .hash-bucket-cell.match {
+            border-color: var(--accent-green) !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+            box-shadow: 0 0 8px var(--accent-green-glow);
+        }
+
+        body.light-mode .hash-bucket-cell.match {
+            background: rgba(16, 185, 129, 0.08) !important;
+            color: #047857 !important;
+        }
+
+        .hash-bucket-cell.occupied {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .hash-bucket-cell.active-insert {
+            border-color: var(--accent-blue) !important;
+            background: rgba(59, 130, 246, 0.12) !important;
+            box-shadow: 0 0 10px var(--accent-blue-glow);
+        }
+
+        body.light-mode .hash-bucket-cell.active-insert {
+            background: rgba(59, 130, 246, 0.08) !important;
+            color: #1d4ed8 !important;
+        }
+
+        .why-horizontal-tabs {
+            width: 100% !important;
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            border-radius: 14px !important;
+            padding: 6px !important;
+            gap: 12px !important;
+            background: rgba(15, 22, 38, 0.7) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+
+        body.light-mode .why-horizontal-tabs {
+            background: #f1f5f9 !important;
+            border-color: rgba(0, 0, 0, 0.08) !important;
+        }
+    </style>
+</head>
+
+<body class="light-mode">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <span class="logo-icon"><i class="fa-solid fa-code-fork"></i></span>
+                    <div class="logo-text">
+                        <h1>Week 3</h1>
+                        <span class="subtitle">Search, Sort & Hashing</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Toggle Sidebar">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-section-title">Module Sections</span>
+                <button class="nav-item active" data-target="search-section">
+                    <i class="fa-solid fa-magnifying-glass"></i> <span>Module 1: Search Algos</span>
+                </button>
+
+                <button class="nav-item" data-target="sorting-section">
+                    <i class="fa-solid fa-arrow-up-wide-short"></i> <span>Module 2: Sorting Algos</span>
+                </button>
+
+                <button class="nav-item" data-target="hashing-section">
+                    <i class="fa-solid fa-hashtag"></i> <span>Module 3: Hash Tables</span>
+                </button>
+
+                <button class="nav-item" data-target="quiz-section">
+                    <i class="fa-solid fa-clipboard-question"></i> <span>Transition Quiz</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="interpreter-status">
+                    <span class="status-dot loading" id="status-dot"></span>
+                    <span class="status-text" id="status-text">Python Loading...</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left" style="display: flex; align-items: center; gap: 16px;">
+                    <div>
+                        <span class="breadcrumb">Search, Sort, and Hash tables</span>
+                        <h2 id="current-section-title">Course Introduction</h2>
+                    </div>
+                </div>
+                <div class="header-right" style="display: flex; gap: 12px;">
+                    <a href="../index.html" class="btn btn-secondary" id="back-dashboard-btn" title="Back to Dashboard">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <button class="btn btn-secondary" id="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button class="btn btn-secondary toggle-console-btn" id="toggle-console-btn" title="Toggle Terminal Console">
+                        <i class="fa-solid fa-terminal"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Frame -->
+            <div class="content-body">
+
+                <!-- 1. SEARCH SECTION -->
+                <section id="search-section" class="content-section active">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background: rgba(59, 130, 246, 0.15); color: var(--accent-blue);">
+                                <i class="fa-solid fa-magnifying-glass mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Linear & Binary Search</h2>
+                                <p>Finding data efficiently is a fundamental operation. In this module, we compare <strong>Linear Search</strong> (O(N)) and <strong>Binary Search</strong> (O(log N)), demonstrating the massive impact of order and divide-and-conquer strategies.</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(59,130,246,0.1); color: var(--accent-blue);">Linear Search O(n)</span>
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Binary Search O(log n)</span>
+                                    <span class="tag" style="background: rgba(168,85,247,0.1); color: var(--accent-purple);">Divide-and-Conquer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Visualizer Mount Root -->
+                    <div id="search-root"></div>
+                </section>
+
+                <!-- 2. SORTING SECTION -->
+                <section id="sorting-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block" style="border-color: var(--border-accent);">
+                            <div class="mod-header-icon-wrap" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">
+                                <i class="fa-solid fa-arrow-up-wide-short mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Sorting Algorithms</h2>
+                                <p>Sorting structures data in order to make it searchable and organized. We analyze four core sorting strategies: <strong>Bubble Sort</strong>, <strong>Selection Sort</strong>, <strong>Insertion Sort</strong>, and <strong>Merge Sort</strong>.</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(239,68,68,0.1); color: var(--accent-red);">Bubble Sort</span>
+                                    <span class="tag" style="background: rgba(249,115,22,0.1); color: var(--accent-orange);">Selection Sort</span>
+                                    <span class="tag" style="background: rgba(6,182,212,0.1); color: var(--accent-cyan);">Insertion Sort</span>
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Merge Sort</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sorting Visualizer Mount Root -->
+                    <div id="sorting-root"></div>
+                </section>
+
+                <!-- 3. HASHING SECTION -->
+                <section id="hashing-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">
+                                <i class="fa-solid fa-hashtag mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Hash Tables & Collision Resolution</h2>
+                                <p>Hash Tables map keys directly to indices for O(1) constant-time search. When keys map to the same index, a <strong>Collision</strong> occurs. We explore collision resolution via <strong>Linear Probing</strong>.</p>
+                                <div style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;">
+                                    <span class="tag" style="background: rgba(16,185,129,0.1); color: var(--accent-green);">Direct Lookup O(1)</span>
+                                    <span class="tag" style="background: rgba(249,115,22,0.1); color: var(--accent-orange);">Linear Probing</span>
+                                    <span class="tag" style="background: rgba(239,68,68,0.1); color: var(--accent-red);">Collision Resolution</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hashing Visualizer Mount Root -->
+                    <div id="hashing-root"></div>
+                </section>
+
+                <!-- 4. QUIZ SECTION -->
+                <section id="quiz-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block quiz-header-block">
+                            <div class="mod-header-icon-wrap" style="background: rgba(14, 165, 233, 0.15); color: #0ea5e9;">
+                                <i class="fa-solid fa-clipboard-question mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Transition Quiz</h2>
+                                <p>Test your understanding of Searching, Sorting, and Hashing. Answer these 5 conceptual questions to assess your knowledge transition from theory to code implementation!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-container" id="quiz-container">
+                        <!-- Questions dynamically loaded by app.js -->
+                    </div>
+
+                    <div class="quiz-summary-card glass" id="quiz-summary-card" style="display:none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; gap: 24px;">
+                        <div class="score-radial">
+                            <span class="score-num" id="quiz-score-num">0</span> / <span class="score-total" id="quiz-score-total">5</span>
+                        </div>
+                        <h3>Quiz Complete!</h3>
+                        <p id="quiz-feedback-text">Nice try! Review the feedback below each question to master the material.</p>
+                        <button class="btn btn-primary" onclick="resetQuiz()"><i class="fa-solid fa-rotate-left"></i> Try Again</button>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Python Console Drawer -->
+        <div class="console-drawer" id="console-drawer">
+            <div class="console-header" id="console-drawer-header">
+                <div class="console-title">
+                    <i class="fa-solid fa-terminal"></i> <span>Python WASM Interactive Terminal</span>
+                </div>
+                <div class="console-actions">
+                    <button class="console-btn" id="clear-console-btn" title="Clear Console"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="console-btn" id="minimize-console-btn" title="Toggle Console"><i class="fa-solid fa-chevron-down"></i></button>
+                </div>
+            </div>
+            <div class="console-content">
+                <div class="console-workspace">
+                    <div class="console-editor-section">
+                        <div class="panel-subtitle">Write Python Code:</div>
+                        <textarea id="global-console-textarea" class="console-textarea"># Try writing Python search/sort code here!
+data = [8, 19, 23, 32, 45, 56, 78]
+target = 23
+
+# Let's perform sequential search
+found_idx = -1
+for i in range(len(data)):
+    if data[i] == target:
+        found_idx = i
+        break
+
+print(f"Target {target} found at index: {found_idx}")
+</textarea>
+                        <button class="btn btn-success" id="run-global-console-btn"><i class="fa-solid fa-play"></i> Execute</button>
+                    </div>
+                    <div class="console-output-section">
+                        <div class="panel-subtitle">Execution Result:</div>
+                        <pre id="global-console-terminal" class="console-terminal">>>> Press Execute to run Python directly in your browser.</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REACT INTERACTIVE GUIDE MODULES -->
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // =========================================================================
+        // MODULE 1: SEARCHING VISUALIZER (Linear & Binary Search)
+        // =========================================================================
+        const SearchApp = () => {
+            const [algo, setAlgo] = useState('linear'); // 'linear' or 'binary'
+            const [array, setArray] = useState([8, 12, 19, 23, 31, 38, 45, 50, 56, 62, 70, 78, 85, 91, 99]);
+            const [target, setTarget] = useState(78);
+            const [isRunning, setIsRunning] = useState(false);
+            const [currentStep, setCurrentStep] = useState(0);
+            const [history, setHistory] = useState([]);
+            const [speed, setSpeed] = useState(800); // ms
+            const timerRef = useRef(null);
+
+            // Generate search execution history based on selected algorithm
+            const generateSearchHistory = () => {
+                const hist = [];
+                const data = [...array];
+                const t = parseInt(target) || 0;
+
+                if (algo === 'linear') {
+                    // Linear search steps
+                    hist.push({
+                        step: 0,
+                        i: -1,
+                        low: -1,
+                        high: -1,
+                        mid: -1,
+                        activeNode: 'node-init',
+                        message: "Initialize loop variable: index i = 0.",
+                        comparisons: 0,
+                        highlighted: [],
+                        found: false,
+                        ended: false
+                    });
+
+                    let found = false;
+                    let comparisons = 0;
+
+                    for (let i = 0; i < data.length; i++) {
+                        comparisons++;
+                        // Step: check loop bounds
+                        hist.push({
+                            step: hist.length,
+                            i,
+                            low: -1,
+                            high: -1,
+                            mid: -1,
+                            activeNode: 'node-loop-check',
+                            message: `Check if index ${i} is within bounds (< ${data.length}). Yes.`,
+                            comparisons: comparisons - 1,
+                            highlighted: [i],
+                            found: false,
+                            ended: false
+                        });
+
+                        // Step: compare element
+                        hist.push({
+                            step: hist.length,
+                            i,
+                            low: -1,
+                            high: -1,
+                            mid: -1,
+                            activeNode: 'node-compare',
+                            message: `Compare item at index ${i}: data[${i}] = ${data[i]}. Is it equal to target ${t}?`,
+                            comparisons,
+                            highlighted: [i],
+                            found: false,
+                            ended: false
+                        });
+
+                        if (data[i] === t) {
+                            found = true;
+                            hist.push({
+                                step: hist.length,
+                                i,
+                                low: -1,
+                                high: -1,
+                                mid: -1,
+                                activeNode: 'node-found',
+                                message: `Found target ${t} at index ${i}! Return index.`,
+                                comparisons,
+                                highlighted: [i],
+                                found: true,
+                                ended: true
+                            });
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        hist.push({
+                            step: hist.length,
+                            i: data.length,
+                            low: -1,
+                            high: -1,
+                            mid: -1,
+                            activeNode: 'node-notfound',
+                            message: `Index reached list length. Target ${t} not found in the array. Return False.`,
+                            comparisons,
+                            highlighted: [],
+                            found: false,
+                            ended: true
+                        });
+                    }
+                } else {
+                    // Binary search steps
+                    hist.push({
+                        step: 0,
+                        i: -1,
+                        low: 0,
+                        high: data.length - 1,
+                        mid: -1,
+                        activeNode: 'node-init',
+                        message: "Initialize boundaries: low = 0, high = " + (data.length - 1) + ".",
+                        comparisons: 0,
+                        highlighted: [],
+                        found: false,
+                        ended: false
+                    });
+
+                    let low = 0;
+                    let high = data.length - 1;
+                    let comparisons = 0;
+                    let found = false;
+
+                    while (low <= high) {
+                        // Loop check
+                        hist.push({
+                            step: hist.length,
+                            i: -1,
+                            low,
+                            high,
+                            mid: -1,
+                            activeNode: 'node-loop-check',
+                            message: `Check while loop: low (${low}) <= high (${high}). Yes, continue.`,
+                            comparisons,
+                            highlighted: [],
+                            range: [low, high],
+                            found: false,
+                            ended: false
+                        });
+
+                        // Calculate mid
+                        let mid = Math.floor((low + high) / 2);
+                        hist.push({
+                            step: hist.length,
+                            i: -1,
+                            low,
+                            high,
+                            mid,
+                            activeNode: 'node-mid',
+                            message: `Calculate middle index: mid = (low + high) // 2 = (${low} + ${high}) // 2 = ${mid}.`,
+                            comparisons,
+                            highlighted: [mid],
+                            range: [low, high],
+                            found: false,
+                            ended: false
+                        });
+
+                        comparisons++;
+                        // Compare mid element
+                        hist.push({
+                            step: hist.length,
+                            i: -1,
+                            low,
+                            high,
+                            mid,
+                            activeNode: 'node-compare',
+                            message: `Compare middle element: data[${mid}] = ${data[mid]}. Is it equal to target ${t}?`,
+                            comparisons,
+                            highlighted: [mid],
+                            range: [low, high],
+                            found: false,
+                            ended: false
+                        });
+
+                        if (data[mid] === t) {
+                            found = true;
+                            hist.push({
+                                step: hist.length,
+                                i: -1,
+                                low,
+                                high,
+                                mid,
+                                activeNode: 'node-found',
+                                message: `Found target ${t} at index ${mid}! Return index.`,
+                                comparisons,
+                                highlighted: [mid],
+                                range: [low, high],
+                                found: true,
+                                ended: true
+                            });
+                            break;
+                        } else if (t < data[mid]) {
+                            high = mid - 1;
+                            hist.push({
+                                step: hist.length,
+                                i: -1,
+                                low,
+                                high,
+                                mid,
+                                activeNode: 'node-left',
+                                message: `Target ${t} < data[${mid}] (${data[mid]}). Discard right half. set high = mid - 1 = ${high}.`,
+                                comparisons,
+                                highlighted: [mid],
+                                range: [low, high],
+                                found: false,
+                                ended: false
+                            });
+                        } else {
+                            low = mid + 1;
+                            hist.push({
+                                step: hist.length,
+                                i: -1,
+                                low,
+                                high,
+                                mid,
+                                activeNode: 'node-right',
+                                message: `Target ${t} > data[${mid}] (${data[mid]}). Discard left half. set low = mid + 1 = ${low}.`,
+                                comparisons,
+                                highlighted: [mid],
+                                range: [low, high],
+                                found: false,
+                                ended: false
+                            });
+                        }
+                    }
+
+                    if (!found) {
+                        hist.push({
+                            step: hist.length,
+                            i: -1,
+                            low,
+                            high,
+                            mid: -1,
+                            activeNode: 'node-notfound',
+                            message: `low (${low}) has exceeded high (${high}). Search interval is empty. Target ${t} not found. Return False.`,
+                            comparisons,
+                            highlighted: [],
+                            found: false,
+                            ended: true
+                        });
+                    }
+                }
+
+                return hist;
+            };
+
+            // Recalculate history when algorithm, target or array values change
+            useEffect(() => {
+                const hist = generateSearchHistory();
+                setHistory(hist);
+                setCurrentStep(0);
+                setIsRunning(false);
+            }, [algo, target, array]);
+
+            // Timer handler for Auto-Play
+            useEffect(() => {
+                if (isRunning) {
+                    timerRef.current = setInterval(() => {
+                        setCurrentStep(prev => {
+                            if (prev < history.length - 1) {
+                                return prev + 1;
+                            } else {
+                                setIsRunning(false);
+                                return prev;
+                            }
+                        });
+                    }, speed);
+                } else {
+                    clearInterval(timerRef.current);
+                }
+                return () => clearInterval(timerRef.current);
+            }, [isRunning, speed, history]);
+
+            const step = history[currentStep] || {};
+
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '16px' }}>
+                    <div className="card glass" style={{ padding: '20px' }}>
+                        <div className="card-header" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '16px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h4 style={{ margin: 0 }}><i className="fa-solid fa-server"></i> Search Algorithm Simulation</h4>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button className={`speed-btn ${algo === 'linear' ? 'active' : ''}`} onClick={() => setAlgo('linear')}>Linear Search</button>
+                                <button className={`speed-btn ${algo === 'binary' ? 'active' : ''}`} onClick={() => setAlgo('binary')}>Binary Search</button>
+                            </div>
+                        </div>
+
+                        <div className="card-body" style={{ paddingTop: '0px' }}>
+                            {/* Controls Panel */}
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-primary)', padding: '4px 12px', borderRadius: '8px', border: '1px solid var(--border-color)', height: '32px' }}>
+                                    <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--text-muted)' }}>Target:</span>
+                                    <input
+                                        type="number"
+                                        value={target}
+                                        onChange={(e) => setTarget(Math.min(999, Math.max(0, parseInt(e.target.value) || 0)))}
+                                        style={{ width: '50px', background: 'transparent', border: 'none', color: 'var(--text-primary)', outline: 'none', fontFamily: 'Fira Code', fontSize: '11px', fontWeight: 'bold' }}
+                                    />
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <button className="speed-btn" onClick={() => { setIsRunning(false); setCurrentStep(0); }} title="Reset"><i className="fa-solid fa-rotate-left"></i></button>
+                                    <button className="speed-btn" disabled={currentStep === 0} onClick={() => { setIsRunning(false); setCurrentStep(p => p - 1); }}><i className="fa-solid fa-chevron-left"></i></button>
+                                    <button className="btn btn-primary" style={{ padding: '0 12px', height: '32px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px' }} onClick={() => setIsRunning(!isRunning)}>
+                                        {isRunning ? <><i className="fa-solid fa-pause"></i> Pause</> : <><i className="fa-solid fa-play"></i> Play</>}
+                                    </button>
+                                    <button className="speed-btn" disabled={currentStep === history.length - 1} onClick={() => { setIsRunning(false); setCurrentStep(p => p + 1); }}><i className="fa-solid fa-chevron-right"></i></button>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '4px', marginLeft: '8px' }}>
+                                    <button className={`speed-btn ${speed === 1200 ? 'active' : ''}`} onClick={() => setSpeed(1200)}>0.5x</button>
+                                    <button className={`speed-btn ${speed === 800 ? 'active' : ''}`} onClick={() => setSpeed(800)}>1x</button>
+                                    <button className={`speed-btn ${speed === 300 ? 'active' : ''}`} onClick={() => setSpeed(300)}>3x</button>
+                                </div>
+
+                                <div style={{ marginLeft: 'auto', display: 'flex', gap: '12px' }}>
+                                    <div style={{ padding: '4px 10px', borderRadius: '4px', background: 'rgba(59,130,246,0.1)', color: 'var(--accent-blue)', fontSize: '11px', fontWeight: 'bold' }}>
+                                        Comparisons: {step.comparisons || 0}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Split layout: Visualizer & Flowchart */}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'stretch' }}>
+                                {/* Left side: array display */}
+                                <div style={{ flex: '1 1 450px', minWidth: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '20px' }}>
+                                    <div>
+                                        <h4 style={{ fontSize: '12px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>
+                                            <i className="fa-solid fa-eye"></i> Search Space
+                                        </h4>
+                                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', padding: '16px 0' }}>
+                                            {array.map((val, idx) => {
+                                                let cellColor = { background: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' };
+                                                let scale = 'scale(1)';
+
+                                                if (algo === 'linear') {
+                                                    if (idx === step.i) {
+                                                        if (step.found) {
+                                                            cellColor = { background: 'rgba(16,185,129,0.1)', borderColor: 'var(--accent-green)', color: 'var(--accent-green)' };
+                                                            scale = 'scale(1.1)';
+                                                        } else {
+                                                            cellColor = { background: 'rgba(249,115,22,0.1)', borderColor: 'var(--accent-orange)', color: 'var(--accent-orange)' };
+                                                            scale = 'scale(1.05)';
+                                                        }
+                                                    } else if (step.i > -1 && idx < step.i) {
+                                                        cellColor = { background: 'rgba(255,255,255,0.02)', borderColor: 'var(--border-color)', color: 'var(--text-muted)', opacity: 0.4 };
+                                                    }
+                                                } else {
+                                                    // Binary search color logic
+                                                    const inRange = step.range && idx >= step.range[0] && idx <= step.range[1];
+                                                    if (idx === step.mid) {
+                                                        if (step.found) {
+                                                            cellColor = { background: 'rgba(16,185,129,0.1)', borderColor: 'var(--accent-green)', color: 'var(--accent-green)' };
+                                                            scale = 'scale(1.15)';
+                                                        } else {
+                                                            cellColor = { background: 'rgba(239,68,68,0.1)', borderColor: 'var(--accent-red)', color: 'var(--accent-red)' };
+                                                            scale = 'scale(1.08)';
+                                                        }
+                                                    } else if (!inRange && step.mid !== -1) {
+                                                        cellColor = { background: 'rgba(255,255,255,0.01)', borderColor: 'var(--border-color)', color: 'var(--text-muted)', opacity: 0.25 };
+                                                    } else if (inRange) {
+                                                        cellColor = { background: 'rgba(59,130,246,0.05)', borderColor: 'rgba(59,130,246,0.3)', color: 'var(--text-primary)' };
+                                                    }
+                                                }
+
+                                                return (
+                                                    <div key={idx} style={{
+                                                        flex: '0 0 34px', width: '34px', height: '34px', borderRadius: '4px', border: '1px solid',
+                                                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                                                        fontSize: '11px', fontFamily: 'Fira Code', fontWeight: 'bold',
+                                                        transform: scale, transition: 'all 0.2s ease', ...cellColor
+                                                    }}>
+                                                        {val}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {/* Dynamic loop tracer */}
+                                        <div style={{ marginTop: '12px', background: 'var(--bg-primary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '11px', fontFamily: 'Fira Code' }}>
+                                            <div><strong>Trace Log:</strong> {step.message}</div>
+                                            {algo === 'binary' && step.low !== -1 && (
+                                                <div style={{ marginTop: '6px', color: 'var(--accent-blue)', display: 'flex', gap: '16px' }}>
+                                                    <span>low: {step.low}</span>
+                                                    <span>high: {step.high}</span>
+                                                    <span>mid: {step.mid !== -1 ? step.mid : 'None'}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Beginner's Loop Guide */}
+                                    <div style={{
+                                        padding: '14px', borderRadius: '8px', borderLeft: '4px solid var(--accent-blue)',
+                                        background: 'rgba(59, 130, 246, 0.05)', color: 'var(--text-primary)', fontSize: '12px', lineHeight: 1.5
+                                    }}>
+                                        <strong style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontSize: '13px' }}>
+                                            <i className="fa-solid fa-code"></i> Loop Mechanics for Beginners
+                                        </strong>
+                                        {algo === 'linear' ? (
+                                            <p>Linear search utilizes a <strong>for loop</strong>. It iterates through the indexes from 0 to N-1 step-by-step. In each step, the loop variable <code>i</code> updates automatically, checking the item <code>data[i]</code>. It finishes instantly as soon as we return from inside the loop.</p>
+                                        ) : (
+                                            <p>Binary search utilizes a <strong>while loop</strong>. Because we don't increment step-by-step, we check if <code>low &lt;= high</code>. In each step, we recalculate <code>mid</code> and adjust our boundaries, dividing our search space by half. If the target is not found, the search boundaries cross each other and the loop stops.</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Right side: Interactive Flowchart */}
+                                <div style={{ flex: '0 0 300px', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0px' }}>
+                                        <i className="fa-solid fa-code-branch"></i> Live Flowchart Execution
+                                    </h4>
+
+                                    {algo === 'linear' ? (
+                                        <div className="flowchart-box">
+                                            <div className={`flowchart-node ${step.activeNode === 'node-init' ? 'active' : ''}`} id="linear-init">Start: i = 0</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-loop-check' ? 'active' : ''}`} id="linear-loop">Check loop: is i &lt; N?</div>
+                                            <div className="flowchart-arrow">⬇ (Yes)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-compare' ? 'active' : ''}`} id="linear-compare">Compare: data[i] == target?</div>
+                                            <div className="flowchart-arrow">⬇ (Yes)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-found' ? 'active' : ''}`} id="linear-found">Found: return index i</div>
+                                            <div className="flowchart-arrow">⬇ (No)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-loop-check' && step.i >= array.length ? 'active' : ''}`} id="linear-increment">Increment index: i = i + 1</div>
+                                            <div className="flowchart-arrow">⬇ (No more items)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-notfound' ? 'active' : ''}`} id="linear-notfound">Not Found: return False</div>
+                                        </div>
+                                    ) : (
+                                        <div className="flowchart-box">
+                                            <div className={`flowchart-node ${step.activeNode === 'node-init' ? 'active' : ''}`} id="bin-init">Start: low=0, high=N-1</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-loop-check' ? 'active' : ''}`} id="bin-loop">Check loop: low &lt;= high?</div>
+                                            <div className="flowchart-arrow">⬇ (Yes)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-mid' ? 'active' : ''}`} id="bin-mid">Calculate middle index: mid</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-compare' ? 'active' : ''}`} id="bin-compare">Compare: target == data[mid]?</div>
+                                            <div className="flowchart-arrow">⬇ (Yes)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-found' ? 'active' : ''}`} id="bin-found">Found: return mid</div>
+                                            <div className="flowchart-arrow">⬇ (No, target &lt; data[mid])</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-left' ? 'active' : ''}`} id="bin-left">Adjust: high = mid - 1</div>
+                                            <div className="flowchart-arrow">⬇ (No, target &gt; data[mid])</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-right' ? 'active' : ''}`} id="bin-right">Adjust: low = mid + 1</div>
+                                            <div className="flowchart-arrow">⬇ (No to loop check)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-notfound' ? 'active' : ''}`} id="bin-notfound">Not Found: return False</div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+
+        // =========================================================================
+        // MODULE 2: SORTING VISUALIZER (Bubble, Selection, Insertion, Merge Sort)
+        // =========================================================================
+        const SortingApp = () => {
+            const [algo, setAlgo] = useState('bubble');
+            const [array, setArray] = useState([78, 56, 32, 45, 8, 23, 19]);
+            const [isRunning, setIsRunning] = useState(false);
+            const [currentStep, setCurrentStep] = useState(0);
+            const [history, setHistory] = useState([]);
+            const [speed, setSpeed] = useState(600);
+            const timerRef = useRef(null);
+
+            // Fetch sorting algorithms execution traces
+            const generateBubbleSortSteps = (arr) => {
+                let a = [...arr];
+                let hist = [];
+                let comparisons = 0;
+                let swaps = 0;
+                let sorted = [];
+                const n = a.length;
+
+                hist.push({
+                    array: [...a], comparisons: 0, swaps: 0, highlight: [], swapHighlight: [], sorted: [],
+                    activeNode: 'node-init', message: "Initial unsorted list.", round: 1, i: -1
+                });
+
+                for (let round = 0; round < n - 1; round++) {
+                    let swapped = false;
+                    for (let i = n - 1; i > round; i--) {
+                        comparisons++;
+                        hist.push({
+                            array: [...a], comparisons, swaps, highlight: [i - 1, i], swapHighlight: [], sorted: [...sorted],
+                            activeNode: 'node-compare', message: `Comparing elements: arr[${i-1}] (${a[i-1]}) and arr[${i}] (${a[i]}).`, round: round + 1, i
+                        });
+
+                        if (a[i - 1] > a[i]) {
+                            let temp = a[i]; a[i] = a[i - 1]; a[i - 1] = temp;
+                            swaps++;
+                            swapped = true;
+                            hist.push({
+                                array: [...a], comparisons, swaps, highlight: [], swapHighlight: [i - 1, i], sorted: [...sorted],
+                                activeNode: 'node-swap', message: `${a[i]} < ${a[i-1]} - Swapping them.`, round: round + 1, i
+                            });
+                        }
+                    }
+                    sorted.push(round); // bubbles smallest to left
+                    hist.push({
+                        array: [...a], comparisons, swaps, highlight: [], swapHighlight: [], sorted: [...sorted],
+                        activeNode: 'node-next-outer', message: `End of Round ${round + 1}. Minimum element bubble is sorted.`, round: round + 1, i: -1
+                    });
+                }
+                let allSorted = a.map((_, i) => i);
+                hist.push({
+                    array: [...a], comparisons, swaps, highlight: [], swapHighlight: [], sorted: allSorted,
+                    activeNode: 'node-finished', message: "Sorting complete!", round: -1, i: -1
+                });
+                return hist;
+            };
+
+            const generateSelectionSortSteps = (arr) => {
+                let a = [...arr];
+                let hist = [];
+                let comparisons = 0;
+                let swaps = 0;
+                let sorted = [];
+                const n = a.length;
+
+                hist.push({
+                    array: [...a], comparisons: 0, swaps: 0, highlight: [], minIdx: -1, swapHighlight: [], sorted: [],
+                    activeNode: 'node-init', message: "Initial unsorted list.", round: 1, i: -1
+                });
+
+                for (let fillslot = 0; fillslot < n - 1; fillslot++) {
+                    let minIdx = fillslot;
+                    hist.push({
+                        array: [...a], comparisons, swaps, highlight: [fillslot], minIdx: minIdx, swapHighlight: [], sorted: [...sorted],
+                        activeNode: 'node-min-init', message: `Round ${fillslot + 1}: Initialize index of minimum value as fillslot ${fillslot}.`, round: fillslot + 1, i: fillslot
+                    });
+
+                    for (let loc = fillslot + 1; loc < n; loc++) {
+                        comparisons++;
+                        hist.push({
+                            array: [...a], comparisons, swaps, highlight: [loc], minIdx: minIdx, swapHighlight: [], sorted: [...sorted],
+                            activeNode: 'node-inner-loop', message: `Scan: comparing element arr[${loc}] (${a[loc]}) with current minimum arr[${minIdx}] (${a[minIdx]}).`, round: fillslot + 1, i: loc
+                        });
+
+                        if (a[loc] < a[minIdx]) {
+                            minIdx = loc;
+                            hist.push({
+                                array: [...a], comparisons, swaps, highlight: [loc], minIdx: minIdx, swapHighlight: [], sorted: [...sorted],
+                                activeNode: 'node-update-min', message: `Found smaller element! Update index of minimum to ${minIdx}.`, round: fillslot + 1, i: loc
+                            });
+                        }
+                    }
+
+                    if (minIdx !== fillslot) {
+                        let temp = a[fillslot]; a[fillslot] = a[minIdx]; a[minIdx] = temp;
+                        swaps++;
+                        hist.push({
+                            array: [...a], comparisons, swaps, highlight: [], minIdx, swapHighlight: [fillslot, minIdx], sorted: [...sorted],
+                            activeNode: 'node-swap', message: `Swap the minimum element arr[${minIdx}] with target index ${fillslot}.`, round: fillslot + 1, i: -1
+                        });
+                    }
+                    sorted.push(fillslot);
+                }
+                let allSorted = a.map((_, i) => i);
+                hist.push({
+                    array: [...a], comparisons, swaps, highlight: [], minIdx: -1, swapHighlight: [], sorted: allSorted,
+                    activeNode: 'node-finished', message: "Sorting complete!", round: -1, i: -1
+                });
+                return hist;
+            };
+
+            const generateInsertionSortSteps = (arr) => {
+                let a = [...arr];
+                let hist = [];
+                let comparisons = 0;
+                let shifts = 0;
+                const n = a.length;
+
+                hist.push({
+                    array: [...a], comparisons: 0, swaps: 0, highlight: [], keyVal: null, keyIdx: -1, swapHighlight: [], sortedUpTo: 0,
+                    activeNode: 'node-init', message: "Index 0 is considered initially sorted.", round: 1, i: -1
+                });
+
+                for (let index = 1; index < n; index++) {
+                    let keyVal = a[index];
+                    let pos = index;
+
+                    hist.push({
+                        array: [...a], comparisons, swaps: shifts, highlight: [index], keyVal, keyIdx: index, swapHighlight: [], sortedUpTo: index - 1,
+                        activeNode: 'node-key-init', message: `Round ${index}: Select index ${index} (value: ${keyVal}) as key to insert.`, round: index, i: index
+                    });
+
+                    while (pos > 0 && a[pos - 1] > keyVal) {
+                        comparisons++;
+                        hist.push({
+                            array: [...a], comparisons, swaps: shifts, highlight: [pos - 1, pos], keyVal, keyIdx: pos, swapHighlight: [], sortedUpTo: index - 1,
+                            activeNode: 'node-inner-check', message: `Check shift: is arr[${pos-1}] (${a[pos-1]}) > key (${keyVal})? Yes.`, round: index, i: pos
+                        });
+
+                        a[pos] = a[pos - 1];
+                        shifts++;
+                        hist.push({
+                            array: [...a], comparisons, swaps: shifts, highlight: [], keyVal, keyIdx: pos - 1, swapHighlight: [pos - 1, pos], sortedUpTo: index - 1,
+                            activeNode: 'node-shift', message: `Shift element arr[${pos-1}] (${a[pos-1]}) right.`, round: index, i: pos - 1
+                        });
+                        pos--;
+                    }
+
+                    if (pos > 0) {
+                        comparisons++; // failed loop check
+                        hist.push({
+                            array: [...a], comparisons, swaps: shifts, highlight: [pos - 1, pos], keyVal, keyIdx: pos, swapHighlight: [], sortedUpTo: index - 1,
+                            activeNode: 'node-inner-check', message: `Check shift: is arr[${pos-1}] (${a[pos-1]}) > key (${keyVal})? No. Break loop.`, round: index, i: pos
+                        });
+                    }
+
+                    a[pos] = keyVal;
+                    hist.push({
+                        array: [...a], comparisons, swaps: shifts, highlight: [], keyVal: null, keyIdx: -1, swapHighlight: [pos], sortedUpTo: index,
+                        activeNode: 'node-insert', message: `Place key value ${keyVal} at insertion position ${pos}.`, round: index, i: -1
+                    });
+                }
+
+                hist.push({
+                    array: [...a], comparisons, swaps: shifts, highlight: [], keyVal: null, keyIdx: -1, swapHighlight: [], sortedUpTo: n - 1,
+                    activeNode: 'node-finished', message: "Sorting complete!", round: -1, i: -1
+                });
+                return hist;
+            };
+
+            const generateMergeSortSteps = (arr) => {
+                let a = [...arr];
+                let hist = [];
+                let comparisons = 0;
+                let writes = 0;
+                const n = a.length;
+
+                hist.push({
+                    array: [...a], comparisons: 0, swaps: 0, highlight: [], swapHighlight: [], leftRange: [], rightRange: [], overwriteIdx: -1,
+                    activeNode: 'node-init', message: "Initial unsorted list.", round: 1, i: -1
+                });
+
+                const merge = (start, mid, end) => {
+                    const L = a.slice(start, mid + 1);
+                    const R = a.slice(mid + 1, end + 1);
+                    let i = 0, j = 0, k = start;
+
+                    hist.push({
+                        array: [...a], comparisons, swaps: writes, highlight: [], swapHighlight: [], leftRange: [start, mid], rightRange: [mid + 1, end], overwriteIdx: -1,
+                        activeNode: 'node-split', message: `Divide: Split section [${start} to ${end}] into Left [${start}-${mid}] and Right [${mid+1}-${end}] sub-lists.`, round: 1, i: -1
+                    });
+
+                    while (i < L.length && j < R.length) {
+                        comparisons++;
+                        hist.push({
+                            array: [...a], comparisons, swaps: writes, highlight: [], swapHighlight: [], leftRange: [start + i, mid], rightRange: [mid + 1 + j, end], overwriteIdx: k,
+                            activeNode: 'node-compare', message: `Compare Left element L[${i}] (${L[i]}) and Right element R[${j}] (${R[j]}).`, round: 1, i: -1
+                        });
+
+                        if (L[i] <= R[j]) {
+                            a[k] = L[i];
+                            writes++;
+                            hist.push({
+                                array: [...a], comparisons, swaps: writes, highlight: [], swapHighlight: [], leftRange: [start, mid], rightRange: [mid + 1, end], overwriteIdx: k,
+                                activeNode: 'node-overwrite', message: `L[${i}] (${L[i]}) <= R[${j}] (${R[j]}). Overwrite original slot ${k} with Left element.`, round: 1, i: -1
+                            });
+                            i++;
+                        } else {
+                            a[k] = R[j];
+                            writes++;
+                            hist.push({
+                                array: [...a], comparisons, swaps: writes, highlight: [], swapHighlight: [], leftRange: [start, mid], rightRange: [mid + 1, end], overwriteIdx: k,
+                                activeNode: 'node-overwrite', message: `R[${j}] (${R[j]}) < L[${i}] (${L[i]}). Overwrite original slot ${k} with Right element.`, round: 1, i: -1
+                            });
+                            j++;
+                        }
+                        k++;
+                    }
+
+                    while (i < L.length) {
+                        a[k] = L[i];
+                        writes++;
+                        hist.push({
+                            array: [...a], comparisons, swaps: writes, highlight: [], swapHighlight: [], leftRange: [start, mid], rightRange: [mid + 1, end], overwriteIdx: k,
+                            activeNode: 'node-overwrite', message: `Copy remaining element L[${i}] (${L[i]}) from Left sub-list into slot ${k}.`, round: 1, i: -1
+                        });
+                        i++;
+                        k++;
+                    }
+
+                    while (j < R.length) {
+                        a[k] = R[j];
+                        writes++;
+                        hist.push({
+                            array: [...a], comparisons, swaps: writes, highlight: [], swapHighlight: [], leftRange: [start, mid], rightRange: [mid + 1, end], overwriteIdx: k,
+                            activeNode: 'node-overwrite', message: `Copy remaining element R[${j}] (${R[j]}) from Right sub-list into slot ${k}.`, round: 1, i: -1
+                        });
+                        j++;
+                        k++;
+                    }
+                };
+
+                const mergeSort = (start, end) => {
+                    if (start >= end) return;
+                    const mid = Math.floor((start + end) / 2);
+                    mergeSort(start, mid);
+                    mergeSort(mid + 1, end);
+                    merge(start, mid, end);
+                };
+
+                mergeSort(0, n - 1);
+                hist.push({
+                    array: [...a], comparisons, swaps: writes, highlight: [], swapHighlight: [], leftRange: [], rightRange: [], overwriteIdx: -1,
+                    activeNode: 'node-finished', message: "Merge Sort Complete!", round: -1, i: -1
+                });
+                return hist;
+            };
+
+            // Re-render when array or algorithm selection changes
+            useEffect(() => {
+                let steps = [];
+                if (algo === 'bubble') steps = generateBubbleSortSteps(array);
+                else if (algo === 'selection') steps = generateSelectionSortSteps(array);
+                else if (algo === 'insertion') steps = generateInsertionSortSteps(array);
+                else if (algo === 'merge') steps = generateMergeSortSteps(array);
+                
+                setHistory(steps);
+                setCurrentStep(0);
+                setIsRunning(false);
+            }, [algo, array]);
+
+            // Timer handler for Auto-Play
+            useEffect(() => {
+                if (isRunning) {
+                    timerRef.current = setInterval(() => {
+                        setCurrentStep(prev => {
+                            if (prev < history.length - 1) {
+                                return prev + 1;
+                            } else {
+                                setIsRunning(false);
+                                return prev;
+                            }
+                        });
+                    }, speed);
+                } else {
+                    clearInterval(timerRef.current);
+                }
+                return () => clearInterval(timerRef.current);
+            }, [isRunning, speed, history]);
+
+            const step = history[currentStep] || { array: [] };
+            const maxValue = Math.max(...array);
+
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '16px' }}>
+                    <div className="card glass" style={{ padding: '20px' }}>
+                        <div className="card-header" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '16px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h4 style={{ margin: 0 }}><i className="fa-solid fa-arrow-up-wide-short"></i> Interactive Sort visualizer</h4>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button className={`speed-btn ${algo === 'bubble' ? 'active' : ''}`} onClick={() => setAlgo('bubble')}>Bubble</button>
+                                <button className={`speed-btn ${algo === 'selection' ? 'active' : ''}`} onClick={() => setAlgo('selection')}>Selection</button>
+                                <button className={`speed-btn ${algo === 'insertion' ? 'active' : ''}`} onClick={() => setAlgo('insertion')}>Insertion</button>
+                                <button className={`speed-btn ${algo === 'merge' ? 'active' : ''}`} onClick={() => setAlgo('merge')}>Merge</button>
+                            </div>
+                        </div>
+
+                        <div className="card-body" style={{ paddingTop: '0px' }}>
+                            {/* Controls */}
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
+                                <button className="speed-btn" onClick={() => { setIsRunning(false); setCurrentStep(0); }} title="Reset"><i className="fa-solid fa-rotate-left"></i></button>
+                                <button className="speed-btn" disabled={currentStep === 0} onClick={() => { setIsRunning(false); setCurrentStep(p => p - 1); }}><i className="fa-solid fa-chevron-left"></i></button>
+                                <button className="btn btn-primary" style={{ padding: '0 12px', height: '32px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px' }} onClick={() => setIsRunning(!isRunning)}>
+                                    {isRunning ? <><i className="fa-solid fa-pause"></i> Pause</> : <><i className="fa-solid fa-play"></i> Play</>}
+                                </button>
+                                <button className="speed-btn" disabled={currentStep === history.length - 1} onClick={() => { setIsRunning(false); setCurrentStep(p => p + 1); }}><i className="fa-solid fa-chevron-right"></i></button>
+
+                                <div style={{ display: 'flex', gap: '4px', marginLeft: '8px' }}>
+                                    <button className={`speed-btn ${speed === 1200 ? 'active' : ''}`} onClick={() => setSpeed(1200)}>0.5x</button>
+                                    <button className={`speed-btn ${speed === 600 ? 'active' : ''}`} onClick={() => setSpeed(600)}>1x</button>
+                                    <button className={`speed-btn ${speed === 250 ? 'active' : ''}`} onClick={() => setSpeed(250)}>3x</button>
+                                </div>
+
+                                <div style={{ marginLeft: 'auto', display: 'flex', gap: '12px' }}>
+                                    <div style={{ padding: '4px 10px', borderRadius: '4px', background: 'rgba(59,130,246,0.1)', color: 'var(--accent-blue)', fontSize: '11px', fontWeight: 'bold' }}>
+                                        Comparisons: {step.comparisons || 0}
+                                    </div>
+                                    <div style={{ padding: '4px 10px', borderRadius: '4px', background: 'rgba(239,68,68,0.1)', color: 'var(--accent-red)', fontSize: '11px', fontWeight: 'bold' }}>
+                                        {algo === 'merge' ? 'Writes/Merges' : 'Exchanges'}: {algo === 'merge' ? (step.swaps || 0) : (step.swaps || 0)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Split layout: visualizer & loop traces */}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'stretch' }}>
+                                {/* Left column: Bar visualizer */}
+                                <div style={{ flex: '1 1 450px', minWidth: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '20px' }}>
+                                    <div>
+                                        <h4 style={{ fontSize: '12px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>
+                                            <i className="fa-solid fa-chart-simple"></i> Array Visualizer
+                                        </h4>
+                                        <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'center', gap: '8px', height: '180px', borderBottom: '2px solid var(--border-color)', paddingBottom: '8px' }}>
+                                            {step.array.map((value, idx) => {
+                                                const barHeight = (value / maxValue) * 140 + 20;
+                                                let barColor = 'rgba(255,255,255,0.06)';
+                                                let borderStyle = '1px solid var(--border-color)';
+
+                                                if (algo === 'bubble') {
+                                                    if (step.sorted && step.sorted.includes(idx)) {
+                                                        barColor = 'rgba(16,185,129,0.15)';
+                                                        borderStyle = '1px solid var(--accent-green)';
+                                                    } else if (step.swapHighlight && step.swapHighlight.includes(idx)) {
+                                                        barColor = 'rgba(239,68,68,0.2)';
+                                                        borderStyle = '2px solid var(--accent-red)';
+                                                    } else if (step.highlight && step.highlight.includes(idx)) {
+                                                        barColor = 'rgba(249,115,22,0.15)';
+                                                        borderStyle = '1.5px solid var(--accent-orange)';
+                                                    }
+                                                } else if (algo === 'selection') {
+                                                    if (step.sorted && step.sorted.includes(idx)) {
+                                                        barColor = 'rgba(16,185,129,0.15)';
+                                                        borderStyle = '1px solid var(--accent-green)';
+                                                    } else if (step.swapHighlight && step.swapHighlight.includes(idx)) {
+                                                        barColor = 'rgba(239,68,68,0.2)';
+                                                        borderStyle = '2px solid var(--accent-red)';
+                                                    } else if (idx === step.minIdx) {
+                                                        barColor = 'rgba(168,85,247,0.2)';
+                                                        borderStyle = '2px solid var(--accent-purple)';
+                                                    } else if (step.highlight && step.highlight.includes(idx)) {
+                                                        barColor = 'rgba(249,115,22,0.15)';
+                                                        borderStyle = '1.5px solid var(--accent-orange)';
+                                                    }
+                                                } else if (algo === 'insertion') {
+                                                    if (idx === step.keyIdx) {
+                                                        barColor = 'rgba(168,85,247,0.2)';
+                                                        borderStyle = '2px solid var(--accent-purple)';
+                                                    } else if (step.swapHighlight && step.swapHighlight.includes(idx)) {
+                                                        barColor = 'rgba(239,68,68,0.2)';
+                                                        borderStyle = '2px solid var(--accent-red)';
+                                                    } else if (step.highlight && step.highlight.includes(idx)) {
+                                                        barColor = 'rgba(249,115,22,0.15)';
+                                                        borderStyle = '1.5px solid var(--accent-orange)';
+                                                    } else if (idx <= step.sortedUpTo) {
+                                                        barColor = 'rgba(16,185,129,0.15)';
+                                                        borderStyle = '1px solid var(--accent-green)';
+                                                    }
+                                                } else if (algo === 'merge') {
+                                                    if (step.activeNode === 'node-finished') {
+                                                        barColor = 'rgba(16,185,129,0.15)';
+                                                        borderStyle = '1px solid var(--accent-green)';
+                                                    } else if (idx === step.overwriteIdx) {
+                                                        barColor = 'rgba(239,68,68,0.2)';
+                                                        borderStyle = '2px solid var(--accent-red)';
+                                                    } else if (step.leftRange && step.leftRange.length && idx >= step.leftRange[0] && idx <= step.leftRange[1]) {
+                                                        barColor = 'rgba(59,130,246,0.15)';
+                                                        borderStyle = '1px solid var(--accent-blue)';
+                                                    } else if (step.rightRange && step.rightRange.length && idx >= step.rightRange[0] && idx <= step.rightRange[1]) {
+                                                        barColor = 'rgba(168,85,247,0.15)';
+                                                        borderStyle = '1px solid var(--accent-purple)';
+                                                    }
+                                                }
+
+                                                return (
+                                                    <div key={idx} style={{
+                                                        width: '12%', height: `${barHeight}px`, background: barColor, border: borderStyle,
+                                                        display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center',
+                                                        borderRadius: '6px 6px 0 0', position: 'relative', transition: 'all 0.2s ease', paddingBottom: '6px'
+                                                    }}>
+                                                        <span style={{ fontSize: '11px', fontFamily: 'Fira Code', fontWeight: 'bold' }}>{value}</span>
+                                                        <span style={{ fontSize: '8px', color: 'var(--text-muted)', position: 'absolute', bottom: '-20px' }}>{idx}</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {/* Status Message */}
+                                        <div style={{ marginTop: '32px', background: 'var(--bg-primary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '11px', fontFamily: 'Fira Code' }}>
+                                            <div><strong>Trace Log:</strong> {step.message}</div>
+                                            {step.round > 0 && algo !== 'merge' && (
+                                                <div style={{ marginTop: '6px', color: 'var(--accent-blue)', display: 'flex', gap: '16px' }}>
+                                                    <span>Round (Outer loop): {step.round}</span>
+                                                    {step.i !== -1 && <span>Index (Inner loop): {step.i}</span>}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Beginner's Loop mechanics */}
+                                    <div style={{
+                                        padding: '14px', borderRadius: '8px', borderLeft: '4px solid var(--accent-purple)',
+                                        background: 'rgba(168, 85, 247, 0.05)', color: 'var(--text-primary)', fontSize: '12px', lineHeight: 1.5
+                                    }}>
+                                        <strong style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontSize: '13px' }}>
+                                            <i className="fa-solid fa-lightbulb"></i> Outer vs Inner Loops
+                                        </strong>
+                                        {algo === 'bubble' ? (
+                                            <p>Bubble sort uses nested loops. The <strong>outer loop</strong> controls the number of rounds (each round secures one sorted item). The <strong>inner loop</strong> starts at the end of the array and bubbles the smallest item backwards to the current sorted boundary.</p>
+                                        ) : algo === 'selection' ? (
+                                            <p>Selection sort uses nested loops. The <strong>outer loop</strong> sets the slot we want to fill. The <strong>inner loop</strong> scans the unsorted section (from slot+1 to end) to find the minimum value. Once the scan is complete, it performs a single swap.</p>
+                                        ) : algo === 'insertion' ? (
+                                            <p>Insertion sort uses an outer loop and an inner while loop. The <strong>outer loop</strong> picks a key value. The <strong>inner loop</strong> shifts sorted elements to the right to make room, inserting the key in its correct relative sorted position.</p>
+                                        ) : (
+                                            <p>Merge sort uses a <strong>divide-and-conquer strategy</strong> using recursion. It continually splits the array in half (dividing phase) until sub-arrays of size 1 are reached. Then, it merges them back in sorted order (merging phase) using two tracking pointers.</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Right column: Sorting Flowcharts */}
+                                <div style={{ flex: '0 0 300px', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0px' }}>
+                                        <i className="fa-solid fa-code-branch"></i> Live Flowchart Execution
+                                    </h4>
+
+                                    {algo === 'bubble' && (
+                                        <div className="flowchart-box">
+                                            <div className={`flowchart-node ${step.activeNode === 'node-init' ? 'active' : ''}`}>Outer loop: round = 0 to N-2</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-compare' ? 'active' : ''}`}>Inner loop: compare arr[i-1] &gt; arr[i]</div>
+                                            <div className="flowchart-arrow">⬇ (Yes)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-swap' ? 'active' : ''}`}>Swap: swap(arr[i-1], arr[i])</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-next-outer' ? 'active' : ''}`}>Decrement i. Next iteration of inner loop</div>
+                                            <div className="flowchart-arrow">⬇ (Inner loop done)</div>
+                                            <div className="flowchart-node">Outer loop: increment round</div>
+                                            <div className="flowchart-arrow">⬇ (Outer loop done)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-finished' ? 'active' : ''}`}>Sort finished</div>
+                                        </div>
+                                    )}
+
+                                    {algo === 'selection' && (
+                                        <div className="flowchart-box">
+                                            <div className={`flowchart-node ${step.activeNode === 'node-init' ? 'active' : ''}`}>Outer loop: fillslot = 0 to N-2</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-min-init' ? 'active' : ''}`}>Set minIndex = fillslot</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-inner-loop' ? 'active' : ''}`}>Inner loop: is arr[loc] &lt; arr[minIndex]?</div>
+                                            <div className="flowchart-arrow">⬇ (Yes)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-update-min' ? 'active' : ''}`}>Update: minIndex = loc</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className="flowchart-node">Increment loc. Loop until N-1</div>
+                                            <div className="flowchart-arrow">⬇ (Inner loop done)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-swap' ? 'active' : ''}`}>Swap: swap(arr[fillslot], arr[minIndex])</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-finished' ? 'active' : ''}`}>Sort finished</div>
+                                        </div>
+                                    )}
+
+                                    {algo === 'insertion' && (
+                                        <div className="flowchart-box">
+                                            <div className={`flowchart-node ${step.activeNode === 'node-init' ? 'active' : ''}`}>Outer loop: index = 1 to N-1</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-key-init' ? 'active' : ''}`}>key = arr[index], pos = index</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-inner-check' ? 'active' : ''}`}>Check: pos &gt; 0 and arr[pos-1] &gt; key?</div>
+                                            <div className="flowchart-arrow">⬇ (Yes)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-shift' ? 'active' : ''}`}>Shift: arr[pos] = arr[pos-1], pos = pos - 1</div>
+                                            <div className="flowchart-arrow">⬇ (Loop back)</div>
+                                            <div className="flowchart-node">Re-evaluate loop check</div>
+                                            <div className="flowchart-arrow">⬇ (No to loop check)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-insert' ? 'active' : ''}`}>Place: arr[pos] = key</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-finished' ? 'active' : ''}`}>Sort finished</div>
+                                        </div>
+                                    )}
+
+                                    {algo === 'merge' && (
+                                        <div className="flowchart-box">
+                                            <div className={`flowchart-node ${step.activeNode === 'node-init' ? 'active' : ''}`}>Start: Recursive merge sort</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-split' ? 'active' : ''}`}>Divide: Split array recursively</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-compare' ? 'active' : ''}`}>Compare: L[i] and R[j] elements</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-overwrite' ? 'active' : ''}`}>Merge: Overwrite key positions</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-finished' ? 'active' : ''}`}>Sort finished</div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+
+        // =========================================================================
+        // MODULE 3: HASH TABLES VISUALIZER (Collision and probing)
+        // =========================================================================
+        const HashingApp = () => {
+            const [student, setStudent] = useState("Alice");
+            const [history, setHistory] = useState([]);
+            const [currentStep, setCurrentStep] = useState(0);
+            const [isRunning, setIsRunning] = useState(false);
+            const [speed, setSpeed] = useState(1200);
+            const timerRef = useRef(null);
+
+            const generateSearchSteps = (key) => {
+                const initialHash = key === "Eve" ? 8 : (key === "David" ? 8 : (key === "Alice" ? 8 : (key === "Bob" ? 5 : 3)));
+                let hist = [];
+                let currentHash = initialHash;
+                let collisions = 0;
+                let found = false;
+
+                const initialBuckets = [
+                    null,
+                    null,
+                    null,
+                    ["Charlie", "C"],
+                    null,
+                    ["Bob", "B"],
+                    null,
+                    null,
+                    ["Alice", "A"],
+                    ["David", "B+"]
+                ];
+
+                hist.push({
+                    buckets: [...initialBuckets],
+                    activeIndex: -1,
+                    state: 'init',
+                    activeNode: 'node-init',
+                    message: `Start searchData_alternative('${key}'): initial hash index is sum(ASCII) % 10 = ${initialHash}. Set collision count = 0.`,
+                    collisions: 0
+                });
+
+                for (let i = 0; i < initialBuckets.length; i++) {
+                    const data = initialBuckets[currentHash];
+
+                    hist.push({
+                        buckets: [...initialBuckets],
+                        activeIndex: currentHash,
+                        state: 'check',
+                        activeNode: 'node-check-match',
+                        message: `Iteration ${i + 1}: check bucket index ${currentHash}. Is it empty or does key match?`,
+                        collisions
+                    });
+
+                    if (data !== null && data[0] === key) {
+                        found = true;
+                        hist.push({
+                            buckets: [...initialBuckets],
+                            activeIndex: currentHash,
+                            state: 'found',
+                            activeNode: 'node-found',
+                            message: `Match Found! Bucket ${currentHash} contains key '${key}'. Return grade: '${data[1]}'.`,
+                            collisions
+                        });
+                        break;
+                    } else if (data === null) {
+                        hist.push({
+                            buckets: [...initialBuckets],
+                            activeIndex: currentHash,
+                            state: 'empty',
+                            activeNode: 'node-check-empty',
+                            message: `Bucket index ${currentHash} is empty (None). By searchData_alternative logic, search stops here! Return 'Not Found'.`,
+                            collisions
+                        });
+                        break;
+                    }
+
+                    collisions++;
+                    hist.push({
+                        buckets: [...initialBuckets],
+                        activeIndex: currentHash,
+                        state: 'collision',
+                        activeNode: 'node-probe',
+                        message: `Bucket index ${currentHash} contains '${data[0]}' (mismatch). Increment index: (${currentHash} + 1) % 10 = ${(currentHash + 1) % 10}.`,
+                        collisions
+                    });
+                    currentHash = (currentHash + 1) % initialBuckets.length;
+                }
+
+                if (!found && hist[hist.length - 1].state !== 'empty') {
+                    hist.push({
+                        buckets: [...initialBuckets],
+                        activeIndex: -1,
+                        state: 'notfound',
+                        activeNode: 'node-notfound',
+                        message: `Loop finished after checking all buckets. Key '${key}' not found in the Hash Table.`,
+                        collisions
+                    });
+                }
+
+                return hist;
+            };
+
+            // Initialize history
+            useEffect(() => {
+                const hist = generateSearchSteps(student);
+                setHistory(hist);
+                setCurrentStep(0);
+            }, [student]);
+
+            const step = history[currentStep] || { buckets: [null, null, null, null, null, null, null, null, null, null], activeIndex: -1, state: 'idle', activeNode: 'node-idle', message: 'Ready to start.', collisions: 0 };
+
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '16px' }}>
+                    <div className="card glass" style={{ padding: '20px' }}>
+                        <div className="card-header" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '16px', marginBottom: '16px' }}>
+                            <h4 style={{ margin: 0 }}><i className="fa-solid fa-server"></i> Hash Table & Collision Resolution Probing</h4>
+                        </div>
+
+                        <div className="card-body" style={{ paddingTop: '0px' }}>
+                            <div className="simulator-box" style={{ padding: '20px', borderStyle: 'dashed', borderColor: 'var(--border-accent)', background: 'rgba(9, 13, 22, 0.4)' }}>
+                                <span className="sim-title"><i className="fa-solid fa-desktop"></i> Interactive Hash Table Collision Simulator (Linear Probing)</span>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
+                                    Select a student name to find their grade. <strong>"David"</strong> collides with <strong>"Alice"</strong> on Bucket Index 8, demonstrating how <strong>Linear Probing</strong> searches adjacent slots.
+                                </p>
+                                
+                                <div className="sim-controls" style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '16px' }}>
+                                    <label htmlFor="hash-name-select" style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary)' }}>Select Student Key:</label>
+                                    <select
+                                        id="hash-name-select"
+                                        className="form-control"
+                                        value={student}
+                                        onChange={(e) => setStudent(e.target.value)}
+                                        style={{ padding: '4px 8px', fontSize: '12px', width: '100px', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '6px' }}
+                                    >
+                                        <option value="Alice">Alice</option>
+                                        <option value="Bob">Bob</option>
+                                        <option value="Charlie">Charlie</option>
+                                        <option value="David">David</option>
+                                        <option value="Eve">Eve</option>
+                                    </select>
+                                    
+                                    <div style={{ display: 'flex', gap: '6px', marginLeft: '12px' }}>
+                                        <button 
+                                            className="speed-btn" 
+                                            onClick={() => setCurrentStep(0)} 
+                                            title="Restart"
+                                            style={{ height: '32px', padding: '0 10px', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px' }}
+                                        >
+                                            <i className="fa-solid fa-rotate-left"></i> Restart
+                                        </button>
+                                        <button 
+                                            className="speed-btn" 
+                                            disabled={currentStep === 0} 
+                                            onClick={() => setCurrentStep(p => p - 1)}
+                                            style={{ height: '32px', padding: '0 10px', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px' }}
+                                        >
+                                            <i className="fa-solid fa-chevron-left"></i> Back
+                                        </button>
+                                        <button 
+                                            className="btn btn-primary" 
+                                            disabled={currentStep === history.length - 1} 
+                                            onClick={() => setCurrentStep(p => p + 1)}
+                                            style={{ 
+                                                height: '32px', 
+                                                padding: '0 16px', 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                gap: '6px', 
+                                                fontSize: '12px', 
+                                                fontWeight: 'bold',
+                                                boxShadow: currentStep === history.length - 1 ? 'none' : '0 0 12px var(--accent-blue-glow)',
+                                                animation: currentStep === history.length - 1 ? 'none' : 'pulse 2s infinite'
+                                            }}
+                                        >
+                                            Next Step <i className="fa-solid fa-chevron-right"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '12px' }}>
+                                        <div style={{ padding: '4px 10px', borderRadius: '4px', background: 'rgba(249,115,22,0.1)', color: 'var(--accent-orange)', fontSize: '11px', fontWeight: 'bold' }}>
+                                            Collisions: {step.collisions || 0}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Original Two Column split layout */}
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'stretch' }}>
+                                    {/* Left Side: Buckets */}
+                                    <div style={{ flex: '1 1 450px', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                        <h4 style={{ fontSize: '12px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0px' }}>
+                                            <i className="fa-solid fa-table-cells-large"></i> HashTable Buckets (Linear Probing, Size 10)
+                                        </h4>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+                                            {step.buckets && step.buckets.map((b, idx) => {
+                                                let stateClass = "";
+                                                if (idx === step.activeIndex) {
+                                                    if (step.state === 'found') stateClass = " match";
+                                                    else if (step.state === 'collision') stateClass = " probing";
+                                                    else if (step.state === 'empty') stateClass = " probing";
+                                                    else stateClass = " active-insert";
+                                                } else if (b !== null) {
+                                                    stateClass = " occupied";
+                                                }
+
+                                                return (
+                                                    <div key={idx} className={`hash-bucket-cell${stateClass}`}>
+                                                        <span style={{ fontWeight: 'bold', color: 'var(--text-muted)' }}>[{idx}]</span>
+                                                        <span>{b ? `${b[0]}: ${b[1]}` : 'None'}</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {/* Status Info / Trace Log */}
+                                        <div style={{ marginTop: 'auto', background: 'var(--bg-primary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', fontSize: '11px', fontFamily: 'Fira Code' }}>
+                                            <div><strong>Trace Log:</strong> {step.message}</div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Side: Flowcharts */}
+                                    <div style={{ flex: '0 0 300px', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '0px' }}>
+                                            <i className="fa-solid fa-code-branch"></i> Live Flowchart Execution
+                                        </h4>
+
+                                        <div className="flowchart-box">
+                                            <div className={`flowchart-node ${step.activeNode === 'node-init' ? 'active' : ''}`}>Start: Calculate hashKey = hash(key) % N</div>
+                                            <div className="flowchart-arrow">⬇</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-check-match' && step.state !== 'found' && step.state !== 'empty' ? 'active' : ''}`}>For Loop: check index hashKey</div>
+                                            <div className="flowchart-arrow">⬇ (Matches key?)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-found' ? 'active' : ''}`}>Yes: Return value</div>
+                                            <div className="flowchart-arrow">⬇ (No / Empty?)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-check-empty' ? 'active' : ''}`}>If Empty: Return "Not Found"</div>
+                                            <div className="flowchart-arrow">⬇ (Collision)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-probe' ? 'active' : ''}`}>Rehash: hashKey = (hashKey + 1) % N</div>
+                                            <div className="flowchart-arrow">⬇ (Loop back)</div>
+                                            <div className="flowchart-node">Next loop iteration</div>
+                                            <div className="flowchart-arrow">⬇ (Loop completed)</div>
+                                            <div className={`flowchart-node ${step.activeNode === 'node-notfound' ? 'active' : ''}`}>Not Found: Return "Not Found"</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Details (Full Width below simulator box) */}
+                            <div style={{ marginTop: '24px' }}>
+                                <div style={{
+                                    padding: '14px', borderRadius: '8px', borderLeft: '4px solid var(--accent-green)',
+                                    background: 'rgba(16, 185, 129, 0.05)', color: 'var(--text-primary)', fontSize: '12px', lineHeight: 1.5
+                                }}>
+                                    <strong style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontSize: '13px' }}>
+                                        <i className="fa-solid fa-code-compare"></i> insertData_alternative vs searchData_alternative
+                                    </strong>
+                                    <p>In Lab 6, we implement collision resolution via <strong>linear probing</strong>. Instead of using a complicated while loop condition, the <code>_alternative</code> versions simplify loop logic by using a standard <strong>for loop</strong> over the range of buckets (table size). This ensures we check each bucket at most once, and keeps loop control simple and easy to understand for beginners!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Render roots
+        ReactDOM.createRoot(document.getElementById('search-root')).render(<SearchApp />);
+        ReactDOM.createRoot(document.getElementById('sorting-root')).render(<SortingApp />);
+        ReactDOM.createRoot(document.getElementById('hashing-root')).render(<HashingApp />);
+    </script>
+
+    <!-- Script Entry -->
+    <script src="app.js"></script>
+</body>
+
+</html>
