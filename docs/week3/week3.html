@@ -431,12 +431,12 @@
                     <i class="fa-solid fa-magnifying-glass"></i> <span>Module 1: Search Algos</span>
                 </button>
 
-                <button class="nav-item" data-target="sorting-section">
-                    <i class="fa-solid fa-arrow-up-wide-short"></i> <span>Module 2: Sorting Algos</span>
-                </button>
-
                 <button class="nav-item" data-target="hashing-section">
-                    <i class="fa-solid fa-hashtag"></i> <span>Module 3: Hash Tables</span>
+                    <i class="fa-solid fa-hashtag"></i> <span>Module 2: Hash Tables</span>
+                </button>
+               
+                <button class="nav-item" data-target="sorting-section">
+                    <i class="fa-solid fa-arrow-up-wide-short"></i> <span>Module 3: Sorting Algos</span>
                 </button>
 
                 <button class="nav-item" data-target="quiz-section">
@@ -498,8 +498,9 @@
                         </div>
                     </div>
 
-                    <!-- Search Visualizer Mount Root -->
+                    <!-- Search Visualizer -->
                     <div id="search-root"></div>
+
                 </section>
 
                 <!-- 2. SORTING SECTION -->
@@ -522,8 +523,9 @@
                         </div>
                     </div>
 
-                    <!-- Sorting Visualizer Mount Root -->
+                    <!-- Sorting Visualizer -->
                     <div id="sorting-root"></div>
+
                 </section>
 
                 <!-- 3. HASHING SECTION -->
@@ -545,8 +547,9 @@
                         </div>
                     </div>
 
-                    <!-- Hashing Visualizer Mount Root -->
+                    <!-- Hashing Visualizer -->
                     <div id="hashing-root"></div>
+
                 </section>
 
                 <!-- 4. QUIZ SECTION -->
@@ -629,35 +632,77 @@ print(f"Target {target} found at index: {found_idx}")
         // =========================================================================
         const nodeTypeMap = {
             // Search
-            'node-init':       { type: 'init',     badge: 'init',     icon: 'fa-solid fa-flag',            label: 'Initialize' },
-            'node-loop-check': { type: 'loop',     badge: 'loop',     icon: 'fa-solid fa-rotate',          label: 'Loop Check' },
-            'node-mid':        { type: 'mid',      badge: 'mid',      icon: 'fa-solid fa-divide',          label: 'Calc Mid' },
-            'node-compare':    { type: 'compare',  badge: 'compare',  icon: 'fa-solid fa-not-equal',       label: 'Compare' },
-            'node-found':      { type: 'found',    badge: 'found',    icon: 'fa-solid fa-circle-check',    label: 'Found!' },
-            'node-notfound':   { type: 'notfound', badge: 'notfound', icon: 'fa-solid fa-circle-xmark',    label: 'Not Found' },
-            'node-left':       { type: 'adjust',   badge: 'adjust',   icon: 'fa-solid fa-angles-left',     label: 'Search Left' },
-            'node-right':      { type: 'adjust',   badge: 'adjust',   icon: 'fa-solid fa-angles-right',    label: 'Search Right' },
+            'node-init':       { type: 'init',     badge: 'init',     icon: 'fa-solid fa-flag',            label: 'Set up i = 0' },
+            'node-loop-check': { type: 'loop',     badge: 'loop',     icon: 'fa-solid fa-rotate',          label: 'Loop: i < N?' },
+            'node-mid':        { type: 'mid',      badge: 'mid',      icon: 'fa-solid fa-divide',          label: 'Compute mid' },
+            'node-compare':    { type: 'compare',  badge: 'compare',  icon: 'fa-solid fa-not-equal',       label: 'Compare values' },
+            'node-found':      { type: 'found',    badge: 'found',    icon: 'fa-solid fa-circle-check',    label: 'Target found!' },
+            'node-notfound':   { type: 'notfound', badge: 'notfound', icon: 'fa-solid fa-circle-xmark',    label: 'Not found — end' },
+            'node-left':       { type: 'adjust',   badge: 'adjust',   icon: 'fa-solid fa-angles-left',     label: 'Discard right half' },
+            'node-right':      { type: 'adjust',   badge: 'adjust',   icon: 'fa-solid fa-angles-right',    label: 'Discard left half' },
             // Sort
-            'node-swap':        { type: 'swap',    badge: 'swap',     icon: 'fa-solid fa-arrow-right-arrow-left', label: 'Swap' },
-            'node-next-outer':  { type: 'loop',    badge: 'loop',     icon: 'fa-solid fa-rotate',          label: 'Next Round' },
-            'node-finished':    { type: 'done',    badge: 'done',     icon: 'fa-solid fa-check-double',    label: 'Done!' },
-            'node-min-init':    { type: 'init',    badge: 'init',     icon: 'fa-solid fa-flag',            label: 'Set Min' },
-            'node-inner-loop':  { type: 'compare', badge: 'compare',  icon: 'fa-solid fa-not-equal',       label: 'Scan' },
-            'node-update-min':  { type: 'adjust',  badge: 'adjust',   icon: 'fa-solid fa-arrow-down',      label: 'Update Min' },
-            'node-key-init':    { type: 'init',    badge: 'init',     icon: 'fa-solid fa-key',             label: 'Pick Key' },
-            'node-inner-check': { type: 'loop',    badge: 'loop',     icon: 'fa-solid fa-rotate',          label: 'Shift Check' },
-            'node-shift':       { type: 'swap',    badge: 'swap',     icon: 'fa-solid fa-arrow-right',     label: 'Shift' },
-            'node-insert':      { type: 'found',   badge: 'found',    icon: 'fa-solid fa-arrow-down-to-line', label: 'Insert Key' },
-            'node-split':       { type: 'merge',   badge: 'merge',    icon: 'fa-solid fa-code-branch',     label: 'Split' },
-            'node-overwrite':   { type: 'merge',   badge: 'merge',    icon: 'fa-solid fa-pen',             label: 'Merge Write' },
+            'node-swap':        { type: 'swap',    badge: 'swap',     icon: 'fa-solid fa-arrow-right-arrow-left', label: 'Swap neighbors' },
+            'node-next-outer':  { type: 'loop',    badge: 'loop',     icon: 'fa-solid fa-rotate',          label: 'Next outer round' },
+            'node-finished':    { type: 'done',    badge: 'done',     icon: 'fa-solid fa-check-double',    label: 'Array sorted!' },
+            'node-min-init':    { type: 'init',    badge: 'init',     icon: 'fa-solid fa-flag',            label: 'Set minIdx = slot' },
+            'node-inner-loop':  { type: 'compare', badge: 'compare',  icon: 'fa-solid fa-not-equal',       label: 'Compare vs min' },
+            'node-update-min':  { type: 'adjust',  badge: 'adjust',   icon: 'fa-solid fa-arrow-down',      label: 'New min found!' },
+            'node-key-init':    { type: 'init',    badge: 'init',     icon: 'fa-solid fa-key',             label: 'Pick key to insert' },
+            'node-inner-check': { type: 'loop',    badge: 'loop',     icon: 'fa-solid fa-rotate',          label: 'While: shift left?' },
+            'node-shift':       { type: 'swap',    badge: 'swap',     icon: 'fa-solid fa-arrow-right',     label: 'Shift element right' },
+            'node-insert':      { type: 'found',   badge: 'found',    icon: 'fa-solid fa-arrow-down-to-line', label: 'Insert key here' },
+            'node-split':       { type: 'merge',   badge: 'merge',    icon: 'fa-solid fa-code-branch',     label: 'Divide: split half' },
+            'node-overwrite':   { type: 'merge',   badge: 'merge',    icon: 'fa-solid fa-pen',             label: 'Merge: write smaller' },
             // Hash
-            'node-check-match': { type: 'compare', badge: 'compare',  icon: 'fa-solid fa-not-equal',       label: 'Check Bucket' },
-            'node-check-empty': { type: 'notfound',badge: 'notfound', icon: 'fa-solid fa-circle-xmark',    label: 'Empty Slot' },
-            'node-probe':       { type: 'probe',   badge: 'probe',    icon: 'fa-solid fa-arrow-right',     label: 'Linear Probe' },
+            'node-check-match': { type: 'compare', badge: 'compare',  icon: 'fa-solid fa-not-equal',       label: 'Check key match' },
+            'node-check-empty': { type: 'notfound',badge: 'notfound', icon: 'fa-solid fa-circle-xmark',    label: 'Slot empty — stop' },
+            'node-probe':       { type: 'probe',   badge: 'probe',    icon: 'fa-solid fa-arrow-right',     label: 'Collision → probe next' },
         };
 
-        const ExplanationPanel = ({ activeNode, message, vars, currentStep, totalSteps, onPrev, onNext }) => {
-            const info = nodeTypeMap[activeNode] || { type: 'init', badge: 'init', icon: 'fa-solid fa-circle', label: 'Step' };
+        const varDescriptions = {
+            i: "current index",
+            low: "low index boundary",
+            high: "high index boundary",
+            mid: "middle index",
+            target: "target value",
+            'arr[i]': "current value",
+            'arr[mid]': "middle value",
+            minIdx: "minimum index",
+            key: "key value",
+            comparisons: "comparisons count",
+            swaps: "swaps count",
+            shifts: "shifts count",
+            writes: "writes count",
+            collisions: "collisions count",
+            bucketIdx: "bucket index",
+            bucketKey: "key in bucket"
+        };
+
+        const ExplanationPanel = ({ activeNode, customLabel, message, vars, currentStep, totalSteps, onPrev, onNext }) => {
+            const baseInfo = nodeTypeMap[activeNode] || { type: 'init', badge: 'init', icon: 'fa-solid fa-circle', label: 'Step' };
+            const info = { ...baseInfo };
+            if (customLabel) {
+                info.label = customLabel;
+            }
+
+            // Format message to split Q&A into separate lines
+            let messageContent = message || '—';
+            if (message && message.includes('?')) {
+                // Split at "? " (question mark followed by space)
+                const parts = message.split(/(?<=\?)\s+/);
+                if (parts.length > 1) {
+                    messageContent = (
+                        <div>
+                            {parts[0]}
+                            <br />
+                            <span style={{ display: 'block', marginTop: '6px', fontWeight: 'bold', color: 'var(--accent-green)' }}>
+                                {parts.slice(1).join(' ')}
+                            </span>
+                        </div>
+                    );
+                }
+            }
+
             return (
                 <div className={`explanation-panel type-${info.type}`}>
                     <div className="exp-panel-header">
@@ -667,15 +712,22 @@ print(f"Target {target} found at index: {found_idx}")
                         <span className="exp-panel-title">Step Explanation</span>
                     </div>
                     <div className="exp-panel-body">
-                        <div className="exp-panel-message">{message || '—'}</div>
+                        <div className="exp-panel-message">{messageContent}</div>
                         {vars && vars.length > 0 && (
-                            <div className="exp-panel-vars">
-                                {vars.map(v => (
-                                    <span key={v.label} className="exp-var-chip">
-                                        <span className="exp-var-label">{v.label}:</span>
-                                        <span className="exp-var-value">{String(v.value)}</span>
-                                    </span>
-                                ))}
+                            <div className="exp-panel-vars-section" style={{ marginTop: '8px' }}>
+                                <div className="exp-panel-vars">
+                                    {vars.map(v => (
+                                        <span key={v.label} className="exp-var-chip">
+                                            <span className="exp-var-label">{v.label}:</span>
+                                            <span className="exp-var-value">{String(v.value)}</span>
+                                            {varDescriptions[v.label] && (
+                                                <span style={{ fontSize: '9px', color: 'var(--text-muted)', marginLeft: '4px', fontWeight: 'normal' }}>
+                                                    ({varDescriptions[v.label]})
+                                                </span>
+                                            )}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -697,6 +749,441 @@ print(f"Target {target} found at index: {found_idx}")
                         </div>
                     </div>
                 </div>
+            );
+        };
+
+        // =========================================================================
+        // SVG FLOWCHART COMPONENTS (Static representation of algorithms)
+        // =========================================================================
+        const SearchFlowchart = ({ algo }) => {
+            if (algo === 'linear') {
+                return (
+                    <svg width="100%" height="280" viewBox="0 0 420 280" className="flowchart-svg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--text-muted)" />
+                            </marker>
+                        </defs>
+                        {/* Start Node */}
+                        <rect x="170" y="10" width="80" height="30" rx="15" fill="var(--bg-primary)" stroke="var(--accent-blue)" strokeWidth="1.5" />
+                        <text x="210" y="29" fill="var(--text-primary)" fontSize="11" fontWeight="bold" textAnchor="middle">Start</text>
+                        
+                        {/* Arrow 1 */}
+                        <line x1="210" y1="40" x2="210" y2="60" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Initialize i = 0 */}
+                        <rect x="150" y="60" width="120" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="210" y="81" fill="var(--text-secondary)" fontSize="11" textAnchor="middle">Initialize i = 0</text>
+                        
+                        {/* Arrow 2 */}
+                        <line x1="210" y1="95" x2="210" y2="115" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Loop condition: i < N? */}
+                        <polygon points="210,115 265,140 210,165 155,140" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="210" y="144" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">{"i < N?"}</text>
+                        
+                        {/* No path (Loop boundary) */}
+                        <line x1="265" y1="140" x2="310" y2="140" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="282" y="134" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
+                        
+                        <rect x="310" y="122" width="100" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
+                        <text x="360" y="143" fill="var(--accent-red)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Not Found</text>
+                        
+                        {/* Yes path */}
+                        <line x1="210" y1="165" x2="210" y2="185" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="215" y="177" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
+                        
+                        {/* Compare arr[i] == Target */}
+                        <polygon points="210,185 275,210 210,235 145,210" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="210" y="214" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">arr[i] == Target?</text>
+                        
+                        {/* Match Found */}
+                        <line x1="275" y1="210" x2="310" y2="210" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="287" y="204" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
+                        
+                        <rect x="310" y="192" width="100" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                        <text x="360" y="213" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Index i</text>
+                        
+                        {/* No match: Increment i */}
+                        <line x1="210" y1="235" x2="210" y2="250" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="215" y="244" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
+                        
+                        <rect x="160" y="250" width="100" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="210" y="266" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">i = i + 1</text>
+                        
+                        {/* Back loop line */}
+                        <path d="M 160 262.5 L 120 262.5 L 120 140 L 155 140" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                    </svg>
+                );
+            } else {
+                // Binary Search Flowchart
+                return (
+                    <svg width="100%" height="340" viewBox="0 0 420 340" className="flowchart-svg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--text-muted)" />
+                            </marker>
+                        </defs>
+                        {/* Start */}
+                        <rect x="150" y="5" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-blue)" strokeWidth="1.5" />
+                        <text x="190" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Start</text>
+                        
+                        <line x1="190" y1="30" x2="190" y2="45" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Init low, high */}
+                        <rect x="90" y="45" width="200" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="190" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">low = 0, high = N - 1</text>
+                        
+                        <line x1="190" y1="75" x2="190" y2="95" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* low <= high? */}
+                        <polygon points="190,95 245,120 190,145 135,120" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="190" y="124" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">low ≤ high?</text>
+                        
+                        {/* No path: Not Found */}
+                        <line x1="245" y1="120" x2="300" y2="120" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="265" y="114" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
+                        
+                        <rect x="300" y="105" width="110" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
+                        <text x="355" y="123" fill="var(--accent-red)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Not Found</text>
+                        
+                        {/* Yes path */}
+                        <line x1="190" y1="145" x2="190" y2="165" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="195" y="154" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
+                        
+                        {/* Calc mid */}
+                        <rect x="90" y="165" width="200" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="190" y="183" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">mid = low + (high - low) / 2</text>
+                        
+                        <line x1="190" y1="195" x2="190" y2="215" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* arr[mid] == Target? */}
+                        <polygon points="190,215 255,240 190,265 125,240" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="190" y="244" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">arr[mid] == Target?</text>
+                        
+                        {/* Found Match */}
+                        <line x1="255" y1="240" x2="300" y2="240" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="270" y="234" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
+                        
+                        <rect x="300" y="225" width="110" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                        <text x="355" y="243" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Index mid</text>
+                        
+                        {/* No match */}
+                        <line x1="190" y1="265" x2="190" y2="280" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="195" y="273" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
+                        
+                        {/* Target < arr[mid]? */}
+                        <polygon points="190,280 260,305 190,330 120,305" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="190" y="309" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">{"Target < arr[mid]?"}</text>
+                        
+                        {/* Target < arr[mid] Yes: high = mid - 1 */}
+                        <line x1="120" y1="305" x2="90" y2="305" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="98" y="299" fill="var(--accent-green)" fontSize="8" fontWeight="bold">Yes</text>
+                        
+                        <rect x="5" y="290" width="85" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="47" y="308" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">high = mid - 1</text>
+                        
+                        {/* Target < arr[mid] No: low = mid + 1 */}
+                        <line x1="260" y1="305" x2="290" y2="305" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="270" y="299" fill="var(--accent-red)" fontSize="8" fontWeight="bold">No</text>
+                        
+                        <rect x="290" y="290" width="85" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="332" y="308" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">low = mid + 1</text>
+                        
+                        {/* Loops back to low <= high */}
+                        <path d="M 47 290 L 47 120 L 135 120" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <path d="M 332 290 L 332 180 L 305 180" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" />
+                    </svg>
+                );
+            }
+        };
+
+        const SortingFlowchart = ({ algo }) => {
+            if (algo === 'bubble') {
+                return (
+                    <svg width="100%" height="320" viewBox="0 0 420 320" className="flowchart-svg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--text-muted)" />
+                            </marker>
+                        </defs>
+                        <rect x="160" y="5" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
+                        <text x="200" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Start</text>
+                        
+                        <line x1="200" y1="30" x2="200" y2="45" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Outer loop init */}
+                        <rect x="90" y="45" width="220" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Outer loop: round from 0 to N-2</text>
+                        
+                        <line x1="200" y1="75" x2="200" y2="95" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Inner loop init */}
+                        <rect x="90" y="95" width="220" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="200" y="113" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Inner loop: i from N-1 down to round+1</text>
+                        
+                        <line x1="200" y1="125" x2="200" y2="145" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Compare arr[i-1] > arr[i] */}
+                        <polygon points="200,145 270,175 200,205 130,175" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="200" y="179" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">{"arr[i-1] > arr[i]?"}</text>
+                        
+                        {/* Swap Yes */}
+                        <line x1="270" y1="175" x2="310" y2="175" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="285" y="169" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
+                        
+                        <rect x="310" y="160" width="100" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
+                        <text x="360" y="178" fill="var(--accent-red)" fontSize="9" fontWeight="bold" textAnchor="middle">Swap arr[i-1], arr[i]</text>
+                        
+                        {/* Merge paths */}
+                        <path d="M 360 190 L 360 220 L 200 220" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" />
+                        <line x1="200" y1="205" x2="200" y2="220" stroke="var(--text-muted)" strokeWidth="1.5" />
+                        <text x="205" y="213" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
+                        
+                        <line x1="200" y1="220" x2="200" y2="235" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Decrement inner loop */}
+                        <rect x="130" y="235" width="140" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="200" y="251" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Decrement i</text>
+                        
+                        {/* Loops back to Inner loop check */}
+                        <path d="M 130 247.5 L 70 247.5 L 70 110 L 90 110" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Complete Round */}
+                        <path d="M 310 60 L 330 60 L 330 280 L 200 280" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" />
+                        <line x1="200" y1="280" x2="200" y2="290" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* End */}
+                        <rect x="160" y="290" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Done</text>
+                    </svg>
+                );
+            } else if (algo === 'selection') {
+                return (
+                    <svg width="100%" height="320" viewBox="0 0 420 320" className="flowchart-svg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--text-muted)" />
+                            </marker>
+                        </defs>
+                        <rect x="160" y="5" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
+                        <text x="200" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Start</text>
+                        
+                        <line x1="200" y1="30" x2="200" y2="45" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Outer loop */}
+                        <rect x="80" y="45" width="240" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Outer loop: fillslot from 0 to N-2</text>
+                        
+                        <line x1="200" y1="75" x2="200" y2="90" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Init minIdx */}
+                        <rect x="120" y="90" width="160" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
+                        <text x="200" y="106" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">Set minIdx = fillslot</text>
+                        
+                        <line x1="200" y1="115" x2="200" y2="130" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Inner scan loop */}
+                        <rect x="80" y="130" width="240" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="200" y="148" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Inner scan: loc from fillslot+1 to N-1</text>
+                        
+                        <line x1="200" y1="160" x2="200" y2="175" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Compare arr[loc] < arr[minIdx] */}
+                        <polygon points="200,175 270,200 200,225 130,200" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="200" y="204" fill="var(--text-primary)" fontSize="8" fontWeight="bold" textAnchor="middle">{"arr[loc] < arr[minIdx]?"}</text>
+                        
+                        {/* Update minIdx */}
+                        <line x1="270" y1="200" x2="305" y2="200" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="282" y="194" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
+                        
+                        <rect x="305" y="185" width="105" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
+                        <text x="357" y="203" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">minIdx = loc</text>
+                        
+                        {/* Merge back */}
+                        <path d="M 357 215 L 357 240 L 200 240" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" />
+                        <line x1="200" y1="225" x2="200" y2="240" stroke="var(--text-muted)" strokeWidth="1.5" />
+                        <text x="205" y="233" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
+                        
+                        {/* Swap at end of round */}
+                        <line x1="200" y1="240" x2="200" y2="255" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        <rect x="100" y="255" width="200" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
+                        <text x="200" y="271" fill="var(--accent-red)" fontSize="9" fontWeight="bold" textAnchor="middle">{"Swap arr[fillslot] & arr[minIdx]"}</text>
+                        
+                        {/* Loops */}
+                        <path d="M 100 267.5 L 50 267.5 L 50 60 L 80 60" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        <line x1="200" y1="280" x2="200" y2="290" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <rect x="160" y="290" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Done</text>
+                    </svg>
+                );
+            } else if (algo === 'insertion') {
+                return (
+                    <svg width="100%" height="320" viewBox="0 0 420 320" className="flowchart-svg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--text-muted)" />
+                            </marker>
+                        </defs>
+                        <rect x="160" y="5" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
+                        <text x="200" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Start</text>
+                        
+                        <line x1="200" y1="30" x2="200" y2="45" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Outer loop */}
+                        <rect x="80" y="45" width="240" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Outer loop: index from 1 to N-1</text>
+                        
+                        <line x1="200" y1="75" x2="200" y2="90" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Extract key */}
+                        <rect x="100" y="90" width="200" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
+                        <text x="200" y="108" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">key = arr[index], pos = index</text>
+                        
+                        <line x1="200" y1="120" x2="200" y2="135" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Inner check: pos > 0 and arr[pos-1] > key? */}
+                        <polygon points="200,135 290,165 200,195 110,165" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="200" y="163" fill="var(--text-primary)" fontSize="8" fontWeight="bold" textAnchor="middle">{"pos > 0 and arr[pos-1] > key?"}</text>
+                        
+                        {/* Yes: Shift */}
+                        <line x1="290" y1="165" x2="320" y2="165" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="298" y="159" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
+                        
+                        <rect x="320" y="150" width="95" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="367" y="168" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">arr[pos] = arr[pos-1]</text>
+                        
+                        <line x1="367" y1="180" x2="367" y2="200" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        <rect x="320" y="200" width="95" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="367" y="216" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">pos = pos - 1</text>
+                        
+                        {/* Loop back to inner check */}
+                        <path d="M 320 212.5 L 200 212.5 L 200 195" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* No: Insert Key */}
+                        <line x1="200" y1="195" x2="200" y2="235" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="205" y="210" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
+                        
+                        <rect x="120" y="235" width="160" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                        <text x="200" y="253" fill="var(--accent-green)" fontSize="9" fontWeight="bold" textAnchor="middle">arr[pos] = key</text>
+                        
+                        {/* Loop back to outer loop */}
+                        <path d="M 120 250 L 60 250 L 60 60 L 80 60" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        <line x1="200" y1="265" x2="200" y2="290" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <rect x="160" y="290" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Done</text>
+                    </svg>
+                );
+            } else if (algo === 'merge') {
+                return (
+                    <svg width="100%" height="320" viewBox="0 0 420 320" className="flowchart-svg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--text-muted)" />
+                            </marker>
+                        </defs>
+                        <rect x="160" y="5" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
+                        <text x="200" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">mergeSort(L, R)</text>
+                        
+                        <line x1="200" y1="30" x2="200" y2="45" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Base case: size <= 1? */}
+                        <polygon points="200,45 265,75 200,105 135,75" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                        <text x="200" y="79" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">{"L ≥ R?"}</text>
+                        
+                        {/* Yes: Stop */}
+                        <line x1="265" y1="75" x2="310" y2="75" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="282" y="69" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
+                        
+                        <rect x="310" y="62" width="80" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="350" y="78" fill="var(--text-muted)" fontSize="9" textAnchor="middle">Return (Stop)</text>
+                        
+                        {/* No: Divide */}
+                        <line x1="200" y1="105" x2="200" y2="120" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        <text x="205" y="112" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
+                        
+                        <rect x="100" y="120" width="200" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                        <text x="200" y="138" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Calculate mid = (L + R) / 2</text>
+                        
+                        <line x1="200" y1="150" x2="200" y2="165" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Conquer: Split recursively */}
+                        <rect x="50" y="165" width="300" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--accent-blue)" strokeWidth="1.5" />
+                        <text x="200" y="180" fill="var(--accent-blue)" fontSize="9" fontWeight="bold" textAnchor="middle">{"Call mergeSort(L, mid) & mergeSort(mid+1, R)"}</text>
+                        
+                        <line x1="200" y1="200" x2="200" y2="220" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        {/* Combine: Merge sorted sub-arrays */}
+                        <rect x="100" y="220" width="200" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                        <text x="200" y="236" fill="var(--accent-green)" fontSize="9" fontWeight="bold" textAnchor="middle">Merge sub-arrays in sorted order</text>
+                        
+                        <line x1="200" y1="255" x2="200" y2="280" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                        
+                        <rect x="160" y="280" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                        <text x="200" y="296" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Done</text>
+                    </svg>
+                );
+            }
+        };
+
+        const HashingFlowchart = () => {
+            return (
+                <svg width="100%" height="320" viewBox="0 0 420 320" className="flowchart-svg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="var(--text-muted)" />
+                        </marker>
+                    </defs>
+                    <rect x="150" y="5" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                    <text x="190" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Search key</text>
+                    
+                    <line x1="190" y1="30" x2="190" y2="45" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                    
+                    {/* Calculate index */}
+                    <rect x="80" y="45" width="220" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                    <text x="190" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">hashIdx = hash(key) % TableSize</text>
+                    
+                    <line x1="190" y1="75" x2="190" y2="95" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                    
+                    {/* Check slot */}
+                    <polygon points="190,95 255,120 190,145 125,120" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                    <text x="190" y="124" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">bucket[hashIdx]?</text>
+                    
+                    {/* Case 1: Empty */}
+                    <line x1="125" y1="120" x2="60" y2="120" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                    <text x="80" y="114" fill="var(--accent-red)" fontSize="9" fontWeight="bold">Empty</text>
+                    
+                    <rect x="5" y="140" width="100" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
+                    <text x="55" y="158" fill="var(--accent-red)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Not Found</text>
+                    
+                    {/* Case 2: Matches Key */}
+                    <line x1="190" y1="145" x2="190" y2="185" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                    <text x="195" y="160" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Matches</text>
+                    
+                    <rect x="140" y="185" width="100" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
+                    <text x="190" y="203" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Value</text>
+                    
+                    {/* Case 3: Collision */}
+                    <line x1="255" y1="120" x2="310" y2="120" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                    <text x="265" y="114" fill="var(--accent-orange)" fontSize="9" fontWeight="bold">Mismatch</text>
+                    
+                    {/* Linear probe */}
+                    <rect x="310" y="105" width="100" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
+                    <text x="360" y="123" fill="var(--accent-orange)" fontSize="9" fontWeight="bold" textAnchor="middle">Probe Collision</text>
+                    
+                    <line x1="360" y1="135" x2="360" y2="155" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                    
+                    {/* Next slot */}
+                    <rect x="300" y="155" width="115" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
+                    <text x="357" y="173" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">idx = (idx + 1) % Size</text>
+                    
+                    {/* Loop back to check bucket */}
+                    <path d="M 357 185 L 357 230 L 190 230 L 190 145" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
+                </svg>
             );
         };
 
@@ -769,7 +1256,7 @@ print(f"Target {target} found at index: {found_idx}")
             // Auto-scroll trace log to current row
             useEffect(() => {
                 if (traceOpen && activeRowRef.current && traceBodyRef.current) {
-                    activeRowRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                        activeRowRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                 }
             }, [currentStep, traceOpen]);
 
@@ -781,12 +1268,18 @@ print(f"Target {target} found at index: {found_idx}")
                 if (!s) return [];
                 const vars = [{ label: 'comparisons', value: s.comparisons ?? 0 }];
                 if (algo === 'linear') {
-                    if (s.i !== undefined && s.i >= 0) vars.push({ label: 'i', value: s.i });
+                    if (s.i !== undefined && s.i >= 0) {
+                        vars.push({ label: 'i', value: s.i });
+                        vars.push({ label: 'arr[i]', value: array[s.i] });
+                    }
                     vars.push({ label: 'target', value: target });
                 } else {
                     if (s.low !== undefined) vars.push({ label: 'low', value: s.low });
                     if (s.high !== undefined) vars.push({ label: 'high', value: s.high });
-                    if (s.mid !== undefined && s.mid !== -1) vars.push({ label: 'mid', value: s.mid });
+                    if (s.mid !== undefined && s.mid !== -1) {
+                        vars.push({ label: 'mid', value: s.mid });
+                        vars.push({ label: 'arr[mid]', value: array[s.mid] });
+                    }
                     vars.push({ label: 'target', value: target });
                 }
                 return vars;
@@ -799,6 +1292,26 @@ print(f"Target {target} found at index: {found_idx}")
                 const colors = { init: 'var(--accent-purple)', loop: 'var(--accent-blue)', mid: 'var(--accent-cyan)', compare: 'var(--accent-orange)', found: 'var(--accent-green)', notfound: 'var(--accent-red)', adjust: 'var(--accent-cyan)' };
                 return { icon: info.icon, color: colors[info.badge] || 'var(--text-muted)' };
             };
+
+             const baseInfo = nodeTypeMap[step.activeNode] || { type: 'init', badge: 'init', icon: 'fa-solid fa-circle', label: 'Step' };
+             const info = { ...baseInfo };
+             if (step.activeNode === 'node-loop-check') {
+                 if (algo === 'linear') {
+                     info.label = `Loop: i (${step.i ?? 0}) < N (15)?`;
+                 } else {
+                     info.label = `Loop: low (${step.low ?? 0}) <= high (${step.high ?? 0})?`;
+                 }
+             } else if (step.activeNode === 'node-compare') {
+                 if (algo === 'linear') {
+                     if (step.i !== undefined && step.i >= 0) {
+                         info.label = `Compare: ${array[step.i]} == ${target}?`;
+                     }
+                 } else {
+                     if (step.mid !== undefined && step.mid !== -1) {
+                         info.label = `Compare: ${array[step.mid]} == ${target}?`;
+                     }
+                 }
+             }
 
             return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '16px' }}>
@@ -848,14 +1361,23 @@ print(f"Target {target} found at index: {found_idx}")
 
                         {/* Main split layout */}
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'stretch' }}>
-                            {/* Left: Array + info */}
-                            <div style={{ flex: '1 1 420px', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', margin: 0, letterSpacing: '0.5px' }}>
-                                    <i className="fa-solid fa-eye"></i> Search Space
-                                </h4>
+                            {/* Left: Array + info wrapper */}
+                            <div className="simulator-box" style={{ flex: '1 1 340px', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(9,13,22,0.2)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '16px', position: 'relative', height: 'fit-content'}}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                                    <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', margin: 0, letterSpacing: '0.5px' }}>
+                                        <i className="fa-solid fa-eye"></i> Search Space
+                                    </h4>
+                                </div>
+
+                                {/* Centered Operation Badge */}
+                                <div style={{ display: 'flex', justifyContent: 'center', margin: '12px 0 4px' }}>
+                                    <span className={`exp-panel-badge ${info.badge}`} style={{ fontSize: '11px', padding: '6px 14px', borderRadius: '20px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+                                        <i className={info.icon}></i> {info.label}
+                                    </span>
+                                </div>
 
                                 {/* Array cells */}
-                                <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', padding: '12px 0' }}>
+                                <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', paddingTop: '20px', paddingBottom: '10px', justifyContent: 'center' }}>
                                     {array.map((val, idx) => {
                                         let bg = 'var(--bg-primary)', borderCol = 'var(--border-color)', col = 'var(--text-secondary)', scale = 'scale(1)', opacity = 1;
                                         if (algo === 'linear') {
@@ -876,10 +1398,30 @@ print(f"Target {target} found at index: {found_idx}")
                                                 bg = 'rgba(59,130,246,0.06)'; borderCol = 'rgba(59,130,246,0.35)'; col = 'var(--text-primary)';
                                             }
                                         }
+                                        
+                                        // Floating pointers logic
+                                        let ptrLabel = "";
+                                        if (algo === 'linear') {
+                                            if (idx === step.i) ptrLabel = "i";
+                                        } else {
+                                            const ptrs = [];
+                                            if (idx === step.low) ptrs.push("low");
+                                            if (idx === step.mid) ptrs.push("mid");
+                                            if (idx === step.high) ptrs.push("high");
+                                            ptrLabel = ptrs.join(",");
+                                        }
+                                        
                                         return (
-                                            <div key={idx} style={{ flex: '0 0 36px', width: '36px', height: '46px', borderRadius: '6px', border: `1.5px solid ${borderCol}`, background: bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontFamily: 'Fira Code', fontWeight: 'bold', color: col, transform: scale, opacity, transition: 'all 0.2s ease' }}>
-                                                {val}
-                                                <span style={{ fontSize: '8px', color: 'var(--text-muted)', fontWeight: 400, marginTop: '2px' }}>{idx}</span>
+                                            <div key={idx} style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                {ptrLabel && (
+                                                    <span style={{ position: 'absolute', top: '-18px', fontSize: '9px', fontWeight: 'bold', color: ptrLabel.includes('mid') ? 'var(--accent-red)' : 'var(--accent-blue)', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', padding: '1px 5px', borderRadius: '3px', zIndex: 10, whiteSpace: 'nowrap' }}>
+                                                        {ptrLabel}
+                                                    </span>
+                                                )}
+                                                <div style={{ flex: '0 0 36px', width: '36px', height: '46px', borderRadius: '6px', border: `1.5px solid ${borderCol}`, background: bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontFamily: 'Fira Code', fontWeight: 'bold', color: col, transform: scale, opacity, transition: 'all 0.2s ease' }}>
+                                                    {val}
+                                                    <span style={{ fontSize: '8px', color: 'var(--text-muted)', fontWeight: 400, marginTop: '2px' }}>{idx}</span>
+                                                </div>
                                             </div>
                                         );
                                     })}
@@ -905,16 +1447,29 @@ print(f"Target {target} found at index: {found_idx}")
                                 </div>
                             </div>
 
-                            {/* Right: Interactive Explanation Panel */}
-                            <ExplanationPanel
-                                activeNode={step.activeNode}
-                                message={step.message}
-                                vars={buildVars(step)}
-                                currentStep={currentStep}
-                                totalSteps={history.length}
-                                onPrev={() => setCurrentStep(p => Math.max(0, p - 1))}
-                                onNext={() => setCurrentStep(p => Math.min(history.length - 1, p + 1))}
-                            />
+                            {/* Right: Explanation Panel + Flowchart */}
+                            <div style={{ flex: '1 1 320px', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                <ExplanationPanel
+                                    activeNode={step.activeNode}
+                                    customLabel={info.label}
+                                    message={step.message}
+                                    vars={buildVars(step)}
+                                    currentStep={currentStep}
+                                    totalSteps={history.length}
+                                    onPrev={() => setCurrentStep(p => Math.max(0, p - 1))}
+                                    onNext={() => setCurrentStep(p => Math.min(history.length - 1, p + 1))}
+                                />
+                                {/* Flowchart below ExplanationPanel */}
+                                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
+                                    <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: '700', color: 'var(--accent-blue)', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'Outfit' }}>
+                                        <i className="fa-solid fa-diagram-project"></i>
+                                        Flowchart: {algo === 'linear' ? 'Linear Search' : 'Binary Search'}
+                                    </p>
+                                    <div style={{ background: 'var(--bg-primary)', borderRadius: '8px', padding: '10px', border: '1px solid var(--border-color)', overflowX: 'auto' }}>
+                                        <SearchFlowchart algo={algo} />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         {/* Binary Search: All-Trace Log Panel (collapsible) */}
@@ -952,6 +1507,7 @@ print(f"Target {target} found at index: {found_idx}")
                                 )}
                             </div>
                         )}
+
                     </div>
                 </div>
             );
@@ -1085,6 +1641,59 @@ print(f"Target {target} found at index: {found_idx}")
                 return vars;
             };
 
+            const baseInfo = nodeTypeMap[step.activeNode] || { type: 'init', badge: 'init', icon: 'fa-solid fa-circle', label: 'Step' };
+            const info = { ...baseInfo };
+
+            // Dynamically build sorting comparison and swap labels with actual values
+            if (step.activeNode === 'node-compare') {
+                if (algo === 'bubble') {
+                    if (step.i !== undefined && step.i > 0 && step.array) {
+                        info.label = `Compare: ${step.array[step.i - 1]} > ${step.array[step.i]}?`;
+                    }
+                }
+            } else if (step.activeNode === 'node-swap') {
+                if (algo === 'bubble') {
+                    if (step.i !== undefined && step.i > 0 && step.array) {
+                        info.label = `Swap: ${step.array[step.i - 1]} ↔ ${step.array[step.i]}`;
+                    }
+                } else if (algo === 'selection') {
+                    if (step.swapHighlight && step.swapHighlight.length === 2 && step.array) {
+                        info.label = `Swap: ${step.array[step.swapHighlight[0]]} ↔ ${step.array[step.swapHighlight[1]]}`;
+                    }
+                }
+            } else if (step.activeNode === 'node-inner-loop' && algo === 'selection') {
+                if (step.i !== undefined && step.minIdx !== undefined && step.array) {
+                    info.label = `Compare: ${step.array[step.i]} < ${step.array[step.minIdx]}?`;
+                }
+            } else if (step.activeNode === 'node-update-min' && algo === 'selection') {
+                if (step.minIdx !== undefined && step.array) {
+                    info.label = `New Min: ${step.array[step.minIdx]}`;
+                }
+            } else if (step.activeNode === 'node-key-init' && algo === 'insertion') {
+                if (step.keyVal !== undefined) {
+                    info.label = `Pick Key: ${step.keyVal}`;
+                }
+            } else if (step.activeNode === 'node-inner-check' && algo === 'insertion') {
+                const pos = step.i;
+                if (pos > 0 && step.array) {
+                    info.label = `Compare: ${step.array[pos - 1]} > ${step.keyVal}?`;
+                } else {
+                    info.label = `pos (${pos}) > 0? (False)`;
+                }
+            } else if (step.activeNode === 'node-shift' && algo === 'insertion') {
+                if (step.swapHighlight && step.swapHighlight.length === 2 && step.array) {
+                    info.label = `Shift: ${step.array[step.swapHighlight[1]]} to right`;
+                }
+            } else if (step.activeNode === 'node-insert' && algo === 'insertion') {
+                if (step.swapHighlight && step.swapHighlight.length > 0 && step.array) {
+                    info.label = `Insert Key: ${step.array[step.swapHighlight[0]]}`;
+                }
+            } else if (step.activeNode === 'node-overwrite' && algo === 'merge') {
+                if (step.overwriteIdx !== undefined && step.overwriteIdx !== -1 && step.array) {
+                    info.label = `Write: ${step.array[step.overwriteIdx]} to index ${step.overwriteIdx}`;
+                }
+            }
+
             return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '16px' }}>
                     <div className="card glass" style={{ padding: '20px' }}>
@@ -1124,12 +1733,22 @@ print(f"Target {target} found at index: {found_idx}")
 
                         {/* Main split layout */}
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'stretch' }}>
-                            {/* Left: Bar Visualizer */}
-                            <div style={{ flex: '1 1 420px', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', margin: 0, letterSpacing: '0.5px' }}>
-                                    <i className="fa-solid fa-chart-simple"></i> Array Visualizer
-                                </h4>
-                                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '8px', height: '180px', borderBottom: '2px solid var(--border-color)', paddingBottom: '8px' }}>
+                            {/* Left: Bar Visualizer wrapper */}
+                            <div className="simulator-box" style={{ flex: '1 1 340px', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'rgba(9,13,22,0.2)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '16px', position: 'relative', height: 'fit-content' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                                    <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', margin: 0, letterSpacing: '0.5px' }}>
+                                        <i className="fa-solid fa-chart-simple"></i> Array Visualizer
+                                    </h4>
+                                </div>
+
+                                {/* Centered Operation Badge */}
+                                <div style={{ display: 'flex', justifyContent: 'center', margin: '12px 0 4px' }}>
+                                    <span className={`exp-panel-badge ${info.badge}`} style={{ fontSize: '11px', padding: '6px 14px', borderRadius: '20px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+                                        <i className={info.icon}></i> {info.label}
+                                    </span>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '8px', height: '210px', borderBottom: '2px solid var(--border-color)', paddingBottom: '8px', paddingTop: '35px' }}>
                                     {step.array.map((value, idx) => {
                                         const barHeight = (value / maxValue) * 140 + 20;
                                         let barColor = 'rgba(255,255,255,0.06)', borderStyle = '1px solid var(--border-color)';
@@ -1153,9 +1772,36 @@ print(f"Target {target} found at index: {found_idx}")
                                             else if (step.leftRange && step.leftRange.length && idx >= step.leftRange[0] && idx <= step.leftRange[1]) { barColor = 'rgba(59,130,246,0.15)'; borderStyle = '1px solid var(--accent-blue)'; }
                                             else if (step.rightRange && step.rightRange.length && idx >= step.rightRange[0] && idx <= step.rightRange[1]) { barColor = 'rgba(168,85,247,0.15)'; borderStyle = '1px solid var(--accent-purple)'; }
                                         }
+
+                                        // Floating pointers logic
+                                        let ptrLabel = "";
+                                        if (algo === 'bubble') {
+                                            if (idx === step.i) ptrLabel = "i";
+                                            else if (idx === step.i - 1 && step.i > 0) ptrLabel = "i-1";
+                                        } else if (algo === 'selection') {
+                                            const ptrs = [];
+                                            if (idx === step.i) ptrs.push("i");
+                                            if (idx === step.minIdx) ptrs.push("min");
+                                            ptrLabel = ptrs.join(",");
+                                        } else if (algo === 'insertion') {
+                                            const ptrs = [];
+                                            if (idx === step.keyIdx) ptrs.push("key");
+                                            if (idx === step.i) ptrs.push("i");
+                                            ptrLabel = ptrs.join(",");
+                                        } else if (algo === 'merge') {
+                                            const ptrs = [];
+                                            if (idx === step.overwriteIdx) ptrs.push("write");
+                                            ptrLabel = ptrs.join(",");
+                                        }
+
                                         return (
                                             <div key={idx} style={{ width: '12%', height: `${barHeight}px`, background: barColor, border: borderStyle, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', borderRadius: '6px 6px 0 0', position: 'relative', transition: 'all 0.2s ease', paddingBottom: '6px' }}>
-                                                <span style={{ fontSize: '11px', fontFamily: 'Fira Code', fontWeight: 'bold' }}>{value}</span>
+                                                {ptrLabel && (
+                                                    <span style={{ position: 'absolute', top: '-24px', fontSize: '9px', fontWeight: 'bold', color: 'var(--accent-purple)', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', padding: '2px 5px', borderRadius: '4px', zIndex: 10, whiteSpace: 'nowrap' }}>
+                                                        {ptrLabel}
+                                                    </span>
+                                                )}
+                                                <span style={{ fontSize: '11px', fontFamily: 'Fira Code', fontWeight: 'bold', zIndex: 1 }}>{value}</span>
                                                 <span style={{ fontSize: '8px', color: 'var(--text-muted)', position: 'absolute', bottom: '-18px' }}>{idx}</span>
                                             </div>
                                         );
@@ -1174,16 +1820,29 @@ print(f"Target {target} found at index: {found_idx}")
                                 </div>
                             </div>
 
-                            {/* Right: Interactive Explanation Panel */}
-                            <ExplanationPanel
-                                activeNode={step.activeNode}
-                                message={step.message}
-                                vars={buildSortVars(step)}
-                                currentStep={currentStep}
-                                totalSteps={history.length}
-                                onPrev={() => setCurrentStep(p => Math.max(0, p - 1))}
-                                onNext={() => setCurrentStep(p => Math.min(history.length - 1, p + 1))}
-                            />
+                            {/* Right: Explanation Panel + Flowchart */}
+                            <div style={{ flex: '1 1 320px', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                <ExplanationPanel
+                                    activeNode={step.activeNode}
+                                    customLabel={info.label}
+                                    message={step.message}
+                                    vars={buildSortVars(step)}
+                                    currentStep={currentStep}
+                                    totalSteps={history.length}
+                                    onPrev={() => setCurrentStep(p => Math.max(0, p - 1))}
+                                    onNext={() => setCurrentStep(p => Math.min(history.length - 1, p + 1))}
+                                />
+                                {/* Flowchart below ExplanationPanel */}
+                                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
+                                    <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: '700', color: 'var(--accent-purple)', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'Outfit' }}>
+                                        <i className="fa-solid fa-diagram-project"></i>
+                                        Flowchart: {algo.charAt(0).toUpperCase() + algo.slice(1)} Sort
+                                    </p>
+                                    <div style={{ background: 'var(--bg-primary)', borderRadius: '8px', padding: '10px', border: '1px solid var(--border-color)', overflowX: 'auto' }}>
+                                        <SortingFlowchart algo={algo} />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1239,8 +1898,20 @@ print(f"Target {target} found at index: {found_idx}")
                 const vars = [{ label: 'collisions', value: s.collisions ?? 0 }];
                 if (s.activeIndex >= 0) vars.push({ label: 'bucketIdx', value: s.activeIndex });
                 vars.push({ label: 'key', value: student });
+                if (s.activeIndex >= 0 && s.buckets && s.buckets[s.activeIndex]) {
+                    vars.push({ label: 'bucketKey', value: s.buckets[s.activeIndex][0] });
+                }
                 return vars;
             };
+
+            const baseInfo = nodeTypeMap[step.activeNode] || { type: 'init', badge: 'init', icon: 'fa-solid fa-circle', label: 'Step' };
+            const info = { ...baseInfo };
+            if (step.activeNode === 'node-check-match' && step.activeIndex >= 0) {
+                const b = step.buckets[step.activeIndex];
+                if (b) {
+                    info.label = `Match Check: '${b[0]}' == '${student}'?`;
+                }
+            }
 
             return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '16px' }}>
@@ -1251,7 +1922,7 @@ print(f"Target {target} found at index: {found_idx}")
                             </h4>
                         </div>
 
-                        <div className="simulator-box" style={{ padding: '20px', borderStyle: 'dashed', borderColor: 'var(--border-accent)', background: 'rgba(9,13,22,0.4)', borderRadius: '10px', border: '1px dashed var(--border-accent)' }}>
+                        <div className="simulator-box" style={{ padding: '20px', borderStyle: 'dashed', borderColor: 'var(--border-accent)', background: 'rgba(9,13,22,0.4)', borderRadius: '10px', border: '1px dashed var(--border-accent)', height: 'fit-content' }}>
                             <p style={{ fontSize: '13px', fontFamily: 'Outfit', fontWeight: 700, color: 'var(--accent-green)', marginBottom: '6px' }}>
                                 <i className="fa-solid fa-desktop"></i> Interactive Hash Table Collision Simulator (Linear Probing)
                             </p>
@@ -1287,22 +1958,38 @@ print(f"Target {target} found at index: {found_idx}")
 
                             {/* Main split layout */}
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'stretch' }}>
-                                {/* Left: Bucket cells */}
-                                <div style={{ flex: '1 1 400px', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                    <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', margin: 0, letterSpacing: '0.5px' }}>
-                                        <i className="fa-solid fa-table-cells-large"></i> HashTable Buckets (Linear Probing, Size 10)
-                                    </h4>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+                                {/* Left: Bucket cells wrapper */}
+                                <div className="simulator-box" style={{ flex: '1 1 400px', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '12px', background: 'rgba(9,13,22,0.2)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '16px', position: 'relative', height: 'fit-content' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '8px' }}>
+                                        <h4 style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', margin: 0, letterSpacing: '0.5px' }}>
+                                            <i className="fa-solid fa-table-cells-large"></i> HashTable Buckets (Size 10)
+                                        </h4>
+                                    </div>
+
+                                    {/* Centered Operation Badge */}
+                                    <div style={{ display: 'flex', justifyContent: 'center', margin: '12px 0 4px' }}>
+                                        <span className={`exp-panel-badge ${info.badge}`} style={{ fontSize: '11px', padding: '6px 14px', borderRadius: '20px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+                                            <i className={info.icon}></i> {info.label}
+                                        </span>
+                                    </div>
+
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', paddingTop: '10px' }}>
                                         {step.buckets && step.buckets.map((b, idx) => {
                                             let stateClass = '';
+                                            let ptrLabel = '';
                                             if (idx === step.activeIndex) {
-                                                if (step.state === 'found') stateClass = ' match';
-                                                else if (step.state === 'collision') stateClass = ' probing';
-                                                else if (step.state === 'empty') stateClass = ' probing';
-                                                else stateClass = ' active-insert';
+                                                if (step.state === 'found') { stateClass = ' match'; ptrLabel = 'MATCH'; }
+                                                else if (step.state === 'collision') { stateClass = ' probing'; ptrLabel = 'COLLISION'; }
+                                                else if (step.state === 'empty') { stateClass = ' probing'; ptrLabel = 'EMPTY'; }
+                                                else { stateClass = ' active-insert'; ptrLabel = 'HASH INDEX'; }
                                             } else if (b !== null) { stateClass = ' occupied'; }
                                             return (
-                                                <div key={idx} className={`hash-bucket-cell${stateClass}`}>
+                                                <div key={idx} className={`hash-bucket-cell${stateClass}`} style={{ position: 'relative' }}>
+                                                    {ptrLabel && (
+                                                        <span style={{ position: 'absolute', right: '4px', top: '-10px', fontSize: '8px', fontWeight: 'bold', color: 'white', background: 'var(--accent-orange)', padding: '1px 4px', borderRadius: '3px', zIndex: 10 }}>
+                                                            {ptrLabel}
+                                                        </span>
+                                                    )}
                                                     <span style={{ fontWeight: 'bold', color: 'var(--text-muted)', fontFamily: 'Fira Code' }}>[{idx}]</span>
                                                     <span style={{ fontFamily: 'Fira Code', fontSize: '11px' }}>{b ? `${b[0]}: ${b[1]}` : 'None'}</span>
                                                 </div>
@@ -1311,25 +1998,30 @@ print(f"Target {target} found at index: {found_idx}")
                                     </div>
                                 </div>
 
-                                {/* Right: Interactive Explanation Panel */}
-                                <ExplanationPanel
-                                    activeNode={step.activeNode}
-                                    message={step.message}
-                                    vars={buildHashVars(step)}
-                                    currentStep={currentStep}
-                                    totalSteps={history.length}
-                                    onPrev={() => setCurrentStep(p => Math.max(0, p - 1))}
-                                    onNext={() => setCurrentStep(p => Math.min(history.length - 1, p + 1))}
-                                />
+                                {/* Right: Explanation Panel + Flowchart */}
+                                <div style={{ flex: '1 1 320px', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <ExplanationPanel
+                                        activeNode={step.activeNode}
+                                        customLabel={info.label}
+                                        message={step.message}
+                                        vars={buildHashVars(step)}
+                                        currentStep={currentStep}
+                                        totalSteps={history.length}
+                                        onPrev={() => setCurrentStep(p => Math.max(0, p - 1))}
+                                        onNext={() => setCurrentStep(p => Math.min(history.length - 1, p + 1))}
+                                    />
+                                    {/* Flowchart below ExplanationPanel */}
+                                    <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
+                                        <p style={{ margin: '0 0 8px', fontSize: '11px', fontWeight: '700', color: 'var(--accent-green)', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'Outfit' }}>
+                                            <i className="fa-solid fa-diagram-project"></i>
+                                            Flowchart: Linear Probing Search
+                                        </p>
+                                        <div style={{ background: 'var(--bg-primary)', borderRadius: '8px', padding: '10px', border: '1px solid var(--border-color)', overflowX: 'auto' }}>
+                                            <HashingFlowchart />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-
-                        {/* Detail card */}
-                        <div style={{ marginTop: '24px', padding: '14px', borderRadius: '8px', borderLeft: '4px solid var(--accent-green)', background: 'rgba(16,185,129,0.05)', fontSize: '12px', lineHeight: 1.6 }}>
-                            <strong style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', fontSize: '13px', fontFamily: 'Outfit' }}>
-                                <i className="fa-solid fa-code-compare"></i> insertData_alternative vs searchData_alternative
-                            </strong>
-                            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '12px' }}>In Lab 6, collision resolution uses <strong>linear probing</strong>. The <code>_alternative</code> versions simplify loop logic by using a standard <strong>for loop</strong> over the full bucket range, ensuring each bucket is checked at most once.</p>
                         </div>
                     </div>
                 </div>
