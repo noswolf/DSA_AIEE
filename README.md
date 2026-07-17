@@ -14,7 +14,7 @@ Urgency Contact: sirasit.lo@kmitl.ac.th
 
 ## Main Interactive Guides
 
-[DSA_Guide]()
+[DSA_Guide (Coming soon)]()
 
 ## Course Outlines
 
@@ -26,4 +26,4 @@ Urgency Contact: sirasit.lo@kmitl.ac.th
 || | 04 | [S04_Arrays](https://github.com/noswolf/DSA_AIEE/blob/main/2026/slides/DSA_Week2_S04.pdf) | | - [Lab #4](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L04/DSA_Lab_4_student.ipynb) <br> - [Lab #4 Tutorial](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L04/DSA_Lab_4_tutorial_student.ipynb) | |
 |Week 03| 13/07/2026 | 05 | [S05_Searching](https://github.com/noswolf/DSA_AIEE/blob/main/2026/slides/DSA_Week3_S05.pdf)  | [Guide #3: Searching & Sorting](https://noswolf.github.io/DSA_AIEE/week3/week3.html) | - [Lab #5](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L05/DSA_Lab_5_student.ipynb)  <br> - [Loop Example Codes](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L05/DSA_Week3_live.ipynb)|  [Challenge #5](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L05/DSA_Lab_5_challenge.ipynb) |
 || | 06 | [S06_Sorting](https://github.com/noswolf/DSA_AIEE/blob/main/2026/slides/DSA_Week3_S06.pdf) | [Guide #4: Sorting (Old)](https://noswolf.github.io/DSA_BIT/Week7/Sorting_Interactive_Guide.html) |[Lab #6](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L06/DSA_Lab_6_student.ipynb) | [Challenge #6](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L06/DSA_Lab_6_challenge.ipynb) |
-|Week 05| 20/07/2026 | 07 | [S06_Linked Lists](https://github.com/noswolf/DSA_AIEE/blob/main/2026/slides/DSA_Week4_S07.pdf)  | [Guide #5: Singly Linked List](https://noswolf.github.io/DSA_BIT/Week9/Linked_list_guide.html) <br> [Guide #6: Doubly Linked List](https://noswolf.github.io/DSA_BIT/Week10/Doubly_LL_guide.html) | [Lab #5](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L07/DSA_Lab_7_student.ipynb)  |  [Challenge #7](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L07/DSA_Lab_7_challenge.ipynb) |
+|Week 04| 20/07/2026 | 07 | [S06_Linked Lists](https://github.com/noswolf/DSA_AIEE/blob/main/2026/slides/DSA_Week4_S07.pdf)  | [Guide #5: Singly Linked List](https://noswolf.github.io/DSA_BIT/Week9/Linked_list_guide.html) <br> [Guide #6: Doubly Linked List](https://noswolf.github.io/DSA_BIT/Week10/Doubly_LL_guide.html) | [Lab #7](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L07/DSA_Lab_7_student.ipynb)  |  [Challenge #7](https://github.com/noswolf/DSA_AIEE/blob/main/2026/labs/L07/DSA_Lab_7_challenge.ipynb) |
