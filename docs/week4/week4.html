@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UT
+
+        const dTabs = ['structure', 'creation', 'traversal', 'insertion', 'deletion'];
+        const dTabLabels = ['1. Basic Structure', '2. Creation', '3. Traversal', '4. Insertion', '5. Deletion'];
+        const currentDTabIndex = dTabs.indexOf(activeTab);
+
+        const handleDPrev = () => {
+            if (currentDTabIndex > 0) {
+                setActiveTab(dTabs[currentDTabIndex - 1]);
+                document.querySelector('.content-body').scrollTop = 0;
+            } else {
+                window.navigateToSection('singly-section');
+            }
+        };
+
+        const handleDNext = () => {
+            if (currentDTabIndex < dTabs.length - 1) {
+                setActiveTab(dTabs[currentDTabIndex + 1]);
+                document.querySelector('.content-body').scrollTop = 0;
+            } else {
+                window.navigateToSection('quiz-section');
+            }
+        };
+F-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 4: Linked Lists & OOP | DSA AIEE</title>
+    <meta name="description" content="Interactive guide for Linked Lists and OOP Basics — Week 4 of 01526121 DSA AIEE.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Week CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS (No Preflight to protect existing styles) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
+
+    <!-- Pyodide -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+
+    <style>
+        
+        /* ── Visualizer Specific CSS ── */
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            margin: 0;
+        }
+        .node-enter {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .list-container::-webkit-scrollbar { height: 8px; }
+        .list-container::-webkit-scrollbar-track { background: #f1f5f9; }
+        .list-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .code-font { font-family: 'Fira Code', monospace; }
+
+        /* Staging node overlay */
+        .staging-overlay {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+        .staging-overlay .staging-badge {
+            animation: floatBounce 1s ease-in-out infinite alternate;
+        }
+        @keyframes floatBounce {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-8px); }
+        }
+
+        /* Flowchart SVG */
+        .flowchart-box { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    
+        /* ── End Visualizer CSS ── */
+
+        /* ── visualizer sections ── */
+        .viz-section {
+            min-height: calc(100vh - 70px);
+            display: none;
+            padding: 20px;
+            padding-bottom: 60px;
+            background: transparent;
+        }
+        .viz-section.active {
+            display: block;
+        }
+        
+
+        /* ── normal content sections ── */
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+
+        /* ── code blocks in OOP section ── */
+        .oop-code {
+            background: #0f172a;
+            color: #e2e8f0;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-left: 4px solid #3b82f6;
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 12px 0;
+        }
+        .oop-code .kw { color: #c084fc; }
+        .oop-code .fn { color: #60a5fa; }
+        .oop-code .cn { color: #fbbf24; }
+        .oop-code .st { color: #34d399; }
+        .oop-code .cm { color: #64748b; }
+        .oop-code .kv { color: #f97316; }
+
+        /* ── card grid & cards ── */
+        .card { padding: 24px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); }
+        body.light-mode .card { background: #ffffff; border-color: rgba(0,0,0,0.1); }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        body.light-mode .info-card {
+            background: #ffffff;
+            border-color: rgba(0,0,0,0.1);
+        }
+        .info-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+        .info-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+        .info-card code {
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--accent-blue);
+            border-radius: 4px;
+            padding: 1px 5px;
+            font-size: 12px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* ── quiz styles (copied from week3) ── */
+        .quiz-question-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        body.light-mode .quiz-question-card { background: #fff; border-color: rgba(0,0,0,0.1); }
+        .quiz-question-text { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; line-height: 1.5; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+        .quiz-option {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .quiz-option:hover { border-color: var(--accent-blue); color: var(--text-primary); }
+        .quiz-option.correct { border-color: var(--accent-green); background: var(--bg-green-light); color: var(--accent-green); }
+        .quiz-option.incorrect { border-color: var(--accent-red); background: var(--bg-red-light); color: var(--accent-red); }
+        body.light-mode .quiz-option { background: #f8fafc; border-color: rgba(0,0,0,0.1); }
+        .quiz-feedback { margin-top: 14px; padding: 12px 16px; border-radius: 8px; font-size: 13px; line-height: 1.6; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: var(--bg-green-light); border-left: 3px solid var(--accent-green); color: var(--accent-green); }
+        .quiz-feedback.incorrect { background: var(--bg-red-light); border-left: 3px solid var(--accent-red); color: var(--accent-red); }
+        .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .quiz-counter { font-size: 13px; color: var(--text-muted); }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="app-container">
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <span class="logo-icon"><i class="fa-solid fa-link"></i></span>
+                    <div class="logo-text">
+                        <h1>Week 4</h1>
+                        <span class="subtitle">Linked Lists & OOP</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Toggle Sidebar">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-section-title">Module Sections</span>
+
+                <button class="nav-item active" data-target="oop-section">
+                    <i class="fa-solid fa-cubes"></i> <span>Module 1: OOP Refresher</span>
+                </button>
+
+                <button class="nav-item" data-target="singly-section">
+                    <i class="fa-solid fa-link"></i> <span>Module 2: Singly Linked List</span>
+                </button>
+
+                <button class="nav-item" data-target="doubly-section">
+                    <i class="fa-solid fa-arrows-left-right"></i> <span>Module 3: Doubly Linked List</span>
+                </button>
+
+                <button class="nav-item" data-target="quiz-section">
+                    <i class="fa-solid fa-clipboard-question"></i> <span>Transition Quiz</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="interpreter-status">
+                    <span class="status-dot loading" id="status-dot"></span>
+                    <span class="status-text" id="status-text">Python Loading...</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ── Main Content ── -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left" style="display:flex; align-items:center; gap:16px;">
+                    <div>
+                        <span class="breadcrumb">Linked Lists &amp; OOP Basics</span>
+                        <h2 id="current-section-title">Module 1: OOP Refresher</h2>
+                    </div>
+                </div>
+                <div class="header-right" style="display:flex; gap:12px;">
+                    <a href="../index.html" class="btn btn-secondary" title="Back to Dashboard">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <button class="btn btn-secondary" id="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button class="btn btn-secondary" id="toggle-console-btn" title="Toggle Terminal Console">
+                        <i class="fa-solid fa-terminal"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Frame -->
+            <div class="content-body">
+
+                <!-- ── MODULE 1: OOP Refresher ── -->
+                <section id="oop-section" class="content-section active">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">
+                                <i class="fa-solid fa-cubes mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 1: OOP Refresher</h2>
+                                <p>Before diving into Linked Lists, let's warm up with the Object-Oriented Programming patterns you'll use. Week 2 introduced <code>class</code>, <code>method</code>, and <code>inheritance</code>. Now we add the key patterns for writing clean, professional data structure code.</p>
+                                <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+                                    <span class="tag" style="background:rgba(168,85,247,0.1); color:var(--accent-purple);">Encapsulation</span>
+                                    <span class="tag" style="background:rgba(59,130,246,0.1); color:var(--accent-blue);">Getters & Setters</span>
+                                    <span class="tag" style="background:rgba(16,185,129,0.1); color:var(--accent-green);">super() & Inheritance</span>
+                                    <span class="tag" style="background:rgba(249,115,22,0.1); color:var(--accent-orange);">self keyword</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1.1 self keyword -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">
+                            <i class="fa-solid fa-circle-dot" style="color:var(--accent-orange); margin-right:8px;"></i>
+                            1.1 — The <code style="font-size:16px; background:rgba(249,115,22,0.12); color:var(--accent-orange); padding:2px 8px; border-radius:5px;">self</code> Keyword
+                        </h3>
+                        <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">
+                            In Python, <code>self</code> is the first parameter of every instance method. It refers to <strong>the specific object being created or used</strong>. This is how a method knows which object's data to access. Without it, methods would have no way to distinguish between different instances of the same class.
+                        </p>
+                        <div class="oop-code"><span class="kw">class</span> <span class="cn">BankAccount</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, owner, balance):
+        self.owner = owner          <span class="cm"># 'self.owner' stores data ON this specific object</span>
+        self.balance = balance
+
+    <span class="kw">def</span> <span class="fn">show_info</span>(self):
+        <span class="kw">print</span>(<span class="st">f"Account of {self.owner}, Balance: {self.balance}"</span>)
+
+<span class="cm"># Creating two different objects from the same class</span>
+acc1 = <span class="cn">BankAccount</span>(<span class="st">"Alice"</span>, 5000)
+acc2 = <span class="cn">BankAccount</span>(<span class="st">"Bob"</span>, 1200)
+
+acc1.<span class="fn">show_info</span>()  <span class="cm"># Output: Account of Alice, Balance: 5000</span>
+acc2.<span class="fn">show_info</span>()  <span class="cm"># Output: Account of Bob, Balance: 1200</span></div>
+                        <div style="background:rgba(249,115,22,0.08); border-left:3px solid var(--accent-orange); border-radius:0 8px 8px 0; padding:12px 16px; margin-top:8px;">
+                            <p style="font-size:13px; color:var(--text-secondary); margin:0;"><strong style="color:var(--accent-orange);">Key Point:</strong> When you call <code>acc1.show_info()</code>, Python automatically passes <code>acc1</code> as the <code>self</code> argument. You never pass it manually.</p>
+                        </div>
+                    </div>
+
+                    <!-- 1.2 Encapsulation / Getters & Setters -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">
+                            <i class="fa-solid fa-shield-halved" style="color:var(--accent-blue); margin-right:8px;"></i>
+                            1.2 — Encapsulation &amp; Getters / Setters
+                        </h3>
+                        <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">
+                            <strong>Encapsulation</strong> means hiding the internal state of an object and exposing it through well-defined methods. This protects data from being modified accidentally. In Python, we use a <strong>single underscore</strong> (<code>_attr</code>) as a convention to signal "private", and we provide <strong>getter/setter methods</strong> to safely read or write the value.
+                        </p>
+                        <div class="oop-code"><span class="kw">class</span> <span class="cn">Node</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, data):
+        self._data = data      <span class="cm"># _data is "protected" — don't modify directly</span>
+        self._next = <span class="kw">None</span>
+
+    <span class="cm"># Getter — allows reading the value safely</span>
+    <span class="kw">def</span> <span class="fn">get_data</span>(self):
+        <span class="kw">return</span> self._data
+
+    <span class="cm"># Setter — allows updating with validation</span>
+    <span class="kw">def</span> <span class="fn">set_data</span>(self, new_data):
+        <span class="kw">if</span> new_data <span class="kw">is not None</span>:     <span class="cm"># Add validation here</span>
+            self._data = new_data
+        <span class="kw">else</span>:
+            <span class="kw">raise</span> <span class="cn">ValueError</span>(<span class="st">"Data cannot be None"</span>)
+
+    <span class="kw">def</span> <span class="fn">get_next</span>(self):
+        <span class="kw">return</span> self._next
+
+    <span class="kw">def</span> <span class="fn">set_next</span>(self, node):
+        self._next = node
+
+<span class="cm"># Usage</span>
+n = <span class="cn">Node</span>(42)
+<span class="kw">print</span>(n.<span class="fn">get_data</span>())    <span class="cm"># 42</span>
+n.<span class="fn">set_data</span>(99)
+<span class="kw">print</span>(n.<span class="fn">get_data</span>())    <span class="cm"># 99</span></div>
+                    </div>
+
+                    <!-- 1.3 super() and Inheritance -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">
+                            <i class="fa-solid fa-sitemap" style="color:var(--accent-green); margin-right:8px;"></i>
+                            1.3 — <code style="font-size:16px; background:rgba(16,185,129,0.12); color:var(--accent-green); padding:2px 8px; border-radius:5px;">super()</code> and Inheritance
+                        </h3>
+                        <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">
+                            <strong>Inheritance</strong> lets a child class reuse code from a parent class. The <code>super()</code> function is used to call the <strong>parent class's method</strong> from within the child. This is extremely common in data structure implementations where you build specialized structures on top of base ones.
+                        </p>
+                        <div class="oop-code"><span class="kw">class</span> <span class="cn">LinkedList</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.head = <span class="kw">None</span>
+        self.size = 0
+
+    <span class="kw">def</span> <span class="fn">__len__</span>(self):
+        <span class="kw">return</span> self.size
+
+
+<span class="cm"># DoublyLinkedList inherits all attributes and methods from LinkedList</span>
+<span class="kw">class</span> <span class="cn">DoublyLinkedList</span>(<span class="cn">LinkedList</span>):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        <span class="kw">super</span>().<span class="fn">__init__</span>()    <span class="cm"># Call parent's __init__ to set head and size</span>
+        self.tail = <span class="kw">None</span>     <span class="cm"># DLL adds a tail pointer on top of SLL</span>
+
+    <span class="kw">def</span> <span class="fn">info</span>(self):
+        <span class="kw">print</span>(<span class="st">f"DLL: size={self.size}, head={self.head}, tail={self.tail}"</span>)
+
+
+dll = <span class="cn">DoublyLinkedList</span>()
+dll.<span class="fn">info</span>()           <span class="cm"># DLL: size=0, head=None, tail=None</span>
+<span class="kw">print</span>(<span class="kw">len</span>(dll))      <span class="cm"># 0 — inherited from LinkedList!</span></div>
+                        <div style="background:rgba(16,185,129,0.08); border-left:3px solid var(--accent-green); border-radius:0 8px 8px 0; padding:12px 16px; margin-top:8px;">
+                            <p style="font-size:13px; color:var(--text-secondary); margin:0;"><strong style="color:var(--accent-green);">Why super()?</strong> Without <code>super().__init__()</code>, the parent's constructor never runs, so <code>self.head</code> and <code>self.size</code> would never be initialized. This causes an <code>AttributeError</code> at runtime.</p>
+                        </div>
+                    </div>
+
+                    <!-- 1.4 Putting it together: A proper Node class -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">
+                            <i class="fa-solid fa-puzzle-piece" style="color:var(--accent-cyan); margin-right:8px;"></i>
+                            1.4 — Putting It All Together: A Complete Node Class
+                        </h3>
+                        <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">
+                            Here is how a production-quality <code>Node</code> class for a Linked List looks, applying all three OOP concepts above.
+                        </p>
+                        <div class="oop-code"><span class="kw">class</span> <span class="cn">Node</span>:
+    <span class="st">"""A single node in a linked list."""</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, data):
+        self._data = data    <span class="cm"># Encapsulated payload</span>
+        self._next = <span class="kw">None</span>   <span class="cm"># Encapsulated pointer</span>
+
+    <span class="cm"># Getter/Setter for data</span>
+    <span class="kw">def</span> <span class="fn">get_data</span>(self): <span class="kw">return</span> self._data
+    <span class="kw">def</span> <span class="fn">set_data</span>(self, val): self._data = val
+
+    <span class="cm"># Getter/Setter for next pointer</span>
+    <span class="kw">def</span> <span class="fn">get_next</span>(self): <span class="kw">return</span> self._next
+    <span class="kw">def</span> <span class="fn">set_next</span>(self, node): self._next = node
+
+    <span class="kw">def</span> <span class="fn">__repr__</span>(self):
+        <span class="kw">return</span> <span class="st">f"Node(data={self._data})"</span>
+
+
+<span class="kw">class</span> <span class="cn">SinglyLinkedList</span>:
+    <span class="st">"""A basic Singly Linked List implementation."""</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self._head = <span class="kw">None</span>
+        self._size = 0
+
+    <span class="kw">def</span> <span class="fn">append</span>(self, data):
+        new_node = <span class="cn">Node</span>(data)
+        <span class="kw">if</span> self._head <span class="kw">is None</span>:
+            self._head = new_node
+        <span class="kw">else</span>:
+            current = self._head
+            <span class="kw">while</span> current.<span class="fn">get_next</span>() <span class="kw">is not None</span>:
+                current = current.<span class="fn">get_next</span>()
+            current.<span class="fn">set_next</span>(new_node)
+        self._size += 1
+
+    <span class="kw">def</span> <span class="fn">__len__</span>(self): <span class="kw">return</span> self._size</div>
+                    </div>
+
+                    <!-- 1.5 Lab 7 OOP Training -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px; font-weight:700; color:var(--text-primary); margin-bottom:12px;">
+                            <i class="fa-solid fa-laptop-code" style="color:var(--accent-purple); margin-right:8px;"></i>
+                            1.5 — Lab 7 OOP Training & Practice
+                        </h3>
+                        <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">
+                            In <strong>Lab 7</strong>, you are tasked with defining a <code>DataNode</code> class and a <code>SinglyLinkedList</code> class, then manually linking nodes together. Use the embedded Python console below to practice creating a few nodes (e.g., "John", "Jane", "Doe"), linking their <code>_next</code> pointers, and writing a simple loop to print their names. This is the exact foundation you'll need for your lab!
+                        </p>
+                        <h4 style="font-size:15px; font-weight:600; color:var(--text-primary); margin-bottom:12px; margin-top:20px;">
+                            <i class="fa-solid fa-terminal" style="color:var(--accent-green); margin-right:8px;"></i> Interactive Console
+                        </h4>
+                        <div class="embedded-editor-container">
+                            <textarea class="editor-textarea" rows="12" spellcheck="false">class DataNode:
+    def __init__(self, name):
+        self.name = name
+        self.next = None
+    
+    def __repr__(self): return f"DataNode({self.name})"
+
+# Practice: Build a 3-node linked list (John -> Jane -> Doe)
+n1 = DataNode("John")
+n2 = DataNode("Jane")
+n3 = DataNode("Doe")
+
+# Link them together
+n1.next = n2
+n2.next = n3
+
+# Traverse and print
+current = n1
+while current is not None:
+    print(current.name)
+    current = current.next</textarea>
+                            <div class="editor-controls">
+                                <button class="btn btn-success run-editor-btn"><i class="fa-solid fa-play"></i> Run</button>
+                            </div>
+                            <pre class="editor-output">>>> Output will appear here after running.</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ── MODULE 2: Singly LL (iframe) ── -->
+                <div id="singly-section" class="viz-section">
+                    <div id="singly-root" style="width: 100%;"></div>
+                </div>
+
+                <!-- ── MODULE 3: Doubly LL (iframe) ── -->
+                <div id="doubly-section" class="viz-section">
+                    <div id="doubly-root" style="width: 100%;"></div>
+                </div>
+
+                <!-- ── QUIZ ── -->
+                <section id="quiz-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block">
+                            <div class="mod-header-icon-wrap" style="background: rgba(249, 115, 22, 0.15); color: var(--accent-orange);">
+                                <i class="fa-solid fa-clipboard-question mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Transition Quiz</h2>
+                                <p>Test your understanding of Linked Lists and OOP concepts from Week 4. This knowledge will be the foundation for Stacks, Queues, and Trees in upcoming weeks.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="quiz-card-container"></div>
+                    <div class="quiz-nav">
+                        <span class="quiz-counter" id="quiz-counter">Question 1 of 8</span>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn btn-secondary" id="quiz-prev-btn"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                            <button class="btn btn-primary" id="quiz-next-btn">Next <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </section>
+
+            </div><!-- end .content-body -->
+        </main>
+    </div><!-- end .app-container -->
+
+    <!-- Global Console Drawer -->
+    <div class="console-drawer" id="console-drawer">
+        <div class="console-header">
+            <div class="console-title-wrap">
+                <i class="fa-solid fa-terminal"></i>
+                <span>Global Python Console</span>
+            </div>
+            <div class="console-controls">
+                <button class="console-ctrl-btn" id="run-global-console-btn" title="Run Code"><i class="fa-solid fa-play"></i></button>
+                <button class="console-ctrl-btn" id="clear-console-btn" title="Clear Output"><i class="fa-solid fa-trash"></i></button>
+                <button class="console-ctrl-btn" id="minimize-console-btn" title="Minimize"><i class="fa-solid fa-chevron-down"></i></button>
+            </div>
+        </div>
+        <textarea class="console-textarea" id="global-console-textarea" placeholder="# Type Python code here..."></textarea>
+        <pre class="console-terminal" id="global-console-terminal">>>> Python Console Ready</pre>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // ── Nav item click handler ──
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const target = item.getAttribute('data-target');
+                // Hide all
+                document.querySelectorAll('.content-section, .viz-section').forEach(s => s.classList.remove('active'));
+                // Show target
+                const el = document.getElementById(target);
+                if (el) el.classList.add('active');
+                // Update active nav
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+                // Update header
+                const title = document.getElementById('current-section-title');
+                if (title) title.textContent = item.querySelector('span')?.innerText || item.innerText.trim();
+            });
+        });
+
+        // ── Sidebar toggle ──
+        const sidebarBtn = document.getElementById('sidebar-toggle-btn');
+        const appContainer = document.querySelector('.app-container');
+        if (sidebarBtn) sidebarBtn.addEventListener('click', () => appContainer.classList.toggle('collapsed'));
+
+        // ── Theme toggle ──
+        const themeBtn = document.getElementById('theme-toggle-btn');
+        if (themeBtn) themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const icon = themeBtn.querySelector('i');
+            if (icon) icon.className = document.body.classList.contains('light-mode') ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+        });
+
+        // ── Console drawer ──
+        const consoleDrawer = document.getElementById('console-drawer');
+        const toggleConsoleBtn = document.getElementById('toggle-console-btn');
+        const minimizeConsoleBtn = document.getElementById('minimize-console-btn');
+        const clearConsoleBtn = document.getElementById('clear-console-btn');
+        const runConsoleBtn = document.getElementById('run-global-console-btn');
+        const consoleTextarea = document.getElementById('global-console-textarea');
+        const consoleTerminal = document.getElementById('global-console-terminal');
+
+        const toggleDrawer = () => { if (consoleDrawer) consoleDrawer.classList.toggle('expanded'); };
+        if (toggleConsoleBtn) toggleConsoleBtn.addEventListener('click', toggleDrawer);
+        if (minimizeConsoleBtn) minimizeConsoleBtn.addEventListener('click', toggleDrawer);
+        if (clearConsoleBtn) clearConsoleBtn.addEventListener('click', () => { if (consoleTerminal) consoleTerminal.textContent = 'Console cleared.\n'; });
+        if (runConsoleBtn) runConsoleBtn.addEventListener('click', async () => {
+            if (consoleTerminal && consoleTextarea) {
+                consoleTerminal.textContent = 'Running...\n';
+                const result = await runPythonCode(consoleTextarea.value);
+                consoleTerminal.textContent = result || '>>> Code executed with no printed output.';
+            }
+        });
+
+        // ── Embedded code runners ──
+        document.querySelectorAll('.run-editor-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const container = btn.closest('.embedded-editor-container');
+                const textarea = container.querySelector('.editor-textarea');
+                const output = container.querySelector('.editor-output');
+                output.textContent = 'Running...\n';
+                if (!pyodideInstance) { output.textContent = 'Python engine is loading. Please wait...'; return; }
+                const result = await runPythonCode(textarea.value);
+                output.textContent = result || '>>> Code executed with no printed output.';
+            });
+        });
+
+        // ── Tab indentation ──
+        document.querySelectorAll('textarea').forEach(t => enableTabIndentation(t));
+
+        // ── Init Pyodide ──
+        initPyodide();
+
+        // ── Quiz ──
+        const quizData = [
+            {
+                q: "In a Singly Linked List, what does the 'next' pointer of the last node (Tail) point to?",
+                options: ["The Head node", "None (Null)", "Itself", "The second-to-last node"],
+                correct: 1,
+                explanation: "The Tail's 'next' pointer is set to None to signal the end of the list. This is how traversal terminates the 'while current is not None' loop."
+            },
+            {
+                q: "What is the time complexity of inserting a new node at the HEAD of a Singly Linked List?",
+                options: ["O(n) — must traverse to the end", "O(log n)", "O(1) — constant time, no traversal needed", "O(n²)"],
+                correct: 2,
+                explanation: "Inserting at the head only requires two pointer updates: new_node.next = head, then head = new_node. No traversal is needed, making it O(1)."
+            },
+            {
+                q: "Which OOP concept does using `self._data` (with an underscore) represent in Python?",
+                options: ["Inheritance", "Encapsulation (marking as protected)", "Polymorphism", "Abstraction"],
+                correct: 1,
+                explanation: "A single underscore (_attr) is a naming convention in Python that signals the attribute is 'protected' or 'private'. This is encapsulation — hiding internal state and encouraging use of getters/setters."
+            },
+            {
+                q: "What is the PRIMARY advantage of a Doubly Linked List (DLL) over a Singly Linked List (SLL)?",
+                options: [
+                    "It uses less memory per node",
+                    "Insertion at the head is O(1) instead of O(n)",
+                    "Bidirectional traversal and O(1) deletion given a node reference",
+                    "It is faster to search by value"
+                ],
+                correct: 2,
+                explanation: "A DLL allows traversal in both directions (forward via .next, backward via .prev). Critically, if you have a direct reference to a node, you can delete it in O(1) because you can access its predecessor via .prev without traversing from head."
+            },
+            {
+                q: "In Python OOP, what is the purpose of calling `super().__init__()` inside a child class's constructor?",
+                options: [
+                    "To create a copy of the parent object",
+                    "To execute the parent class's __init__ method, initializing inherited attributes",
+                    "To import the parent class's methods",
+                    "It's not necessary in Python"
+                ],
+                correct: 1,
+                explanation: "super().__init__() calls the parent class's constructor. Without it, inherited attributes (like self.head and self.size) would never be initialized, leading to AttributeErrors when you try to use them."
+            },
+            {
+                q: "To delete a middle node in a Singly Linked List, you need access to:",
+                options: [
+                    "Only the node to be deleted",
+                    "The node to be deleted AND its predecessor (prev node)",
+                    "The head and tail pointers",
+                    "None of the above — just update the node's value"
+                ],
+                correct: 1,
+                explanation: "In an SLL, deletion requires setting prev.next = node_to_delete.next. Since nodes only have a .next pointer, you must traverse from head to find the predecessor. This makes middle deletion O(n)."
+            },
+            {
+                q: "How many pointer updates are required to correctly insert a new node in the MIDDLE of a Doubly Linked List?",
+                options: ["1 pointer update", "2 pointer updates", "3 pointer updates", "4 pointer updates"],
+                correct: 3,
+                explanation: "You must update 4 pointers: (1) new_node.next = next_node, (2) new_node.prev = prev_node, (3) prev_node.next = new_node, (4) next_node.prev = new_node. Forgetting any one breaks the bidirectional chain."
+            },
+            {
+                q: "Which data structure would you use to implement a 'browser history' (Back and Forward navigation)?",
+                options: [
+                    "Singly Linked List — because it's simpler",
+                    "Array — for constant-time random access",
+                    "Doubly Linked List — for efficient bidirectional traversal",
+                    "Circular Linked List — to loop back to the start"
+                ],
+                correct: 2,
+                explanation: "A Doubly Linked List is ideal because browser history requires going backward (.prev) and forward (.next) efficiently. Each page is a node, and we can navigate both directions in O(1) time."
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        function renderQuiz(index) {
+            const container = document.getElementById('quiz-card-container');
+            const counter = document.getElementById('quiz-counter');
+            if (!container) return;
+            const q = quizData[index];
+            counter.textContent = `Question ${index + 1} of ${quizData.length}`;
+            container.innerHTML = `
+                <div class="quiz-question-card">
+                    <p class="quiz-question-text">${q.q}</p>
+                    <div class="quiz-options">
+                        ${q.options.map((opt, i) => `<button class="quiz-option" data-index="${i}">${opt}</button>`).join('')}
+                    </div>
+                    <div class="quiz-feedback" id="qfeedback"></div>
+                </div>`;
+            container.querySelectorAll('.quiz-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const chosen = parseInt(btn.getAttribute('data-index'));
+                    const feedback = document.getElementById('qfeedback');
+                    container.querySelectorAll('.quiz-option').forEach(b => b.style.pointerEvents = 'none');
+                    if (chosen === q.correct) {
+                        btn.classList.add('correct');
+                        feedback.textContent = '✓ Correct! ' + q.explanation;
+                        feedback.className = 'quiz-feedback correct show';
+                    } else {
+                        btn.classList.add('incorrect');
+                        container.querySelectorAll('.quiz-option')[q.correct].classList.add('correct');
+                        feedback.textContent = '✗ Incorrect. ' + q.explanation;
+                        feedback.className = 'quiz-feedback incorrect show';
+                    }
+                });
+            });
+        }
+
+        const prevBtn = document.getElementById('quiz-prev-btn');
+        const nextBtn = document.getElementById('quiz-next-btn');
+        if (prevBtn) prevBtn.addEventListener('click', () => { if (currentQuestion > 0) { currentQuestion--; renderQuiz(currentQuestion); } });
+        if (nextBtn) nextBtn.addEventListener('click', () => { if (currentQuestion < quizData.length - 1) { currentQuestion++; renderQuiz(currentQuestion); } });
+        renderQuiz(0);
+    </script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- Singly Linked List Logic ---
+
+        
+
+        const Singly_generateAddress = () => `0x${Math.floor(Math.random() * 0xFFFF).toString(16).toUpperCase().padStart(4, '0')}`;
+        
+        const Singly_Icon = ({ name, size = 20, color = "currentColor", className="" }) => {
+            if (name === 'arrow-right') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>;
+            if (name === 'play') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>;
+            if (name === 'book') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>;
+            if (name === 'clock') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>;
+            if (name === 'refresh') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>;
+            if (name === 'repeat') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>;
+            if (name === 'cpu') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>;
+            return null;
+        };
+
+        const Singly_NodeVisual = ({ value, address, nextAddress, isNull, highlight, label, isNew }) => {
+            if (isNull) return (
+                <div className="flex flex-col items-center mx-2 opacity-60">
+                    <div className="w-16 h-16 border-2 border-dashed border-gray-400 bg-gray-100 rounded flex items-center justify-center">
+                        <span className="text-gray-500 font-bold">None</span>
+                    </div>
+                </div>
+            );
+
+            let borderColor = 'border-slate-300', ringClass = '', bgColor = 'bg-white';
+            if (isNew) { borderColor = 'border-green-500'; ringClass = 'ring-2 ring-green-200'; bgColor = 'bg-green-50'; }
+            else if (highlight) { borderColor = 'border-yellow-400'; ringClass = 'ring-2 ring-yellow-200'; }
+
+            return (
+                <div className={`flex flex-col items-center mx-2 transition-all duration-300 ${highlight || isNew ? 'transform scale-105' : ''}`}>
+                    {label && (
+                        <div className="mb-1 flex flex-col items-center node-enter">
+                            <span className={`text-xs px-2 py-1 rounded-full mb-1 font-bold shadow-sm ${label.includes('Tail') && !label.includes('/') ? 'bg-slate-600 text-white' : 'bg-blue-600 text-white'}`}>{label}</span>
+                            <div className={`w-0.5 h-4 ${label.includes('Tail') && !label.includes('/') ? 'bg-slate-600' : 'bg-blue-600'}`}></div>
+                            <div className={`w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] ${label.includes('Tail') && !label.includes('/') ? 'border-t-slate-600' : 'border-t-blue-600'}`}></div>
+                        </div>
+                    )}
+                    <div className={`node-enter flex shadow-lg rounded-lg overflow-hidden border-2 ${borderColor} ${ringClass}`}>
+                        <div className={`${bgColor} p-3 w-20 flex flex-col items-center justify-center border-r border-slate-200`}>
+                            <span className="text-[10px] text-slate-400 uppercase font-bold">Data</span>
+                            <span className="text-lg font-bold text-slate-800">{value}</span>
+                        </div>
+                        <div className="bg-slate-100 p-3 w-24 flex flex-col items-center justify-center relative">
+                            <span className="text-[10px] text-slate-400 uppercase font-bold">Next</span>
+                            <span className="code-font text-xs text-blue-600 font-bold">{nextAddress || 'None'}</span>
+                        </div>
+                    </div>
+                    <div className="mt-2 code-font text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">Addr: {address}</div>
+                </div>
+            );
+        };
+
+        const Singly_Arrow = () => (
+            <div className="flex items-center justify-center w-12 text-slate-400">
+                <Singly_Icon name="arrow-right" size={24} />
+            </div>
+        );
+
+        // --- Flowchart Components ---
+        const TraversalFlowchart = () => (
+            <div className="flowchart-box mt-4 bg-slate-800 rounded-lg p-4 border border-slate-700">
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-3">Traversal Flowchart</p>
+                <svg viewBox="0 0 300 280" className="w-full max-w-xs mx-auto">
+                    {/* Start */}
+                    <ellipse cx="150" cy="22" rx="50" ry="16" fill="#3b82f6" stroke="#1d4ed8" strokeWidth="1.5"/>
+                    <text x="150" y="26" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">START</text>
+                    {/* Arrow */}
+                    <line x1="150" y1="38" x2="150" y2="55" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrow)"/>
+                    {/* Set current = head */}
+                    <rect x="75" y="56" width="150" height="30" rx="4" fill="#1e293b" stroke="#475569" strokeWidth="1.5"/>
+                    <text x="150" y="75" textAnchor="middle" fill="#94a3b8" fontSize="10">current = head</text>
+                    {/* Arrow */}
+                    <line x1="150" y1="86" x2="150" y2="103" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrow)"/>
+                    {/* Diamond: current != None? */}
+                    <polygon points="150,104 230,128 150,152 70,128" fill="#7c3aed" stroke="#6d28d9" strokeWidth="1.5"/>
+                    <text x="150" y="124" textAnchor="middle" fill="white" fontSize="9">current</text>
+                    <text x="150" y="136" textAnchor="middle" fill="white" fontSize="9">!= None?</text>
+                    {/* Yes arrow down */}
+                    <line x1="150" y1="152" x2="150" y2="170" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrow)"/>
+                    <text x="160" y="165" fill="#22c55e" fontSize="10" fontWeight="bold">Yes</text>
+                    {/* Process node */}
+                    <rect x="75" y="171" width="150" height="30" rx="4" fill="#1e293b" stroke="#475569" strokeWidth="1.5"/>
+                    <text x="150" y="190" textAnchor="middle" fill="#94a3b8" fontSize="10">Process current.data</text>
+                    {/* Arrow */}
+                    <line x1="150" y1="201" x2="150" y2="218" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrow)"/>
+                    {/* current = current.next */}
+                    <rect x="75" y="219" width="150" height="30" rx="4" fill="#1e293b" stroke="#475569" strokeWidth="1.5"/>
+                    <text x="150" y="238" textAnchor="middle" fill="#94a3b8" fontSize="10">current = current.next</text>
+                    {/* Loop back line */}
+                    <path d="M 75 234 Q 30 234 30 128 Q 30 104 70 128" stroke="#64748b" strokeWidth="1.5" fill="none" markerEnd="url(#arrow)"/>
+                    {/* No arrow right */}
+                    <line x1="230" y1="128" x2="260" y2="128" stroke="#64748b" strokeWidth="1.5" markerEnd="url(#arrow)"/>
+                    <text x="237" y="122" fill="#ef4444" fontSize="10" fontWeight="bold">No</text>
+                    {/* End */}
+                    <ellipse cx="280" cy="128" rx="30" ry="16" fill="#10b981" stroke="#047857" strokeWidth="1.5"/>
+                    <text x="280" y="132" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">END</text>
+                    <defs>
+                        <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L6,3 z" fill="#64748b"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        );
+
+        const InsertBeforeFlowchart = () => (
+            <div className="flowchart-box mt-4 bg-white border border-slate-200 rounded-lg p-4">
+                <p className="text-slate-600 text-xs font-bold uppercase tracking-wider mb-3">Insert Before (Middle) — Flowchart</p>
+                <svg viewBox="0 0 300 240" className="w-full max-w-xs mx-auto">
+                    <ellipse cx="150" cy="20" rx="50" ry="14" fill="#3b82f6" stroke="#1d4ed8" strokeWidth="1.5"/>
+                    <text x="150" y="24" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">START</text>
+                    <line x1="150" y1="34" x2="150" y2="50" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow2)"/>
+                    {/* Traverse to prev */}
+                    <rect x="60" y="51" width="180" height="28" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1.5"/>
+                    <text x="150" y="68" textAnchor="middle" fill="#475569" fontSize="10">Traverse to prev node</text>
+                    <line x1="150" y1="79" x2="150" y2="95" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow2)"/>
+                    {/* Create new_node */}
+                    <rect x="60" y="96" width="180" height="28" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1.5"/>
+                    <text x="150" y="113" textAnchor="middle" fill="#475569" fontSize="10">Create new_node in memory</text>
+                    <line x1="150" y1="124" x2="150" y2="140" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow2)"/>
+                    {/* new_node.next = prev.next */}
+                    <rect x="60" y="141" width="180" height="28" rx="4" fill="#fef3c7" stroke="#d97706" strokeWidth="1.5"/>
+                    <text x="150" y="158" textAnchor="middle" fill="#92400e" fontSize="10">new_node.next = prev.next</text>
+                    <line x1="150" y1="169" x2="150" y2="185" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow2)"/>
+                    {/* prev.next = new_node */}
+                    <rect x="60" y="186" width="180" height="28" rx="4" fill="#dcfce7" stroke="#16a34a" strokeWidth="1.5"/>
+                    <text x="150" y="203" textAnchor="middle" fill="#14532d" fontSize="10">prev.next = new_node</text>
+                    <line x1="150" y1="214" x2="150" y2="227" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow2)"/>
+                    <ellipse cx="150" cy="234" rx="40" ry="13" fill="#10b981" stroke="#047857" strokeWidth="1.5"/>
+                    <text x="150" y="238" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">DONE</text>
+                    <defs>
+                        <marker id="arrow2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L6,3 z" fill="#94a3b8"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        );
+
+        const DeleteFlowchart = () => (
+            <div className="flowchart-box mt-4 bg-white border border-slate-200 rounded-lg p-4">
+                <p className="text-slate-600 text-xs font-bold uppercase tracking-wider mb-3">Delete Middle Node — Flowchart</p>
+                <svg viewBox="0 0 300 240" className="w-full max-w-xs mx-auto">
+                    <ellipse cx="150" cy="20" rx="50" ry="14" fill="#3b82f6" stroke="#1d4ed8" strokeWidth="1.5"/>
+                    <text x="150" y="24" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">START</text>
+                    <line x1="150" y1="34" x2="150" y2="50" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow3)"/>
+                    <rect x="55" y="51" width="190" height="28" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1.5"/>
+                    <text x="150" y="68" textAnchor="middle" fill="#475569" fontSize="10">Traverse to prev (before target)</text>
+                    <line x1="150" y1="79" x2="150" y2="95" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow3)"/>
+                    <rect x="55" y="96" width="190" height="28" rx="4" fill="#fff7ed" stroke="#ea580c" strokeWidth="1.5"/>
+                    <text x="150" y="113" textAnchor="middle" fill="#9a3412" fontSize="10">temp = prev.next (node to delete)</text>
+                    <line x1="150" y1="124" x2="150" y2="140" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow3)"/>
+                    <rect x="55" y="141" width="190" height="28" rx="4" fill="#dcfce7" stroke="#16a34a" strokeWidth="1.5"/>
+                    <text x="150" y="158" textAnchor="middle" fill="#14532d" fontSize="10">prev.next = temp.next</text>
+                    <line x1="150" y1="169" x2="150" y2="185" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow3)"/>
+                    <rect x="55" y="186" width="190" height="28" rx="4" fill="#fce7f3" stroke="#be185d" strokeWidth="1.5"/>
+                    <text x="150" y="203" textAnchor="middle" fill="#831843" fontSize="10">GC reclaims temp's memory</text>
+                    <line x1="150" y1="214" x2="150" y2="227" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#arrow3)"/>
+                    <ellipse cx="150" cy="234" rx="40" ry="13" fill="#10b981" stroke="#047857" strokeWidth="1.5"/>
+                    <text x="150" y="238" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">DONE</text>
+                    <defs>
+                        <marker id="arrow3" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L6,3 z" fill="#94a3b8"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        );
+
+        // --- Main App ---
+        const SinglyApp = () => {
+            const [activeTab, setActiveTab] = useState('structure');
+            const [list, setList] = useState([]);
+            const [logs, setLogs] = useState(["Welcome to the Linked List module."]);
+            const [highlightIndex, setHighlightIndex] = useState(null);
+            const [pointerLabel, setPointerLabel] = useState({});
+            const [stagingNode, setStagingNode] = useState(null);
+            const [speed, setSpeed] = useState(1);
+
+            const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms / speed));
+            const log = (msg) => setLogs(prev => [msg, ...prev]);
+
+            const resetList = () => {
+                setHighlightIndex(null);
+                setPointerLabel({});
+                setStagingNode(null);
+                setLogs([`Resetting environment for ${activeTab}...`]);
+                if (activeTab === 'traversal' || activeTab === 'insertion' || activeTab === 'deletion' || activeTab === 'circular') {
+                    const addr1 = Singly_generateAddress(), addr2 = Singly_generateAddress(), addr3 = Singly_generateAddress();
+                    let nodes = [
+                        { id: 1, value: 10, address: addr1, next: addr2 },
+                        { id: 2, value: 45, address: addr2, next: addr3 },
+                        { id: 3, value: 99, address: addr3, next: null },
+                    ];
+                    if (activeTab === 'traversal') {
+                        const used = new Set();
+                        nodes = nodes.map(n => { let s; do { s = Math.floor(Math.random() * 16); } while(used.has(s)); used.add(s); return { ...n, memorySlot: s }; });
+                    }
+                    setList(nodes);
+                    setPointerLabel({ 0: 'head' });
+                } else {
+                    setList([]);
+                }
+            };
+
+            useEffect(() => { resetList(); }, [activeTab]);
+
+            const getNodeLabel = (index) => {
+                let label = pointerLabel[index] || "";
+                if (index === list.length - 1) label = label ? label + " / Tail" : "Tail";
+                return label || null;
+            };
+
+            const createHead = async () => {
+                log("Allocating memory for Head node...");
+                const addr = Singly_generateAddress();
+                const newNode = { id: Date.now(), value: Math.floor(Math.random() * 100), address: addr, next: null };
+                setStagingNode(newNode);
+                await wait(1000);
+                setStagingNode(null);
+                setList([newNode]);
+                setPointerLabel({ 0: 'head' });
+                log(`Head created at ${addr}.`);
+            };
+
+            const appendNode = async () => {
+                log("Creating new node...");
+                const newAddr = Singly_generateAddress();
+                const newNode = { id: Date.now(), value: Math.floor(Math.random() * 100), address: newAddr, next: null };
+                setStagingNode(newNode);
+                await wait(1000);
+                if (list.length === 0) { setStagingNode(null); setList([newNode]); setPointerLabel({ 0: 'head' }); log("List was empty. New node becomes Head."); return; }
+                log("Traversing to Tail...");
+                const newList = [...list];
+                newList[newList.length - 1].next = newAddr;
+                setStagingNode(null);
+                setList([...newList, newNode]);
+                log(`Updated previous tail.next to ${newAddr}.`);
+            };
+
+            const traverseList = async () => {
+                log("Starting Traversal...");
+                for (let i = 0; i < list.length; i++) {
+                    setHighlightIndex(i);
+                    setPointerLabel({ 0: 'head', [i]: 'current' });
+                    log(`Visiting Node at ${list[i].address}. Value: ${list[i].value}.`);
+                    await wait(1000);
+                }
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+                log("Traversal Complete. current is None.");
+            };
+
+            const insertHead = async () => {
+                log("Step 1: Create new node object in memory.");
+                const newAddr = Singly_generateAddress();
+                const newVal = Math.floor(Math.random() * 100);
+                const oldHeadAddr = list.length > 0 ? list[0].address : null;
+                const newNodeObj = { id: Date.now(), value: newVal, address: newAddr, next: oldHeadAddr };
+                setStagingNode(newNodeObj);
+                await wait(1000);
+                log(`Step 2: Set new_node.next = head (${oldHeadAddr || 'None'}).`);
+                await wait(800);
+                log("Step 3: Update head = new_node.");
+                setStagingNode(null);
+                setList([newNodeObj, ...list]);
+                setPointerLabel({ 0: 'head' });
+                setHighlightIndex(0);
+                await wait(500);
+                setHighlightIndex(null);
+            };
+
+            const insertAtIndex1 = async () => {
+                if (list.length < 2) { log("Need at least 2 nodes to demonstrate insert between."); return; }
+                log("Step 1: Traverse to index 0 (prev).");
+                setHighlightIndex(0);
+                setPointerLabel({ 0: 'head/prev' });
+                await wait(1000);
+                log("Step 2: Create new node.");
+                const newAddr = Singly_generateAddress();
+                const nextNodeAddr = list[1].address;
+                const newNodeObj = { id: Date.now(), value: 77, address: newAddr, next: nextNodeAddr };
+                setStagingNode(newNodeObj);
+                await wait(1200);
+                log(`Step 3: Set new_node.next = prev.next (${nextNodeAddr}).`);
+                await wait(800);
+                log(`Step 4: Set prev.next = new_node (${newAddr}).`);
+                const newList = [...list];
+                newList.splice(1, 0, newNodeObj);
+                newList[0].next = newAddr;
+                setStagingNode(null);
+                setList(newList);
+                setHighlightIndex(1);
+                setPointerLabel({ 0: 'head', 1: 'new_node' });
+                await wait(1500);
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+            };
+
+            const insertTail = async () => {
+                if(list.length === 0) { createHead(); return; }
+                log("Step 1: Create new node.");
+                const newAddr = Singly_generateAddress();
+                const newNodeObj = { id: Date.now(), value: Math.floor(Math.random() * 100), address: newAddr, next: null };
+                setStagingNode(newNodeObj);
+                await wait(1000);
+                log("Step 2: Traverse to find current tail.");
+                for(let i=0; i<list.length; i++) {
+                    setHighlightIndex(i);
+                    setPointerLabel({ 0: 'head', [i]: 'current' });
+                    await wait(400);
+                }
+                log(`Step 3: Set current.next = new_node (${newAddr}).`);
+                const newList = [...list];
+                newList[newList.length-1].next = newAddr;
+                setStagingNode(null);
+                setList([...newList, newNodeObj]);
+                setHighlightIndex(newList.length);
+                setPointerLabel({ 0: 'head', [newList.length]: 'tail' });
+                await wait(1000);
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+            };
+
+            const deleteHead = async () => {
+                if(list.length === 0) return;
+                log("Step 1: Identify current head.");
+                setHighlightIndex(0);
+                await wait(800);
+                const newList = [...list];
+                newList.shift();
+                log(`Step 2: Update head = head.next.`);
+                setList(newList);
+                setPointerLabel({ 0: 'head' });
+                setHighlightIndex(null);
+                if (newList.length > 0) log(`Head is now at ${newList[0].address}.`);
+                else log("List is now empty.");
+            };
+
+            const deleteMiddle = async () => {
+                if(list.length < 3) { log("Need more nodes to show middle deletion."); return; }
+                log("Step 1: Traverse to node BEFORE the one to delete (prev).");
+                setHighlightIndex(0);
+                setPointerLabel({ 0: 'head/prev' });
+                await wait(1000);
+                log("Step 2: Identify node to delete (temp).");
+                setHighlightIndex(1);
+                setPointerLabel({ 0: 'head/prev', 1: 'temp' });
+                await wait(1000);
+                const newList = [...list];
+                newList.splice(1, 1);
+                if (newList.length > 1) newList[0].next = newList[1].address;
+                else newList[0].next = null;
+                log("Step 3: prev.next = temp.next. Garbage Collector frees temp.");
+                setList(newList);
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+            };
+
+            const deleteTail = async () => {
+                if(list.length === 0) return;
+                if(list.length === 1) {
+                    log("Only 1 node. Deleting Head/Tail.");
+                    setHighlightIndex(0);
+                    await wait(800);
+                    setList([]);
+                    setPointerLabel({});
+                    setHighlightIndex(null);
+                    log("List is now empty.");
+                    return;
+                }
+                log("Step 1: Traverse to second-to-last node.");
+                for(let i=0; i < list.length - 1; i++) {
+                    setHighlightIndex(i);
+                    setPointerLabel({ 0: 'head', [i]: 'current' });
+                    await wait(500);
+                }
+                const secondLastIndex = list.length - 2;
+                setHighlightIndex(secondLastIndex);
+                setPointerLabel({ 0: 'head', [secondLastIndex]: 'current', [list.length - 1]: 'to_delete' });
+                log("Found second-to-last node. This will become the new Tail.");
+                await wait(1000);
+                log("Step 2: Update current.next = None.");
+                const newList = list.slice(0, list.length - 1);
+                newList[newList.length - 1] = { ...newList[newList.length - 1], next: null };
+                setList(newList);
+                setPointerLabel({ 0: 'head', [newList.length - 1]: 'tail' });
+                setHighlightIndex(newList.length - 1);
+                log("Tail deleted.");
+                await wait(1000);
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+            };
+
+            const renderSpeedControls = () => (
+                <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
+                    <Singly_Icon name="clock" size={16} className="text-slate-500 ml-2" />
+                    <span className="text-xs font-bold text-slate-500 uppercase mr-1">Speed</span>
+                    {[0.5, 1, 2].map(s => (
+                        <button key={s} onClick={() => setSpeed(s)} className={`px-2 py-1 text-xs font-bold rounded ${speed === s ? 'bg-white text-blue-600 shadow' : 'text-slate-400 hover:text-slate-600'}`}>{s}x</button>
+                    ))}
+                </div>
+            );
+
+            const renderStructureTab = () => (
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <Singly_Icon name="book" className="text-blue-600"/> What is a Singly Linked List?
+                        </h3>
+                        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-4">
+                            <p className="text-blue-900 text-sm">
+                                A <strong>Singly Linked List</strong> is a linear data structure where elements (nodes) are <em>not</em> stored in contiguous memory. 
+                                Instead, each node stores its <strong>data</strong> and a <strong>pointer (next)</strong> to the next node, forming a chain.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-6">
+                            <div className="p-3 bg-green-50 border border-green-200 rounded">
+                                <strong className="text-green-800 block mb-1">✓ Advantages</strong>
+                                <ul className="text-green-700 text-xs space-y-1 list-disc ml-3">
+                                    <li>Dynamic size — grows/shrinks at runtime</li>
+                                    <li>O(1) insert/delete at Head</li>
+                                    <li>No pre-allocation needed</li>
+                                </ul>
+                            </div>
+                            <div className="p-3 bg-red-50 border border-red-200 rounded">
+                                <strong className="text-red-800 block mb-1">✗ Disadvantages</strong>
+                                <ul className="text-red-700 text-xs space-y-1 list-disc ml-3">
+                                    <li>O(n) access by index</li>
+                                    <li>Extra memory for next pointer</li>
+                                    <li>Not cache-friendly</li>
+                                </ul>
+                            </div>
+                            <div className="p-3 bg-purple-50 border border-purple-200 rounded">
+                                <strong className="text-purple-800 block mb-1">🔄 Use Cases</strong>
+                                <ul className="text-purple-700 text-xs space-y-1 list-disc ml-3">
+                                    <li>Undo/Redo stacks</li>
+                                    <li>Implementing queues</li>
+                                    <li>Hash table chaining</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h4 className="font-bold text-slate-700 mb-3">Anatomy of a Node</h4>
+                        <p className="text-slate-600 text-sm mb-4">In Python, a node is simply an instance of a <strong>Class</strong>. It contains the <strong>data</strong> and a <strong>reference (next)</strong> to the next node object.</p>
+                        <div className="bg-slate-800 p-4 rounded text-slate-200 text-sm font-mono border-l-4 border-blue-500">
+                            <div className="text-purple-400 inline">class</div> <span className="text-yellow-400">Node</span>:<br/>
+                            &nbsp;&nbsp;<div className="text-purple-400 inline">def</div> <span className="text-blue-400">__init__</span>(self, data):<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;self.data = data<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;self.next = <span className="text-purple-400">None</span>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const renderCreationTab = () => (
+                <div className="space-y-4">
+                    <div className="flex gap-4 mb-4">
+                        <button onClick={createHead} disabled={list.length > 0} className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 disabled:opacity-50">Initialize Head</button>
+                        <button onClick={appendNode} disabled={list.length === 0} className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 disabled:opacity-50">Append Node</button>
+                    </div>
+                    <div className="bg-blue-50 p-4 rounded text-sm text-blue-800 border-l-4 border-blue-600">
+                        <strong>Logic:</strong> When you create the first node, the <code>head</code> variable refers to it. Subsequent nodes are linked by updating <code>current.next</code> to point to the new node instance.
+                    </div>
+                    <p className="text-slate-600 text-sm">Use the buttons to build a list. Note how <code>next</code> pointers update.</p>
+                </div>
+            );
+
+            const renderTraversalTab = () => {
+                const memSlots = 16;
+                return (
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <button onClick={traverseList} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded shadow hover:bg-indigo-700">
+                                <Singly_Icon name="play" size={16}/> Simulate Traversal
+                            </button>
+                            {renderSpeedControls()}
+                        </div>
+                        <div className="bg-slate-50 p-3 rounded text-sm text-slate-700 border border-slate-200">
+                            <strong>Algorithm:</strong> Start at <code>head</code>. While <code>current != None</code>, process data, then <code>current = current.next</code>.
+                        </div>
+                        <TraversalFlowchart />
+                        <div className="mt-4 bg-slate-800 p-4 rounded-lg shadow-inner border border-slate-700">
+                            <div className="flex items-center gap-2 mb-3">
+                                <Singly_Icon name="cpu" size={18} className="text-indigo-400" />
+                                <h4 className="text-slate-300 text-xs font-bold uppercase tracking-wider">Simulated Memory Lane (RAM)</h4>
+                            </div>
+                            <div className="grid grid-cols-8 gap-2">
+                                {Array.from({length: memSlots}).map((_, i) => {
+                                    const nodeInSlot = list.find(n => n.memorySlot === i);
+                                    const isActive = highlightIndex !== null && list[highlightIndex] && list[highlightIndex].memorySlot === i;
+                                    return (
+                                        <div key={i} className={`relative h-12 rounded border flex flex-col items-center justify-center text-[10px] transition-all duration-300 ${isActive ? 'bg-yellow-400 border-yellow-500 scale-110 z-10 shadow-[0_0_15px_rgba(250,204,21,0.6)] text-slate-900 font-bold' : nodeInSlot ? 'bg-blue-600 border-blue-500 text-white' : 'bg-slate-700/50 border-slate-600 text-slate-600'}`}>
+                                            <span className="absolute top-0.5 right-1 text-[8px] opacity-60">{i.toString(16).toUpperCase()}</span>
+                                            {nodeInSlot ? (
+                                                <div className="flex flex-col items-center">
+                                                    <span className="text-xs">{nodeInSlot.value}</span>
+                                                    {isActive && <span className="text-[8px] animate-pulse">READ</span>}
+                                                </div>
+                                            ) : <span className="text-xl leading-none opacity-20">.</span>}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            const renderInsertionTab = () => (
+                <div className="space-y-4">
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        <button onClick={insertHead} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Head</button>
+                        <button onClick={insertAtIndex1} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Index 1 (Between)</button>
+                        <button onClick={insertTail} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Tail</button>
+                    </div>
+                    <div className="bg-teal-50 border border-teal-200 p-3 rounded text-sm text-teal-800">
+                        <strong>Visual Guide:</strong> Green node = Newly created node (Memory allocated). Watch it appear above the list, then get linked in.
+                    </div>
+                    <InsertBeforeFlowchart />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mt-4">
+                        <div className="p-3 bg-white border border-slate-200 rounded">
+                            <strong className="block text-slate-800 mb-1">Insert Head</strong>
+                            <div className="text-xs text-slate-500 mb-2">Big O: <strong>O(1)</strong></div>
+                            <p className="text-slate-600">Fastest. <br/> <code>new_node.next = head</code>, then <code>head = new_node</code>.</p>
+                        </div>
+                        <div className="p-3 bg-white border border-slate-200 rounded">
+                            <strong className="block text-slate-800 mb-1">Insert Middle</strong>
+                            <div className="text-xs text-slate-500 mb-2">Big O: <strong>O(n)</strong></div>
+                            <p className="text-slate-600">Must traverse to find insertion point.</p>
+                        </div>
+                        <div className="p-3 bg-white border border-slate-200 rounded">
+                            <strong className="block text-slate-800 mb-1">Insert Tail</strong>
+                            <div className="text-xs text-slate-500 mb-2">Big O: <strong>O(n)*</strong></div>
+                            <p className="text-slate-600">*O(n) traversing from Head. O(1) with a <code>tail</code> reference.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const renderDeletionTab = () => (
+                <div className="space-y-4">
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        <button onClick={deleteHead} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Head</button>
+                        <button onClick={deleteMiddle} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete at Index 1</button>
+                        <button onClick={deleteTail} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Tail</button>
+                    </div>
+                    <div className="bg-red-50 border border-red-200 p-4 rounded">
+                        <h4 className="text-red-800 font-bold mb-2">Python Garbage Collection</h4>
+                        <p className="text-sm text-red-700">When we change references (e.g., <code>prev.next = current.next</code>), the skipped node is no longer referenced. Python's <strong>Garbage Collector</strong> automatically cleans this up.</p>
+                    </div>
+                    <DeleteFlowchart />
+                    <div className="flex gap-4 text-sm mt-2">
+                        <div className="p-2 bg-white border rounded shadow-sm">Delete Head: <strong>O(1)</strong></div>
+                        <div className="p-2 bg-white border rounded shadow-sm">Delete Middle/Tail: <strong>O(n)</strong></div>
+                    </div>
+                </div>
+            );
+
+            const renderCircularTab = () => (
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <Singly_Icon name="repeat" className="text-purple-600"/> Circular Linked Lists
+                        </h3>
+                        <p className="text-slate-600 mb-4">In a Circular Linked List, the <strong>Tail</strong> node does not point to <code>None</code>. Instead, it points back to the <strong>Head</strong>.</p>
+                        <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded mb-6">
+                            <h4 className="font-bold text-purple-800 mb-2">Key Differences</h4>
+                            <ul className="list-disc ml-5 space-y-2 text-sm text-purple-900">
+                                <li><strong>Traversal:</strong> Use <code>while current.next != head</code> instead of checking for <code>None</code>.</li>
+                                <li><strong>Insert Tail:</strong> New node's <code>next</code> must point to <code>head</code>, not <code>None</code>.</li>
+                                <li><strong>Applications:</strong> Round-robin scheduling, multiplayer games, streaming buffers.</li>
+                            </ul>
+                        </div>
+                        <div className="bg-slate-800 p-4 rounded text-slate-200 text-sm font-mono">
+                            <span className="text-slate-500"># Setting up the circular link manually</span><br/>
+                            head = Node(10)<br/>
+                            second = Node(20)<br/>
+                            head.next = second<br/>
+                            second.next = <span className="text-purple-400">head</span> <span className="text-slate-500"># Points back to start!</span>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
+                    {/* Sidebar */}
+                    
+
+                    {/* Main Content */}
+                    <div className="flex-1 flex flex-col overflow-hidden relative">
+                        <nav className="flex gap-2 p-3 bg-white border-b border-slate-200 overflow-x-auto shadow-sm z-10">
+                            {[
+                                { id: 'structure', label: '1. Basic Structure' },
+                                { id: 'creation', label: '2. Creation' },
+                                { id: 'traversal', label: '3. Traversal' },
+                                { id: 'insertion', label: '4. Insertion' },
+                                { id: 'deletion', label: '5. Deletion' },
+                                { id: 'circular', label: '6. Circular Lists' }
+                            ].map(item => (
+                                <button key={item.id} onClick={() => setActiveTab(item.id)}
+                                    className={`px-4 py-2 text-sm font-semibold rounded-full whitespace-nowrap transition-colors ${activeTab === item.id ? 'bg-blue-600 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                                    {item.label}
+                                </button>
+                            ))}
+                        </nav>
+                        <header className="bg-white border-b border-slate-200 p-4 flex justify-between items-center">
+                            <div>
+                                <h2 className="text-2xl font-bold text-slate-800 capitalize">{activeTab} Linked List</h2>
+                                <p className="text-xs text-slate-500">Interactive Simulation</p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                {activeTab !== 'structure' && (
+                                    <button onClick={resetList} className="flex items-center gap-2 px-3 py-1 bg-white border border-slate-300 text-slate-600 rounded hover:bg-slate-50 text-xs font-bold uppercase shadow-sm">
+                                        <Singly_Icon name="refresh" size={14} /> Reset
+                                    </button>
+                                )}
+                                {renderSpeedControls()}
+                                <div className="text-sm bg-slate-100 px-3 py-1 rounded text-slate-600">Nodes: {list.length}</div>
+                            </div>
+                        </header>
+
+                        {/* Visualization Area */}
+                        <div className="flex-1 bg-slate-50 p-6 overflow-x-auto overflow-y-hidden flex items-center relative list-container">
+                            {/* Staging Node — floats above, centered, no push */}
+                            {stagingNode && (
+                                <div className="staging-overlay">
+                                    <div className="staging-badge flex flex-col items-center bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-xl border border-green-200">
+                                        <span className="text-xs font-bold text-green-700 bg-green-100 px-3 py-1 rounded-full mb-2 animate-pulse">⚡ Allocating Memory...</span>
+                                        <Singly_NodeVisual value={stagingNode.value} address={stagingNode.address} nextAddress={stagingNode.next} isNew={true} />
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'structure' ? (
+                                <div className="w-full h-full flex items-center justify-center text-slate-400 italic">
+                                    Select other tabs to build the list
+                                </div>
+                            ) : (
+                                <div className="flex items-center min-w-max px-4">
+                                    <React.Fragment>
+                                        <Singly_NodeVisual value={list.length} address="0xHEAD" nextAddress={list.length > 0 ? list[0].address : 'None'} isHeader={true} label="Sentinel" />
+                                        <Singly_Arrow />
+                                    </React.Fragment>
+                                    {list.length === 0 ? <Singly_NodeVisual isNull={true} /> : (
+                                        <React.Fragment>
+                                            {list.map((node, index) => {
+                                                let nextAddressOverride = node.next;
+                                                if (activeTab === 'circular' && index === list.length - 1 && list.length > 0) nextAddressOverride = list[0].address;
+                                                return (
+                                                    <React.Fragment key={node.id}>
+                                                        <Singly_NodeVisual value={node.value} address={node.address} nextAddress={nextAddressOverride} highlight={highlightIndex === index} label={getNodeLabel(index)} isNew={highlightIndex === index && activeTab === 'insertion'} />
+                                                        {index < list.length - 1 && <Singly_Arrow />}
+                                                    </React.Fragment>
+                                                );
+                                            })}
+                                            {activeTab === 'circular' && list.length > 0 ? (
+                                                <div className="flex flex-col items-center text-purple-400 mx-2 animate-pulse">
+                                                    <div className="border-b-2 border-dashed border-purple-400 w-12 mb-1"></div>
+                                                    <Singly_Icon name="repeat" size={32} />
+                                                    <span className="text-[10px] uppercase font-bold mt-1">Loop to Head</span>
+                                                </div>
+                                            ) : (
+                                                <React.Fragment>
+                                                    {list.length > 0 && <Singly_Arrow />}
+                                                    <Singly_NodeVisual isNull={true} />
+                                                </React.Fragment>
+                                            )}
+                                        </React.Fragment>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Controls & Info Panel */}
+                        <div className="bg-white border-t border-slate-200 flex flex-col md:flex-row">
+                            <div className="flex-1 p-6 border-r border-slate-100">
+                                {activeTab === 'structure' && renderStructureTab()}
+                                {activeTab === 'creation' && renderCreationTab()}
+                                {activeTab === 'traversal' && renderTraversalTab()}
+                                {activeTab === 'insertion' && renderInsertionTab()}
+                                {activeTab === 'deletion' && renderDeletionTab()}
+                                {activeTab === 'circular' && renderCircularTab()}
+                            </div>
+                            <div className="w-full md:w-80 bg-slate-900 text-slate-300 p-4 font-mono text-xs overflow-y-auto flex flex-col max-h-[500px]">
+                                <div className="font-bold text-slate-500 mb-2 uppercase border-b border-slate-700 pb-1">System Log</div>
+                                <div className="flex-1 space-y-1">
+                                    {logs.map((l, i) => (
+                                        <div key={i} className="border-l-2 border-blue-500 pl-2 py-0.5">
+                                            <span className="text-blue-400 opacity-50">[{logs.length - i}]</span> {l}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        
+    
+
+        // --- Doubly Linked List Logic ---
+
+        
+
+        const Doubly_generateAddress = () => `0x${Math.floor(Math.random() * 0xFFFF).toString(16).toUpperCase().padStart(4, '0')}`;
+
+        const Doubly_Icon = ({ name, size = 20, color = "currentColor", className="" }) => {
+            if (name === 'arrow-right') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>;
+            if (name === 'arrow-left') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>;
+            if (name === 'play') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>;
+            if (name === 'book') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>;
+            if (name === 'clock') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>;
+            if (name === 'refresh') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>;
+            if (name === 'chevrons-right') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>;
+            if (name === 'chevrons-left') return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>;
+            return null;
+        };
+
+        const Doubly_DoubleArrow = () => (
+            <div className="flex flex-col items-center justify-center w-12 text-slate-400 gap-1">
+                <div className="flex items-center text-blue-400 opacity-60"><Doubly_Icon name="arrow-right" size={20} /></div>
+                <div className="flex items-center text-orange-400 opacity-60"><Doubly_Icon name="arrow-left" size={20} /></div>
+            </div>
+        );
+
+        const Doubly_NodeVisual = ({ value, address, nextAddress, prevAddress, isNull, highlight, label, isNew, isHeader }) => {
+            if (isNull) return (
+                <div className="flex flex-col items-center mx-2 opacity-60">
+                    <div className="w-16 h-16 border-2 border-dashed border-gray-400 bg-gray-100 rounded flex items-center justify-center">
+                        <span className="text-gray-500 font-bold">None</span>
+                    </div>
+                </div>
+            );
+            let borderColor = 'border-slate-300', ringClass = '', bgColor = 'bg-white';
+            if (isHeader) { borderColor = 'border-purple-400'; bgColor = 'bg-purple-50'; }
+            else if (isNew) { borderColor = 'border-green-500'; ringClass = 'ring-2 ring-green-200'; bgColor = 'bg-green-50'; }
+            else if (highlight) { borderColor = 'border-yellow-400'; ringClass = 'ring-2 ring-yellow-200'; }
+
+            return (
+                <div className={`flex flex-col items-center mx-2 transition-all duration-300 ${highlight || isNew ? 'transform scale-105' : ''}`}>
+                    {label && (
+                        <div className="mb-1 flex flex-col items-center node-enter">
+                            <span className={`text-xs px-2 py-1 rounded-full mb-1 font-bold shadow-sm ${label.includes('Tail') ? 'bg-slate-600 text-white' : 'bg-blue-600 text-white'}`}>{label}</span>
+                            <div className={`w-0.5 h-4 ${label.includes('Tail') ? 'bg-slate-600' : 'bg-blue-600'}`}></div>
+                            <div className={`w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] ${label.includes('Tail') ? 'border-t-slate-600' : 'border-t-blue-600'}`}></div>
+                        </div>
+                    )}
+                    <div className={`node-enter flex shadow-lg rounded-lg overflow-hidden border-2 ${borderColor} ${ringClass}`}>
+                        {!isHeader && (
+                            <div className="bg-orange-50 p-3 w-24 flex flex-col items-center justify-center border-r border-slate-200">
+                                <span className="text-[10px] text-orange-400 uppercase font-bold">Prev</span>
+                                <span className="code-font text-xs text-orange-600 font-bold">{prevAddress || 'None'}</span>
+                            </div>
+                        )}
+                        <div className={`${bgColor} p-3 w-20 flex flex-col items-center justify-center border-r border-slate-200`}>
+                            <span className="text-[10px] text-slate-400 uppercase font-bold">{isHeader ? 'Count' : 'Data'}</span>
+                            <span className={`font-bold text-slate-800 ${isHeader ? 'text-xl' : 'text-lg'}`}>{value}</span>
+                        </div>
+                        <div className="bg-blue-50 p-3 w-24 flex flex-col items-center justify-center">
+                            <span className="text-[10px] text-blue-400 uppercase font-bold">Next</span>
+                            <span className="code-font text-xs text-blue-600 font-bold">{nextAddress || 'None'}</span>
+                        </div>
+                    </div>
+                    <div className="mt-2 code-font text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">Addr: {address}</div>
+                </div>
+            );
+        };
+
+        // Flowcharts
+        const TraversalBothFlowchart = () => (
+            <div className="flowchart-box grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
+                    <p className="text-blue-400 text-xs font-bold uppercase tracking-wider mb-3">→ Forward (Head to Tail)</p>
+                    <div className="text-slate-300 font-mono text-xs space-y-1">
+                        <div className="text-slate-500"># Algorithm</div>
+                        <div><span className="text-purple-400">current</span> = head</div>
+                        <div><span className="text-yellow-400">while</span> current <span className="text-yellow-400">is not</span> None:</div>
+                        <div>&nbsp;&nbsp;process(current.data)</div>
+                        <div>&nbsp;&nbsp;<span className="text-purple-400">current</span> = current.<span className="text-blue-400">next</span></div>
+                    </div>
+                </div>
+                <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
+                    <p className="text-orange-400 text-xs font-bold uppercase tracking-wider mb-3">← Backward (Tail to Head)</p>
+                    <div className="text-slate-300 font-mono text-xs space-y-1">
+                        <div className="text-slate-500"># Algorithm</div>
+                        <div><span className="text-purple-400">current</span> = tail</div>
+                        <div><span className="text-yellow-400">while</span> current <span className="text-yellow-400">is not</span> None:</div>
+                        <div>&nbsp;&nbsp;process(current.data)</div>
+                        <div>&nbsp;&nbsp;<span className="text-purple-400">current</span> = current.<span className="text-orange-400">prev</span></div>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const DLLInsertFlowchart = () => (
+            <div className="flowchart-box mt-4 bg-white border border-slate-200 rounded-lg p-4">
+                <p className="text-slate-600 text-xs font-bold uppercase tracking-wider mb-3">Insert Middle — DLL (4-Pointer Update)</p>
+                <div className="grid grid-cols-2 gap-3">
+                    {[
+                        { step: 1, text: "Traverse to prev_node", color: "bg-blue-50 border-blue-200 text-blue-800" },
+                        { step: 2, text: "Create new_node in memory", color: "bg-green-50 border-green-200 text-green-800" },
+                        { step: 3, text: "new_node.next = next_node\nnew_node.prev = prev_node", color: "bg-yellow-50 border-yellow-200 text-yellow-800" },
+                        { step: 4, text: "prev_node.next = new_node\nnext_node.prev = new_node", color: "bg-orange-50 border-orange-200 text-orange-800" },
+                    ].map(({ step, text, color }) => (
+                        <div key={step} className={`p-3 rounded border ${color} flex items-start gap-2`}>
+                            <span className="font-bold text-xs rounded-full bg-white w-5 h-5 flex items-center justify-center border flex-shrink-0">{step}</span>
+                            <pre className="text-xs whitespace-pre-wrap leading-relaxed font-mono">{text}</pre>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const DLLDeleteFlowchart = () => (
+            <div className="flowchart-box mt-4 bg-white border border-slate-200 rounded-lg p-4">
+                <p className="text-slate-600 text-xs font-bold uppercase tracking-wider mb-3">Delete Node — DLL Advantage</p>
+                <div className="space-y-2">
+                    {[
+                        { step: 1, text: "Find node to delete (or given directly)", note: "Can be O(n) to find, O(1) if you have a reference" },
+                        { step: 2, text: "prev_node.next = node.next", note: "Bridge the forward link" },
+                        { step: 3, text: "next_node.prev = node.prev", note: "Bridge the backward link (DLL advantage!)" },
+                        { step: 4, text: "GC reclaims node's memory", note: "Python handles this automatically" },
+                    ].map(({ step, text, note }) => (
+                        <div key={step} className="flex items-start gap-3 p-2 rounded bg-slate-50 border border-slate-200">
+                            <span className="font-bold text-xs rounded-full bg-blue-600 text-white w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">{step}</span>
+                            <div>
+                                <code className="text-xs font-bold text-slate-800">{text}</code>
+                                <p className="text-xs text-slate-500 mt-0.5">{note}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="mt-3 bg-green-50 border border-green-200 p-2 rounded text-xs text-green-800">
+                    <strong>DLL Advantage:</strong> We can delete a given node in O(1) without traversing from head to find its predecessor, because we already have <code>node.prev</code>!
+                </div>
+            </div>
+        );
+
+        const DoublyApp = () => {
+            const [activeTab, setActiveTab] = useState('structure');
+            const [list, setList] = useState([]);
+            const [logs, setLogs] = useState(["Welcome to the Doubly Linked List module."]);
+            const [highlightIndex, setHighlightIndex] = useState(null);
+            const [pointerLabel, setPointerLabel] = useState({});
+            const [stagingNode, setStagingNode] = useState(null);
+            const [speed, setSpeed] = useState(1);
+
+            const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms / speed));
+            const log = (msg) => setLogs(prev => [msg, ...prev]);
+
+            const resetList = () => {
+                setHighlightIndex(null);
+                setPointerLabel({});
+                setStagingNode(null);
+                setLogs([`Resetting environment for ${activeTab}...`]);
+                if (activeTab === 'structure') { setList([]); return; }
+                const addr1 = Doubly_generateAddress(), addr2 = Doubly_generateAddress(), addr3 = Doubly_generateAddress();
+                setList([
+                    { id: 1, value: 10, address: addr1, next: addr2, prev: null },
+                    { id: 2, value: 45, address: addr2, next: addr3, prev: addr1 },
+                    { id: 3, value: 99, address: addr3, next: null, prev: addr2 },
+                ]);
+                setPointerLabel({ 0: 'head' });
+            };
+
+            useEffect(() => { resetList(); }, [activeTab]);
+
+            const getNodeLabel = (index) => {
+                let label = pointerLabel[index] || "";
+                if (index === list.length - 1) label = label ? label + " / Tail" : "Tail";
+                return label || null;
+            };
+
+            const createHead = async () => {
+                log("Allocating memory for Head node...");
+                const addr = Doubly_generateAddress();
+                const newNode = { id: Date.now(), value: Math.floor(Math.random() * 100), address: addr, next: null, prev: null };
+                setStagingNode(newNode);
+                await wait(1000);
+                setStagingNode(null);
+                setList([newNode]);
+                setPointerLabel({ 0: 'head' });
+                log(`Head created at ${addr}. prev=None, next=None.`);
+            };
+
+            const appendNode = async () => {
+                log("Creating new node...");
+                const newAddr = Doubly_generateAddress();
+                const newNode = { id: Date.now(), value: Math.floor(Math.random() * 100), address: newAddr, next: null, prev: null };
+                setStagingNode(newNode);
+                await wait(1000);
+                if (list.length === 0) { setStagingNode(null); setList([newNode]); setPointerLabel({ 0: 'head' }); log("List was empty. New node becomes Head."); return; }
+                log("Traversing to Tail to link pointers...");
+                const newList = [...list];
+                const oldTail = newList[newList.length - 1];
+                oldTail.next = newAddr;
+                newNode.prev = oldTail.address;
+                setStagingNode(null);
+                setList([...newList, newNode]);
+                log(`Linked old_tail.next -> ${newAddr} AND new_node.prev -> ${oldTail.address}`);
+            };
+
+            const traverseForward = async () => {
+                log("Starting Forward Traversal (Head -> Tail)...");
+                for (let i = 0; i < list.length; i++) {
+                    setHighlightIndex(i);
+                    setPointerLabel({ 0: 'head', [i]: 'current' });
+                    log(`Visiting Node at ${list[i].address}. Value: ${list[i].value}.`);
+                    await wait(800);
+                }
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+                log("Reached None (End of list).");
+            };
+
+            const traverseBackward = async () => {
+                if (list.length === 0) return;
+                log("Starting Backward Traversal (Tail -> Head)...");
+                for (let i = list.length - 1; i >= 0; i--) {
+                    setHighlightIndex(i);
+                    setPointerLabel({ 0: 'head', [i]: 'current' });
+                    log(`Visiting Node at ${list[i].address} using .prev pointer.`);
+                    await wait(800);
+                }
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+                log("Reached None (Start of list).");
+            };
+
+            const insertHead = async () => {
+                log("Step 1: Create new node.");
+                const newAddr = Doubly_generateAddress();
+                const oldHeadAddr = list.length > 0 ? list[0].address : null;
+                const newNodeObj = { id: Date.now(), value: Math.floor(Math.random() * 100), address: newAddr, next: oldHeadAddr, prev: null };
+                setStagingNode(newNodeObj);
+                await wait(1000);
+                log(`Step 2: new_node.next = old_head (${oldHeadAddr}).`);
+                let newList = [...list];
+                if (newList.length > 0) {
+                    log(`Step 3: old_head.prev = new_node (${newAddr}).`);
+                    newList[0] = { ...newList[0], prev: newAddr };
+                }
+                setStagingNode(null);
+                setList([newNodeObj, ...newList]);
+                setPointerLabel({ 0: 'head' });
+                setHighlightIndex(0);
+                await wait(1000);
+                setHighlightIndex(null);
+            };
+
+            const insertTail = async () => {
+                if(list.length === 0) { createHead(); return; }
+                log("Step 1: Create new node.");
+                const newAddr = Doubly_generateAddress();
+                const oldTail = list[list.length - 1];
+                const newNodeObj = { id: Date.now(), value: Math.floor(Math.random() * 100), address: newAddr, next: null, prev: oldTail.address };
+                setStagingNode(newNodeObj);
+                await wait(1000);
+                log(`Step 2: old_tail.next = new_node (${newAddr}).`);
+                const newList = [...list];
+                newList[newList.length - 1] = { ...newList[newList.length - 1], next: newAddr };
+                setStagingNode(null);
+                setList([...newList, newNodeObj]);
+                setHighlightIndex(newList.length);
+                setPointerLabel({ 0: 'head', [newList.length]: 'tail' });
+                await wait(1000);
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+            };
+
+            const insertAtIndex1 = async () => {
+                if (list.length < 2) { log("Need at least 2 nodes to insert between."); return; }
+                log("Step 1: Traverse to 'prev_node' (index 0).");
+                setHighlightIndex(0);
+                setPointerLabel({ 0: 'head/prev' });
+                await wait(800);
+                const prevNode = list[0], nextNode = list[1];
+                log("Step 2: Create new node.");
+                const newAddr = Doubly_generateAddress();
+                const newNodeObj = { id: Date.now(), value: 77, address: newAddr, next: nextNode.address, prev: prevNode.address };
+                setStagingNode(newNodeObj);
+                await wait(1000);
+                log("Step 3: Link all 4 pointers.");
+                log(` - prev_node.next = ${newAddr}`);
+                log(` - new_node.prev = ${prevNode.address}`);
+                log(` - new_node.next = ${nextNode.address}`);
+                log(` - next_node.prev = ${newAddr}`);
+                const newList = [...list];
+                newList[0] = { ...newList[0], next: newAddr };
+                newList[1] = { ...newList[1], prev: newAddr };
+                newList.splice(1, 0, newNodeObj);
+                setStagingNode(null);
+                setList(newList);
+                setHighlightIndex(1);
+                setPointerLabel({ 0: 'head', 1: 'new_node' });
+                await wait(1500);
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+            };
+
+            const deleteHead = async () => {
+                if(list.length === 0) return;
+                log("Step 1: Identify head.");
+                setHighlightIndex(0);
+                await wait(800);
+                if (list.length === 1) { setList([]); setPointerLabel({}); log("List empty."); return; }
+                const newList = [...list];
+                newList.shift();
+                log("Step 2: Update new_head.prev = None.");
+                newList[0] = { ...newList[0], prev: null };
+                setList(newList);
+                setPointerLabel({ 0: 'head' });
+                setHighlightIndex(null);
+            };
+
+            const deleteMiddle = async () => {
+                if(list.length < 3) { log("Need more nodes to show middle deletion clearly."); return; }
+                log("Deleting node at index 1.");
+                setHighlightIndex(1);
+                setPointerLabel({ 0: 'head', 1: 'to_delete' });
+                await wait(1000);
+                const prevNode = list[0], nextNode = list[2];
+                log(`Step 1: prev_node.next = next_node (${nextNode.address})`);
+                log(`Step 2: next_node.prev = prev_node (${prevNode.address})`);
+                const newList = [...list];
+                newList[0] = { ...newList[0], next: nextNode.address };
+                newList[2] = { ...newList[2], prev: prevNode.address };
+                newList.splice(1, 1);
+                setList(newList);
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+                log("Node removed. Links bridged.");
+            };
+
+            const deleteTail = async () => {
+                if(list.length === 0) return;
+                if(list.length === 1) { deleteHead(); return; }
+                log("Step 1: Identify Tail.");
+                const lastIdx = list.length - 1;
+                setHighlightIndex(lastIdx);
+                setPointerLabel({ 0: 'head', [lastIdx]: 'tail' });
+                await wait(800);
+                log("Step 2: new_tail = tail.prev");
+                const newTailIdx = lastIdx - 1;
+                setHighlightIndex(newTailIdx);
+                setPointerLabel({ 0: 'head', [newTailIdx]: 'new_tail' });
+                await wait(800);
+                log("Step 3: new_tail.next = None.");
+                const newList = list.slice(0, list.length - 1);
+                newList[newList.length - 1] = { ...newList[newList.length - 1], next: null };
+                setList(newList);
+                setHighlightIndex(null);
+                setPointerLabel({ 0: 'head' });
+                log("Old tail removed.");
+            };
+
+            const renderSpeedControls = () => (
+                <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
+                    <Doubly_Icon name="clock" size={16} className="text-slate-500 ml-2" />
+                    <span className="text-xs font-bold text-slate-500 uppercase mr-1">Speed</span>
+                    {[0.5, 1, 2].map(s => (
+                        <button key={s} onClick={() => setSpeed(s)} className={`px-2 py-1 text-xs font-bold rounded ${speed === s ? 'bg-white text-blue-600 shadow' : 'text-slate-400 hover:text-slate-600'}`}>{s}x</button>
+                    ))}
+                </div>
+            );
+
+            const renderStructureTab = () => (
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                        <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <Doubly_Icon name="book" className="text-blue-600"/> What is a Doubly Linked List?
+                        </h3>
+                        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-4">
+                            <p className="text-blue-900 text-sm">
+                                A <strong>Doubly Linked List (DLL)</strong> extends the Singly Linked List by giving each node <em>two pointers</em>: 
+                                <strong> next</strong> (forward link) and <strong>prev</strong> (backward link). This allows traversal in both directions.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm">
+                            <div className="p-3 bg-green-50 border border-green-200 rounded">
+                                <strong className="text-green-800 block mb-1">✓ Advantages over SLL</strong>
+                                <ul className="text-green-700 text-xs space-y-1 list-disc ml-3">
+                                    <li>Bidirectional traversal</li>
+                                    <li>Delete a given node in O(1) (no traversal for prev)</li>
+                                    <li>Easier to insert before a node</li>
+                                </ul>
+                            </div>
+                            <div className="p-3 bg-red-50 border border-red-200 rounded">
+                                <strong className="text-red-800 block mb-1">✗ Extra Cost</strong>
+                                <ul className="text-red-700 text-xs space-y-1 list-disc ml-3">
+                                    <li>Extra memory per node (prev pointer)</li>
+                                    <li>More complex pointer management on insert/delete</li>
+                                    <li>Must update 4 pointers for middle insert</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h4 className="font-bold text-slate-700 mb-3">Anatomy of a DLL Node</h4>
+                        <p className="text-slate-600 text-sm mb-4">Unlike SLL, a Doubly Linked Node has <strong>three</strong> components: <code>prev</code>, <code>data</code>, and <code>next</code>.</p>
+                        <div className="bg-slate-800 p-4 rounded text-slate-200 text-sm font-mono border-l-4 border-blue-500">
+                            <div className="text-purple-400 inline">class</div> <span className="text-yellow-400">Node</span>:<br/>
+                            &nbsp;&nbsp;<div className="text-purple-400 inline">def</div> <span className="text-blue-400">__init__</span>(self, data):<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;self.data = data<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;self.<span className="text-orange-400">prev</span> = <span className="text-purple-400">None</span> <span className="text-slate-500"># New!</span><br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;self.<span className="text-blue-400">next</span> = <span className="text-purple-400">None</span>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const renderCreationTab = () => (
+                <div className="space-y-4">
+                    <div className="flex gap-4 mb-4">
+                        <button onClick={createHead} disabled={list.length > 0} className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 disabled:opacity-50">Initialize Head</button>
+                        <button onClick={appendNode} disabled={list.length === 0} className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 disabled:opacity-50">Append Node</button>
+                    </div>
+                    <div className="bg-blue-50 text-blue-800 p-3 rounded text-sm border-l-4 border-blue-600">
+                        Notice how the <strong>Prev</strong> pointer of the new node points back to the old tail, and the old tail's <strong>Next</strong> is updated to the new node.
+                    </div>
+                </div>
+            );
+
+            const renderTraversalTab = () => (
+                <div className="space-y-4">
+                    <div className="flex gap-4">
+                        <button onClick={traverseForward} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded shadow hover:bg-indigo-700">
+                            <Doubly_Icon name="chevrons-right" size={16}/> Forward (Head → Tail)
+                        </button>
+                        <button onClick={traverseBackward} className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded shadow hover:bg-orange-600">
+                            <Doubly_Icon name="chevrons-left" size={16}/> Backward (Tail → Head)
+                        </button>
+                    </div>
+                    <div className="mt-2 p-3 bg-white border border-slate-200 rounded text-sm text-slate-600">
+                        <strong>Key Use Cases:</strong> Browser history (Back/Forward), undo/redo in editors, music playlist navigation.
+                    </div>
+                    <TraversalBothFlowchart />
+                </div>
+            );
+
+            const renderInsertionTab = () => (
+                <div className="space-y-4">
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        <button onClick={insertHead} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Head</button>
+                        <button onClick={insertAtIndex1} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Index 1</button>
+                        <button onClick={insertTail} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Tail</button>
+                    </div>
+                    <DLLInsertFlowchart />
+                    <div className="bg-white border border-slate-200 rounded p-4 mt-4">
+                        <h4 className="font-bold text-slate-700 mb-3">Time Complexity (Big O)</h4>
+                        <div className="grid grid-cols-3 gap-2 text-sm text-center">
+                            <div className="bg-slate-50 p-2 rounded"><div className="font-semibold">Head</div><div className="text-green-600 font-bold font-mono">O(1)</div></div>
+                            <div className="bg-slate-50 p-2 rounded"><div className="font-semibold">Middle</div><div className="text-orange-500 font-bold font-mono">O(n)</div></div>
+                            <div className="bg-slate-50 p-2 rounded"><div className="font-semibold">Tail*</div><div className="text-green-600 font-bold font-mono">O(1)</div></div>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-2 italic">*Assuming we maintain a <code>tail</code> pointer.</p>
+                    </div>
+                </div>
+            );
+
+            const renderDeletionTab = () => (
+                <div className="space-y-4">
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        <button onClick={deleteHead} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Head</button>
+                        <button onClick={deleteMiddle} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Middle</button>
+                        <button onClick={deleteTail} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Tail</button>
+                    </div>
+                    <DLLDeleteFlowchart />
+                    <div className="bg-white border border-slate-200 rounded p-4 mt-4">
+                        <h4 className="font-bold text-slate-700 mb-3">Time Complexity (Big O)</h4>
+                        <div className="grid grid-cols-3 gap-2 text-sm text-center">
+                            <div className="bg-slate-50 p-2 rounded"><div className="font-semibold">Head</div><div className="text-green-600 font-bold font-mono">O(1)</div></div>
+                            <div className="bg-slate-50 p-2 rounded"><div className="font-semibold">Middle</div><div className="text-orange-500 font-bold font-mono">O(n)*</div></div>
+                            <div className="bg-slate-50 p-2 rounded"><div className="font-semibold">Tail*</div><div className="text-green-600 font-bold font-mono">O(1)</div></div>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-2 italic">*O(1) if you have a direct reference to the node (DLL advantage). O(n) to search for it by value.</p>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
+                    
+
+                    <div className="flex-1 flex flex-col overflow-hidden relative">
+                        <nav className="flex gap-2 p-3 bg-white border-b border-slate-200 overflow-x-auto shadow-sm z-10">
+                            {[
+                                { id: 'structure', label: '1. DLL Structure' },
+                                { id: 'creation', label: '2. Creation' },
+                                { id: 'traversal', label: '3. Traversal (Bi-Dir)' },
+                                { id: 'insertion', label: '4. Insertion' },
+                                { id: 'deletion', label: '5. Deletion' }
+                            ].map(item => (
+                                <button key={item.id} onClick={() => setActiveTab(item.id)}
+                                    className={`px-4 py-2 text-sm font-semibold rounded-full whitespace-nowrap transition-colors ${activeTab === item.id ? 'bg-blue-600 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                                    {item.label}
+                                </button>
+                            ))}
+                        </nav>
+                        <header className="bg-white border-b border-slate-200 p-4 flex justify-between items-center">
+                            <div>
+                                <h2 className="text-2xl font-bold text-slate-800 capitalize">{activeTab} — Doubly Linked List</h2>
+                                <p className="text-xs text-slate-500">Interactive Simulation</p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                {activeTab !== 'structure' && (
+                                    <button onClick={resetList} className="flex items-center gap-2 px-3 py-1 bg-white border border-slate-300 text-slate-600 rounded hover:bg-slate-50 text-xs font-bold uppercase shadow-sm">
+                                        <Doubly_Icon name="refresh" size={14} /> Reset
+                                    </button>
+                                )}
+                                {renderSpeedControls()}
+                                <div className="text-sm bg-slate-100 px-3 py-1 rounded text-slate-600">Nodes: {list.length}</div>
+                            </div>
+                        </header>
+
+                        <div className="flex-1 bg-slate-50 p-6 overflow-x-auto overflow-y-hidden flex items-center relative list-container">
+                            {stagingNode && (
+                                <div className="staging-overlay">
+                                    <div className="staging-badge flex flex-col items-center bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-xl border border-green-200">
+                                        <span className="text-xs font-bold text-green-700 bg-green-100 px-3 py-1 rounded-full mb-2 animate-pulse">⚡ Allocating Memory...</span>
+                                        <Doubly_NodeVisual value={stagingNode.value} address={stagingNode.address} nextAddress={stagingNode.next} prevAddress={stagingNode.prev} isNew={true} />
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'structure' && list.length === 0 ? (
+                                <div className="w-full h-full flex items-center justify-center text-slate-400 italic">
+                                    Review the anatomy of a Doubly Linked Node below
+                                </div>
+                            ) : (
+                                <div className="flex items-center min-w-max px-4">
+                                    {activeTab !== 'structure' && (
+                                        <React.Fragment>
+                                            <Doubly_NodeVisual value={list.length} address="HEAD_SENTINEL" nextAddress={list.length > 0 ? list[0].address : 'None'} isHeader={true} label="List Metadata" />
+                                            <div className="mx-2 text-slate-300"><Doubly_Icon name="arrow-right" size={24}/></div>
+                                        </React.Fragment>
+                                    )}
+                                    {list.length === 0 && activeTab !== 'structure' ? (
+                                        <Doubly_NodeVisual isNull={true} />
+                                    ) : (
+                                        list.map((node, index) => (
+                                            <React.Fragment key={node.id}>
+                                                <Doubly_NodeVisual value={node.value} address={node.address} nextAddress={node.next} prevAddress={node.prev} highlight={highlightIndex === index} label={getNodeLabel(index)} isNew={highlightIndex === index && activeTab === 'insertion'} />
+                                                {index < list.length - 1 ? <Doubly_DoubleArrow /> : <div className="mx-2 text-slate-300"><Doubly_Icon name="arrow-right" size={24}/></div>}
+                                            </React.Fragment>
+                                        ))
+                                    )}
+                                    {list.length > 0 && <Doubly_NodeVisual isNull={true} />}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-white border-t border-slate-200 flex flex-col md:flex-row">
+                            <div className="flex-1 p-6 border-r border-slate-100">
+                                {activeTab === 'structure' && renderStructureTab()}
+                                {activeTab === 'creation' && renderCreationTab()}
+                                {activeTab === 'traversal' && renderTraversalTab()}
+                                {activeTab === 'insertion' && renderInsertionTab()}
+                                {activeTab === 'deletion' && renderDeletionTab()}
+                            </div>
+                            <div className="w-full md:w-80 bg-slate-900 text-slate-300 p-4 font-mono text-xs overflow-y-auto flex flex-col max-h-[500px]">
+                                <div className="font-bold text-slate-500 mb-2 uppercase border-b border-slate-700 pb-1">System Log</div>
+                                <div className="flex-1 space-y-1">
+                                    {logs.map((l, i) => (
+                                        <div key={i} className="border-l-2 border-blue-500 pl-2 py-0.5">
+                                            <span className="text-blue-400 opacity-50">[{logs.length - i}]</span> {l}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        
+                        </div>
+                        {/* Custom Navigation Footer */}
+                        <div className="section-nav-footer" style={{ borderTop: 'none', background: 'transparent' }}>
+                            <button className="sec-nav-btn prev-btn" onClick={handleDPrev}>
+                                <span className="nav-label"><i className="fa-solid fa-arrow-left"></i> {currentDTabIndex === 0 ? "Previous Section" : "Previous Step"}</span>
+                                <span className="nav-title">{currentDTabIndex === 0 ? "Module 2: Singly Linked List" : dTabLabels[currentDTabIndex - 1]}</span>
+                            </button>
+                            <button className="sec-nav-btn next-btn" onClick={handleDNext}>
+                                <span className="nav-label">{currentDTabIndex === dTabs.length - 1 ? "Next Section" : "Next Step"} <i className="fa-solid fa-arrow-right"></i></span>
+                                <span className="nav-title">{currentDTabIndex === dTabs.length - 1 ? "Transition Quiz" : dTabLabels[currentDTabIndex + 1]}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            );
+        };
+
+        
+    
+
+        // Mount apps
+        const singlyRoot = ReactDOM.createRoot(document.getElementById('singly-root'));
+        singlyRoot.render(<SinglyApp />);
+
+        const doublyRoot = ReactDOM.createRoot(document.getElementById('doubly-root'));
+        doublyRoot.render(<DoublyApp />);
+    </script>
+
+</body>
+</html>
