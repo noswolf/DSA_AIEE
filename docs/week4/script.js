@@ -73,9 +73,8 @@ async function runPythonCode(code) {
 // Navigation and Layout Control
 // -------------------------------------------------------------
 function navigateToSection(sectionId) {
-    // Hide all sections
-    const sections = document.querySelectorAll(".content-section");
-    sections.forEach(sec => sec.classList.remove("active"));
+    // Hide all sections (both content and viz)
+    document.querySelectorAll(".content-section, .viz-section").forEach(sec => sec.classList.remove("active"));
 
     // Show targeted section
     const targetSection = document.getElementById(sectionId);

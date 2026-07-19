@@ -1,30 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UT
-
-        const dTabs = ['structure', 'creation', 'traversal', 'insertion', 'deletion'];
-        const dTabLabels = ['1. Basic Structure', '2. Creation', '3. Traversal', '4. Insertion', '5. Deletion'];
-        const currentDTabIndex = dTabs.indexOf(activeTab);
-
-        const handleDPrev = () => {
-            if (currentDTabIndex > 0) {
-                setActiveTab(dTabs[currentDTabIndex - 1]);
-                document.querySelector('.content-body').scrollTop = 0;
-            } else {
-                window.navigateToSection('singly-section');
-            }
-        };
-
-        const handleDNext = () => {
-            if (currentDTabIndex < dTabs.length - 1) {
-                setActiveTab(dTabs[currentDTabIndex + 1]);
-                document.querySelector('.content-body').scrollTop = 0;
-            } else {
-                window.navigateToSection('quiz-section');
-            }
-        };
-F-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 4: Linked Lists & OOP | DSA AIEE</title>
     <meta name="description" content="Interactive guide for Linked Lists and OOP Basics — Week 4 of 01526121 DSA AIEE.">
@@ -569,7 +546,7 @@ while current is not None:
         // ── Sidebar toggle ──
         const sidebarBtn = document.getElementById('sidebar-toggle-btn');
         const appContainer = document.querySelector('.app-container');
-        if (sidebarBtn) sidebarBtn.addEventListener('click', () => appContainer.classList.toggle('collapsed'));
+        if (sidebarBtn && appContainer) sidebarBtn.addEventListener('click', () => appContainer.classList.toggle('collapsed'));
 
         // ── Theme toggle ──
         const themeBtn = document.getElementById('theme-toggle-btn');
@@ -912,6 +889,20 @@ while current is not None:
             const [activeTab, setActiveTab] = useState('structure');
             const [list, setList] = useState([]);
             const [logs, setLogs] = useState(["Welcome to the Linked List module."]);
+
+            // ── Singly step navigation ──
+            const singlyTabs   = ['structure','creation','traversal','insertion','deletion','circular'];
+            const singlyLabels = ['1. Basic Structure','2. Creation','3. Traversal','4. Insertion','5. Deletion','6. Circular Lists'];
+            const singlyIdx    = singlyTabs.indexOf(activeTab);
+            const singlyPrev   = () => {
+                if (singlyIdx > 0) { setActiveTab(singlyTabs[singlyIdx - 1]); }
+                else { window.navigateToSection('oop-section'); }
+            };
+            const singlyNext   = () => {
+                if (singlyIdx < singlyTabs.length - 1) { setActiveTab(singlyTabs[singlyIdx + 1]); }
+                else { window.navigateToSection('doubly-section'); }
+            };
+
             const [highlightIndex, setHighlightIndex] = useState(null);
             const [pointerLabel, setPointerLabel] = useState({});
             const [stagingNode, setStagingNode] = useState(null);
@@ -1133,11 +1124,13 @@ while current is not None:
             };
 
             const renderSpeedControls = () => (
-                <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
-                    <Singly_Icon name="clock" size={16} className="text-slate-500 ml-2" />
-                    <span className="text-xs font-bold text-slate-500 uppercase mr-1">Speed</span>
+                <div className="flex items-center gap-1 tag" style={{ padding: '4px 8px', gap: '4px', border: '1px solid var(--border-color)' }}>
+                    <i className="fa-solid fa-gauge-high" style={{ fontSize: '11px', color: 'var(--text-muted)', marginRight: '4px' }}></i>
+                    <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', textTransform: 'uppercase', marginRight: '4px' }}>Speed</span>
                     {[0.5, 1, 2].map(s => (
-                        <button key={s} onClick={() => setSpeed(s)} className={`px-2 py-1 text-xs font-bold rounded ${speed === s ? 'bg-white text-blue-600 shadow' : 'text-slate-400 hover:text-slate-600'}`}>{s}x</button>
+                        <button key={s} onClick={() => setSpeed(s)}
+                            className={speed === s ? 'btn btn-primary' : 'btn btn-secondary'}
+                            style={{ padding: '2px 8px', fontSize: '11px', minWidth: 'unset' }}>{s}x</button>
                     ))}
                 </div>
             );
@@ -1195,8 +1188,8 @@ while current is not None:
             const renderCreationTab = () => (
                 <div className="space-y-4">
                     <div className="flex gap-4 mb-4">
-                        <button onClick={createHead} disabled={list.length > 0} className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 disabled:opacity-50">Initialize Head</button>
-                        <button onClick={appendNode} disabled={list.length === 0} className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 disabled:opacity-50">Append Node</button>
+                        <button onClick={createHead} disabled={list.length > 0} className="btn btn-primary disabled:opacity-50">Initialize Head</button>
+                        <button onClick={appendNode} disabled={list.length === 0} className="btn btn-success disabled:opacity-50">Append Node</button>
                     </div>
                     <div className="bg-blue-50 p-4 rounded text-sm text-blue-800 border-l-4 border-blue-600">
                         <strong>Logic:</strong> When you create the first node, the <code>head</code> variable refers to it. Subsequent nodes are linked by updating <code>current.next</code> to point to the new node instance.
@@ -1210,7 +1203,7 @@ while current is not None:
                 return (
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                            <button onClick={traverseList} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded shadow hover:bg-indigo-700">
+                            <button onClick={traverseList} className="btn btn-primary">
                                 <Singly_Icon name="play" size={16}/> Simulate Traversal
                             </button>
                             {renderSpeedControls()}
@@ -1249,9 +1242,9 @@ while current is not None:
             const renderInsertionTab = () => (
                 <div className="space-y-4">
                     <div className="flex flex-wrap gap-2 mb-4">
-                        <button onClick={insertHead} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Head</button>
-                        <button onClick={insertAtIndex1} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Index 1 (Between)</button>
-                        <button onClick={insertTail} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Tail</button>
+                        <button onClick={insertHead} className="btn btn-success">Insert at Head</button>
+                        <button onClick={insertAtIndex1} className="btn btn-success">Insert at Index 1 (Between)</button>
+                        <button onClick={insertTail} className="btn btn-success">Insert at Tail</button>
                     </div>
                     <div className="bg-teal-50 border border-teal-200 p-3 rounded text-sm text-teal-800">
                         <strong>Visual Guide:</strong> Green node = Newly created node (Memory allocated). Watch it appear above the list, then get linked in.
@@ -1280,9 +1273,9 @@ while current is not None:
             const renderDeletionTab = () => (
                 <div className="space-y-4">
                     <div className="flex flex-wrap gap-2 mb-4">
-                        <button onClick={deleteHead} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Head</button>
-                        <button onClick={deleteMiddle} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete at Index 1</button>
-                        <button onClick={deleteTail} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Tail</button>
+                        <button onClick={deleteHead} className="btn btn-danger">Delete Head</button>
+                        <button onClick={deleteMiddle} className="btn btn-danger">Delete at Index 1</button>
+                        <button onClick={deleteTail} className="btn btn-danger">Delete Tail</button>
                     </div>
                     <div className="bg-red-50 border border-red-200 p-4 rounded">
                         <h4 className="text-red-800 font-bold mb-2">Python Garbage Collection</h4>
@@ -1323,6 +1316,7 @@ while current is not None:
             );
 
             return (
+                <React.Fragment>
                 <div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
                     {/* Sidebar */}
                     
@@ -1339,7 +1333,7 @@ while current is not None:
                                 { id: 'circular', label: '6. Circular Lists' }
                             ].map(item => (
                                 <button key={item.id} onClick={() => setActiveTab(item.id)}
-                                    className={`px-4 py-2 text-sm font-semibold rounded-full whitespace-nowrap transition-colors ${activeTab === item.id ? 'bg-blue-600 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                                    className={`explorer-tab-btn${activeTab === item.id ? ' active' : ''}`}>
                                     {item.label}
                                 </button>
                             ))}
@@ -1351,7 +1345,7 @@ while current is not None:
                             </div>
                             <div className="flex items-center gap-4">
                                 {activeTab !== 'structure' && (
-                                    <button onClick={resetList} className="flex items-center gap-2 px-3 py-1 bg-white border border-slate-300 text-slate-600 rounded hover:bg-slate-50 text-xs font-bold uppercase shadow-sm">
+                                    <button onClick={resetList} className="btn btn-secondary">
                                         <Singly_Icon name="refresh" size={14} /> Reset
                                     </button>
                                 )}
@@ -1361,10 +1355,11 @@ while current is not None:
                         </header>
 
                         {/* Visualization Area */}
-                        <div className="flex-1 bg-slate-50 p-6 overflow-x-auto overflow-y-hidden flex items-center relative list-container">
-                            {/* Staging Node — floats above, centered, no push */}
+                        {/* Visualization Area Container (relative wrapper) */}
+                        <div className="flex-1 bg-slate-50 p-6 overflow-hidden flex flex-col justify-center relative min-h-[280px]">
+                            {/* Staging Node floats above, absolute, no layout push */}
                             {stagingNode && (
-                                <div className="staging-overlay">
+                                <div className="staging-overlay" style={{ position: 'absolute', top: '12px', left: '50%', transform: 'translateX(-50%)', zIndex: 50 }}>
                                     <div className="staging-badge flex flex-col items-center bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-xl border border-green-200">
                                         <span className="text-xs font-bold text-green-700 bg-green-100 px-3 py-1 rounded-full mb-2 animate-pulse">⚡ Allocating Memory...</span>
                                         <Singly_NodeVisual value={stagingNode.value} address={stagingNode.address} nextAddress={stagingNode.next} isNew={true} />
@@ -1372,44 +1367,56 @@ while current is not None:
                                 </div>
                             )}
 
-                            {activeTab === 'structure' ? (
-                                <div className="w-full h-full flex items-center justify-center text-slate-400 italic">
-                                    Select other tabs to build the list
-                                </div>
-                            ) : (
-                                <div className="flex items-center min-w-max px-4">
-                                    <React.Fragment>
-                                        <Singly_NodeVisual value={list.length} address="0xHEAD" nextAddress={list.length > 0 ? list[0].address : 'None'} isHeader={true} label="Sentinel" />
-                                        <Singly_Arrow />
-                                    </React.Fragment>
-                                    {list.length === 0 ? <Singly_NodeVisual isNull={true} /> : (
+                            {/* List Container (horizontal scroll list) */}
+                            <div className="flex-1 overflow-x-auto overflow-y-hidden flex items-center justify-center py-4">
+                                {activeTab === 'structure' ? (
+                                    <div className="flex flex-col items-center justify-center w-full py-4 text-slate-400 font-medium">
+                                        <h4 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-6">Sample Singly Linked List Structure</h4>
+                                        <div className="flex items-center min-w-max px-4">
+                                            <Singly_NodeVisual value="10" address="0x1A4F" nextAddress="0x2B8E" highlight={false} label="Head" />
+                                            <Singly_Arrow />
+                                            <Singly_NodeVisual value="45" address="0x2B8E" nextAddress="0x3C9D" highlight={false} />
+                                            <Singly_Arrow />
+                                            <Singly_NodeVisual value="99" address="0x3C9D" nextAddress="None" highlight={false} label="Tail" />
+                                            <Singly_Arrow />
+                                            <Singly_NodeVisual isNull={true} />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center min-w-max px-4">
                                         <React.Fragment>
-                                            {list.map((node, index) => {
-                                                let nextAddressOverride = node.next;
-                                                if (activeTab === 'circular' && index === list.length - 1 && list.length > 0) nextAddressOverride = list[0].address;
-                                                return (
-                                                    <React.Fragment key={node.id}>
-                                                        <Singly_NodeVisual value={node.value} address={node.address} nextAddress={nextAddressOverride} highlight={highlightIndex === index} label={getNodeLabel(index)} isNew={highlightIndex === index && activeTab === 'insertion'} />
-                                                        {index < list.length - 1 && <Singly_Arrow />}
-                                                    </React.Fragment>
-                                                );
-                                            })}
-                                            {activeTab === 'circular' && list.length > 0 ? (
-                                                <div className="flex flex-col items-center text-purple-400 mx-2 animate-pulse">
-                                                    <div className="border-b-2 border-dashed border-purple-400 w-12 mb-1"></div>
-                                                    <Singly_Icon name="repeat" size={32} />
-                                                    <span className="text-[10px] uppercase font-bold mt-1">Loop to Head</span>
-                                                </div>
-                                            ) : (
-                                                <React.Fragment>
-                                                    {list.length > 0 && <Singly_Arrow />}
-                                                    <Singly_NodeVisual isNull={true} />
-                                                </React.Fragment>
-                                            )}
+                                            <Singly_NodeVisual value={list.length} address="0xHEAD" nextAddress={list.length > 0 ? list[0].address : 'None'} isHeader={true} label="Sentinel" />
+                                            <Singly_Arrow />
                                         </React.Fragment>
-                                    )}
-                                </div>
-                            )}
+                                        {list.length === 0 ? <Singly_NodeVisual isNull={true} /> : (
+                                            <React.Fragment>
+                                                {list.map((node, index) => {
+                                                    let nextAddressOverride = node.next;
+                                                    if (activeTab === 'circular' && index === list.length - 1 && list.length > 0) nextAddressOverride = list[0].address;
+                                                    return (
+                                                        <React.Fragment key={node.id}>
+                                                            <Singly_NodeVisual value={node.value} address={node.address} nextAddress={nextAddressOverride} highlight={highlightIndex === index} label={getNodeLabel(index)} isNew={highlightIndex === index && activeTab === 'insertion'} />
+                                                            {index < list.length - 1 && <Singly_Arrow />}
+                                                        </React.Fragment>
+                                                    );
+                                                })}
+                                                {activeTab === 'circular' && list.length > 0 ? (
+                                                    <div className="flex flex-col items-center text-purple-400 mx-2 animate-pulse">
+                                                        <div className="border-b-2 border-dashed border-purple-400 w-12 mb-1"></div>
+                                                        <Singly_Icon name="repeat" size={32} />
+                                                        <span className="text-[10px] uppercase font-bold mt-1">Loop to Head</span>
+                                                    </div>
+                                                ) : (
+                                                    <React.Fragment>
+                                                        {list.length > 0 && <Singly_Arrow />}
+                                                        <Singly_NodeVisual isNull={true} />
+                                                    </React.Fragment>
+                                                )}
+                                            </React.Fragment>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Controls & Info Panel */}
@@ -1433,8 +1440,23 @@ while current is not None:
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
+
+                {/* ── Step Navigation Footer (outside card) ── */}
+                <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '20px 0 0 0' }} />
+                <div className="section-nav-footer">
+                    <button className="sec-nav-btn prev-btn" onClick={singlyPrev}>
+                        <span className="nav-label"><i className="fa-solid fa-arrow-left"></i> {singlyIdx === 0 ? 'Previous Section' : 'Previous Step'}</span>
+                        <span className="nav-title">{singlyIdx === 0 ? 'Module 1: OOP Refresher' : singlyLabels[singlyIdx - 1]}</span>
+                    </button>
+                    <button className="sec-nav-btn next-btn" onClick={singlyNext}>
+                        <span className="nav-label">{singlyIdx === singlyTabs.length - 1 ? 'Next Section' : 'Next Step'} <i className="fa-solid fa-arrow-right"></i></span>
+                        <span className="nav-title">{singlyIdx === singlyTabs.length - 1 ? 'Module 3: Doubly Linked List' : singlyLabels[singlyIdx + 1]}</span>
+                    </button>
+                </div>
+                </React.Fragment>
             );
         };
 
@@ -1587,6 +1609,19 @@ while current is not None:
             const [pointerLabel, setPointerLabel] = useState({});
             const [stagingNode, setStagingNode] = useState(null);
             const [speed, setSpeed] = useState(1);
+
+            // ── Doubly step navigation ──
+            const dTabs = ['structure','creation','traversal','insertion','deletion'];
+            const dTabLabels = ['1. Basic Structure','2. Creation','3. Traversal','4. Insertion','5. Deletion'];
+            const currentDTabIndex = dTabs.indexOf(activeTab);
+            const handleDPrev = () => {
+                if (currentDTabIndex > 0) { setActiveTab(dTabs[currentDTabIndex - 1]); }
+                else { window.navigateToSection('singly-section'); }
+            };
+            const handleDNext = () => {
+                if (currentDTabIndex < dTabs.length - 1) { setActiveTab(dTabs[currentDTabIndex + 1]); }
+                else { window.navigateToSection('quiz-section'); }
+            };
 
             const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms / speed));
             const log = (msg) => setLogs(prev => [msg, ...prev]);
@@ -1798,11 +1833,13 @@ while current is not None:
             };
 
             const renderSpeedControls = () => (
-                <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
-                    <Doubly_Icon name="clock" size={16} className="text-slate-500 ml-2" />
-                    <span className="text-xs font-bold text-slate-500 uppercase mr-1">Speed</span>
+                <div className="flex items-center gap-1 tag" style={{ padding: '4px 8px', gap: '4px', border: '1px solid var(--border-color)' }}>
+                    <i className="fa-solid fa-gauge-high" style={{ fontSize: '11px', color: 'var(--text-muted)', marginRight: '4px' }}></i>
+                    <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', textTransform: 'uppercase', marginRight: '4px' }}>Speed</span>
                     {[0.5, 1, 2].map(s => (
-                        <button key={s} onClick={() => setSpeed(s)} className={`px-2 py-1 text-xs font-bold rounded ${speed === s ? 'bg-white text-blue-600 shadow' : 'text-slate-400 hover:text-slate-600'}`}>{s}x</button>
+                        <button key={s} onClick={() => setSpeed(s)}
+                            className={speed === s ? 'btn btn-primary' : 'btn btn-secondary'}
+                            style={{ padding: '2px 8px', fontSize: '11px', minWidth: 'unset' }}>{s}x</button>
                     ))}
                 </div>
             );
@@ -1853,8 +1890,8 @@ while current is not None:
             const renderCreationTab = () => (
                 <div className="space-y-4">
                     <div className="flex gap-4 mb-4">
-                        <button onClick={createHead} disabled={list.length > 0} className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 disabled:opacity-50">Initialize Head</button>
-                        <button onClick={appendNode} disabled={list.length === 0} className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 disabled:opacity-50">Append Node</button>
+                        <button onClick={createHead} disabled={list.length > 0} className="btn btn-primary disabled:opacity-50">Initialize Head</button>
+                        <button onClick={appendNode} disabled={list.length === 0} className="btn btn-success disabled:opacity-50">Append Node</button>
                     </div>
                     <div className="bg-blue-50 text-blue-800 p-3 rounded text-sm border-l-4 border-blue-600">
                         Notice how the <strong>Prev</strong> pointer of the new node points back to the old tail, and the old tail's <strong>Next</strong> is updated to the new node.
@@ -1865,10 +1902,10 @@ while current is not None:
             const renderTraversalTab = () => (
                 <div className="space-y-4">
                     <div className="flex gap-4">
-                        <button onClick={traverseForward} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded shadow hover:bg-indigo-700">
+                        <button onClick={traverseForward} className="btn btn-primary">
                             <Doubly_Icon name="chevrons-right" size={16}/> Forward (Head → Tail)
                         </button>
-                        <button onClick={traverseBackward} className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded shadow hover:bg-orange-600">
+                        <button onClick={traverseBackward} className="btn btn-secondary">
                             <Doubly_Icon name="chevrons-left" size={16}/> Backward (Tail → Head)
                         </button>
                     </div>
@@ -1882,9 +1919,9 @@ while current is not None:
             const renderInsertionTab = () => (
                 <div className="space-y-4">
                     <div className="flex flex-wrap gap-2 mb-4">
-                        <button onClick={insertHead} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Head</button>
-                        <button onClick={insertAtIndex1} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Index 1</button>
-                        <button onClick={insertTail} className="px-4 py-2 bg-teal-600 text-white rounded shadow hover:bg-teal-700 text-sm">Insert at Tail</button>
+                        <button onClick={insertHead} className="btn btn-success">Insert at Head</button>
+                        <button onClick={insertAtIndex1} className="btn btn-success">Insert at Index 1</button>
+                        <button onClick={insertTail} className="btn btn-success">Insert at Tail</button>
                     </div>
                     <DLLInsertFlowchart />
                     <div className="bg-white border border-slate-200 rounded p-4 mt-4">
@@ -1902,9 +1939,9 @@ while current is not None:
             const renderDeletionTab = () => (
                 <div className="space-y-4">
                     <div className="flex flex-wrap gap-2 mb-4">
-                        <button onClick={deleteHead} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Head</button>
-                        <button onClick={deleteMiddle} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Middle</button>
-                        <button onClick={deleteTail} className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 text-sm">Delete Tail</button>
+                        <button onClick={deleteHead} className="btn btn-danger">Delete Head</button>
+                        <button onClick={deleteMiddle} className="btn btn-danger">Delete Middle</button>
+                        <button onClick={deleteTail} className="btn btn-danger">Delete Tail</button>
                     </div>
                     <DLLDeleteFlowchart />
                     <div className="bg-white border border-slate-200 rounded p-4 mt-4">
@@ -1920,6 +1957,7 @@ while current is not None:
             );
 
             return (
+                <React.Fragment>
                 <div className="flex flex-col overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
                     
 
@@ -1933,7 +1971,7 @@ while current is not None:
                                 { id: 'deletion', label: '5. Deletion' }
                             ].map(item => (
                                 <button key={item.id} onClick={() => setActiveTab(item.id)}
-                                    className={`px-4 py-2 text-sm font-semibold rounded-full whitespace-nowrap transition-colors ${activeTab === item.id ? 'bg-blue-600 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                                    className={`explorer-tab-btn${activeTab === item.id ? ' active' : ''}`}>
                                     {item.label}
                                 </button>
                             ))}
@@ -1945,7 +1983,7 @@ while current is not None:
                             </div>
                             <div className="flex items-center gap-4">
                                 {activeTab !== 'structure' && (
-                                    <button onClick={resetList} className="flex items-center gap-2 px-3 py-1 bg-white border border-slate-300 text-slate-600 rounded hover:bg-slate-50 text-xs font-bold uppercase shadow-sm">
+                                    <button onClick={resetList} className="btn btn-secondary">
                                         <Doubly_Icon name="refresh" size={14} /> Reset
                                     </button>
                                 )}
@@ -1954,9 +1992,11 @@ while current is not None:
                             </div>
                         </header>
 
-                        <div className="flex-1 bg-slate-50 p-6 overflow-x-auto overflow-y-hidden flex items-center relative list-container">
+                        {/* Visualization Area Container (relative wrapper) */}
+                        <div className="flex-1 bg-slate-50 p-6 overflow-hidden flex flex-col justify-center relative min-h-[280px]">
+                            {/* Staging Node floats above, absolute, no layout push */}
                             {stagingNode && (
-                                <div className="staging-overlay">
+                                <div className="staging-overlay" style={{ position: 'absolute', top: '12px', left: '50%', transform: 'translateX(-50%)', zIndex: 50 }}>
                                     <div className="staging-badge flex flex-col items-center bg-white/90 backdrop-blur-sm p-3 rounded-xl shadow-xl border border-green-200">
                                         <span className="text-xs font-bold text-green-700 bg-green-100 px-3 py-1 rounded-full mb-2 animate-pulse">⚡ Allocating Memory...</span>
                                         <Doubly_NodeVisual value={stagingNode.value} address={stagingNode.address} nextAddress={stagingNode.next} prevAddress={stagingNode.prev} isNew={true} />
@@ -1964,31 +2004,43 @@ while current is not None:
                                 </div>
                             )}
 
-                            {activeTab === 'structure' && list.length === 0 ? (
-                                <div className="w-full h-full flex items-center justify-center text-slate-400 italic">
-                                    Review the anatomy of a Doubly Linked Node below
-                                </div>
-                            ) : (
-                                <div className="flex items-center min-w-max px-4">
-                                    {activeTab !== 'structure' && (
-                                        <React.Fragment>
-                                            <Doubly_NodeVisual value={list.length} address="HEAD_SENTINEL" nextAddress={list.length > 0 ? list[0].address : 'None'} isHeader={true} label="List Metadata" />
+                            {/* List Container (horizontal scroll list) */}
+                            <div className="flex-1 overflow-x-auto overflow-y-hidden flex items-center justify-center py-4">
+                                {activeTab === 'structure' && list.length === 0 ? (
+                                    <div className="flex flex-col items-center justify-center w-full py-4 text-slate-400 font-medium">
+                                        <h4 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-6">Sample Doubly Linked List Structure</h4>
+                                        <div className="flex items-center min-w-max px-4">
+                                            <Doubly_NodeVisual value="10" address="0x1A4F" nextAddress="0x2B8E" prevAddress="None" highlight={false} label="Head" />
+                                            <Doubly_DoubleArrow />
+                                            <Doubly_NodeVisual value="45" address="0x2B8E" nextAddress="0x3C9D" prevAddress="0x1A4F" highlight={false} />
+                                            <Doubly_DoubleArrow />
+                                            <Doubly_NodeVisual value="99" address="0x3C9D" nextAddress="None" prevAddress="0x2B8E" highlight={false} label="Tail" />
                                             <div className="mx-2 text-slate-300"><Doubly_Icon name="arrow-right" size={24}/></div>
-                                        </React.Fragment>
-                                    )}
-                                    {list.length === 0 && activeTab !== 'structure' ? (
-                                        <Doubly_NodeVisual isNull={true} />
-                                    ) : (
-                                        list.map((node, index) => (
-                                            <React.Fragment key={node.id}>
-                                                <Doubly_NodeVisual value={node.value} address={node.address} nextAddress={node.next} prevAddress={node.prev} highlight={highlightIndex === index} label={getNodeLabel(index)} isNew={highlightIndex === index && activeTab === 'insertion'} />
-                                                {index < list.length - 1 ? <Doubly_DoubleArrow /> : <div className="mx-2 text-slate-300"><Doubly_Icon name="arrow-right" size={24}/></div>}
+                                            <Doubly_NodeVisual isNull={true} />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center min-w-max px-4">
+                                        {activeTab !== 'structure' && (
+                                            <React.Fragment>
+                                                <Doubly_NodeVisual value={list.length} address="HEAD_SENTINEL" nextAddress={list.length > 0 ? list[0].address : 'None'} isHeader={true} label="List Metadata" />
+                                                <div className="mx-2 text-slate-300"><Doubly_Icon name="arrow-right" size={24}/></div>
                                             </React.Fragment>
-                                        ))
-                                    )}
-                                    {list.length > 0 && <Doubly_NodeVisual isNull={true} />}
-                                </div>
-                            )}
+                                        )}
+                                        {list.length === 0 && activeTab !== 'structure' ? (
+                                            <Doubly_NodeVisual isNull={true} />
+                                        ) : (
+                                            list.map((node, index) => (
+                                                <React.Fragment key={node.id}>
+                                                    <Doubly_NodeVisual value={node.value} address={node.address} nextAddress={node.next} prevAddress={node.prev} highlight={highlightIndex === index} label={getNodeLabel(index)} isNew={highlightIndex === index && activeTab === 'insertion'} />
+                                                    {index < list.length - 1 ? <Doubly_DoubleArrow /> : <div className="mx-2 text-slate-300"><Doubly_Icon name="arrow-right" size={24}/></div>}
+                                                </React.Fragment>
+                                            ))
+                                        )}
+                                        {list.length > 0 && <Doubly_NodeVisual isNull={true} />}
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div className="bg-white border-t border-slate-200 flex flex-col md:flex-row">
@@ -2011,20 +2063,23 @@ while current is not None:
                             </div>
                         
                         </div>
-                        {/* Custom Navigation Footer */}
-                        <div className="section-nav-footer" style={{ borderTop: 'none', background: 'transparent' }}>
-                            <button className="sec-nav-btn prev-btn" onClick={handleDPrev}>
-                                <span className="nav-label"><i className="fa-solid fa-arrow-left"></i> {currentDTabIndex === 0 ? "Previous Section" : "Previous Step"}</span>
-                                <span className="nav-title">{currentDTabIndex === 0 ? "Module 2: Singly Linked List" : dTabLabels[currentDTabIndex - 1]}</span>
-                            </button>
-                            <button className="sec-nav-btn next-btn" onClick={handleDNext}>
-                                <span className="nav-label">{currentDTabIndex === dTabs.length - 1 ? "Next Section" : "Next Step"} <i className="fa-solid fa-arrow-right"></i></span>
-                                <span className="nav-title">{currentDTabIndex === dTabs.length - 1 ? "Transition Quiz" : dTabLabels[currentDTabIndex + 1]}</span>
-                            </button>
-                        </div>
                     </div>
 
                 </div>
+
+                {/* ── Step Navigation Footer (outside card) ── */}
+                <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '20px 0 0 0' }} />
+                <div className="section-nav-footer">
+                    <button className="sec-nav-btn prev-btn" onClick={handleDPrev}>
+                        <span className="nav-label"><i className="fa-solid fa-arrow-left"></i> {currentDTabIndex === 0 ? "Previous Section" : "Previous Step"}</span>
+                        <span className="nav-title">{currentDTabIndex === 0 ? "Module 2: Singly Linked List" : dTabLabels[currentDTabIndex - 1]}</span>
+                    </button>
+                    <button className="sec-nav-btn next-btn" onClick={handleDNext}>
+                        <span className="nav-label">{currentDTabIndex === dTabs.length - 1 ? "Next Section" : "Next Step"} <i className="fa-solid fa-arrow-right"></i></span>
+                        <span className="nav-title">{currentDTabIndex === dTabs.length - 1 ? "Transition Quiz" : dTabLabels[currentDTabIndex + 1]}</span>
+                    </button>
+                </div>
+                </React.Fragment>
             );
         };
 
