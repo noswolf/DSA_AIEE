@@ -109,12 +109,13 @@ function setupSectionNavigation() {
 
     navItems.forEach((item, index) => {
         const targetId = item.getAttribute("data-target");
+        // Skip viz-sections (singly and doubly) since React handles their own nav
+        if (targetId === 'singly-section' || targetId === 'doubly-section') return;
+
         const section = document.getElementById(targetId);
         if (!section) return;
 
         if (section.querySelector(".section-nav-footer")) return;
-        // Skip adding global footer for visualizer sections, they handle it internally
-        if (section.classList.contains("viz-section")) return;
 
         const footer = document.createElement("div");
         footer.className = "section-nav-footer";
@@ -165,6 +166,7 @@ function setupSectionNavigation() {
 
         section.appendChild(footer);
     });
+    window.navigateToSection = navigateToSection;
 }
 
 // -------------------------------------------------------------
@@ -245,11 +247,8 @@ function loadQuizQuestion() {
                 ${q.options.map((opt, i) => {
                     let extraClass = "";
                     if (isAnswered) {
-                        if (i === q.correct) {
-                            extraClass = " correct";
-                        } else if (i === prevAnswer) {
-                            extraClass = " incorrect";
-                        }
+                        if (i === q.correct) extraClass = " correct";
+                        else if (i === prevAnswer) extraClass = " incorrect";
                     }
                     return `<button class="quiz-option${extraClass}" ${isAnswered ? 'disabled' : ''} onclick="selectQuizOption(${i})">${opt}</button>`;
                 }).join('')}
@@ -268,7 +267,7 @@ function loadQuizQuestion() {
                     ${currentQuizIdx > 0 ? `<button class="btn btn-secondary" id="quiz-prev-btn" onclick="prevQuizQuestion()"><i class="fa-solid fa-chevron-left"></i> Back</button>` : ''}
                 </div>
                 <div>
-                    <button class="btn btn-primary" id="quiz-next-btn" style="display: ${isAnswered ? 'inline-flex' : 'none'};" onclick="nextQuizQuestion()">Next Question <i class="fa-solid fa-chevron-right"></i></button>
+                    ${isAnswered && currentQuizIdx < quizQuestions.length - 1 ? `<button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuizQuestion()">Next Question <i class="fa-solid fa-chevron-right"></i></button>` : ''}
                 </div>
             </div>
         </div>
@@ -276,47 +275,8 @@ function loadQuizQuestion() {
 }
 
 function selectQuizOption(optionIdx) {
-    const q = quizQuestions[currentQuizIdx];
-    const options = document.querySelectorAll(".quiz-option");
-
-    // Disable all options
-    options.forEach(opt => opt.disabled = true);
-
-    // Save selection
     userAnswers[currentQuizIdx] = optionIdx;
-    const isCorrect = (optionIdx === q.correct);
-
-    // Highlight options
-    options.forEach((opt, idx) => {
-        if (idx === q.correct) {
-            opt.classList.add("correct");
-        } else if (idx === optionIdx) {
-            opt.classList.add("incorrect");
-        }
-    });
-
-    // Render explanation
-    const explainBox = document.getElementById("quiz-explanation-box");
-    if (explainBox) {
-        explainBox.style.display = "block";
-        if (isCorrect) {
-            explainBox.className = "quiz-explanation correct-explain";
-            explainBox.innerHTML = `
-                <h5 class="correct-title"><i class="fa-solid fa-circle-check"></i> Correct!</h5>
-                <p>${q.explanation}</p>
-            `;
-        } else {
-            explainBox.className = "quiz-explanation incorrect-explain";
-            explainBox.innerHTML = `
-                <h5 class="incorrect-title"><i class="fa-solid fa-circle-xmark"></i> Incorrect</h5>
-                <p>${q.explanation}</p>
-            `;
-        }
-    }
-
-    // Show Next Button
-    const nextBtn = document.getElementById("quiz-next-btn");
-    if (nextBtn) nextBtn.style.display = "inline-flex";
+    loadQuizQuestion();
 }
 
 function nextQuizQuestion() {
@@ -341,9 +301,7 @@ function showQuizResults() {
     // Compute Score
     let score = 0;
     userAnswers.forEach((ans, idx) => {
-        if (ans === quizQuestions[idx].correct) {
-            score++;
-        }
+        if (ans === quizQuestions[idx].correct) score++;
     });
 
     const scoreNum = document.getElementById("quiz-score-num");
@@ -354,11 +312,11 @@ function showQuizResults() {
     const fbText = document.getElementById("quiz-feedback-text");
     if (fbText) {
         if (score === quizQuestions.length) {
-            fbText.textContent = "Spectacular! You've mastered all the searching, sorting, and hashing concepts of Week 3!";
+            fbText.textContent = "Perfect score! You've mastered all concepts from Week 4!";
         } else if (score >= 3) {
-            fbText.textContent = "Great job! You have a solid understanding of searching bounds, sorting swaps, and linear probing. Review the explanations to perfect your knowledge.";
+            fbText.textContent = "Great job! Review the explanations to perfect your knowledge!";
         } else {
-            fbText.textContent = "Keep reviewing! Understanding how binary search halves space, how selection sort minimizes swaps, and how open addressing rehashes is key to advanced DSA.";
+            fbText.textContent = "Keep reviewing! Go back through the modules to strengthen your understanding!";
         }
     }
 }
@@ -373,6 +331,216 @@ function resetQuiz() {
     if (container) container.style.display = "block";
 
     loadQuizQuestion();
+}
+
+// ------------------------------
+// Module 1: OOP Quiz
+// ------------------------------
+const oopQuizQuestions = [
+    {
+        qnum: "Question 1 of 10",
+        question: "In Python, what is the first parameter of every instance method?",
+        options: ["this", "self", "cls", "init"],
+        correct: 1,
+        explanation: "The 'self' keyword refers to the current instance of the class, and it must be the first parameter of any instance method."
+    },
+    {
+        qnum: "Question 2 of 10",
+        question: "What convention in Python indicates that a variable should be treated as 'private' (encapsulated)?",
+        options: ["double underscore (__var)", "single underscore (_var)", "dollar sign ($var)", "all caps (VAR)"],
+        correct: 1,
+        explanation: "A single underscore prefix (_var) is a convention to signal that an attribute is intended to be private and shouldn't be accessed directly outside the class."
+    },
+    {
+        qnum: "Question 3 of 10",
+        question: "What do you call a method that retrieves the value of a private attribute?",
+        options: ["Setter", "Getter", "Constructor", "Destructor"],
+        correct: 1,
+        explanation: "A 'getter' method is used to safely retrieve the value of a private attribute, allowing controlled access."
+    },
+    {
+        qnum: "Question 4 of 10",
+        question: "Which function is used to call a method from a parent class?",
+        options: ["parent()", "super()", "call()", "inherit()"],
+        correct: 1,
+        explanation: "The super() function gives access to methods in a superclass (parent class), and it's commonly used to call the parent's __init__ method."
+    },
+    {
+        qnum: "Question 5 of 10",
+        question: "What is the special method that runs when you create an instance of a class?",
+        options: ["__new__", "__init__", "__create__", "__main__"],
+        correct: 1,
+        explanation: "The __init__ method is the constructor that initializes a new object when you create an instance of a class."
+    },
+    {
+        qnum: "Question 6 of 10",
+        question: "Which of these best describes encapsulation?",
+        options: [
+            "Allowing a class to inherit from another",
+            "Hiding internal state and exposing it through controlled methods",
+            "Creating multiple methods with the same name",
+            "Making all attributes public"
+        ],
+        correct: 1,
+        explanation: "Encapsulation means hiding the internal state of an object and only exposing it through well-defined methods (getters/setters) to protect data integrity."
+    },
+    {
+        qnum: "Question 7 of 10",
+        question: "If you don't call super().__init__() in a child class's __init__, what happens?",
+        options: [
+            "The parent class is automatically initialized",
+            "The parent's attributes are not initialized, which may cause AttributeErrors",
+            "The child class can't inherit any methods",
+            "Python throws a syntax error"
+        ],
+        correct: 1,
+        explanation: "Without super().__init__(), the parent class's constructor never runs, so its attributes are never initialized, which often leads to AttributeErrors."
+    },
+    {
+        qnum: "Question 8 of 10",
+        question: "What would you use a setter method for?",
+        options: [
+            "To retrieve an attribute's value",
+            "To delete an attribute",
+            "To update an attribute's value, often with validation",
+            "To create a new instance"
+        ],
+        correct: 2,
+        explanation: "A 'setter' method is used to safely update a private attribute's value, often including validation logic."
+    },
+    {
+        qnum: "Question 9 of 10",
+        question: "In Python, can you directly access an attribute with a single underscore from outside the class?",
+        options: [
+            "No, it's completely private and raises an error",
+            "Yes, but it's a convention to not do so",
+            "Only if you use the get() function",
+            "Only if the class has a public getter"
+        ],
+        correct: 1,
+        explanation: "A single underscore is just a naming convention — you can still access it from outside the class, but you shouldn't as it signals the attribute is intended for internal use."
+    },
+    {
+        qnum: "Question 10 of 10",
+        question: "In this code, what is 'self._next'? class Node: def __init__(self, data): self._data = data self._next = None",
+        options: [
+            "A public attribute",
+            "A protected (encapsulated) attribute meant for internal use",
+            "A static variable",
+            "A global variable"
+        ],
+        correct: 1,
+        explanation: "The single underscore prefix (_next) indicates this is a protected attribute meant to be used only within the class, not accessed directly from outside."
+    }
+];
+
+let currentOopQuizIdx = 0;
+let oopUserAnswers = Array(oopQuizQuestions.length).fill(null);
+
+function loadOopQuizQuestion() {
+    const container = document.getElementById("oop-quiz-container");
+    if (!container) return;
+
+    if (currentOopQuizIdx >= oopQuizQuestions.length) {
+        showOopQuizResults();
+        return;
+    }
+
+    const q = oopQuizQuestions[currentOopQuizIdx];
+    const prevAnswer = oopUserAnswers[currentOopQuizIdx];
+    const isAnswered = (prevAnswer !== null);
+
+    container.innerHTML = `
+        <div class="quiz-question-card glass">
+            <div class="quiz-q-num">${q.qnum}</div>
+            <div class="quiz-q-text">${q.question}</div>
+            <div class="quiz-options">
+                ${q.options.map((opt, i) => {
+                    let extraClass = "";
+                    if (isAnswered) {
+                        if (i === q.correct) extraClass = " correct";
+                        else if (i === prevAnswer) extraClass = " incorrect";
+                    }
+                    return `<button class="quiz-option${extraClass}" ${isAnswered ? 'disabled' : ''} onclick="selectOopQuizOption(${i})">${opt}</button>`;
+                }).join('')}
+            </div>
+            <div class="quiz-explanation ${isAnswered ? (prevAnswer === q.correct ? 'correct-explain' : 'incorrect-explain') : ''}" id="oop-quiz-explanation-box" style="display: ${isAnswered ? 'block' : 'none'};">
+                ${isAnswered ? `
+                    <h5 class="${prevAnswer === q.correct ? 'correct-title' : 'incorrect-title'}">
+                        <i class="fa-solid ${prevAnswer === q.correct ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> 
+                        ${prevAnswer === q.correct ? 'Correct!' : 'Incorrect'}
+                    </h5>
+                    <p>${q.explanation}</p>
+                ` : ''}
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 16px; align-items: center; width: 100%;">
+                <div>
+                    ${currentOopQuizIdx > 0 ? `<button class="btn btn-secondary" id="oop-quiz-prev-btn" onclick="prevOopQuizQuestion()"><i class="fa-solid fa-chevron-left"></i> Back</button>` : ''}
+                </div>
+                <div>
+                    ${currentOopQuizIdx < oopQuizQuestions.length - 1 ? `<button class="btn btn-primary" id="oop-quiz-next-btn" onclick="nextOopQuizQuestion()" style="display: ${isAnswered ? 'inline-flex' : 'none'};">Next Question <i class="fa-solid fa-chevron-right"></i></button>` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function selectOopQuizOption(optionIdx) {
+    oopUserAnswers[currentOopQuizIdx] = optionIdx;
+    loadOopQuizQuestion();
+}
+
+function nextOopQuizQuestion() {
+    currentOopQuizIdx++;
+    loadOopQuizQuestion();
+}
+
+function prevOopQuizQuestion() {
+    if (currentOopQuizIdx > 0) {
+        currentOopQuizIdx--;
+        loadOopQuizQuestion();
+    }
+}
+
+function showOopQuizResults() {
+    const container = document.getElementById("oop-quiz-container");
+    if (container) container.style.display = "none";
+
+    const summaryCard = document.getElementById("oop-quiz-summary-card");
+    if (summaryCard) summaryCard.style.display = "flex";
+
+    let score = 0;
+    oopUserAnswers.forEach((ans, idx) => {
+        if (ans === oopQuizQuestions[idx].correct) score++;
+    });
+
+    const scoreNum = document.getElementById("oop-quiz-score-num");
+    const scoreTotal = document.getElementById("oop-quiz-score-total");
+    if (scoreNum) scoreNum.textContent = score;
+    if (scoreTotal) scoreTotal.textContent = oopQuizQuestions.length;
+
+    const fbText = document.getElementById("oop-quiz-feedback-text");
+    if (fbText) {
+        if (score === oopQuizQuestions.length) {
+            fbText.textContent = "Perfect score! You've mastered OOP concepts! Let's move to Linked Lists!";
+        } else if (score >= 7) {
+            fbText.textContent = "Great job! Review the questions you missed and then dive into Linked Lists!";
+        } else {
+            fbText.textContent = "Keep practicing! Re-read the OOP Refresher section and try the quiz again!";
+        }
+    }
+}
+
+function resetOopQuiz() {
+    currentOopQuizIdx = 0;
+    oopUserAnswers = Array(oopQuizQuestions.length).fill(null);
+
+    const summaryCard = document.getElementById("oop-quiz-summary-card");
+    const container = document.getElementById("oop-quiz-container");
+    if (summaryCard) summaryCard.style.display = "none";
+    if (container) container.style.display = "block";
+
+    loadOopQuizQuestion();
 }
 
 // -------------------------------------------------------------
@@ -470,4 +638,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initPyodide();
     setupSectionNavigation();
     loadQuizQuestion();
+    loadOopQuizQuestion();
 });

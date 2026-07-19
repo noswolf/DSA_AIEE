@@ -208,6 +208,10 @@
                     <i class="fa-solid fa-cubes"></i> <span>Module 1: OOP Refresher</span>
                 </button>
 
+                <button class="nav-item" data-target="oop-quiz-section">
+                    <i class="fa-solid fa-clipboard-check"></i> <span>Module 1 Quiz: OOP</span>
+                </button>
+
                 <button class="nav-item" data-target="singly-section">
                     <i class="fa-solid fa-link"></i> <span>Module 2: Singly Linked List</span>
                 </button>
@@ -240,7 +244,7 @@
                     </div>
                 </div>
                 <div class="header-right" style="display:flex; gap:12px;">
-                    <a href="../index.html" class="btn btn-secondary" title="Back to Dashboard">
+                    <a href="../index.html" class="btn btn-secondary" id="back-dashboard-btn" title="Back to Dashboard">
                         <i class="fa-solid fa-house"></i>
                         <span>Back to Dashboard</span>
                     </a>
@@ -469,6 +473,31 @@ while current is not None:
                     </div>
                 </section>
 
+                <!-- ── MODULE 1 OOP Quiz ── -->
+                <section id="oop-quiz-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block">
+                            <div class="mod-header-icon-wrap" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">
+                                <i class="fa-solid fa-clipboard-check mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 1 Quiz: OOP Refresher</h2>
+                                <p>Test your understanding of OOP concepts from Module 1 before moving on to Linked Lists!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="oop-quiz-container"></div>
+                    <div id="oop-quiz-summary-card" style="display: none;" class="card glass">
+                        <div style="text-align: center; padding: 24px;">
+                            <div style="font-size: 64px; margin-bottom: 16px;">🎉</div>
+                            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Quiz Complete!</h2>
+                            <p style="font-size: 16px; color: var(--text-muted); margin-bottom: 24px;">Your score: <span id="oop-quiz-score-num">0</span>/<span id="oop-quiz-score-total">10</span></p>
+                            <p id="oop-quiz-feedback-text" style="margin-bottom: 24px;">Great job! Now let's learn Linked Lists!</p>
+                            <button class="btn btn-primary" onclick="resetOopQuiz()">Try Again</button>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- ── MODULE 2: Singly LL (iframe) ── -->
                 <div id="singly-section" class="viz-section">
                     <div id="singly-root" style="width: 100%;"></div>
@@ -492,12 +521,14 @@ while current is not None:
                             </div>
                         </div>
                     </div>
-                    <div id="quiz-card-container"></div>
-                    <div class="quiz-nav">
-                        <span class="quiz-counter" id="quiz-counter">Question 1 of 8</span>
-                        <div style="display:flex; gap:10px;">
-                            <button class="btn btn-secondary" id="quiz-prev-btn"><i class="fa-solid fa-arrow-left"></i> Previous</button>
-                            <button class="btn btn-primary" id="quiz-next-btn">Next <i class="fa-solid fa-arrow-right"></i></button>
+                    <div id="quiz-container"></div>
+                    <div id="quiz-summary-card" style="display: none;" class="card glass">
+                        <div style="text-align: center; padding: 24px;">
+                            <div style="font-size: 64px; margin-bottom: 16px;">🎉</div>
+                            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Quiz Complete!</h2>
+                            <p style="font-size: 16px; color: var(--text-muted); margin-bottom: 24px;">Your score: <span id="quiz-score-num">0</span>/<span id="quiz-score-total">4</span></p>
+                            <p id="quiz-feedback-text" style="margin-bottom: 24px;">Great job! Keep learning!</p>
+                            <button class="btn btn-primary" onclick="resetQuiz()">Try Again</button>
                         </div>
                     </div>
                 </section>
@@ -508,208 +539,48 @@ while current is not None:
 
     <!-- Global Console Drawer -->
     <div class="console-drawer" id="console-drawer">
-        <div class="console-header">
-            <div class="console-title-wrap">
-                <i class="fa-solid fa-terminal"></i>
-                <span>Global Python Console</span>
+        <div class="console-header" id="console-drawer-header">
+            <div class="console-title">
+                <i class="fa-solid fa-terminal"></i> <span>Python WASM Interactive Terminal</span>
             </div>
-            <div class="console-controls">
-                <button class="console-ctrl-btn" id="run-global-console-btn" title="Run Code"><i class="fa-solid fa-play"></i></button>
-                <button class="console-ctrl-btn" id="clear-console-btn" title="Clear Output"><i class="fa-solid fa-trash"></i></button>
-                <button class="console-ctrl-btn" id="minimize-console-btn" title="Minimize"><i class="fa-solid fa-chevron-down"></i></button>
+            <div class="console-actions">
+                <button class="console-btn" id="clear-console-btn" title="Clear Console"><i class="fa-solid fa-trash-can"></i></button>
+                <button class="console-btn" id="minimize-console-btn" title="Toggle Console"><i class="fa-solid fa-chevron-down"></i></button>
             </div>
         </div>
-        <textarea class="console-textarea" id="global-console-textarea" placeholder="# Type Python code here..."></textarea>
-        <pre class="console-terminal" id="global-console-terminal">>>> Python Console Ready</pre>
+        <div class="console-content">
+            <div class="console-workspace">
+                <div class="console-editor-section">
+                    <div class="panel-subtitle">Write Python Code:</div>
+                    <textarea id="global-console-textarea" class="console-textarea"># Try writing Python linked list code here!
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+# Let's build a simple linked list: 10 -> 20 -> 30
+head = Node(10)
+head.next = Node(20)
+head.next.next = Node(30)
+
+# Traverse and print the list
+print("Linked list values:")
+current = head
+while current is not None:
+    print(current.value)
+    current = current.next
+</textarea>
+                    <button class="btn btn-success" id="run-global-console-btn"><i class="fa-solid fa-play"></i> Execute</button>
+                </div>
+                <div class="console-terminal-section">
+                    <div class="panel-subtitle">Execution Result:</div>
+                    <pre id="global-console-terminal" class="console-terminal">>>> Press Execute to run Python directly in your browser.</pre>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
-    <script>
-        // ── Nav item click handler ──
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const target = item.getAttribute('data-target');
-                // Hide all
-                document.querySelectorAll('.content-section, .viz-section').forEach(s => s.classList.remove('active'));
-                // Show target
-                const el = document.getElementById(target);
-                if (el) el.classList.add('active');
-                // Update active nav
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                item.classList.add('active');
-                // Update header
-                const title = document.getElementById('current-section-title');
-                if (title) title.textContent = item.querySelector('span')?.innerText || item.innerText.trim();
-            });
-        });
-
-        // ── Sidebar toggle ──
-        const sidebarBtn = document.getElementById('sidebar-toggle-btn');
-        const appContainer = document.querySelector('.app-container');
-        if (sidebarBtn && appContainer) sidebarBtn.addEventListener('click', () => appContainer.classList.toggle('collapsed'));
-
-        // ── Theme toggle ──
-        const themeBtn = document.getElementById('theme-toggle-btn');
-        if (themeBtn) themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-            const icon = themeBtn.querySelector('i');
-            if (icon) icon.className = document.body.classList.contains('light-mode') ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-        });
-
-        // ── Console drawer ──
-        const consoleDrawer = document.getElementById('console-drawer');
-        const toggleConsoleBtn = document.getElementById('toggle-console-btn');
-        const minimizeConsoleBtn = document.getElementById('minimize-console-btn');
-        const clearConsoleBtn = document.getElementById('clear-console-btn');
-        const runConsoleBtn = document.getElementById('run-global-console-btn');
-        const consoleTextarea = document.getElementById('global-console-textarea');
-        const consoleTerminal = document.getElementById('global-console-terminal');
-
-        const toggleDrawer = () => { if (consoleDrawer) consoleDrawer.classList.toggle('expanded'); };
-        if (toggleConsoleBtn) toggleConsoleBtn.addEventListener('click', toggleDrawer);
-        if (minimizeConsoleBtn) minimizeConsoleBtn.addEventListener('click', toggleDrawer);
-        if (clearConsoleBtn) clearConsoleBtn.addEventListener('click', () => { if (consoleTerminal) consoleTerminal.textContent = 'Console cleared.\n'; });
-        if (runConsoleBtn) runConsoleBtn.addEventListener('click', async () => {
-            if (consoleTerminal && consoleTextarea) {
-                consoleTerminal.textContent = 'Running...\n';
-                const result = await runPythonCode(consoleTextarea.value);
-                consoleTerminal.textContent = result || '>>> Code executed with no printed output.';
-            }
-        });
-
-        // ── Embedded code runners ──
-        document.querySelectorAll('.run-editor-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const container = btn.closest('.embedded-editor-container');
-                const textarea = container.querySelector('.editor-textarea');
-                const output = container.querySelector('.editor-output');
-                output.textContent = 'Running...\n';
-                if (!pyodideInstance) { output.textContent = 'Python engine is loading. Please wait...'; return; }
-                const result = await runPythonCode(textarea.value);
-                output.textContent = result || '>>> Code executed with no printed output.';
-            });
-        });
-
-        // ── Tab indentation ──
-        document.querySelectorAll('textarea').forEach(t => enableTabIndentation(t));
-
-        // ── Init Pyodide ──
-        initPyodide();
-
-        // ── Quiz ──
-        const quizData = [
-            {
-                q: "In a Singly Linked List, what does the 'next' pointer of the last node (Tail) point to?",
-                options: ["The Head node", "None (Null)", "Itself", "The second-to-last node"],
-                correct: 1,
-                explanation: "The Tail's 'next' pointer is set to None to signal the end of the list. This is how traversal terminates the 'while current is not None' loop."
-            },
-            {
-                q: "What is the time complexity of inserting a new node at the HEAD of a Singly Linked List?",
-                options: ["O(n) — must traverse to the end", "O(log n)", "O(1) — constant time, no traversal needed", "O(n²)"],
-                correct: 2,
-                explanation: "Inserting at the head only requires two pointer updates: new_node.next = head, then head = new_node. No traversal is needed, making it O(1)."
-            },
-            {
-                q: "Which OOP concept does using `self._data` (with an underscore) represent in Python?",
-                options: ["Inheritance", "Encapsulation (marking as protected)", "Polymorphism", "Abstraction"],
-                correct: 1,
-                explanation: "A single underscore (_attr) is a naming convention in Python that signals the attribute is 'protected' or 'private'. This is encapsulation — hiding internal state and encouraging use of getters/setters."
-            },
-            {
-                q: "What is the PRIMARY advantage of a Doubly Linked List (DLL) over a Singly Linked List (SLL)?",
-                options: [
-                    "It uses less memory per node",
-                    "Insertion at the head is O(1) instead of O(n)",
-                    "Bidirectional traversal and O(1) deletion given a node reference",
-                    "It is faster to search by value"
-                ],
-                correct: 2,
-                explanation: "A DLL allows traversal in both directions (forward via .next, backward via .prev). Critically, if you have a direct reference to a node, you can delete it in O(1) because you can access its predecessor via .prev without traversing from head."
-            },
-            {
-                q: "In Python OOP, what is the purpose of calling `super().__init__()` inside a child class's constructor?",
-                options: [
-                    "To create a copy of the parent object",
-                    "To execute the parent class's __init__ method, initializing inherited attributes",
-                    "To import the parent class's methods",
-                    "It's not necessary in Python"
-                ],
-                correct: 1,
-                explanation: "super().__init__() calls the parent class's constructor. Without it, inherited attributes (like self.head and self.size) would never be initialized, leading to AttributeErrors when you try to use them."
-            },
-            {
-                q: "To delete a middle node in a Singly Linked List, you need access to:",
-                options: [
-                    "Only the node to be deleted",
-                    "The node to be deleted AND its predecessor (prev node)",
-                    "The head and tail pointers",
-                    "None of the above — just update the node's value"
-                ],
-                correct: 1,
-                explanation: "In an SLL, deletion requires setting prev.next = node_to_delete.next. Since nodes only have a .next pointer, you must traverse from head to find the predecessor. This makes middle deletion O(n)."
-            },
-            {
-                q: "How many pointer updates are required to correctly insert a new node in the MIDDLE of a Doubly Linked List?",
-                options: ["1 pointer update", "2 pointer updates", "3 pointer updates", "4 pointer updates"],
-                correct: 3,
-                explanation: "You must update 4 pointers: (1) new_node.next = next_node, (2) new_node.prev = prev_node, (3) prev_node.next = new_node, (4) next_node.prev = new_node. Forgetting any one breaks the bidirectional chain."
-            },
-            {
-                q: "Which data structure would you use to implement a 'browser history' (Back and Forward navigation)?",
-                options: [
-                    "Singly Linked List — because it's simpler",
-                    "Array — for constant-time random access",
-                    "Doubly Linked List — for efficient bidirectional traversal",
-                    "Circular Linked List — to loop back to the start"
-                ],
-                correct: 2,
-                explanation: "A Doubly Linked List is ideal because browser history requires going backward (.prev) and forward (.next) efficiently. Each page is a node, and we can navigate both directions in O(1) time."
-            }
-        ];
-
-        let currentQuestion = 0;
-
-        function renderQuiz(index) {
-            const container = document.getElementById('quiz-card-container');
-            const counter = document.getElementById('quiz-counter');
-            if (!container) return;
-            const q = quizData[index];
-            counter.textContent = `Question ${index + 1} of ${quizData.length}`;
-            container.innerHTML = `
-                <div class="quiz-question-card">
-                    <p class="quiz-question-text">${q.q}</p>
-                    <div class="quiz-options">
-                        ${q.options.map((opt, i) => `<button class="quiz-option" data-index="${i}">${opt}</button>`).join('')}
-                    </div>
-                    <div class="quiz-feedback" id="qfeedback"></div>
-                </div>`;
-            container.querySelectorAll('.quiz-option').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const chosen = parseInt(btn.getAttribute('data-index'));
-                    const feedback = document.getElementById('qfeedback');
-                    container.querySelectorAll('.quiz-option').forEach(b => b.style.pointerEvents = 'none');
-                    if (chosen === q.correct) {
-                        btn.classList.add('correct');
-                        feedback.textContent = '✓ Correct! ' + q.explanation;
-                        feedback.className = 'quiz-feedback correct show';
-                    } else {
-                        btn.classList.add('incorrect');
-                        container.querySelectorAll('.quiz-option')[q.correct].classList.add('correct');
-                        feedback.textContent = '✗ Incorrect. ' + q.explanation;
-                        feedback.className = 'quiz-feedback incorrect show';
-                    }
-                });
-            });
-        }
-
-        const prevBtn = document.getElementById('quiz-prev-btn');
-        const nextBtn = document.getElementById('quiz-next-btn');
-        if (prevBtn) prevBtn.addEventListener('click', () => { if (currentQuestion > 0) { currentQuestion--; renderQuiz(currentQuestion); } });
-        if (nextBtn) nextBtn.addEventListener('click', () => { if (currentQuestion < quizData.length - 1) { currentQuestion++; renderQuiz(currentQuestion); } });
-        renderQuiz(0);
-    </script>
-
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
