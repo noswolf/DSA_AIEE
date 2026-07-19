@@ -346,24 +346,24 @@ const oopQuizQuestions = [
     },
     {
         qnum: "Question 2 of 10",
-        question: "What convention in Python indicates that a variable should be treated as 'private' (encapsulated)?",
+        question: "What convention in Python indicates that a variable should be treated as 'protected' (encapsulated)?",
         options: ["double underscore (__var)", "single underscore (_var)", "dollar sign ($var)", "all caps (VAR)"],
         correct: 1,
-        explanation: "A single underscore prefix (_var) is a convention to signal that an attribute is intended to be private and shouldn't be accessed directly outside the class."
+        explanation: "A single underscore prefix (_var) is a convention to signal that an attribute is intended to be protected and shouldn't be accessed directly outside the class."
     },
     {
         qnum: "Question 3 of 10",
-        question: "What do you call a method that retrieves the value of a private attribute?",
+        question: "What do you call a method that retrieves the value of a protected attribute?",
         options: ["Setter", "Getter", "Constructor", "Destructor"],
         correct: 1,
-        explanation: "A 'getter' method is used to safely retrieve the value of a private attribute, allowing controlled access."
+        explanation: "A 'getter' method is used to safely retrieve the value of a protected attribute, allowing controlled access."
     },
     {
         qnum: "Question 4 of 10",
-        question: "Which function is used to call a method from a parent class?",
-        options: ["parent()", "super()", "call()", "inherit()"],
-        correct: 1,
-        explanation: "The super() function gives access to methods in a superclass (parent class), and it's commonly used to call the parent's __init__ method."
+        question: "What do you call a method that updates the value of a protected attribute (often with validation)?",
+        options: ["Setter", "Getter", "Constructor", "Destructor"],
+        correct: 0,
+        explanation: "A 'setter' method is used to safely update the value of a protected attribute, often including validation logic."
     },
     {
         qnum: "Question 5 of 10",
@@ -386,6 +386,13 @@ const oopQuizQuestions = [
     },
     {
         qnum: "Question 7 of 10",
+        question: "Which function is used to call a method from a parent class?",
+        options: ["parent()", "super()", "call()", "inherit()"],
+        correct: 1,
+        explanation: "The super() function gives access to methods in a superclass (parent class), and it's commonly used to call the parent's __init__ method."
+    },
+    {
+        qnum: "Question 8 of 10",
         question: "If you don't call super().__init__() in a child class's __init__, what happens?",
         options: [
             "The parent class is automatically initialized",
@@ -395,18 +402,6 @@ const oopQuizQuestions = [
         ],
         correct: 1,
         explanation: "Without super().__init__(), the parent class's constructor never runs, so its attributes are never initialized, which often leads to AttributeErrors."
-    },
-    {
-        qnum: "Question 8 of 10",
-        question: "What would you use a setter method for?",
-        options: [
-            "To retrieve an attribute's value",
-            "To delete an attribute",
-            "To update an attribute's value, often with validation",
-            "To create a new instance"
-        ],
-        correct: 2,
-        explanation: "A 'setter' method is used to safely update a private attribute's value, often including validation logic."
     },
     {
         qnum: "Question 9 of 10",
@@ -422,15 +417,15 @@ const oopQuizQuestions = [
     },
     {
         qnum: "Question 10 of 10",
-        question: "In this code, what is 'self._next'? class Node: def __init__(self, data): self._data = data self._next = None",
+        question: "What do we call a class that inherits from another class?",
         options: [
-            "A public attribute",
-            "A protected (encapsulated) attribute meant for internal use",
-            "A static variable",
-            "A global variable"
+            "Parent class",
+            "Child class",
+            "Base class",
+            "Superclass"
         ],
         correct: 1,
-        explanation: "The single underscore prefix (_next) indicates this is a protected attribute meant to be used only within the class, not accessed directly from outside."
+        explanation: "A class that inherits from another class is called a child class (or subclass)."
     }
 ];
 
