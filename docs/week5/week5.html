@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5: Stacks &amp; Queues | DSA AIEE</title>
+    <meta name="description" content="Interactive guide for Stacks and Queues — Week 5 of 01526121 DSA AIEE.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Week CSS (shared with week4) -->
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body class="light-mode">
+    <div class="app-container">
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <span class="logo-icon"><i class="fa-solid fa-layer-group"></i></span>
+                    <div class="logo-text">
+                        <h1>Week 5</h1>
+                        <span class="subtitle">Stacks &amp; Queues</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Toggle Sidebar">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-section-title">Module Sections</span>
+
+                <button class="nav-item active" data-target="basics-section">
+                    <i class="fa-solid fa-book-open"></i> <span>Module 0: Basics</span>
+                </button>
+                <button class="nav-item" data-target="stack-section">
+                    <i class="fa-solid fa-layer-group"></i> <span>Module 1: Stack (LIFO)</span>
+                </button>
+                <button class="nav-item" data-target="stack-impl-section">
+                    <i class="fa-solid fa-terminal"></i> <span>Module 2: Stack Implementation</span>
+                </button>
+                <button class="nav-item" data-target="stack-compare-section">
+                    <i class="fa-solid fa-chart-bar"></i> <span>Module 3: Stack Array vs LL</span>
+                </button>
+                <button class="nav-item" data-target="queue-section">
+                    <i class="fa-solid fa-users-line"></i> <span>Module 4: Queue (FIFO)</span>
+                </button>
+                <button class="nav-item" data-target="queue-impl-section">
+                    <i class="fa-solid fa-terminal"></i> <span>Module 5: Queue Implementation</span>
+                </button>
+                <button class="nav-item" data-target="queue-compare-section">
+                    <i class="fa-solid fa-chart-bar"></i> <span>Module 6: Queue Array vs LL</span>
+                </button>
+                <button class="nav-item" data-target="stack-vs-queue-section">
+                    <i class="fa-solid fa-code-compare"></i> <span>Module 7: Stack vs Queue</span>
+                </button>
+                <button class="nav-item" data-target="quiz-section">
+                    <i class="fa-solid fa-clipboard-question"></i> <span>Module 8: Quiz</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- ── Main Content ── -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left" style="display:flex;align-items:center;gap:16px;">
+                    <div>
+                        <span class="breadcrumb">Stacks &amp; Queues</span>
+                        <h2 id="current-section-title">Module 0: Basics</h2>
+                    </div>
+                </div>
+                <div class="header-right" style="display:flex;gap:12px;">
+                    <a href="../index.html" class="btn btn-secondary" id="back-dashboard-btn" title="Back to Dashboard">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <button class="btn btn-secondary" id="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Body -->
+            <div class="content-body">
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 0: Basics                        -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="basics-section" class="content-section active">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">
+                                <i class="fa-solid fa-book-open mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 0: Stack &amp; Queue Basics</h2>
+                                <p>Stacks and Queues are two <strong>Linear Data Structures</strong>. Unlike Arrays or Linked Lists where you can access any element via index, these are <em>restricted access</em> structures — they define a strict interface for how data enters and exits the collection.</p>
+                                <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;">
+                                    <span class="tag" style="background:rgba(59,130,246,0.1);color:var(--accent-blue);">LIFO — Stack</span>
+                                    <span class="tag" style="background:rgba(16,185,129,0.1);color:var(--accent-green);">FIFO — Queue</span>
+                                    <span class="tag" style="background:rgba(250,204,21,0.1);color:#facc15;">Restricted Access</span>
+                                    <span class="tag" style="background:rgba(168,85,247,0.1);color:var(--accent-purple);">Linear Structures</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- What is Stack -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-layer-group" style="color:var(--accent-blue);margin-right:8px;"></i>
+                            The Stack — Last-In, First-Out (LIFO)
+                        </h3>
+                        <div style="background:rgba(59,130,246,0.08);border-left:3px solid var(--accent-blue);border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:14px;">
+                            <p style="font-size:14px;color:var(--text-secondary);margin:0;"><strong style="color:var(--accent-blue);">LIFO:</strong> The most recently added item is always the first one to be removed.</p>
+                        </div>
+                        <ul style="font-size:14px;color:var(--text-secondary);line-height:1.9;padding-left:0;list-style:none;">
+                            <li>🔵 <strong>Primary Operations:</strong> <code>push()</code> to add and <code>pop()</code> to remove.</li>
+                            <li>🔵 <strong>Analogy:</strong> A stack of cafeteria trays or the "Undo" history in a text editor.</li>
+                            <li>🔵 <strong>Access Point:</strong> Only the <strong>Top</strong> element is accessible at any time.</li>
+                            <li>🔵 <strong>Real-World Use:</strong> Function call stack, browser back button, expression parsing.</li>
+                        </ul>
+                    </div>
+
+                    <!-- What is Queue -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-users-line" style="color:var(--accent-green);margin-right:8px;"></i>
+                            The Queue — First-In, First-Out (FIFO)
+                        </h3>
+                        <div style="background:rgba(16,185,129,0.08);border-left:3px solid var(--accent-green);border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:14px;">
+                            <p style="font-size:14px;color:var(--text-secondary);margin:0;"><strong style="color:var(--accent-green);">FIFO:</strong> The item that has been in the collection the longest is removed first.</p>
+                        </div>
+                        <ul style="font-size:14px;color:var(--text-secondary);line-height:1.9;padding-left:0;list-style:none;">
+                            <li>🟢 <strong>Primary Operations:</strong> <code>enqueue()</code> to add and <code>dequeue()</code> to remove.</li>
+                            <li>🟢 <strong>Analogy:</strong> A line at a grocery store or a printer's task buffer.</li>
+                            <li>🟢 <strong>Access Points:</strong> Additions at the <strong>Rear</strong>; removals from the <strong>Front</strong>.</li>
+                            <li>🟢 <strong>Real-World Use:</strong> CPU scheduling, breadth-first search, request queues.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Why use them -->
+                    <div class="card glass">
+                        <h3 style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">
+                            <i class="fa-solid fa-circle-question" style="color:#facc15;margin-right:8px;"></i>
+                            Why Use Restricted Structures?
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;">
+                            While Arrays are more flexible, Stacks and Queues provide <strong>safety and intent</strong>. By using a Stack, you guarantee data is processed in a specific order, which is essential for algorithms like Depth-First Search, backtracking, and expression evaluation. A Queue guarantees fairness — the first task submitted is always the first one processed.
+                        </p>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+                            <div style="background:rgba(59,130,246,0.08);border-radius:10px;padding:14px;">
+                                <div style="font-size:12px;font-weight:700;color:var(--accent-blue);text-transform:uppercase;margin-bottom:6px;">Stack Use Cases</div>
+                                <ul style="font-size:13px;color:var(--text-secondary);line-height:1.8;padding-left:16px;">
+                                    <li>Function call stack (recursion)</li>
+                                    <li>Undo / Redo functionality</li>
+                                    <li>Balanced parentheses checker</li>
+                                    <li>Depth-First Search (DFS)</li>
+                                </ul>
+                            </div>
+                            <div style="background:rgba(16,185,129,0.08);border-radius:10px;padding:14px;">
+                                <div style="font-size:12px;font-weight:700;color:var(--accent-green);text-transform:uppercase;margin-bottom:6px;">Queue Use Cases</div>
+                                <ul style="font-size:13px;color:var(--text-secondary);line-height:1.8;padding-left:16px;">
+                                    <li>CPU / OS task scheduling</li>
+                                    <li>Breadth-First Search (BFS)</li>
+                                    <li>Print job spooling</li>
+                                    <li>Network packet buffering</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="section-nav-footer">
+                        <div style="flex:1;"></div>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('stack-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 1: Stack (LIFO)</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 1: Stack (LIFO)                  -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="stack-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">
+                                <i class="fa-solid fa-layer-group mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 1: Stack (LIFO)</h2>
+                                <p>A Stack is a <strong>top-heavy</strong> structure with only one entry and exit point: the <strong>Top</strong>. Think of it like a can of Pringles — chips are added and removed from the same end.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Structure explanation -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-layer-group" style="color:var(--accent-blue);margin-right:8px;"></i>
+                            Structure of a Stack
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">
+                            A Stack has only one entry and exit point called the <strong>Top</strong>. Elements are added and removed only from this point. The <strong>Base</strong> (bottom) contains the oldest data — it cannot be accessed until everything above it is removed first.
+                        </p>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                            <div style="background:rgba(59,130,246,0.08);border-radius:10px;padding:14px;border-left:3px solid var(--accent-blue);">
+                                <div style="font-size:12px;font-weight:700;color:var(--accent-blue);text-transform:uppercase;margin-bottom:6px;">PUSH (Add)</div>
+                                <p style="font-size:13px;color:var(--text-secondary);">Adds an item to the Top. If the stack is full → <code>Stack Overflow</code>. Time: <strong>O(1)</strong></p>
+                            </div>
+                            <div style="background:rgba(239,68,68,0.08);border-radius:10px;padding:14px;border-left:3px solid #f87171;">
+                                <div style="font-size:12px;font-weight:700;color:#f87171;text-transform:uppercase;margin-bottom:6px;">POP (Remove)</div>
+                                <p style="font-size:13px;color:var(--text-secondary);">Removes the Top item. If the stack is empty → <code>Stack Underflow</code>. Time: <strong>O(1)</strong></p>
+                            </div>
+                            <div style="background:rgba(250,204,21,0.08);border-radius:10px;padding:14px;border-left:3px solid #facc15;">
+                                <div style="font-size:12px;font-weight:700;color:#facc15;text-transform:uppercase;margin-bottom:6px;">PEEK / TOP</div>
+                                <p style="font-size:13px;color:var(--text-secondary);">Returns the value at the Top without removing it. Essential for inspection. Time: <strong>O(1)</strong></p>
+                            </div>
+                            <div style="background:rgba(168,85,247,0.08);border-radius:10px;padding:14px;border-left:3px solid var(--accent-purple);">
+                                <div style="font-size:12px;font-weight:700;color:var(--accent-purple);text-transform:uppercase;margin-bottom:6px;">IS EMPTY</div>
+                                <p style="font-size:13px;color:var(--text-secondary);">Returns <code>True</code> if the stack has no elements. Always check before Pop. Time: <strong>O(1)</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stack Simulation -->
+                    <div class="card glass sim-wrapper" style="margin-bottom:20px;" id="stack-sim-card">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:16px;">
+                            <i class="fa-solid fa-flask" style="color:var(--accent-blue);margin-right:8px;"></i>
+                            Interactive Stack Simulation
+                            <span style="font-size:13px;font-weight:400;color:var(--text-muted);margin-left:10px;">Like a Pringles can 🥫</span>
+                        </h3>
+                        <button class="sim-fullscreen-btn" onclick="openProjector('stack')">
+                            <i class="fa-solid fa-expand"></i> Projector Mode
+                        </button>
+                        <div class="stack-sim-container" id="stack-sim-display">
+                            <div class="stack-column">
+                                <div class="stack-label-top" id="stack-top-label">▲ TOP</div>
+                                <div class="stack-elements" id="stack-elements">
+                                    <span class="stack-empty-label" id="stack-empty-label">Empty Stack</span>
+                                </div>
+                                <div class="stack-base"></div>
+                                <div style="font-size:10px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;">Base</div>
+                            </div>
+                            <div class="stack-info-panel">
+                                <button class="stack-op-btn push" id="stack-push-btn" onclick="stackPush()">
+                                    <i class="fa-solid fa-arrow-down"></i> Push
+                                </button>
+                                <button class="stack-op-btn pop" id="stack-pop-btn" onclick="stackPop()">
+                                    <i class="fa-solid fa-arrow-up"></i> Pop
+                                </button>
+                                <button class="stack-op-btn peek" onclick="stackPeek()">
+                                    <i class="fa-solid fa-eye"></i> Peek
+                                </button>
+                                <div class="stack-stat">Size: <strong id="stack-size-label">0</strong> / 8</div>
+                            </div>
+                            <div class="stack-log" id="stack-log">
+                                <div class="stack-log-entry">Welcome to Stack simulation.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(59,130,246,0.08);border-left:3px solid var(--accent-blue);border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:20px;">
+                        <strong style="color:var(--accent-blue);">LIFO (Last-In, First-Out):</strong>
+                        <span style="font-size:14px;color:var(--text-secondary);"> Imagine a stack of dinner plates. You always place new plates on top, and must take the top plate off before reaching the ones below.</span>
+                    </div>
+
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('basics-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 0: Basics</span>
+                        </button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('stack-impl-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 2: Stack Implementation</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 2: Stack Implementation          -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="stack-impl-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">
+                                <i class="fa-solid fa-terminal mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 2: Stack Implementation</h2>
+                                <p>A Stack can be implemented using two underlying data structures: a <strong>Python List (Array)</strong> or a <strong>Linked List</strong>. Each has different trade-offs in memory and performance.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Array-based -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-table-list" style="color:var(--accent-blue);margin-right:8px;"></i>
+                            1. Array-Based Stack (Python List)
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px;">
+                            In Python, the built-in <code>list</code> is the most efficient way to implement a stack. Since it is a dynamic array, appending and popping from the <strong>end</strong> of the list is highly optimized (amortized O(1)).
+                        </p>
+                        <div class="w5-code"><span class="kw">class</span> <span class="cn">Stack</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self._items = []          <span class="cm"># Top of stack = end of list</span>
+
+    <span class="kw">def</span> <span class="fn">push</span>(self, item):
+        <span class="cm"># O(1) amortized — appends to end</span>
+        self._items.append(item)
+
+    <span class="kw">def</span> <span class="fn">pop</span>(self):
+        <span class="cm"># O(1) — removes last element</span>
+        <span class="kw">if not</span> self.<span class="fn">is_empty</span>():
+            <span class="kw">return</span> self._items.pop()
+        <span class="kw">return None</span>
+
+    <span class="kw">def</span> <span class="fn">peek</span>(self):
+        <span class="cm"># O(1) — view top without removing</span>
+        <span class="kw">if not</span> self.<span class="fn">is_empty</span>():
+            <span class="kw">return</span> self._items[-1]
+        <span class="kw">return None</span>
+
+    <span class="kw">def</span> <span class="fn">is_empty</span>(self): <span class="kw">return</span> <span class="fn">len</span>(self._items) == 0
+    <span class="kw">def</span> <span class="fn">size</span>(self): <span class="kw">return</span> <span class="fn">len</span>(self._items)</div>
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+                            <div style="background:rgba(59,130,246,0.08);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:var(--accent-blue);text-transform:uppercase;">Push</div>
+                                <div style="font-size:18px;font-family:'Fira Code';color:var(--accent-blue);font-weight:700;">O(1)*</div>
+                                <div style="font-size:10px;color:var(--text-muted);">Amortized</div>
+                            </div>
+                            <div style="background:rgba(239,68,68,0.08);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:#f87171;text-transform:uppercase;">Pop</div>
+                                <div style="font-size:18px;font-family:'Fira Code';color:#f87171;font-weight:700;">O(1)</div>
+                                <div style="font-size:10px;color:var(--text-muted);">Removes last</div>
+                            </div>
+                            <div style="background:rgba(100,116,139,0.08);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Space</div>
+                                <div style="font-size:18px;font-family:'Fira Code';color:var(--text-secondary);font-weight:700;">O(n)</div>
+                                <div style="font-size:10px;color:var(--text-muted);">Contiguous</div>
+                            </div>
+                        </div>
+                        <div style="background:rgba(250,204,21,0.08);border-left:3px solid #facc15;border-radius:0 8px 8px 0;padding:12px 16px;margin-top:12px;">
+                            <strong style="color:#facc15;">⚠ Important:</strong> <span style="font-size:13px;color:var(--text-secondary);">Always use the <strong>end</strong> of the list as the "Top". Using <code>list.insert(0, val)</code> or <code>list.pop(0)</code> forces shifting every element — turning an O(1) into O(n).</span>
+                        </div>
+                    </div>
+
+                    <!-- Linked List-based -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-link" style="color:var(--accent-purple);margin-right:8px;"></i>
+                            2. Linked List–Based Stack
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px;">
+                            Implementing a stack with a Linked List uses the <strong>Head</strong> pointer as the "Top". New nodes are always inserted at the front, and removal also happens from the front — ensuring truly dynamic growth with no resize overhead.
+                        </p>
+                        <div class="w5-code"><span class="kw">class</span> <span class="cn">Node</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, data):
+        self.data = data
+        self.next = <span class="kw">None</span>
+
+<span class="kw">class</span> <span class="cn">LinkedStack</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.top = <span class="kw">None</span>
+        self._size = 0
+
+    <span class="kw">def</span> <span class="fn">push</span>(self, data):
+        <span class="cm"># Insert at front (O(1)) — new node becomes top</span>
+        new_node = <span class="cn">Node</span>(data)
+        new_node.next = self.top
+        self.top = new_node
+        self._size += 1
+
+    <span class="kw">def</span> <span class="fn">pop</span>(self):
+        <span class="cm"># Remove from front (O(1))</span>
+        <span class="kw">if</span> self.top <span class="kw">is None</span>: <span class="kw">return None</span>
+        popped = self.top.data
+        self.top = self.top.next
+        self._size -= 1
+        <span class="kw">return</span> popped
+
+    <span class="kw">def</span> <span class="fn">peek</span>(self):
+        <span class="kw">return</span> self.top.data <span class="kw">if</span> self.top <span class="kw">else None</span>
+
+    <span class="kw">def</span> <span class="fn">is_empty</span>(self): <span class="kw">return</span> self.top <span class="kw">is None</span></div>
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+                            <div style="background:rgba(168,85,247,0.08);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:var(--accent-purple);text-transform:uppercase;">Structure</div>
+                                <div style="font-size:13px;color:var(--accent-purple);">top → Node</div>
+                                <div style="font-size:10px;color:var(--text-muted);">Head = Top</div>
+                            </div>
+                            <div style="background:rgba(168,85,247,0.08);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:var(--accent-purple);text-transform:uppercase;">Flexibility</div>
+                                <div style="font-size:13px;color:var(--accent-purple);">Dynamic</div>
+                                <div style="font-size:10px;color:var(--text-muted);">No resize needed</div>
+                            </div>
+                            <div style="background:rgba(168,85,247,0.08);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:var(--accent-purple);text-transform:uppercase;">Efficiency</div>
+                                <div style="font-size:18px;font-family:'Fira Code';color:var(--accent-purple);font-weight:700;">O(1)</div>
+                                <div style="font-size:10px;color:var(--text-muted);">Push &amp; Pop</div>
+                            </div>
+                        </div>
+                        <div style="background:rgba(59,130,246,0.08);border-left:3px solid var(--accent-blue);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:12px;">
+                            <strong style="color:var(--accent-blue);">Key Benefit:</strong> <span style="font-size:13px;color:var(--text-secondary);">Unlike array-based stacks, a Linked List stack never needs to reallocate memory. Each "Push" simply creates a new node object — truly O(1) with no amortization asterisk.</span>
+                        </div>
+                    </div>
+
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('stack-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 1: Stack (LIFO)</span>
+                        </button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('stack-compare-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 3: Stack Array vs LL</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 3: Stack Array vs Linked List    -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="stack-compare-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">
+                                <i class="fa-solid fa-chart-bar mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 3: Stack — Array vs Linked List</h2>
+                                <p>Both implementations provide the same logical interface, but their performance characteristics and memory behavior differ in important ways.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:16px;">
+                            <i class="fa-solid fa-stopwatch" style="color:var(--accent-blue);margin-right:8px;"></i>
+                            Big-O Complexity Comparison
+                        </h3>
+                        <div style="overflow:hidden;border-radius:12px;border:1px solid var(--border-color);">
+                            <table class="compare-table">
+                                <thead>
+                                    <tr>
+                                        <th>Operation</th>
+                                        <th style="color:var(--accent-blue);">Array-Based (Python List)</th>
+                                        <th style="color:var(--accent-purple);">Linked List-Based</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Push</td><td><span class="badge-ok">O(1)*</span> <span style="font-size:11px;color:var(--text-muted);">Amortized</span></td><td><span class="badge-o1">O(1)</span></td></tr>
+                                    <tr><td>Pop</td><td><span class="badge-o1">O(1)</span></td><td><span class="badge-o1">O(1)</span></td></tr>
+                                    <tr><td>Peek / Top</td><td><span class="badge-o1">O(1)</span></td><td><span class="badge-o1">O(1)</span></td></tr>
+                                    <tr><td>Is Empty</td><td><span class="badge-o1">O(1)</span></td><td><span class="badge-o1">O(1)</span></td></tr>
+                                    <tr><td>Space Complexity</td><td><span class="badge-ok">O(n)</span></td><td><span class="badge-ok">O(n)</span> <span style="font-size:11px;color:var(--text-muted);">+pointer overhead</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                        <div class="card glass">
+                            <h4 style="font-size:14px;font-weight:700;color:#facc15;margin-bottom:8px;"><i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i>The Array (*) Asterisk</h4>
+                            <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Array Push is <strong>O(1) amortized</strong>. When the underlying dynamic array fills up, it triggers a resize (O(n)). For almost all cases this is negligible, but it prevents "Hard Real-Time" performance guarantees.</p>
+                        </div>
+                        <div class="card glass">
+                            <h4 style="font-size:14px;font-weight:700;color:var(--accent-purple);margin-bottom:8px;"><i class="fa-solid fa-memory" style="margin-right:6px;"></i>Space Overhead</h4>
+                            <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;">Both are <strong>O(n) space</strong>, but the Linked List has a higher constant factor because it must store a reference/pointer (typically 8 bytes) for every single data element.</p>
+                        </div>
+                    </div>
+
+                    <div class="card glass">
+                        <h4 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px;"><i class="fa-solid fa-lightbulb" style="color:#facc15;margin-right:6px;"></i>When to Choose Which?</h4>
+                        <ul style="font-size:14px;color:var(--text-secondary);line-height:1.9;padding-left:16px;">
+                            <li><strong>Python List (Array):</strong> Best for most use cases. Simple, fast in practice, cache-friendly memory layout.</li>
+                            <li><strong>Linked List:</strong> Best when you need guaranteed O(1) with no resize events, or when memory is extremely fragmented.</li>
+                            <li><strong>Python's built-in</strong> <code>collections.deque</code> is actually a doubly-linked list optimized for O(1) append and pop on both ends.</li>
+                        </ul>
+                    </div>
+
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('stack-impl-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 2: Stack Implementation</span>
+                        </button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('queue-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 4: Queue (FIFO)</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 4: Queue (FIFO)                  -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="queue-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">
+                                <i class="fa-solid fa-users-line mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 4: Queue (FIFO)</h2>
+                                <p>A Queue is a <strong>double-ended</strong> linear structure: additions happen at the <strong>Rear</strong> and removals happen at the <strong>Front</strong>. Like a real queue — first come, first served.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Structure -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-users-line" style="color:var(--accent-green);margin-right:8px;"></i>
+                            Structure of a Queue
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;">
+                            A Queue has two distinct access points. Elements are added at the <strong>Rear</strong> (back) and removed from the <strong>Front</strong> (head). Elements in the middle cannot be accessed directly — they must wait their turn.
+                        </p>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                            <div style="background:rgba(16,185,129,0.08);border-radius:10px;padding:14px;border-left:3px solid var(--accent-green);">
+                                <div style="font-size:12px;font-weight:700;color:var(--accent-green);text-transform:uppercase;margin-bottom:6px;">ENQUEUE (Add)</div>
+                                <p style="font-size:13px;color:var(--text-secondary);">Adds an item to the Rear. "Joining the end of the line." Time: <strong>O(1)</strong></p>
+                            </div>
+                            <div style="background:rgba(239,68,68,0.08);border-radius:10px;padding:14px;border-left:3px solid #f87171;">
+                                <div style="font-size:12px;font-weight:700;color:#f87171;text-transform:uppercase;margin-bottom:6px;">DEQUEUE (Remove)</div>
+                                <p style="font-size:13px;color:var(--text-secondary);">Removes the item from the Front. The one waiting longest leaves first. Time: <strong>O(1)*</strong></p>
+                            </div>
+                            <div style="background:rgba(250,204,21,0.08);border-radius:10px;padding:14px;border-left:3px solid #facc15;">
+                                <div style="font-size:12px;font-weight:700;color:#facc15;text-transform:uppercase;margin-bottom:6px;">FRONT / PEEK</div>
+                                <p style="font-size:13px;color:var(--text-secondary);">Returns the value of the Front element without removing it. Identifies "who is next." Time: <strong>O(1)</strong></p>
+                            </div>
+                            <div style="background:rgba(168,85,247,0.08);border-radius:10px;padding:14px;border-left:3px solid var(--accent-purple);">
+                                <div style="font-size:12px;font-weight:700;color:var(--accent-purple);text-transform:uppercase;margin-bottom:6px;">IS EMPTY</div>
+                                <p style="font-size:13px;color:var(--text-secondary);">Checks if the queue is empty. Must check before Dequeue to prevent errors.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Queue Simulation -->
+                    <div class="card glass sim-wrapper" style="margin-bottom:20px;" id="queue-sim-card">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:16px;">
+                            <i class="fa-solid fa-flask" style="color:var(--accent-green);margin-right:8px;"></i>
+                            Interactive Queue Simulation
+                            <span style="font-size:13px;font-weight:400;color:var(--text-muted);margin-left:10px;">Like a queue at a bank 🏦</span>
+                        </h3>
+                        <button class="sim-fullscreen-btn" onclick="openProjector('queue')">
+                            <i class="fa-solid fa-expand"></i> Projector Mode
+                        </button>
+                        <div class="queue-sim-container" id="queue-sim-display">
+                            <div class="queue-label-row">
+                                <span class="q-badge front">← DEQUEUE (Front)</span>
+                                <span style="flex:1;text-align:center;font-size:12px;color:var(--text-muted);">Queue</span>
+                                <span class="q-badge rear">ENQUEUE (Rear) →</span>
+                            </div>
+                            <div class="queue-track" id="queue-track">
+                                <div class="queue-arrow-left"></div>
+                                <div class="queue-arrow-right"></div>
+                                <span class="queue-empty-label" id="queue-empty-label">Empty Queue</span>
+                            </div>
+                            <div class="queue-split-row">
+                                <div class="queue-controls-panel">
+                                    <div class="queue-btns">
+                                        <button class="queue-op-btn enq" id="queue-enq-btn" onclick="queueEnqueue()">
+                                            <i class="fa-solid fa-arrow-right-to-bracket"></i> Enqueue
+                                        </button>
+                                        <button class="queue-op-btn deq" id="queue-deq-btn" onclick="queueDequeue()">
+                                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Dequeue
+                                        </button>
+                                    </div>
+                                    <div style="font-size:12px;color:var(--text-muted);display:flex;flex-direction:column;gap:4px;">
+                                        <div>Size: <strong style="color:var(--text-primary);" id="queue-size-label">0</strong> / 8</div>
+                                        <div>Front: <strong style="color:var(--text-primary);" id="queue-front-idx">-1</strong> | Rear: <strong style="color:var(--text-primary);" id="queue-rear-idx">-1</strong></div>
+                                    </div>
+                                </div>
+                                <div class="queue-log" id="queue-log">
+                                    <div class="queue-log-entry">Welcome to Queue simulation.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background:rgba(16,185,129,0.08);border-left:3px solid var(--accent-green);border-radius:0 8px 8px 0;padding:12px 16px;">
+                        <strong style="color:var(--accent-green);">FIFO (First-In, First-Out):</strong>
+                        <span style="font-size:14px;color:var(--text-secondary);"> Like a printer queue — the first document sent is the first one that gets printed. Fair ordering is guaranteed.</span>
+                    </div>
+
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('stack-compare-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 3: Stack Array vs LL</span>
+                        </button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('queue-impl-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 5: Queue Implementation</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 5: Queue Implementation          -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="queue-impl-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">
+                                <i class="fa-solid fa-terminal mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 5: Queue Implementation</h2>
+                                <p>Array-based queues can be tricky. The challenge is handling empty space left at the front after a removal without causing performance bottlenecks. There are 3 main approaches.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Naive -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-1" style="color:#f87171;margin-right:8px;"></i>
+                            1. Naive Implementation (Shifting Array) <span style="font-size:12px;color:#f87171;margin-left:8px;">⚠ Slow Dequeue</span>
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px;">
+                            The simplest approach using <code>list.pop(0)</code>. Fundamentally flawed for large data because removing the first element forces <strong>every other element to shift</strong> by one position.
+                        </p>
+                        <div class="w5-code green"><span class="kw">class</span> <span class="cn">NaiveQueue</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.items = []
+
+    <span class="kw">def</span> <span class="fn">enqueue</span>(self, x):
+        self.items.append(x)       <span class="cm"># O(1) — append to end</span>
+
+    <span class="kw">def</span> <span class="fn">dequeue</span>(self):
+        <span class="kw">if not</span> (len(self.items) == 0):
+            <span class="kw">return</span> self.items.pop(0)  <span class="err"># O(n) — shifts ALL elements!</span></div>
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+                            <div style="background:rgba(16,185,129,0.08);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:var(--accent-green);text-transform:uppercase;">Enqueue</div>
+                                <div style="font-size:18px;font-family:'Fira Code';color:var(--accent-green);font-weight:700;">O(1)</div>
+                            </div>
+                            <div style="background:rgba(239,68,68,0.12);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:#f87171;text-transform:uppercase;">Dequeue</div>
+                                <div style="font-size:18px;font-family:'Fira Code';color:#f87171;font-weight:700;text-decoration:underline;">O(n)</div>
+                            </div>
+                            <div style="background:rgba(100,116,139,0.08);border-radius:8px;padding:12px;text-align:center;">
+                                <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Memory</div>
+                                <div style="font-size:14px;color:var(--text-secondary);">Efficient</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Front Pointer -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-2" style="color:var(--accent-blue);margin-right:8px;"></i>
+                            2. Front-Pointer Implementation (Linear) <span style="font-size:12px;color:var(--accent-blue);margin-left:8px;">O(1) Dequeue</span>
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px;">
+                            Instead of shifting, we simply increment a <strong>Front</strong> pointer. This makes Dequeue O(1), but creates "Dead Space" at the start of the array that cannot be reused without a reset.
+                        </p>
+                        <div class="w5-code"><span class="kw">class</span> <span class="cn">FrontPtrQueue</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.items = []
+        self.front = 0              <span class="cm"># tracks the front index</span>
+
+    <span class="kw">def</span> <span class="fn">enqueue</span>(self, x):
+        self.items.append(x)
+
+    <span class="kw">def</span> <span class="fn">dequeue</span>(self):
+        <span class="kw">if</span> self.front &lt; len(self.items):
+            val = self.items[self.front]
+            self.front += 1         <span class="kv"># Move pointer, don't shift!</span>
+            <span class="kw">return</span> val</div>
+                    </div>
+
+                    <!-- Circular Queue -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-3" style="color:var(--accent-purple);margin-right:8px;"></i>
+                            3. Circular Queue (Modulo &amp; Resize) <span style="font-size:12px;color:var(--accent-purple);margin-left:8px;">Best Array-Based</span>
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px;">
+                            Wraps the Rear pointer back to index 0 using modulo arithmetic to reuse "Dead Space." When full, the array is copied into a new array with twice the capacity.
+                        </p>
+                        <div class="w5-code"><span class="kw">class</span> <span class="cn">CircularQueue</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, capacity=4):
+        self.items = [<span class="kw">None</span>] * capacity
+        self.front = 0
+        self.size = 0
+
+    <span class="kw">def</span> <span class="fn">enqueue</span>(self, val):
+        <span class="kw">if</span> self.size == len(self.items):
+            self.<span class="fn">_resize</span>(len(self.items) * 2)
+        rear = (self.front + self.size) % len(self.items)  <span class="cm"># wraps around</span>
+        self.items[rear] = val
+        self.size += 1
+
+    <span class="kw">def</span> <span class="fn">dequeue</span>(self):
+        <span class="kw">if</span> self.size == 0: <span class="kw">return None</span>
+        val = self.items[self.front]
+        self.items[self.front] = <span class="kw">None</span>
+        self.front = (self.front + 1) % len(self.items)    <span class="cm"># shift pointer</span>
+        self.size -= 1
+        <span class="kw">return</span> val
+
+    <span class="kw">def</span> <span class="fn">_resize</span>(self, new_cap):
+        new_arr = [<span class="kw">None</span>] * new_cap
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(self.size):
+            new_arr[i] = self.items[(self.front + i) % len(self.items)]
+        self.items = new_arr
+        self.front = 0</div>
+                    </div>
+
+                    <!-- Linked List Queue -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                            <i class="fa-solid fa-4" style="color:var(--accent-green);margin-right:8px;"></i>
+                            4. Linked List–Based Queue
+                        </h3>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px;">
+                            Maintains two pointers: <strong>Front</strong> (to remove items) and <strong>Rear</strong> (to add items). This avoids traversal and ensures every operation is independent of the queue's size.
+                        </p>
+                        <div class="w5-code green"><span class="kw">class</span> <span class="cn">Node</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, data):
+        self.data = data
+        self.next = <span class="kw">None</span>
+
+<span class="kw">class</span> <span class="cn">LinkedQueue</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.front = self.rear = <span class="kw">None</span>
+
+    <span class="kw">def</span> <span class="fn">enqueue</span>(self, data):    <span class="cm"># O(1) — add to rear</span>
+        new_node = <span class="cn">Node</span>(data)
+        <span class="kw">if</span> self.rear <span class="kw">is None</span>:
+            self.front = self.rear = new_node
+            <span class="kw">return</span>
+        self.rear.next = new_node
+        self.rear = new_node
+
+    <span class="kw">def</span> <span class="fn">dequeue</span>(self):           <span class="cm"># O(1) — remove from front</span>
+        <span class="kw">if</span> self.front <span class="kw">is None</span>: <span class="kw">return None</span>
+        val = self.front.data
+        self.front = self.front.next
+        <span class="kw">if</span> self.front <span class="kw">is None</span>: self.rear = <span class="kw">None</span>
+        <span class="kw">return</span> val</div>
+                        <div style="background:rgba(16,185,129,0.08);border-left:3px solid var(--accent-green);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:12px;">
+                            <strong style="color:var(--accent-green);">Key Concept:</strong> <span style="font-size:13px;color:var(--text-secondary);">The <strong>Rear</strong> pointer is the "secret sauce" of the Linked Queue. Without it, we would have to traverse the entire list to find the end — making Enqueue O(n).</span>
+                        </div>
+                    </div>
+
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('queue-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 4: Queue (FIFO)</span>
+                        </button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('queue-compare-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 6: Queue Array vs LL</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 6: Queue Array vs LL             -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="queue-compare-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">
+                                <i class="fa-solid fa-chart-bar mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 6: Queue — Array vs Linked List</h2>
+                                <p>The queue's performance depends heavily on <em>how</em> you implement Dequeue. The naive approach has a critical flaw that the other methods solve differently.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:16px;">
+                            <i class="fa-solid fa-stopwatch" style="color:var(--accent-green);margin-right:8px;"></i>
+                            Big-O Complexity Comparison
+                        </h3>
+                        <div style="overflow:hidden;border-radius:12px;border:1px solid var(--border-color);">
+                            <table class="compare-table">
+                                <thead>
+                                    <tr>
+                                        <th>Operation</th>
+                                        <th style="color:#f87171;">Array (Naive)</th>
+                                        <th style="color:var(--accent-purple);">Array (Circular)</th>
+                                        <th style="color:var(--accent-green);">Linked List</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Enqueue</td><td><span class="badge-o1">O(1)</span></td><td><span class="badge-o1">O(1)*</span></td><td><span class="badge-o1">O(1)</span></td></tr>
+                                    <tr><td>Dequeue</td><td><span class="badge-on">O(n)</span> ⚠</td><td><span class="badge-o1">O(1)</span></td><td><span class="badge-o1">O(1)</span></td></tr>
+                                    <tr><td>Peek / Front</td><td><span class="badge-o1">O(1)</span></td><td><span class="badge-o1">O(1)</span></td><td><span class="badge-o1">O(1)</span></td></tr>
+                                    <tr><td>Space Complexity</td><td><span class="badge-ok">O(n)</span></td><td><span class="badge-ok">O(n)</span></td><td><span class="badge-ok">O(n)</span> <span style="font-size:11px;color:var(--text-muted);">+ptr</span></td></tr>
+                                    <tr><td>Dead Space?</td><td style="color:var(--text-muted);">No</td><td style="color:var(--text-muted);">Reused via modulo</td><td style="color:var(--text-muted);">None (GC)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card glass" style="background:#0f172a;border-left:4px solid var(--accent-green);">
+                        <h4 style="color:var(--accent-green);font-size:13px;font-weight:700;text-transform:uppercase;margin-bottom:12px;">Performance Summary</h4>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px;color:#94a3b8;">
+                            <p><strong style="color:#e2e8f0;">Naive Array:</strong> Inefficient because <code>pop(0)</code> forces an element shift. As n grows, performance degrades linearly. Avoid for large queues.</p>
+                            <p><strong style="color:#e2e8f0;">Circular Queue &amp; Linked List:</strong> Both provide true O(1) front removal. Circular queue is more cache-friendly; Linked List uses more memory per element.</p>
+                        </div>
+                    </div>
+
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('queue-impl-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 5: Queue Implementation</span>
+                        </button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('stack-vs-queue-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 7: Stack vs Queue</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 7: Stack vs Queue                -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="stack-vs-queue-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(168,85,247,0.15);color:var(--accent-purple);">
+                                <i class="fa-solid fa-code-compare mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 7: Stack vs Queue</h2>
+                                <p>Both are restricted-access linear structures, but their ordering principles make them suitable for completely different problems.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:start;margin-bottom:20px;">
+                        <!-- Stack col -->
+                        <div class="card glass" style="border-top:3px solid var(--accent-blue);">
+                            <div style="text-align:center;padding:12px 0;margin-bottom:16px;">
+                                <i class="fa-solid fa-layer-group" style="font-size:32px;color:var(--accent-blue);margin-bottom:8px;display:block;"></i>
+                                <h3 style="font-size:20px;font-weight:800;color:var(--accent-blue);">Stack</h3>
+                                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Last-In, First-Out</div>
+                            </div>
+                            <ul style="font-size:14px;color:var(--text-secondary);line-height:2;padding-left:16px;">
+                                <li>One access point: <strong>Top</strong></li>
+                                <li>Add with <code>push()</code></li>
+                                <li>Remove with <code>pop()</code></li>
+                                <li>Process newest first</li>
+                                <li>Used in DFS, recursion</li>
+                                <li>Undo / expression parsing</li>
+                            </ul>
+                        </div>
+
+                        <!-- VS circle -->
+                        <div style="display:flex;align-items:center;justify-content:center;padding-top:60px;">
+                            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--accent-blue),var(--accent-green));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#fff;box-shadow:0 4px 20px rgba(59,130,246,0.4);">VS</div>
+                        </div>
+
+                        <!-- Queue col -->
+                        <div class="card glass" style="border-top:3px solid var(--accent-green);">
+                            <div style="text-align:center;padding:12px 0;margin-bottom:16px;">
+                                <i class="fa-solid fa-users-line" style="font-size:32px;color:var(--accent-green);margin-bottom:8px;display:block;"></i>
+                                <h3 style="font-size:20px;font-weight:800;color:var(--accent-green);">Queue</h3>
+                                <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">First-In, First-Out</div>
+                            </div>
+                            <ul style="font-size:14px;color:var(--text-secondary);line-height:2;padding-left:16px;">
+                                <li>Two access points: <strong>Front &amp; Rear</strong></li>
+                                <li>Add with <code>enqueue()</code></li>
+                                <li>Remove with <code>dequeue()</code></li>
+                                <li>Process oldest first</li>
+                                <li>Used in BFS, scheduling</li>
+                                <li>Print spooling, networking</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Quick decision guide -->
+                    <div class="card glass">
+                        <h4 style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px;"><i class="fa-solid fa-map-signs" style="color:#facc15;margin-right:8px;"></i>Quick Decision Guide</h4>
+                        <div style="overflow:hidden;border-radius:10px;border:1px solid var(--border-color);">
+                            <table class="compare-table">
+                                <thead><tr><th>Question</th><th style="color:var(--accent-blue);">Use Stack</th><th style="color:var(--accent-green);">Use Queue</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Process order?</td><td>Newest first (LIFO)</td><td>Oldest first (FIFO)</td></tr>
+                                    <tr><td>Graph traversal?</td><td>DFS (Depth-First)</td><td>BFS (Breadth-First)</td></tr>
+                                    <tr><td>Backtracking needed?</td><td>Yes — stack stores history</td><td>No — queue moves forward</td></tr>
+                                    <tr><td>Fair scheduling?</td><td>No</td><td>Yes — first come, first served</td></tr>
+                                    <tr><td>Undo / nested calls?</td><td>Yes — perfect fit</td><td>No</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('queue-compare-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 6: Queue Array vs LL</span>
+                        </button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('quiz-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 8: Quiz</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 8: Quiz                          -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="quiz-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(250,204,21,0.12);color:#facc15;">
+                                <i class="fa-solid fa-clipboard-question mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 8: Quiz — Stacks &amp; Queues</h2>
+                                <p>Test your understanding of Stack and Queue concepts with 10 multiple-choice questions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-container"></div>
+                    <div id="quiz-summary-card" style="display: none;" class="card glass quiz-summary-card">
+                        <div style="font-size: 64px; margin-bottom: 8px;">🎉</div>
+                        <h2 style="font-size: 28px; font-weight: 700;">Quiz Complete!</h2>
+                        <div class="score-display">
+                            <span class="score-num" id="quiz-score-num">0</span>
+                            <span class="score-total">/<span id="quiz-score-total">10</span></span>
+                        </div>
+                        <p id="quiz-feedback-text" style="font-size: 15px; color: var(--text-secondary); margin-bottom: 8px;">Great job! Keep learning!</p>
+                        <button class="btn btn-primary" onclick="resetQuiz()">Try Again</button>
+                    </div>
+
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('stack-vs-queue-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 7: Stack vs Queue</span>
+                        </button>
+                        <div style="flex:1;text-align:center;color:var(--text-muted);font-size:13px;">🎉 End of Week 5</div>
+                    </div>
+                </section>
+
+            </div><!-- /content-body -->
+        </main>
+    </div><!-- /app-container -->
+
+    <!-- ── Projector Overlay ── -->
+    <div class="sim-projector-overlay" id="projector-overlay">
+        <div class="sim-projector-toolbar">
+            <button onclick="projFontChange(-2)">A−</button>
+            <button onclick="projFontChange(2)">A+</button>
+            <button onclick="closeProjector()"><i class="fa-solid fa-xmark"></i> Exit</button>
+        </div>
+        <div class="sim-projector-title" id="projector-title">Simulation</div>
+        <div class="sim-projector-content" id="projector-content"></div>
+    </div>
+
+    <script>
+    /* ============================================================
+       SIDEBAR & NAVIGATION
+    ============================================================ */
+    const appContainer = document.querySelector('.app-container');
+    const toggleBtn = document.getElementById('sidebar-toggle-btn');
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.content-section');
+    const sectionTitle = document.getElementById('current-section-title');
+    const contentBody = document.querySelector('.content-body');
+
+    const sectionTitles = {
+        'basics-section':        'Module 0: Basics',
+        'stack-section':         'Module 1: Stack (LIFO)',
+        'stack-impl-section':    'Module 2: Stack Implementation',
+        'stack-compare-section': 'Module 3: Stack Array vs Linked List',
+        'queue-section':         'Module 4: Queue (FIFO)',
+        'queue-impl-section':    'Module 5: Queue Implementation',
+        'queue-compare-section': 'Module 6: Queue Array vs Linked List',
+        'stack-vs-queue-section':'Module 7: Stack vs Queue',
+        'quiz-section':          'Module 8: Quiz'
+    };
+
+    function showSection(targetId) {
+        sections.forEach(s => s.classList.remove('active'));
+        navItems.forEach(n => n.classList.remove('active'));
+        const target = document.getElementById(targetId);
+        if (target) target.classList.add('active');
+        navItems.forEach(n => {
+            if (n.dataset.target === targetId) n.classList.add('active');
+        });
+        if (sectionTitles[targetId]) sectionTitle.textContent = sectionTitles[targetId];
+        if (contentBody) contentBody.scrollTop = 0;
+    }
+
+    navItems.forEach(btn => {
+        btn.addEventListener('click', () => showSection(btn.dataset.target));
+    });
+
+    // Sidebar toggle — must toggle on app-container (CSS: .app-container.collapsed)
+    let sidebarCollapsed = false;
+    toggleBtn.addEventListener('click', () => {
+        sidebarCollapsed = !sidebarCollapsed;
+        appContainer.classList.toggle('collapsed', sidebarCollapsed);
+        toggleBtn.querySelector('i').className = sidebarCollapsed
+            ? 'fa-solid fa-angles-right'
+            : 'fa-solid fa-angles-left';
+    });
+
+    // Theme toggle
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        themeBtn.querySelector('i').className = isLight ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    });
+
+
+    /* ============================================================
+       STACK SIMULATION
+    ============================================================ */
+    let stackData = [];
+    const STACK_LIMIT = 8;
+    let stackAnimating = false;
+
+    function stackLog(msg, type='') {
+        const log = document.getElementById('stack-log');
+        const div = document.createElement('div');
+        div.className = 'stack-log-entry' + (type ? ' ' + type : '');
+        div.textContent = msg;
+        log.prepend(div);
+        if (log.children.length > 15) log.removeChild(log.lastChild);
+    }
+
+    function renderStack() {
+        const container = document.getElementById('stack-elements');
+        const emptyLabel = document.getElementById('stack-empty-label');
+        const topLabel = document.getElementById('stack-top-label');
+        const sizeLabel = document.getElementById('stack-size-label');
+
+        // Clear all items (not the empty label)
+        Array.from(container.children).forEach(c => {
+            if (!c.classList.contains('stack-empty-label')) c.remove();
+        });
+
+        if (stackData.length === 0) {
+            emptyLabel.style.display = '';
+            topLabel.style.opacity = '0.3';
+        } else {
+            emptyLabel.style.display = 'none';
+            topLabel.style.opacity = '1';
+            stackData.forEach((val, i) => {
+                const el = document.createElement('div');
+                el.className = 'stack-item' + (i === stackData.length - 1 ? ' stack-item-top' : '');
+                el.textContent = val;
+                el.id = 'stack-item-' + i;
+                container.appendChild(el);
+            });
+        }
+        sizeLabel.textContent = stackData.length;
+        document.getElementById('stack-push-btn').disabled = stackAnimating || stackData.length >= STACK_LIMIT;
+        document.getElementById('stack-pop-btn').disabled = stackAnimating || stackData.length === 0;
+    }
+
+    function stackPush() {
+        if (stackData.length >= STACK_LIMIT) { stackLog('Error: Stack Overflow', 'error'); return; }
+        const val = Math.floor(Math.random() * 99) + 1;
+        stackData.push(val);
+        renderStack();
+        stackLog(`PUSH: Added ${val} to the Top.`);
+    }
+
+    function stackPop() {
+        if (stackData.length === 0) { stackLog('Error: Stack Underflow', 'error'); return; }
+        const topEl = document.getElementById('stack-item-' + (stackData.length - 1));
+        const val = stackData[stackData.length - 1];
+        stackLog(`POP: Removed ${val} from the Top.`);
+        if (topEl) {
+            stackAnimating = true;
+            topEl.classList.add('pop-exit');
+            document.getElementById('stack-push-btn').disabled = true;
+            document.getElementById('stack-pop-btn').disabled = true;
+            setTimeout(() => {
+                stackData.pop();
+                stackAnimating = false;
+                renderStack();
+            }, 300);
+        } else {
+            stackData.pop();
+            renderStack();
+        }
+    }
+
+    function stackPeek() {
+        if (stackData.length === 0) { stackLog('PEEK: Stack is empty.', 'error'); return; }
+        stackLog(`PEEK: Top value is ${stackData[stackData.length - 1]}.`, 'peek');
+    }
+
+    renderStack();
+
+
+    /* ============================================================
+       QUEUE SIMULATION
+    ============================================================ */
+    let queueData = [];
+    const QUEUE_LIMIT = 7;
+    let queueAnimating = false;
+
+    function queueLog(msg, type='') {
+        const log = document.getElementById('queue-log');
+        const div = document.createElement('div');
+        div.className = 'queue-log-entry' + (type ? ' ' + type : '');
+        div.textContent = msg;
+        log.prepend(div);
+        if (log.children.length > 12) log.removeChild(log.lastChild);
+    }
+
+    function renderQueue() {
+        const track = document.getElementById('queue-track');
+        const emptyLabel = document.getElementById('queue-empty-label');
+        // Remove old items
+        Array.from(track.children).forEach(c => {
+            if (!c.classList.contains('queue-empty-label') && !c.classList.contains('queue-arrow-left') && !c.classList.contains('queue-arrow-right')) c.remove();
+        });
+
+        if (queueData.length === 0) {
+            emptyLabel.style.display = '';
+        } else {
+            emptyLabel.style.display = 'none';
+            queueData.forEach((val, i) => {
+                const el = document.createElement('div');
+                el.className = 'queue-item' + (i === 0 ? ' front-item' : '');
+                el.id = 'queue-item-' + i;
+                el.innerHTML = val + '<span class="q-label">' + (i === 0 ? 'FRONT' : (i === queueData.length - 1 ? 'REAR' : '')) + '</span>';
+                track.appendChild(el);
+            });
+        }
+        document.getElementById('queue-enq-btn').disabled = queueAnimating || queueData.length >= QUEUE_LIMIT;
+        document.getElementById('queue-deq-btn').disabled = queueAnimating || queueData.length === 0;
+
+        // Update stats labels
+        const sizeEl = document.getElementById('queue-size-label');
+        const frontEl = document.getElementById('queue-front-idx');
+        const rearEl = document.getElementById('queue-rear-idx');
+        if (sizeEl) sizeEl.textContent = queueData.length;
+        if (frontEl) frontEl.textContent = queueData.length === 0 ? '-1' : '0';
+        if (rearEl) rearEl.textContent = queueData.length === 0 ? '-1' : (queueData.length - 1);
+    }
+
+    function queueEnqueue() {
+        if (queueData.length >= QUEUE_LIMIT) { queueLog('Error: Queue is full!', 'error'); return; }
+        const val = Math.floor(Math.random() * 99) + 1;
+        queueData.push(val);
+        queueLog(`ENQUEUE: Added ${val} to the Rear.`);
+        renderQueue();
+        // animate last item
+        const lastEl = document.getElementById('queue-item-' + (queueData.length - 1));
+        if (lastEl) { lastEl.classList.add('enqueue-enter'); lastEl.addEventListener('animationend', () => lastEl.classList.remove('enqueue-enter'), { once: true }); }
+    }
+
+    function queueDequeue() {
+        if (queueData.length === 0) { queueLog('Error: Queue Underflow!', 'error'); return; }
+        const frontEl = document.getElementById('queue-item-0');
+        const val = queueData[0];
+        queueLog(`DEQUEUE: Removed ${val} from the Front.`);
+        if (frontEl) {
+            queueAnimating = true;
+            document.getElementById('queue-enq-btn').disabled = true;
+            document.getElementById('queue-deq-btn').disabled = true;
+            frontEl.classList.add('dequeue-exit');
+            setTimeout(() => {
+                queueData.shift();
+                queueAnimating = false;
+                renderQueue();
+                // animate remaining items shifting left
+                Array.from(document.querySelectorAll('.queue-item')).forEach(el => {
+                    el.classList.add('shift-left');
+                    el.addEventListener('animationend', () => el.classList.remove('shift-left'), { once: true });
+                });
+            }, 350);
+        } else {
+            queueData.shift();
+            renderQueue();
+        }
+    }
+
+    renderQueue();
+
+
+    /* ============================================================
+       PROJECTOR MODE
+    ============================================================ */
+    let projFontSize = 16;
+    let currentProjector = null;
+
+    function openProjector(type) {
+        currentProjector = type;
+        const overlay = document.getElementById('projector-overlay');
+        const content = document.getElementById('projector-content');
+        const title = document.getElementById('projector-title');
+        overlay.classList.add('active');
+        projFontSize = 16;
+        content.style.fontSize = projFontSize + 'px';
+
+        if (type === 'stack') {
+            title.textContent = 'Stack (LIFO) — Interactive Simulation';
+            content.innerHTML = buildStackProjector();
+        } else {
+            title.textContent = 'Queue (FIFO) — Interactive Simulation';
+            content.innerHTML = buildQueueProjector();
+        }
+    }
+
+    function buildStackProjector() {
+        return `
+        <div style="display:flex;gap:40px;align-items:flex-end;justify-content:center;flex-wrap:nowrap;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                <div id="proj-stack-top" style="font-size:0.75em;color:#60a5fa;font-weight:700;text-transform:uppercase;min-height:1.2em;margin-bottom:4px;">▲ TOP</div>
+                <div id="proj-stack-els" style="display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:280px;max-height:280px;width:100px;position:relative;justify-content:flex-start;">
+                    <span style="color:#475569;font-style:italic;font-size:0.8em;" id="proj-stack-empty">Empty Stack</span>
+                </div>
+                <div style="width:100px;height:6px;background:#3b82f6;border-radius:3px;"></div>
+                <div style="font-size:0.65em;color:#475569;text-transform:uppercase;letter-spacing:0.08em;">Base</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;min-width:180px;">
+                <button onclick="projStackPush()" style="padding:12px 24px;background:rgba(59,130,246,0.2);color:#60a5fa;border:2px solid #3b82f6;border-radius:8px;font-size:0.9em;font-weight:700;cursor:pointer;">⬇ Push</button>
+                <button onclick="projStackPop()" style="padding:12px 24px;background:rgba(239,68,68,0.1);color:#f87171;border:2px solid #f87171;border-radius:8px;font-size:0.9em;font-weight:700;cursor:pointer;">⬆ Pop</button>
+            </div>
+            <div id="proj-stack-log" style="background:#0f172a;border-radius:8px;padding:12px;font-family:'Fira Code',monospace;font-size:0.65em;color:#94a3b8;height:240px;width:240px;overflow-y:auto;text-align:left;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;"></div>
+        </div>`;
+    }
+
+    function buildQueueProjector() {
+        return `
+        <div style="display:flex;flex-direction:column;align-items:center;gap:20px;width:100%;">
+            <div style="display:flex;gap:10px;font-size:0.75em;color:#94a3b8;">
+                <span style="padding:4px 12px;border-radius:20px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid #f87171;">← DEQUEUE (Front)</span>
+                <span style="padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.12);color:#10b981;border:1px solid #10b981;">ENQUEUE (Rear) →</span>
+            </div>
+            <div id="proj-queue-track" style="display:flex;align-items:center;gap:6px;min-height:80px;padding:12px 20px;background:rgba(16,185,129,0.06);border-radius:10px;border:1.5px dashed rgba(16,185,129,0.3);min-width:600px;overflow:hidden;position:relative;flex-wrap:nowrap;">
+                <span id="proj-queue-empty" style="color:#64748b;font-style:italic;font-size:0.8em;">Empty Queue</span>
+            </div>
+            <div style="display:flex;gap:40px;align-items:center;justify-content:center;width:100%;max-width:650px;">
+                <div style="display:flex;gap:16px;">
+                    <button onclick="projQueueEnq()" style="padding:12px 28px;background:rgba(16,185,129,0.2);color:#10b981;border:2px solid #10b981;border-radius:8px;font-size:0.9em;font-weight:700;cursor:pointer;">→ Enqueue</button>
+                    <button onclick="projQueueDeq()" style="padding:12px 28px;background:rgba(239,68,68,0.1);color:#f87171;border:2px solid #f87171;border-radius:8px;font-size:0.9em;font-weight:700;cursor:pointer;">← Dequeue</button>
+                </div>
+                <div id="proj-queue-log" style="background:#0f172a;border-radius:8px;padding:10px 14px;font-family:'Fira Code',monospace;font-size:0.65em;color:#94a3b8;height:120px;overflow-y:auto;width:300px;text-align:left;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;"></div>
+            </div>
+        </div>`;
+    }
+
+    // Projector Stack logic (independent state)
+    let projStack = [];
+    function projStackPush() {
+        if (projStack.length >= STACK_LIMIT) return;
+        const val = Math.floor(Math.random() * 99) + 1;
+        projStack.push(val);
+        renderProjStack();
+        projLog('proj-stack-log', `PUSH: ${val} added.`);
+    }
+    function projStackPop() {
+        if (projStack.length === 0) { projLog('proj-stack-log','Error: Stack Underflow'); return; }
+        const val = projStack.pop();
+        renderProjStack();
+        projLog('proj-stack-log', `POP: ${val} removed.`);
+    }
+    function renderProjStack() {
+        const els = document.getElementById('proj-stack-els');
+        if (!els) return;
+        const empty = document.getElementById('proj-stack-empty');
+        Array.from(els.children).forEach(c => { if (!c.id?.includes('empty')) c.remove(); });
+        if (projStack.length === 0) { if (empty) empty.style.display = ''; return; }
+        if (empty) empty.style.display = 'none';
+        projStack.forEach((v,i) => {
+            const d = document.createElement('div');
+            d.style.cssText = `width:90px;height:46px;display:flex;align-items:center;justify-content:center;font-size:1.1em;font-weight:700;font-family:'Fira Code',monospace;background:${i===projStack.length-1?'rgba(59,130,246,0.35)':'rgba(59,130,246,0.18)'};border:2px solid ${i===projStack.length-1?'#60a5fa':'#3b82f6'};border-radius:8px;color:${i===projStack.length-1?'#60a5fa':'#3b82f6'};`;
+            d.textContent = v;
+            els.appendChild(d);
+        });
+    }
+
+    // Projector Queue logic
+    let projQueue = [];
+    function projQueueEnq() {
+        if (projQueue.length >= QUEUE_LIMIT) return;
+        const val = Math.floor(Math.random() * 99) + 1;
+        projQueue.push(val);
+        renderProjQueue();
+        projLog('proj-queue-log', `ENQUEUE: ${val} added to Rear.`);
+    }
+    function projQueueDeq() {
+        if (projQueue.length === 0) { projLog('proj-queue-log','Error: Queue Underflow'); return; }
+        const val = projQueue.shift();
+        renderProjQueue();
+        projLog('proj-queue-log', `DEQUEUE: ${val} removed from Front.`);
+    }
+    function renderProjQueue() {
+        const track = document.getElementById('proj-queue-track');
+        if (!track) return;
+        const empty = document.getElementById('proj-queue-empty');
+        Array.from(track.children).forEach(c => { if (c.id !== 'proj-queue-empty') c.remove(); });
+        if (projQueue.length === 0) { if (empty) empty.style.display = ''; return; }
+        if (empty) empty.style.display = 'none';
+        projQueue.forEach((v,i) => {
+            const d = document.createElement('div');
+            const isFront = i === 0;
+            d.style.cssText = `min-width:60px;height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.1em;font-weight:700;font-family:'Fira Code',monospace;background:${isFront?'rgba(239,68,68,0.18)':'rgba(16,185,129,0.18)'};border:2px solid ${isFront?'#f87171':'#10b981'};border-radius:8px;color:${isFront?'#f87171':'#10b981'};flex-shrink:0;`;
+            d.innerHTML = v + `<span style="font-size:0.5em;font-family:'Inter',sans-serif;font-weight:600;opacity:0.7;">${i===0?'FRONT':i===projQueue.length-1?'REAR':''}</span>`;
+            track.appendChild(d);
+        });
+    }
+
+    function projLog(id, msg) {
+        const log = document.getElementById(id);
+        if (!log) return;
+        const d = document.createElement('div');
+        d.style.cssText = 'border-left:2px solid #3b82f6;padding-left:6px;margin-bottom:3px;';
+        d.textContent = msg;
+        log.prepend(d);
+    }
+
+    function closeProjector() {
+        document.getElementById('projector-overlay').classList.remove('active');
+        projStack = [];
+        projQueue = [];
+    }
+
+    function projFontChange(delta) {
+        projFontSize = Math.max(10, Math.min(40, projFontSize + delta));
+        document.getElementById('projector-content').style.fontSize = projFontSize + 'px';
+    }
+
+
+    /* ============================================================
+       QUIZ
+    ============================================================ */
+    const quizQuestions = [
+        {
+            q: "What does LIFO stand for?",
+            opts: ["Last-In, First-Out", "Last-In, Full-Out", "Linear Input, Fixed Output", "Linear-Input, First-Output"],
+            ans: 0,
+            exp: "LIFO = Last-In, First-Out. The most recently added item is the first to be removed — the core principle of a Stack."
+        },
+        {
+            q: "Which operation adds an item to a Stack?",
+            opts: ["enqueue()", "push()", "insert()", "append_top()"],
+            ans: 1,
+            exp: "push() adds an element to the top of the Stack. enqueue() is used for Queues."
+        },
+        {
+            q: "What happens when you pop() from an empty Stack?",
+            opts: ["Returns 0", "Stack Overflow", "Stack Underflow", "Returns None automatically"],
+            ans: 2,
+            exp: "Attempting to pop from an empty stack causes a Stack Underflow error. Always check is_empty() before popping."
+        },
+        {
+            q: "What does FIFO stand for?",
+            opts: ["First-In, First-Out", "Fast-Input, First-Output", "Fixed-Input, Flexible-Output", "First-Input, Final-Out"],
+            ans: 0,
+            exp: "FIFO = First-In, First-Out. The item added earliest is removed first — the core principle of a Queue."
+        },
+        {
+            q: "In a Python List-based Stack, which end serves as the 'Top'?",
+            opts: ["Index 0 (front)", "Index -1 (end)", "Middle index", "A separate pointer variable"],
+            ans: 1,
+            exp: "The END of the list (index -1) is the Top. Using list.append() and list.pop() gives O(1) amortized for both push and pop."
+        },
+        {
+            q: "Why is the Naive Array Queue implementation inefficient?",
+            opts: ["Enqueue is O(n)", "Dequeue uses pop(0) which shifts all elements — O(n)", "It cannot store more than 10 items", "It uses too much memory"],
+            ans: 1,
+            exp: "pop(0) forces ALL remaining elements to shift left by one position, making Dequeue O(n) instead of O(1)."
+        },
+        {
+            q: "In a Circular Queue, what does the modulo operator (%) help with?",
+            opts: ["Calculating the size of the queue", "Wrapping the Rear pointer back to index 0 to reuse dead space", "Hashing the queue values", "Sorting the queue"],
+            ans: 1,
+            exp: "Modulo arithmetic allows the Rear pointer to wrap around from the last index back to 0, reusing space freed by Dequeue operations."
+        },
+        {
+            q: "Which data structure is best suited for Depth-First Search (DFS)?",
+            opts: ["Queue (FIFO)", "Stack (LIFO)", "Heap", "Hash Map"],
+            ans: 1,
+            exp: "DFS uses a Stack because it needs to backtrack — always processing the most recently discovered node next (LIFO behavior)."
+        },
+        {
+            q: "What is the time complexity of peek() for both Stack and Queue?",
+            opts: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
+            ans: 2,
+            exp: "peek() simply reads the top (Stack) or front (Queue) without modifying the structure — always O(1) regardless of size."
+        },
+        {
+            q: "In a Linked List–based Queue, which pointer enables O(1) Enqueue?",
+            opts: ["Front pointer", "Head pointer", "Rear pointer", "Size counter"],
+            ans: 2,
+            exp: "The Rear pointer always points to the last node. Adding a new node is simply: rear.next = new_node; rear = new_node — O(1) without traversal."
+        }
+    ];
+
+    let quizCurrent = 0;
+    let quizAnswered = [];
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        const summaryCard = document.getElementById('quiz-summary-card');
+        
+        if (quizCurrent >= quizQuestions.length) {
+            container.style.display = 'none';
+            summaryCard.style.display = 'flex';
+            
+            // Compute Score
+            let score = 0;
+            quizAnswered.forEach((ans, idx) => {
+                if (ans === quizQuestions[idx].ans) score++;
+            });
+            
+            document.getElementById('quiz-score-num').textContent = score;
+            document.getElementById('quiz-score-total').textContent = quizQuestions.length;
+            
+            const fbText = document.getElementById('quiz-feedback-text');
+            if (score === quizQuestions.length) {
+                fbText.textContent = "Perfect score! You've mastered all concepts of Stacks and Queues!";
+            } else if (score >= 7) {
+                fbText.textContent = "Great job! You have a solid understanding of Stacks and Queues.";
+            } else {
+                fbText.textContent = "Keep reviewing! Go back through the simulations to strengthen your understanding.";
+            }
+            return;
+        }
+
+        container.style.display = 'block';
+        summaryCard.style.display = 'none';
+
+        const q = quizQuestions[quizCurrent];
+        const answered = quizAnswered[quizCurrent];
+        const isAnswered = (answered !== undefined);
+
+        container.innerHTML = `
+        <div class="quiz-question-card glass">
+            <div class="quiz-q-num">Question ${quizCurrent + 1} of ${quizQuestions.length}</div>
+            <div class="quiz-q-text">${q.q}</div>
+            <div class="quiz-options">
+                ${q.opts.map((opt, i) => {
+                    let extraClass = "";
+                    if (isAnswered) {
+                        if (i === q.ans) extraClass = " correct";
+                        else if (i === answered) extraClass = " incorrect";
+                    }
+                    return `
+                    <button class="quiz-option${extraClass}" ${isAnswered ? 'disabled' : ''} onclick="quizAnswer(${i})">
+                        <span style="font-weight:700;margin-right:10px;">${String.fromCharCode(65+i)}.</span>${opt}
+                    </button>`;
+                }).join('')}
+            </div>
+            
+            <div class="quiz-explanation ${isAnswered ? (answered === q.ans ? 'correct-explain' : 'incorrect-explain') : ''}" style="display: ${isAnswered ? 'block' : 'none'};">
+                ${isAnswered ? `
+                    <h5 class="${answered === q.ans ? 'correct-title' : 'incorrect-title'}">
+                        <i class="fa-solid ${answered === q.ans ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> 
+                        ${answered === q.ans ? 'Correct!' : 'Incorrect'}
+                    </h5>
+                    <p>${q.exp}</p>
+                ` : ''}
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 20px; align-items: center; width: 100%;">
+                <div>
+                    ${quizCurrent > 0 ? `<button class="btn btn-secondary" onclick="quizPrev()"><i class="fa-solid fa-chevron-left"></i> Back</button>` : ''}
+                </div>
+                <div>
+                    ${isAnswered ? `<button class="btn btn-primary" onclick="quizNext()">${quizCurrent === quizQuestions.length - 1 ? 'Finish Quiz' : 'Next Question'} <i class="fa-solid fa-chevron-right"></i></button>` : ''}
+                </div>
+            </div>
+        </div>`;
+    }
+
+    function quizAnswer(optIndex) {
+        if (quizAnswered[quizCurrent] !== undefined) return;
+        quizAnswered[quizCurrent] = optIndex;
+        renderQuiz();
+    }
+
+    function quizNext() {
+        quizCurrent++;
+        renderQuiz();
+        const contentBody = document.querySelector('.content-body');
+        if (contentBody) contentBody.scrollTop = 0;
+    }
+
+    function quizPrev() {
+        if (quizCurrent > 0) {
+            quizCurrent--;
+            renderQuiz();
+            const contentBody = document.querySelector('.content-body');
+            if (contentBody) contentBody.scrollTop = 0;
+        }
+    }
+
+    function resetQuiz() {
+        quizCurrent = 0;
+        quizAnswered = [];
+        renderQuiz();
+        const contentBody = document.querySelector('.content-body');
+        if (contentBody) contentBody.scrollTop = 0;
+    }
+
+    renderQuiz();
+    </script>
+</body>
+</html>
