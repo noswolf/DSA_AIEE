@@ -256,6 +256,7 @@
             max-height: 280px;
             overflow-y: auto;
             background: rgba(9,13,22,0.3);
+            position: relative;
         }
         body.light-mode .trace-log-body { background: rgba(0,0,0,0.02); }
 
@@ -773,21 +774,21 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Initialize i = 0 */}
                         <rect x="150" y="60" width="120" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="210" y="81" fill="var(--text-secondary)" fontSize="11" textAnchor="middle">Initialize i = 0</text>
+                        <text x="210" y="81" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Start at first item</text>
                         
                         {/* Arrow 2 */}
                         <line x1="210" y1="95" x2="210" y2="115" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Loop condition: i < N? */}
                         <polygon points="210,115 265,140 210,165 155,140" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="210" y="144" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">{"i < N?"}</text>
+                        <text x="210" y="144" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Any items left?</text>
                         
                         {/* No path (Loop boundary) */}
                         <line x1="265" y1="140" x2="310" y2="140" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="282" y="134" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
                         
                         <rect x="310" y="122" width="100" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
-                        <text x="360" y="143" fill="var(--accent-red)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Not Found</text>
+                        <text x="360" y="143" fill="var(--accent-red)" fontSize="10" fontWeight="bold" textAnchor="middle">Report: Not Found</text>
                         
                         {/* Yes path */}
                         <line x1="210" y1="165" x2="210" y2="185" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
@@ -795,21 +796,21 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Compare arr[i] == Target */}
                         <polygon points="210,185 275,210 210,235 145,210" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="210" y="214" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">arr[i] == Target?</text>
+                        <text x="210" y="214" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">Does item match target?</text>
                         
                         {/* Match Found */}
                         <line x1="275" y1="210" x2="310" y2="210" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="287" y="204" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
                         
                         <rect x="310" y="192" width="100" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                        <text x="360" y="213" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Index i</text>
+                        <text x="360" y="213" fill="var(--accent-green)" fontSize="9" fontWeight="bold" textAnchor="middle">Report item position</text>
                         
                         {/* No match: Increment i */}
                         <line x1="210" y1="235" x2="210" y2="250" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="215" y="244" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
                         
                         <rect x="160" y="250" width="100" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="210" y="266" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">i = i + 1</text>
+                        <text x="210" y="266" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Move to next item</text>
                         
                         {/* Back loop line */}
                         <path d="M 160 262.5 L 120 262.5 L 120 140 L 155 140" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
@@ -832,20 +833,20 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Init low, high */}
                         <rect x="90" y="45" width="200" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="190" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">low = 0, high = N - 1</text>
+                        <text x="190" y="63" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Search range: first to last item</text>
                         
                         <line x1="190" y1="75" x2="190" y2="95" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* low <= high? */}
                         <polygon points="190,95 245,120 190,145 135,120" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="190" y="124" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">low ≤ high?</text>
+                        <text x="190" y="124" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">Is search range valid?</text>
                         
                         {/* No path: Not Found */}
                         <line x1="245" y1="120" x2="300" y2="120" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="265" y="114" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
                         
                         <rect x="300" y="105" width="110" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
-                        <text x="355" y="123" fill="var(--accent-red)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Not Found</text>
+                        <text x="355" y="123" fill="var(--accent-red)" fontSize="9" fontWeight="bold" textAnchor="middle">Report: Not Found</text>
                         
                         {/* Yes path */}
                         <line x1="190" y1="145" x2="190" y2="165" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
@@ -853,20 +854,20 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Calc mid */}
                         <rect x="90" y="165" width="200" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="190" y="183" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">mid = low + (high - low) / 2</text>
+                        <text x="190" y="183" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Find middle item of range</text>
                         
                         <line x1="190" y1="195" x2="190" y2="215" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* arr[mid] == Target? */}
                         <polygon points="190,215 255,240 190,265 125,240" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="190" y="244" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">arr[mid] == Target?</text>
+                        <text x="190" y="244" fill="var(--text-primary)" fontSize="8" fontWeight="bold" textAnchor="middle">Does middle item match target?</text>
                         
                         {/* Found Match */}
                         <line x1="255" y1="240" x2="300" y2="240" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="270" y="234" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
                         
                         <rect x="300" y="225" width="110" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                        <text x="355" y="243" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Index mid</text>
+                        <text x="355" y="243" fill="var(--accent-green)" fontSize="9" fontWeight="bold" textAnchor="middle">Report middle position</text>
                         
                         {/* No match */}
                         <line x1="190" y1="265" x2="190" y2="280" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
@@ -874,21 +875,21 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Target < arr[mid]? */}
                         <polygon points="190,280 260,305 190,330 120,305" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="190" y="309" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">{"Target < arr[mid]?"}</text>
+                        <text x="190" y="309" fill="var(--text-primary)" fontSize="8" fontWeight="bold" textAnchor="middle">{"Target < middle item?"}</text>
                         
                         {/* Target < arr[mid] Yes: high = mid - 1 */}
                         <line x1="120" y1="305" x2="90" y2="305" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="98" y="299" fill="var(--accent-green)" fontSize="8" fontWeight="bold">Yes</text>
                         
                         <rect x="5" y="290" width="85" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="47" y="308" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">high = mid - 1</text>
+                        <text x="47" y="308" fill="var(--text-secondary)" fontSize="8" textAnchor="middle">Search left</text>
                         
                         {/* Target < arr[mid] No: low = mid + 1 */}
                         <line x1="260" y1="305" x2="290" y2="305" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="270" y="299" fill="var(--accent-red)" fontSize="8" fontWeight="bold">No</text>
                         
                         <rect x="290" y="290" width="85" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="332" y="308" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">low = mid + 1</text>
+                        <text x="332" y="308" fill="var(--text-secondary)" fontSize="8" textAnchor="middle">Search right</text>
                         
                         {/* Loops back to low <= high */}
                         <path d="M 47 290 L 47 120 L 135 120" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
@@ -914,26 +915,26 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Outer loop init */}
                         <rect x="90" y="45" width="220" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Outer loop: round from 0 to N-2</text>
+                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Repeat N-1 times (Rounds)</text>
                         
                         <line x1="200" y1="75" x2="200" y2="95" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Inner loop init */}
                         <rect x="90" y="95" width="220" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="200" y="113" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Inner loop: i from N-1 down to round+1</text>
+                        <text x="200" y="113" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Scan from right to left</text>
                         
                         <line x1="200" y1="125" x2="200" y2="145" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Compare arr[i-1] > arr[i] */}
                         <polygon points="200,145 270,175 200,205 130,175" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="200" y="179" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">{"arr[i-1] > arr[i]?"}</text>
+                        <text x="200" y="179" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">Left item &gt; Right item?</text>
                         
                         {/* Swap Yes */}
                         <line x1="270" y1="175" x2="310" y2="175" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="285" y="169" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
                         
                         <rect x="310" y="160" width="100" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
-                        <text x="360" y="178" fill="var(--accent-red)" fontSize="9" fontWeight="bold" textAnchor="middle">Swap arr[i-1], arr[i]</text>
+                        <text x="360" y="178" fill="var(--accent-red)" fontSize="9" fontWeight="bold" textAnchor="middle">Swap their positions</text>
                         
                         {/* Merge paths */}
                         <path d="M 360 190 L 360 220 L 200 220" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" />
@@ -944,7 +945,7 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Decrement inner loop */}
                         <rect x="130" y="235" width="140" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="200" y="251" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Decrement i</text>
+                        <text x="200" y="251" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Move one step left</text>
                         
                         {/* Loops back to Inner loop check */}
                         <path d="M 130 247.5 L 70 247.5 L 70 110 L 90 110" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
@@ -955,7 +956,7 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* End */}
                         <rect x="160" y="290" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Done</text>
+                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Finished</text>
                     </svg>
                 );
             } else if (algo === 'selection') {
@@ -973,32 +974,32 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Outer loop */}
                         <rect x="80" y="45" width="240" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Outer loop: fillslot from 0 to N-2</text>
+                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Loop through each slot (first to second-to-last)</text>
                         
                         <line x1="200" y1="75" x2="200" y2="90" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Init minIdx */}
                         <rect x="120" y="90" width="160" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
-                        <text x="200" y="106" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">Set minIdx = fillslot</text>
+                        <text x="200" y="106" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">Assume current slot is minimum</text>
                         
                         <line x1="200" y1="115" x2="200" y2="130" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Inner scan loop */}
                         <rect x="80" y="130" width="240" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="200" y="148" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Inner scan: loc from fillslot+1 to N-1</text>
+                        <text x="200" y="148" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Scan remaining items on the right</text>
                         
                         <line x1="200" y1="160" x2="200" y2="175" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Compare arr[loc] < arr[minIdx] */}
                         <polygon points="200,175 270,200 200,225 130,200" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="200" y="204" fill="var(--text-primary)" fontSize="8" fontWeight="bold" textAnchor="middle">{"arr[loc] < arr[minIdx]?"}</text>
+                        <text x="200" y="204" fill="var(--text-primary)" fontSize="8" fontWeight="bold" textAnchor="middle">Is this item &lt; current minimum?</text>
                         
                         {/* Update minIdx */}
                         <line x1="270" y1="200" x2="305" y2="200" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="282" y="194" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
                         
                         <rect x="305" y="185" width="105" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
-                        <text x="357" y="203" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">minIdx = loc</text>
+                        <text x="357" y="203" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">Set as new minimum</text>
                         
                         {/* Merge back */}
                         <path d="M 357 215 L 357 240 L 200 240" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" />
@@ -1009,14 +1010,14 @@ print(f"Target {target} found at index: {found_idx}")
                         <line x1="200" y1="240" x2="200" y2="255" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         <rect x="100" y="255" width="200" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
-                        <text x="200" y="271" fill="var(--accent-red)" fontSize="9" fontWeight="bold" textAnchor="middle">{"Swap arr[fillslot] & arr[minIdx]"}</text>
+                        <text x="200" y="271" fill="var(--accent-red)" fontSize="9" fontWeight="bold" textAnchor="middle">Swap current slot and minimum items</text>
                         
                         {/* Loops */}
                         <path d="M 100 267.5 L 50 267.5 L 50 60 L 80 60" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         <line x1="200" y1="280" x2="200" y2="290" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <rect x="160" y="290" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Done</text>
+                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Finished</text>
                     </svg>
                 );
             } else if (algo === 'insertion') {
@@ -1034,31 +1035,31 @@ print(f"Target {target} found at index: {found_idx}")
                         
                         {/* Outer loop */}
                         <rect x="80" y="45" width="240" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Outer loop: index from 1 to N-1</text>
+                        <text x="200" y="63" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Pick each item one by one (start from second)</text>
                         
                         <line x1="200" y1="75" x2="200" y2="90" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Extract key */}
                         <rect x="100" y="90" width="200" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
-                        <text x="200" y="108" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">key = arr[index], pos = index</text>
+                        <text x="200" y="108" fill="var(--accent-purple)" fontSize="9" fontWeight="bold" textAnchor="middle">Hold item and remember its starting position</text>
                         
                         <line x1="200" y1="120" x2="200" y2="135" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Inner check: pos > 0 and arr[pos-1] > key? */}
                         <polygon points="200,135 290,165 200,195 110,165" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="200" y="163" fill="var(--text-primary)" fontSize="8" fontWeight="bold" textAnchor="middle">{"pos > 0 and arr[pos-1] > key?"}</text>
+                        <text x="200" y="163" fill="var(--text-primary)" fontSize="8" fontWeight="bold" textAnchor="middle">Is there a larger item on the left?</text>
                         
                         {/* Yes: Shift */}
                         <line x1="290" y1="165" x2="320" y2="165" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="298" y="159" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
                         
                         <rect x="320" y="150" width="95" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="367" y="168" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">arr[pos] = arr[pos-1]</text>
+                        <text x="367" y="168" fill="var(--text-secondary)" fontSize="8" textAnchor="middle">Shift larger item right</text>
                         
                         <line x1="367" y1="180" x2="367" y2="200" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         <rect x="320" y="200" width="95" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="367" y="216" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">pos = pos - 1</text>
+                        <text x="367" y="216" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Move one step left</text>
                         
                         {/* Loop back to inner check */}
                         <path d="M 320 212.5 L 200 212.5 L 200 195" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
@@ -1068,14 +1069,14 @@ print(f"Target {target} found at index: {found_idx}")
                         <text x="205" y="210" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
                         
                         <rect x="120" y="235" width="160" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                        <text x="200" y="253" fill="var(--accent-green)" fontSize="9" fontWeight="bold" textAnchor="middle">arr[pos] = key</text>
+                        <text x="200" y="253" fill="var(--accent-green)" fontSize="9" fontWeight="bold" textAnchor="middle">Insert item in cleared position</text>
                         
                         {/* Loop back to outer loop */}
                         <path d="M 120 250 L 60 250 L 60 60 L 80 60" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         <line x1="200" y1="265" x2="200" y2="290" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <rect x="160" y="290" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Done</text>
+                        <text x="200" y="306" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Finished</text>
                     </svg>
                 );
             } else if (algo === 'merge') {
@@ -1087,44 +1088,44 @@ print(f"Target {target} found at index: {found_idx}")
                             </marker>
                         </defs>
                         <rect x="160" y="5" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-purple)" strokeWidth="1.5" />
-                        <text x="200" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">mergeSort(L, R)</text>
+                        <text x="200" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Sort Left to Right</text>
                         
                         <line x1="200" y1="30" x2="200" y2="45" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Base case: size <= 1? */}
                         <polygon points="200,45 265,75 200,105 135,75" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                        <text x="200" y="79" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">{"L ≥ R?"}</text>
+                        <text x="200" y="79" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">Range has 1 or 0 items?</text>
                         
                         {/* Yes: Stop */}
                         <line x1="265" y1="75" x2="310" y2="75" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="282" y="69" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Yes</text>
                         
                         <rect x="310" y="62" width="80" height="25" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="350" y="78" fill="var(--text-muted)" fontSize="9" textAnchor="middle">Return (Stop)</text>
+                        <text x="350" y="78" fill="var(--text-muted)" fontSize="9" textAnchor="middle">Stop (Already Sorted)</text>
                         
                         {/* No: Divide */}
                         <line x1="200" y1="105" x2="200" y2="120" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         <text x="205" y="112" fill="var(--accent-red)" fontSize="9" fontWeight="bold">No</text>
                         
                         <rect x="100" y="120" width="200" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                        <text x="200" y="138" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">Calculate mid = (L + R) / 2</text>
+                        <text x="200" y="138" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Find middle point to split</text>
                         
                         <line x1="200" y1="150" x2="200" y2="165" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Conquer: Split recursively */}
                         <rect x="50" y="165" width="300" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--accent-blue)" strokeWidth="1.5" />
-                        <text x="200" y="180" fill="var(--accent-blue)" fontSize="9" fontWeight="bold" textAnchor="middle">{"Call mergeSort(L, mid) & mergeSort(mid+1, R)"}</text>
+                        <text x="200" y="180" fill="var(--accent-blue)" fontSize="9" fontWeight="bold" textAnchor="middle">Sort left half and right half recursively</text>
                         
                         <line x1="200" y1="200" x2="200" y2="220" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         {/* Combine: Merge sorted sub-arrays */}
                         <rect x="100" y="220" width="200" height="35" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                        <text x="200" y="236" fill="var(--accent-green)" fontSize="9" fontWeight="bold" textAnchor="middle">Merge sub-arrays in sorted order</text>
+                        <text x="200" y="236" fill="var(--accent-green)" fontSize="9" fontWeight="bold" textAnchor="middle">Combine sorted halves in order</text>
                         
                         <line x1="200" y1="255" x2="200" y2="280" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                         
                         <rect x="160" y="280" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                        <text x="200" y="296" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Done</text>
+                        <text x="200" y="296" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Finished</text>
                     </svg>
                 );
             }
@@ -1139,25 +1140,25 @@ print(f"Target {target} found at index: {found_idx}")
                         </marker>
                     </defs>
                     <rect x="150" y="5" width="80" height="25" rx="12.5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                    <text x="190" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Search key</text>
+                    <text x="190" y="21" fill="var(--text-primary)" fontSize="10" fontWeight="bold" textAnchor="middle">Search for key</text>
                     
                     <line x1="190" y1="30" x2="190" y2="45" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                     
                     {/* Calculate index */}
                     <rect x="80" y="45" width="220" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                    <text x="190" y="63" fill="var(--text-secondary)" fontSize="10" textAnchor="middle">hashIdx = hash(key) % TableSize</text>
+                    <text x="190" y="63" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Calculate index using hash function</text>
                     
                     <line x1="190" y1="75" x2="190" y2="95" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                     
                     {/* Check slot */}
                     <polygon points="190,95 255,120 190,145 125,120" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                    <text x="190" y="124" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">bucket[hashIdx]?</text>
+                    <text x="190" y="124" fill="var(--text-primary)" fontSize="9" fontWeight="bold" textAnchor="middle">What is in this slot?</text>
                     
                     {/* Case 1: Empty */}
                     <line x1="125" y1="120" x2="60" y2="120" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                     
                     <rect x="5" y="105" width="100" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-red)" strokeWidth="1.5" />
-                    <text x="55" y="123" fill="var(--accent-red)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Not Found</text>
+                    <text x="55" y="123" fill="var(--accent-red)" fontSize="10" fontWeight="bold" textAnchor="middle">Report: Not Found</text>
                     <text x="110" y="114" fill="var(--accent-red)" fontSize="9" fontWeight="bold">Empty</text>
                     
                     {/* Case 2: Matches Key */}
@@ -1165,21 +1166,21 @@ print(f"Target {target} found at index: {found_idx}")
                     <text x="195" y="160" fill="var(--accent-green)" fontSize="9" fontWeight="bold">Matches</text>
                     
                     <rect x="140" y="185" width="100" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-green)" strokeWidth="1.5" />
-                    <text x="190" y="203" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Return Value</text>
+                    <text x="190" y="203" fill="var(--accent-green)" fontSize="10" fontWeight="bold" textAnchor="middle">Found! Return value</text>
                     
                     {/* Case 3: Collision */}
                     <line x1="255" y1="120" x2="310" y2="120" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-                    <text x="265" y="114" fill="var(--accent-orange)" fontSize="9" fontWeight="bold">Mismatch</text>
+                    <text x="265" y="114" fill="var(--accent-orange)" fontSize="9" fontWeight="bold">Not a match</text>
                     
                     {/* Linear probe */}
                     <rect x="310" y="105" width="100" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--accent-orange)" strokeWidth="1.5" />
-                    <text x="360" y="123" fill="var(--accent-orange)" fontSize="9" fontWeight="bold" textAnchor="middle">Probe Collision</text>
+                    <text x="360" y="123" fill="var(--accent-orange)" fontSize="9" fontWeight="bold" textAnchor="middle">Look at next slot</text>
                     
                     <line x1="360" y1="135" x2="360" y2="155" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
                     
                     {/* Next slot */}
                     <rect x="300" y="155" width="115" height="30" rx="5" fill="var(--bg-primary)" stroke="var(--border-color)" strokeWidth="1.5" />
-                    <text x="357" y="173" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">idx = (idx + 1) % Size</text>
+                    <text x="357" y="173" fill="var(--text-secondary)" fontSize="9" textAnchor="middle">Move to next slot</text>
                     
                     {/* Loop back to check bucket */}
                     <path d="M 357 185 L 357 230 L 190 230 L 190 145" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" markerEnd="url(#arrow)" />
@@ -1253,10 +1254,21 @@ print(f"Target {target} found at index: {found_idx}")
                 setCurrentStep(0);
             }, [algo, target]);
 
-            // Auto-scroll trace log to current row
+            // Auto-scroll trace log to current row without scrolling browser window
             useEffect(() => {
                 if (traceOpen && activeRowRef.current && traceBodyRef.current) {
-                        activeRowRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    const container = traceBodyRef.current;
+                    const row = activeRowRef.current;
+                    const containerTop = container.scrollTop;
+                    const containerBottom = containerTop + container.clientHeight;
+                    const rowTop = row.offsetTop;
+                    const rowBottom = rowTop + row.offsetHeight;
+
+                    if (rowTop < containerTop) {
+                        container.scrollTop = rowTop;
+                    } else if (rowBottom > containerBottom) {
+                        container.scrollTop = rowBottom - container.clientHeight;
+                    }
                 }
             }, [currentStep, traceOpen]);
 
