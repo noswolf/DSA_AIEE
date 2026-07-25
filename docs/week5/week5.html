@@ -1126,24 +1126,51 @@
 
     function renderQueue() {
         const track = document.getElementById('queue-track');
-        const emptyLabel = document.getElementById('queue-empty-label');
-        // Remove old items
-        Array.from(track.children).forEach(c => {
-            if (!c.classList.contains('queue-empty-label') && !c.classList.contains('queue-arrow-left') && !c.classList.contains('queue-arrow-right')) c.remove();
-        });
+        if (!track) return;
+        track.innerHTML = '';
 
-        if (queueData.length === 0) {
-            emptyLabel.style.display = '';
-        } else {
-            emptyLabel.style.display = 'none';
-            queueData.forEach((val, i) => {
-                const el = document.createElement('div');
-                el.className = 'queue-item' + (i === 0 ? ' front-item' : '');
-                el.id = 'queue-item-' + i;
-                el.innerHTML = val + '<span class="q-label">' + (i === 0 ? 'FRONT' : (i === queueData.length - 1 ? 'REAR' : '')) + '</span>';
-                track.appendChild(el);
-            });
+        for (let i = 0; i < QUEUE_LIMIT; i++) {
+            const slotWrapper = document.createElement('div');
+            slotWrapper.className = 'flex flex-col items-center gap-1 flex-shrink-0';
+            
+            const idxLabel = document.createElement('div');
+            idxLabel.className = 'font-mono text-[10px] text-slate-400 dark:text-slate-500';
+            idxLabel.textContent = `[${i}]`;
+            
+            const box = document.createElement('div');
+            
+            const ptrLabel = document.createElement('div');
+            ptrLabel.className = 'text-[9px] font-bold h-[12px] flex items-center justify-center';
+            
+            if (i < queueData.length) {
+                const val = queueData[i];
+                box.className = 'queue-item w-[68px] h-[60px] flex flex-col items-center justify-center font-bold font-mono text-lg rounded-lg border-2 ' + 
+                              (i === 0 ? 'bg-rose-500/10 dark:bg-rose-500/20 border-rose-500 text-rose-600 dark:text-rose-455' : 
+                               i === queueData.length - 1 ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-455' : 
+                               'bg-slate-100 dark:bg-slate-800 border-slate-350 dark:border-slate-700 text-slate-700 dark:text-slate-300');
+                box.textContent = val;
+                box.id = 'queue-item-' + i;
+                
+                let ptrText = '';
+                if (i === 0 && i === queueData.length - 1) {
+                    ptrText = '<span class="text-rose-500 font-extrabold">F & R</span>';
+                } else if (i === 0) {
+                    ptrText = '<span class="text-rose-500">FRONT</span>';
+                } else if (i === queueData.length - 1) {
+                    ptrText = '<span class="text-emerald-500">REAR</span>';
+                }
+                ptrLabel.innerHTML = ptrText;
+            } else {
+                box.className = 'queue-item w-[68px] h-[60px] flex items-center justify-center font-mono text-xs text-slate-300 dark:text-slate-700 bg-slate-500/5 dark:bg-slate-400/5 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-lg select-none';
+                box.textContent = '-';
+            }
+            
+            slotWrapper.appendChild(idxLabel);
+            slotWrapper.appendChild(box);
+            slotWrapper.appendChild(ptrLabel);
+            track.appendChild(slotWrapper);
         }
+
         document.getElementById('queue-enq-btn').disabled = queueAnimating || queueData.length >= QUEUE_LIMIT;
         document.getElementById('queue-deq-btn').disabled = queueAnimating || queueData.length === 0;
 
@@ -1152,8 +1179,20 @@
         const frontEl = document.getElementById('queue-front-idx');
         const rearEl = document.getElementById('queue-rear-idx');
         if (sizeEl) sizeEl.textContent = queueData.length;
+        
+        // Progress bar sync
+        const progBar = document.getElementById('queue-progress-bar');
+        if (progBar) {
+            progBar.style.width = (queueData.length / QUEUE_LIMIT * 100) + '%';
+        }
+
         if (frontEl) frontEl.textContent = queueData.length === 0 ? '-1' : '0';
         if (rearEl) rearEl.textContent = queueData.length === 0 ? '-1' : (queueData.length - 1);
+
+        // Render to projector if active
+        if (typeof renderProjectorQueue === 'function') {
+            renderProjectorQueue();
+        }
     }
 
     function queueEnqueue() {
@@ -1162,35 +1201,66 @@
         queueData.push(val);
         queueLog(`ENQUEUE: Added ${val} to the Rear.`);
         renderQueue();
+        
         // animate last item
-        const lastEl = document.getElementById('queue-item-' + (queueData.length - 1));
-        if (lastEl) { lastEl.classList.add('enqueue-enter'); lastEl.addEventListener('animationend', () => lastEl.classList.remove('enqueue-enter'), { once: true }); }
+        const animateEnqueueItem = (id) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.add('enqueue-enter');
+                el.addEventListener('animationend', () => el.classList.remove('enqueue-enter'), { once: true });
+            }
+        };
+        animateEnqueueItem('queue-item-' + (queueData.length - 1));
+        animateEnqueueItem('proj-queue-item-' + (queueData.length - 1));
     }
 
     function queueDequeue() {
         if (queueData.length === 0) { queueLog('Error: Queue Underflow!', 'error'); return; }
         const frontEl = document.getElementById('queue-item-0');
+        const projFrontEl = document.getElementById('proj-queue-item-0');
         const val = queueData[0];
         queueLog(`DEQUEUE: Removed ${val} from the Front.`);
-        if (frontEl) {
-            queueAnimating = true;
-            document.getElementById('queue-enq-btn').disabled = true;
-            document.getElementById('queue-deq-btn').disabled = true;
-            frontEl.classList.add('dequeue-exit');
+        
+        queueAnimating = true;
+        document.getElementById('queue-enq-btn').disabled = true;
+        document.getElementById('queue-deq-btn').disabled = true;
+        const projEnqBtn = document.getElementById('proj-queue-enq-btn');
+        const projDeqBtn = document.getElementById('proj-queue-deq-btn');
+        if (projEnqBtn) projEnqBtn.disabled = true;
+        if (projDeqBtn) projDeqBtn.disabled = true;
+
+        const applyRedHighlight = (el) => {
+            if (!el) return;
+            el.style.transition = 'all 0.2s';
+            el.style.backgroundColor = 'rgba(239, 68, 68, 0.4)';
+            el.style.borderColor = '#ef4444';
+            el.style.color = '#ef4444';
+            el.style.boxShadow = '0 0 12px rgba(239, 68, 68, 0.6)';
+        };
+
+        applyRedHighlight(frontEl);
+        applyRedHighlight(projFrontEl);
+
+        setTimeout(() => {
+            if (frontEl) frontEl.classList.add('dequeue-exit');
+            if (projFrontEl) projFrontEl.classList.add('dequeue-exit');
+            
             setTimeout(() => {
                 queueData.shift();
                 queueAnimating = false;
                 renderQueue();
+                
                 // animate remaining items shifting left
-                Array.from(document.querySelectorAll('.queue-item')).forEach(el => {
-                    el.classList.add('shift-left');
-                    el.addEventListener('animationend', () => el.classList.remove('shift-left'), { once: true });
-                });
+                const applyShiftAnimation = (selector) => {
+                    Array.from(document.querySelectorAll(selector)).forEach(el => {
+                        el.classList.add('shift-left');
+                        el.addEventListener('animationend', () => el.classList.remove('shift-left'), { once: true });
+                    });
+                };
+                applyShiftAnimation('.queue-item');
+                applyShiftAnimation('#proj-queue-track .queue-item');
             }, 350);
-        } else {
-            queueData.shift();
-            renderQueue();
-        }
+        }, 500);
     }
 
     renderQueue();
@@ -1199,7 +1269,7 @@
     /* ============================================================
        PROJECTOR MODE
     ============================================================ */
-    let projFontSize = 16;
+    let projScale = 1.0;
     let currentProjector = null;
 
     function openProjector(type) {
@@ -1207,141 +1277,269 @@
         const overlay = document.getElementById('projector-overlay');
         const content = document.getElementById('projector-content');
         const title = document.getElementById('projector-title');
-        overlay.classList.add('active');
-        projFontSize = 16;
-        content.style.fontSize = projFontSize + 'px';
+        
+        overlay.style.display = 'flex';
+        projScale = 1.0;
+        const scaleWrapper = document.getElementById('projector-scale-wrapper');
+        if (scaleWrapper) {
+            scaleWrapper.style.transform = `scale(${projScale})`;
+        }
 
         if (type === 'stack') {
             title.textContent = 'Stack (LIFO) — Interactive Simulation';
             content.innerHTML = buildStackProjector();
+            renderProjectorStack();
         } else {
             title.textContent = 'Queue (FIFO) — Interactive Simulation';
             content.innerHTML = buildQueueProjector();
+            renderProjectorQueue();
         }
     }
 
     function buildStackProjector() {
         return `
-        <div style="display:flex;gap:40px;align-items:flex-end;justify-content:center;flex-wrap:nowrap;">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-                <div id="proj-stack-top" style="font-size:0.75em;color:#60a5fa;font-weight:700;text-transform:uppercase;min-height:1.2em;margin-bottom:4px;">▲ TOP</div>
-                <div id="proj-stack-els" style="display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:280px;max-height:280px;width:100px;position:relative;justify-content:flex-start;">
-                    <span style="color:#475569;font-style:italic;font-size:0.8em;" id="proj-stack-empty">Empty Stack</span>
+        <div class="flex flex-col md:flex-row gap-8 items-center justify-center p-8 bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl mx-auto shadow-2xl">
+            <!-- Visualizer Tube Column -->
+            <div class="flex flex-col items-center justify-center p-8 bg-slate-950/40 border border-slate-800 rounded-xl min-h-[400px] w-[320px] relative">
+                <div class="absolute top-4 left-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Stack View</div>
+                
+                <div class="flex flex-col items-center w-full max-w-[280px] mt-4" id="proj-stack-elements" style="min-height: 380px;">
+                    <!-- 8 slots will be rendered dynamically -->
                 </div>
-                <div style="width:100px;height:6px;background:#3b82f6;border-radius:3px;"></div>
-                <div style="font-size:0.65em;color:#475569;text-transform:uppercase;letter-spacing:0.08em;">Base</div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:12px;min-width:180px;">
-                <button onclick="projStackPush()" style="padding:12px 24px;background:rgba(59,130,246,0.2);color:#60a5fa;border:2px solid #3b82f6;border-radius:8px;font-size:0.9em;font-weight:700;cursor:pointer;">⬇ Push</button>
-                <button onclick="projStackPop()" style="padding:12px 24px;background:rgba(239,68,68,0.1);color:#f87171;border:2px solid #f87171;border-radius:8px;font-size:0.9em;font-weight:700;cursor:pointer;">⬆ Pop</button>
+            
+            <!-- Controls Column -->
+            <div class="w-64 flex flex-col justify-between gap-6 p-6 bg-slate-950/40 border border-slate-800 rounded-xl shadow-sm">
+                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Operations</div>
+                <div class="flex flex-col gap-4">
+                    <button class="w-full px-4 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer" id="proj-stack-push-btn" onclick="stackPush()">
+                        <i class="fa-solid fa-plus-circle text-lg"></i> Push
+                    </button>
+                    <button class="w-full px-4 py-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer" id="proj-stack-pop-btn" onclick="stackPop()">
+                        <i class="fa-solid fa-minus-circle text-lg"></i> Pop
+                    </button>
+                </div>
+                
+                <div class="border-t border-slate-800 pt-4">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-slate-400">Current Size:</span>
+                        <span class="font-bold text-lg text-slate-300"><span id="proj-stack-size-label">0</span> / 8</span>
+                    </div>
+                </div>
             </div>
-            <div id="proj-stack-log" style="background:#0f172a;border-radius:8px;padding:12px;font-family:'Fira Code',monospace;font-size:0.65em;color:#94a3b8;height:240px;width:240px;overflow-y:auto;text-align:left;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;"></div>
+
+            <!-- Logs Column -->
+            <div class="w-72 flex flex-col bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs shadow-xl relative min-h-[300px]">
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-800 pb-2 mb-2">
+                    <span>Console Log</span>
+                </div>
+                <div class="flex-1 overflow-y-auto space-y-1.5 flex flex-col pr-1 max-h-[320px]" id="proj-stack-log">
+                </div>
+            </div>
         </div>`;
     }
 
     function buildQueueProjector() {
         return `
-        <div style="display:flex;flex-direction:column;align-items:center;gap:20px;width:100%;">
-            <div style="display:flex;gap:10px;font-size:0.75em;color:#94a3b8;">
-                <span style="padding:4px 12px;border-radius:20px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid #f87171;">← DEQUEUE (Front)</span>
-                <span style="padding:4px 12px;border-radius:20px;background:rgba(16,185,129,0.12);color:#10b981;border:1px solid #10b981;">ENQUEUE (Rear) →</span>
-            </div>
-            <div id="proj-queue-track" style="display:flex;align-items:center;gap:6px;min-height:80px;padding:12px 20px;background:rgba(16,185,129,0.06);border-radius:10px;border:1.5px dashed rgba(16,185,129,0.3);min-width:600px;overflow:hidden;position:relative;flex-wrap:nowrap;">
-                <span id="proj-queue-empty" style="color:#64748b;font-style:italic;font-size:0.8em;">Empty Queue</span>
-            </div>
-            <div style="display:flex;gap:40px;align-items:center;justify-content:center;width:100%;max-width:650px;">
-                <div style="display:flex;gap:16px;">
-                    <button onclick="projQueueEnq()" style="padding:12px 28px;background:rgba(16,185,129,0.2);color:#10b981;border:2px solid #10b981;border-radius:8px;font-size:0.9em;font-weight:700;cursor:pointer;">→ Enqueue</button>
-                    <button onclick="projQueueDeq()" style="padding:12px 28px;background:rgba(239,68,68,0.1);color:#f87171;border:2px solid #f87171;border-radius:8px;font-size:0.9em;font-weight:700;cursor:pointer;">← Dequeue</button>
+        <div class="flex flex-col gap-6 p-8 bg-slate-900 border border-slate-800 rounded-2xl max-w-5xl mx-auto shadow-2xl w-full">
+            <!-- Visualization Track Panel -->
+            <div class="w-full flex flex-col items-center justify-center p-6 bg-slate-950/40 border border-slate-800 rounded-xl relative min-h-[180px]">
+                <div class="absolute top-4 left-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Queue Track View</div>
+                
+                <div class="w-full flex flex-col gap-4 mt-6">
+                    <!-- Flow Badges (Front / Rear) -->
+                    <div class="flex justify-between items-center w-full px-4 text-xs font-bold">
+                        <span class="text-rose-400 bg-rose-950/30 px-3 py-1 rounded-full border border-rose-900 shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrow-left animate-pulse"></i> DEQUEUE (Front)
+                        </span>
+                        <span class="text-emerald-400 bg-emerald-950/30 px-3 py-1 rounded-full border border-emerald-900 shadow-sm flex items-center gap-1.5">
+                            ENQUEUE (Rear) <i class="fa-solid fa-arrow-right animate-pulse"></i>
+                        </span>
+                    </div>
+                    
+                    <!-- Queue Track -->
+                    <div class="queue-track w-full min-h-[100px] h-[100px] border-2 border-dashed border-emerald-500/25 bg-slate-950/40 rounded-2xl flex items-center justify-start gap-4 p-4 relative overflow-x-auto shadow-inner" id="proj-queue-track">
+                        <div class="queue-arrow-left"></div>
+                        <div class="queue-arrow-right"></div>
+                        <span class="text-slate-500 italic text-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" id="proj-queue-empty-label">Empty Queue</span>
+                    </div>
                 </div>
-                <div id="proj-queue-log" style="background:#0f172a;border-radius:8px;padding:10px 14px;font-family:'Fira Code',monospace;font-size:0.65em;color:#94a3b8;height:120px;overflow-y:auto;width:300px;text-align:left;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;"></div>
+            </div>
+            
+            <!-- Controls and Logs Row -->
+            <div class="flex flex-col md:flex-row gap-6 items-stretch w-full justify-between">
+                <!-- Controls Panel -->
+                <div class="flex-1 flex flex-col md:flex-row justify-between gap-4 p-6 bg-slate-950/40 border border-slate-800 rounded-xl shadow-sm">
+                    <div class="flex-1 flex flex-col justify-between gap-4">
+                        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Operations</div>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button class="flex-1 px-4 py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer" id="proj-queue-enq-btn" onclick="queueEnqueue()">
+                                <i class="fa-solid fa-arrow-right-to-bracket text-lg"></i> Enqueue
+                            </button>
+                            <button class="flex-1 px-4 py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer" id="proj-queue-deq-btn" onclick="queueDequeue()">
+                                <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i> Dequeue
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full md:w-44 border-t md:border-t-0 md:border-l border-slate-800 pt-4 md:pt-0 md:pl-4 flex flex-col justify-center">
+                        <div class="flex items-center justify-between text-xs mb-1.5">
+                            <span class="text-slate-400">Current Size:</span>
+                            <span class="font-bold text-slate-300"><span id="proj-queue-size-label">0</span> / 7</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span>Front index: <strong class="text-slate-300" id="proj-queue-front-idx">-1</strong></span>
+                            <span>Rear index: <strong class="text-slate-300" id="proj-queue-rear-idx">-1</strong></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Logs Panel -->
+                <div class="w-full md:w-80 flex flex-col bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs shadow-xl relative min-h-[160px]">
+                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-800 pb-2 mb-2">
+                        <span>Console Log</span>
+                    </div>
+                    <div class="flex-1 overflow-y-auto space-y-1.5 flex flex-col pr-1 max-h-[180px]" id="proj-queue-log">
+                    </div>
+                </div>
             </div>
         </div>`;
     }
 
-    // Projector Stack logic (independent state)
-    let projStack = [];
-    function projStackPush() {
-        if (projStack.length >= STACK_LIMIT) return;
-        const val = Math.floor(Math.random() * 99) + 1;
-        projStack.push(val);
-        renderProjStack();
-        projLog('proj-stack-log', `PUSH: ${val} added.`);
-    }
-    function projStackPop() {
-        if (projStack.length === 0) { projLog('proj-stack-log','Error: Stack Underflow'); return; }
-        const val = projStack.pop();
-        renderProjStack();
-        projLog('proj-stack-log', `POP: ${val} removed.`);
-    }
-    function renderProjStack() {
-        const els = document.getElementById('proj-stack-els');
-        if (!els) return;
-        const empty = document.getElementById('proj-stack-empty');
-        Array.from(els.children).forEach(c => { if (!c.id?.includes('empty')) c.remove(); });
-        if (projStack.length === 0) { if (empty) empty.style.display = ''; return; }
-        if (empty) empty.style.display = 'none';
-        projStack.forEach((v,i) => {
-            const d = document.createElement('div');
-            d.style.cssText = `width:90px;height:46px;display:flex;align-items:center;justify-content:center;font-size:1.1em;font-weight:700;font-family:'Fira Code',monospace;background:${i===projStack.length-1?'rgba(59,130,246,0.35)':'rgba(59,130,246,0.18)'};border:2px solid ${i===projStack.length-1?'#60a5fa':'#3b82f6'};border-radius:8px;color:${i===projStack.length-1?'#60a5fa':'#3b82f6'};`;
-            d.textContent = v;
-            els.appendChild(d);
-        });
+    function renderProjectorStack() {
+        const container = document.getElementById('proj-stack-elements');
+        if (!container) return;
+        
+        container.innerHTML = '';
+
+        for (let i = STACK_LIMIT - 1; i >= 0; i--) {
+            const slot = document.createElement('div');
+            slot.className = 'flex items-center justify-center gap-3 w-full';
+            
+            const idxLabel = document.createElement('div');
+            idxLabel.className = 'w-16 text-right font-mono text-xs text-slate-400 dark:text-slate-500';
+            idxLabel.textContent = `arr[${i}]`;
+            
+            const box = document.createElement('div');
+            
+            const topPtr = document.createElement('div');
+            topPtr.className = 'w-16 font-bold text-xs flex items-center gap-1 text-left min-h-[20px]';
+            
+            if (i < stackData.length) {
+                const val = stackData[i];
+                box.className = 'stack-item w-[140px] h-[40px] flex items-center justify-center font-bold font-mono text-lg rounded-lg border-2 ' + 
+                              (i === stackData.length - 1 ? 'stack-item-top bg-blue-500 border-blue-500 text-white shadow-md' : 'bg-blue-500/10 dark:bg-blue-500/20 border-blue-400 text-blue-600 dark:text-blue-400');
+                box.textContent = val;
+                box.id = 'proj-stack-item-' + i;
+                
+                if (i === stackData.length - 1) {
+                    topPtr.innerHTML = '<span class="text-blue-400 animate-pulse">◀ TOP</span>';
+                }
+            } else {
+                box.className = 'w-[140px] h-[40px] flex items-center justify-center font-mono text-xs text-slate-500 bg-slate-800/10 border-2 border-dashed border-slate-700 rounded-lg select-none';
+                box.textContent = '-';
+            }
+            
+            slot.appendChild(idxLabel);
+            slot.appendChild(box);
+            slot.appendChild(topPtr);
+            container.appendChild(slot);
+        }
+
+        const sizeLabel = document.getElementById('proj-stack-size-label');
+        if (sizeLabel) sizeLabel.textContent = stackData.length;
+        
+        const pushBtn = document.getElementById('proj-stack-push-btn');
+        const popBtn = document.getElementById('proj-stack-pop-btn');
+        if (pushBtn) pushBtn.disabled = stackAnimating || stackData.length >= STACK_LIMIT;
+        if (popBtn) popBtn.disabled = stackAnimating || stackData.length === 0;
+
+        const mainLog = document.getElementById('stack-log');
+        const projLog = document.getElementById('proj-stack-log');
+        if (mainLog && projLog) {
+            projLog.innerHTML = mainLog.innerHTML;
+        }
     }
 
-    // Projector Queue logic
-    let projQueue = [];
-    function projQueueEnq() {
-        if (projQueue.length >= QUEUE_LIMIT) return;
-        const val = Math.floor(Math.random() * 99) + 1;
-        projQueue.push(val);
-        renderProjQueue();
-        projLog('proj-queue-log', `ENQUEUE: ${val} added to Rear.`);
-    }
-    function projQueueDeq() {
-        if (projQueue.length === 0) { projLog('proj-queue-log','Error: Queue Underflow'); return; }
-        const val = projQueue.shift();
-        renderProjQueue();
-        projLog('proj-queue-log', `DEQUEUE: ${val} removed from Front.`);
-    }
-    function renderProjQueue() {
+    function renderProjectorQueue() {
         const track = document.getElementById('proj-queue-track');
         if (!track) return;
-        const empty = document.getElementById('proj-queue-empty');
-        Array.from(track.children).forEach(c => { if (c.id !== 'proj-queue-empty') c.remove(); });
-        if (projQueue.length === 0) { if (empty) empty.style.display = ''; return; }
-        if (empty) empty.style.display = 'none';
-        projQueue.forEach((v,i) => {
-            const d = document.createElement('div');
-            const isFront = i === 0;
-            d.style.cssText = `min-width:60px;height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.1em;font-weight:700;font-family:'Fira Code',monospace;background:${isFront?'rgba(239,68,68,0.18)':'rgba(16,185,129,0.18)'};border:2px solid ${isFront?'#f87171':'#10b981'};border-radius:8px;color:${isFront?'#f87171':'#10b981'};flex-shrink:0;`;
-            d.innerHTML = v + `<span style="font-size:0.5em;font-family:'Inter',sans-serif;font-weight:600;opacity:0.7;">${i===0?'FRONT':i===projQueue.length-1?'REAR':''}</span>`;
-            track.appendChild(d);
-        });
-    }
+        
+        track.innerHTML = '';
 
-    function projLog(id, msg) {
-        const log = document.getElementById(id);
-        if (!log) return;
-        const d = document.createElement('div');
-        d.style.cssText = 'border-left:2px solid #3b82f6;padding-left:6px;margin-bottom:3px;';
-        d.textContent = msg;
-        log.prepend(d);
+        for (let i = 0; i < QUEUE_LIMIT; i++) {
+            const slotWrapper = document.createElement('div');
+            slotWrapper.className = 'flex flex-col items-center gap-1 flex-shrink-0';
+            
+            const idxLabel = document.createElement('div');
+            idxLabel.className = 'font-mono text-[10px] text-slate-400 dark:text-slate-500';
+            idxLabel.textContent = `[${i}]`;
+            
+            const box = document.createElement('div');
+            
+            const ptrLabel = document.createElement('div');
+            ptrLabel.className = 'text-[9px] font-bold h-[12px] flex items-center justify-center';
+            
+            if (i < queueData.length) {
+                const val = queueData[i];
+                box.className = 'queue-item w-[68px] h-[60px] flex flex-col items-center justify-center font-bold font-mono text-lg rounded-lg border-2 ' + 
+                              (i === 0 ? 'bg-rose-500/10 dark:bg-rose-500/20 border-rose-500 text-rose-600 dark:text-rose-455' : 
+                               i === queueData.length - 1 ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-455' : 
+                               'bg-slate-100 dark:bg-slate-800 border-slate-350 dark:border-slate-700 text-slate-700 dark:text-slate-300');
+                box.textContent = val;
+                box.id = 'proj-queue-item-' + i;
+                
+                let ptrText = '';
+                if (i === 0 && i === queueData.length - 1) {
+                    ptrText = '<span class="text-rose-500 font-extrabold">F & R</span>';
+                } else if (i === 0) {
+                    ptrText = '<span class="text-rose-500">FRONT</span>';
+                } else if (i === queueData.length - 1) {
+                    ptrText = '<span class="text-emerald-500">REAR</span>';
+                }
+                ptrLabel.innerHTML = ptrText;
+            } else {
+                box.className = 'queue-item w-[68px] h-[60px] flex items-center justify-center font-mono text-xs text-slate-300 dark:text-slate-700 bg-slate-500/5 dark:bg-slate-400/5 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-lg select-none';
+                box.textContent = '-';
+            }
+            
+            slotWrapper.appendChild(idxLabel);
+            slotWrapper.appendChild(box);
+            slotWrapper.appendChild(ptrLabel);
+            track.appendChild(slotWrapper);
+        }
+
+        const enqBtn = document.getElementById('proj-queue-enq-btn');
+        const deqBtn = document.getElementById('proj-queue-deq-btn');
+        if (enqBtn) enqBtn.disabled = queueAnimating || queueData.length >= QUEUE_LIMIT;
+        if (deqBtn) deqBtn.disabled = queueAnimating || queueData.length === 0;
+
+        const sizeEl = document.getElementById('proj-queue-size-label');
+        const frontEl = document.getElementById('proj-queue-front-idx');
+        const rearEl = document.getElementById('proj-queue-rear-idx');
+        if (sizeEl) sizeEl.textContent = queueData.length;
+        if (frontEl) frontEl.textContent = queueData.length === 0 ? '-1' : '0';
+        if (rearEl) rearEl.textContent = queueData.length === 0 ? '-1' : (queueData.length - 1);
+
+        const mainLog = document.getElementById('queue-log');
+        const projLog = document.getElementById('proj-queue-log');
+        if (mainLog && projLog) {
+            projLog.innerHTML = mainLog.innerHTML;
+        }
     }
 
     function closeProjector() {
-        document.getElementById('projector-overlay').classList.remove('active');
-        projStack = [];
-        projQueue = [];
+        document.getElementById('projector-overlay').style.display = 'none';
+        currentProjector = null;
     }
 
-    function projFontChange(delta) {
-        projFontSize = Math.max(10, Math.min(40, projFontSize + delta));
-        document.getElementById('projector-content').style.fontSize = projFontSize + 'px';
-    }
-
-
-    /* ============================================================
+    function projFontChange(direction) {
+        projScale = Math.max(0.4, Math.min(3.0, projScale + direction * 0.15));
+        const wrapper = document.getElementById('projector-scale-wrapper');
+        if (wrapper) {
+            wrapper.style.transform = `scale(${projScale})`;
+        }
+    }    /* ============================================================
        QUIZ
     ============================================================ */
     const quizQuestions = [
