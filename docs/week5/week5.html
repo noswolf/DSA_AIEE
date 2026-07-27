@@ -261,7 +261,7 @@
                                 <button class="stack-op-btn peek" onclick="stackPeek()">
                                     <i class="fa-solid fa-eye"></i> Peek
                                 </button>
-                                <div class="stack-stat">Size: <strong id="stack-size-label">0</strong> / 8</div>
+                                <div class="stack-stat">Size: <strong id="stack-size-label">0</strong> / <span id="stack-limit-label">5</span></div>
                             </div>
                             <div class="stack-log" id="stack-log">
                                 <div class="stack-log-entry">Welcome to Stack simulation.</div>
@@ -576,8 +576,8 @@
                                             <i class="fa-solid fa-arrow-right-from-bracket"></i> Dequeue
                                         </button>
                                     </div>
-                                    <div style="font-size:12px;color:var(--text-muted);display:flex;flex-direction:column;gap:4px;">
-                                        <div>Size: <strong style="color:var(--text-primary);" id="queue-size-label">0</strong> / 8</div>
+                                    <div style="display:none;font-size:12px;color:var(--text-muted);flex-direction:column;gap:4px;">
+                                        <div>Size: <strong style="color:var(--text-primary);" id="queue-size-label">0</strong> / 12</div>
                                         <div>Front: <strong style="color:var(--text-primary);" id="queue-front-idx">-1</strong> | Rear: <strong style="color:var(--text-primary);" id="queue-rear-idx">-1</strong></div>
                                     </div>
                                 </div>
@@ -957,14 +957,25 @@
     </div><!-- /app-container -->
 
     <!-- ── Projector Overlay ── -->
-    <div class="sim-projector-overlay" id="projector-overlay">
+    <div class="sim-projector-overlay light-mode" id="projector-overlay">
         <div class="sim-projector-toolbar">
-            <button onclick="projFontChange(-2)">A−</button>
-            <button onclick="projFontChange(2)">A+</button>
-            <button onclick="closeProjector()"><i class="fa-solid fa-xmark"></i> Exit</button>
+            <div class="proj-toolbar-group">
+                <span class="proj-toolbar-label">Window</span>
+                <button class="proj-btn" onclick="projWindowChange(-1)" title="Smaller"><i class="fa-solid fa-compress"></i></button>
+                <button class="proj-btn" onclick="projWindowChange(1)" title="Bigger"><i class="fa-solid fa-expand"></i></button>
+            </div>
+            <!-- <div class="proj-toolbar-group">
+                <span class="proj-toolbar-label">Font</span>
+                <button class="proj-btn" onclick="projFontChange(-1)" title="Decrease font">A−</button>
+                <button class="proj-btn" onclick="projFontChange(1)" title="Increase font">A+</button>
+            </div> -->
+            <div class="proj-toolbar-title" id="projector-title">Simulation</div>
+            <button class="proj-btn proj-btn-theme" id="proj-theme-btn" onclick="toggleProjTheme()" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+            <button class="proj-btn proj-btn-close" onclick="closeProjector()"><i class="fa-solid fa-xmark"></i> Exit</button>
         </div>
-        <div class="sim-projector-title" id="projector-title">Simulation</div>
-        <div class="sim-projector-content" id="projector-content"></div>
+        <div class="sim-projector-content" id="projector-content">
+            <div id="projector-scale-wrapper"></div>
+        </div>
     </div>
 
     <script>
@@ -1029,8 +1040,10 @@
        STACK SIMULATION
     ============================================================ */
     let stackData = [];
-    const STACK_LIMIT = 8;
+    const STACK_LIMIT = 5;
+    const PROJ_STACK_LIMIT = 8;
     let stackAnimating = false;
+    let currentProjector = null;
 
     function stackLog(msg, type='') {
         const log = document.getElementById('stack-log');
@@ -1060,48 +1073,90 @@
             topLabel.style.opacity = '1';
             stackData.forEach((val, i) => {
                 const el = document.createElement('div');
-                el.className = 'stack-item' + (i === stackData.length - 1 ? ' stack-item-top' : '');
+                el.className = 'stack-item';
                 el.textContent = val;
                 el.id = 'stack-item-' + i;
                 container.appendChild(el);
             });
         }
         sizeLabel.textContent = stackData.length;
-        document.getElementById('stack-push-btn').disabled = stackAnimating || stackData.length >= STACK_LIMIT;
-        document.getElementById('stack-pop-btn').disabled = stackAnimating || stackData.length === 0;
+        
+        const limit = (currentProjector === 'stack') ? PROJ_STACK_LIMIT : STACK_LIMIT;
+        const limitLabel = document.getElementById('stack-limit-label');
+        if (limitLabel) limitLabel.textContent = limit;
+
+        const pushBtn = document.getElementById('stack-push-btn');
+        const popBtn  = document.getElementById('stack-pop-btn');
+        if (pushBtn) pushBtn.disabled = stackAnimating || stackData.length >= limit;
+        if (popBtn)  popBtn.disabled  = stackAnimating || stackData.length === 0;
     }
 
     function stackPush() {
-        if (stackData.length >= STACK_LIMIT) { stackLog('Error: Stack Overflow', 'error'); return; }
+        const limit = (currentProjector === 'stack') ? PROJ_STACK_LIMIT : STACK_LIMIT;
+        if (stackData.length >= limit) { stackLog('Error: Stack Overflow', 'error'); return; }
         const val = Math.floor(Math.random() * 99) + 1;
         stackData.push(val);
         renderStack();
+        // Add the one-time push animation class only on the newly pushed top element
+        const newTopEl = document.getElementById('stack-item-' + (stackData.length - 1));
+        if (newTopEl) {
+            newTopEl.classList.add('stack-item-just-pushed');
+            newTopEl.addEventListener('animationend', () => newTopEl.classList.remove('stack-item-just-pushed'), { once: true });
+        }
+        if (currentProjector === 'stack') {
+            renderProjectorStack();
+        }
         stackLog(`PUSH: Added ${val} to the Top.`);
     }
 
     function stackPop() {
         if (stackData.length === 0) { stackLog('Error: Stack Underflow', 'error'); return; }
-        const topEl = document.getElementById('stack-item-' + (stackData.length - 1));
+        const isProj = currentProjector === 'stack';
+        const itemId = isProj ? 'proj-stack-item-' : 'stack-item-';
+        const topEl = document.getElementById(itemId + (stackData.length - 1));
         const val = stackData[stackData.length - 1];
-        stackLog(`POP: Removed ${val} from the Top.`);
+        stackLog(`POP: Removed ${val} from the Top.`, 'pop');
+
+        // Disable buttons during animation
+        stackAnimating = true;
+        const pushBtn = document.getElementById('stack-push-btn');
+        const popBtn  = document.getElementById('stack-pop-btn');
+        const projPushBtn = document.getElementById('proj-stack-push-btn');
+        const projPopBtn  = document.getElementById('proj-stack-pop-btn');
+        const projPeekBtn = document.getElementById('proj-stack-peek-btn');
+        if (pushBtn) pushBtn.disabled = true;
+        if (popBtn)  popBtn.disabled  = true;
+        if (projPushBtn) projPushBtn.disabled = true;
+        if (projPopBtn)  projPopBtn.disabled  = true;
+        if (projPeekBtn) projPeekBtn.disabled = true;
+
         if (topEl) {
-            stackAnimating = true;
             topEl.classList.add('pop-exit');
-            document.getElementById('stack-push-btn').disabled = true;
-            document.getElementById('stack-pop-btn').disabled = true;
             setTimeout(() => {
                 stackData.pop();
                 stackAnimating = false;
                 renderStack();
-            }, 300);
+                if (isProj) renderProjectorStack();
+            }, 600);
         } else {
             stackData.pop();
+            stackAnimating = false;
             renderStack();
+            if (isProj) renderProjectorStack();
         }
     }
 
     function stackPeek() {
         if (stackData.length === 0) { stackLog('PEEK: Stack is empty.', 'error'); return; }
+        const isProj = currentProjector === 'stack';
+        const itemId = isProj ? 'proj-stack-item-' : 'stack-item-';
+        const topEl = document.getElementById(itemId + (stackData.length - 1));
+        if (topEl) {
+            topEl.classList.remove('peek-highlight');
+            void topEl.offsetWidth;
+            topEl.classList.add('peek-highlight');
+            setTimeout(() => topEl.classList.remove('peek-highlight'), 1200);
+        }
         stackLog(`PEEK: Top value is ${stackData[stackData.length - 1]}.`, 'peek');
     }
 
@@ -1112,7 +1167,7 @@
        QUEUE SIMULATION
     ============================================================ */
     let queueData = [];
-    const QUEUE_LIMIT = 7;
+    const QUEUE_LIMIT = 12;
     let queueAnimating = false;
 
     function queueLog(msg, type='') {
@@ -1127,69 +1182,85 @@
     function renderQueue() {
         const track = document.getElementById('queue-track');
         if (!track) return;
+        // Preserve the arrows inside the track
+        const arrowLeft = track.querySelector('.queue-arrow-left');
+        const arrowRight = track.querySelector('.queue-arrow-right');
         track.innerHTML = '';
+        if (arrowLeft) track.appendChild(arrowLeft);
+        if (arrowRight) track.appendChild(arrowRight);
 
-        for (let i = 0; i < QUEUE_LIMIT; i++) {
-            const slotWrapper = document.createElement('div');
-            slotWrapper.className = 'flex flex-col items-center gap-1 flex-shrink-0';
-            
-            const idxLabel = document.createElement('div');
-            idxLabel.className = 'font-mono text-[10px] text-slate-400 dark:text-slate-500';
-            idxLabel.textContent = `[${i}]`;
-            
-            const box = document.createElement('div');
-            
-            const ptrLabel = document.createElement('div');
-            ptrLabel.className = 'text-[9px] font-bold h-[12px] flex items-center justify-center';
-            
-            if (i < queueData.length) {
-                const val = queueData[i];
-                box.className = 'queue-item w-[68px] h-[60px] flex flex-col items-center justify-center font-bold font-mono text-lg rounded-lg border-2 ' + 
-                              (i === 0 ? 'bg-rose-500/10 dark:bg-rose-500/20 border-rose-500 text-rose-600 dark:text-rose-455' : 
-                               i === queueData.length - 1 ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-455' : 
-                               'bg-slate-100 dark:bg-slate-800 border-slate-350 dark:border-slate-700 text-slate-700 dark:text-slate-300');
-                box.textContent = val;
-                box.id = 'queue-item-' + i;
-                
-                let ptrText = '';
-                if (i === 0 && i === queueData.length - 1) {
-                    ptrText = '<span class="text-rose-500 font-extrabold">F & R</span>';
-                } else if (i === 0) {
-                    ptrText = '<span class="text-rose-500">FRONT</span>';
-                } else if (i === queueData.length - 1) {
-                    ptrText = '<span class="text-emerald-500">REAR</span>';
+        if (queueData.length === 0) {
+            const emptySpan = document.createElement('span');
+            emptySpan.className = 'queue-empty-label';
+            emptySpan.id = 'queue-empty-label';
+            emptySpan.textContent = 'Empty Queue';
+            track.appendChild(emptySpan);
+        } else {
+            for (let i = 0; i < QUEUE_LIMIT; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'queue-slot';
+
+                const box = document.createElement('div');
+
+                if (i < queueData.length) {
+                    // Index label above the card — only for filled slots
+                    const idxLabel = document.createElement('div');
+                    idxLabel.style.cssText = 'font-size:10px;font-family:Fira Code,monospace;font-weight:600;color:var(--text-muted);text-align:center;margin-bottom:2px;height:14px;';
+                    idxLabel.textContent = `[${i}]`;
+                    slot.appendChild(idxLabel);
+
+                    box.className = 'queue-item';
+                    box.id = 'queue-item-' + i;
+
+                    const valSpan = document.createElement('span');
+                    valSpan.textContent = queueData[i];
+
+                    const labelSpan = document.createElement('span');
+                    labelSpan.style.cssText = 'font-size:8px;font-family:Inter,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;';
+
+                    if (i === 0 && i === queueData.length - 1) {
+                        labelSpan.textContent = 'F & R';
+                        labelSpan.style.color = '#a78bfa';
+                    } else if (i === 0) {
+                        labelSpan.textContent = 'FRONT';
+                        labelSpan.style.color = '#f87171';
+                    } else if (i === queueData.length - 1) {
+                        labelSpan.textContent = 'REAR';
+                        labelSpan.style.color = 'var(--accent-green)';
+                    } else {
+                        labelSpan.style.display = 'none';
+                    }
+
+                    box.appendChild(valSpan);
+                    box.appendChild(labelSpan);
+                } else {
+                    // Empty slot — no index label, just a spacer for alignment
+                    const spacer = document.createElement('div');
+                    spacer.style.cssText = 'height:14px;margin-bottom:2px;';
+                    slot.appendChild(spacer);
+
+                    box.className = 'queue-item slot-empty';
+                    box.textContent = '';
                 }
-                ptrLabel.innerHTML = ptrText;
-            } else {
-                box.className = 'queue-item w-[68px] h-[60px] flex items-center justify-center font-mono text-xs text-slate-300 dark:text-slate-700 bg-slate-500/5 dark:bg-slate-400/5 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-lg select-none';
-                box.textContent = '-';
+
+                slot.appendChild(box);
+                track.appendChild(slot);
             }
-            
-            slotWrapper.appendChild(idxLabel);
-            slotWrapper.appendChild(box);
-            slotWrapper.appendChild(ptrLabel);
-            track.appendChild(slotWrapper);
         }
 
         document.getElementById('queue-enq-btn').disabled = queueAnimating || queueData.length >= QUEUE_LIMIT;
         document.getElementById('queue-deq-btn').disabled = queueAnimating || queueData.length === 0;
 
-        // Update stats labels
         const sizeEl = document.getElementById('queue-size-label');
         const frontEl = document.getElementById('queue-front-idx');
         const rearEl = document.getElementById('queue-rear-idx');
         if (sizeEl) sizeEl.textContent = queueData.length;
-        
-        // Progress bar sync
-        const progBar = document.getElementById('queue-progress-bar');
-        if (progBar) {
-            progBar.style.width = (queueData.length / QUEUE_LIMIT * 100) + '%';
-        }
-
         if (frontEl) frontEl.textContent = queueData.length === 0 ? '-1' : '0';
         if (rearEl) rearEl.textContent = queueData.length === 0 ? '-1' : (queueData.length - 1);
 
-        // Render to projector if active
+        const progBar = document.getElementById('queue-progress-bar');
+        if (progBar) progBar.style.width = (queueData.length / QUEUE_LIMIT * 100) + '%';
+
         if (typeof renderProjectorQueue === 'function') {
             renderProjectorQueue();
         }
@@ -1199,68 +1270,48 @@
         if (queueData.length >= QUEUE_LIMIT) { queueLog('Error: Queue is full!', 'error'); return; }
         const val = Math.floor(Math.random() * 99) + 1;
         queueData.push(val);
-        queueLog(`ENQUEUE: Added ${val} to the Rear.`);
+        queueLog(`ENQUEUE: Added ${val} to the Rear.`, 'enqueue');
         renderQueue();
         
-        // animate last item
-        const animateEnqueueItem = (id) => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.classList.add('enqueue-enter');
-                el.addEventListener('animationend', () => el.classList.remove('enqueue-enter'), { once: true });
-            }
-        };
-        animateEnqueueItem('queue-item-' + (queueData.length - 1));
-        animateEnqueueItem('proj-queue-item-' + (queueData.length - 1));
+        const isProj = currentProjector === 'queue';
+        const newElId = (isProj ? 'proj-queue-item-' : 'queue-item-') + (queueData.length - 1);
+        const newEl = document.getElementById(newElId);
+        if (newEl) {
+            newEl.classList.add('enqueue-enter');
+            newEl.addEventListener('animationend', () => newEl.classList.remove('enqueue-enter'), { once: true });
+        }
     }
 
     function queueDequeue() {
         if (queueData.length === 0) { queueLog('Error: Queue Underflow!', 'error'); return; }
-        const frontEl = document.getElementById('queue-item-0');
-        const projFrontEl = document.getElementById('proj-queue-item-0');
+        const isProj = currentProjector === 'queue';
+        const frontEl = document.getElementById(isProj ? 'proj-queue-item-0' : 'queue-item-0');
         const val = queueData[0];
-        queueLog(`DEQUEUE: Removed ${val} from the Front.`);
-        
+        queueLog(`DEQUEUE: Removed ${val} from the Front.`, 'dequeue');
+
         queueAnimating = true;
-        document.getElementById('queue-enq-btn').disabled = true;
-        document.getElementById('queue-deq-btn').disabled = true;
+        const enqBtn = document.getElementById('queue-enq-btn');
+        const deqBtn = document.getElementById('queue-deq-btn');
         const projEnqBtn = document.getElementById('proj-queue-enq-btn');
         const projDeqBtn = document.getElementById('proj-queue-deq-btn');
+        
+        if (enqBtn) enqBtn.disabled = true;
+        if (deqBtn) deqBtn.disabled = true;
         if (projEnqBtn) projEnqBtn.disabled = true;
         if (projDeqBtn) projDeqBtn.disabled = true;
 
-        const applyRedHighlight = (el) => {
-            if (!el) return;
-            el.style.transition = 'all 0.2s';
-            el.style.backgroundColor = 'rgba(239, 68, 68, 0.4)';
-            el.style.borderColor = '#ef4444';
-            el.style.color = '#ef4444';
-            el.style.boxShadow = '0 0 12px rgba(239, 68, 68, 0.6)';
-        };
-
-        applyRedHighlight(frontEl);
-        applyRedHighlight(projFrontEl);
-
-        setTimeout(() => {
-            if (frontEl) frontEl.classList.add('dequeue-exit');
-            if (projFrontEl) projFrontEl.classList.add('dequeue-exit');
-            
+        if (frontEl) {
+            frontEl.classList.add('dequeue-exit');
             setTimeout(() => {
                 queueData.shift();
                 queueAnimating = false;
                 renderQueue();
-                
-                // animate remaining items shifting left
-                const applyShiftAnimation = (selector) => {
-                    Array.from(document.querySelectorAll(selector)).forEach(el => {
-                        el.classList.add('shift-left');
-                        el.addEventListener('animationend', () => el.classList.remove('shift-left'), { once: true });
-                    });
-                };
-                applyShiftAnimation('.queue-item');
-                applyShiftAnimation('#proj-queue-track .queue-item');
-            }, 350);
-        }, 500);
+            }, 600);
+        } else {
+            queueData.shift();
+            queueAnimating = false;
+            renderQueue();
+        }
     }
 
     renderQueue();
@@ -1269,138 +1320,119 @@
     /* ============================================================
        PROJECTOR MODE
     ============================================================ */
-    let projScale = 1.0;
-    let currentProjector = null;
+    let projScale = 1.0;     // font/content scale
+    let projWindowScale = 1.0; // overall window scale
+    let projThemeLight = true;  // default: light theme
 
     function openProjector(type) {
         currentProjector = type;
         const overlay = document.getElementById('projector-overlay');
-        const content = document.getElementById('projector-content');
         const title = document.getElementById('projector-title');
         
         overlay.style.display = 'flex';
         projScale = 1.0;
-        const scaleWrapper = document.getElementById('projector-scale-wrapper');
-        if (scaleWrapper) {
-            scaleWrapper.style.transform = `scale(${projScale})`;
-        }
+        projWindowScale = 1.0;
+        // Apply default light theme
+        projThemeLight = true;
+        overlay.classList.add('light-mode');
+        overlay.classList.remove('dark-mode');
+        const themeBtn = document.getElementById('proj-theme-btn');
+        if (themeBtn) themeBtn.querySelector('i').className = 'fa-solid fa-moon';
+        applyProjScales();
 
+        const wrapper = document.getElementById('projector-scale-wrapper');
         if (type === 'stack') {
             title.textContent = 'Stack (LIFO) — Interactive Simulation';
-            content.innerHTML = buildStackProjector();
+            wrapper.innerHTML = buildStackProjector();
             renderProjectorStack();
         } else {
             title.textContent = 'Queue (FIFO) — Interactive Simulation';
-            content.innerHTML = buildQueueProjector();
+            wrapper.innerHTML = buildQueueProjector();
             renderProjectorQueue();
         }
     }
 
+    function applyProjScales() {
+        const wrapper = document.getElementById('projector-scale-wrapper');
+        if (wrapper) {
+            wrapper.style.transform = `scale(${projWindowScale})`;
+            wrapper.style.fontSize = (projScale * 16) + 'px';
+        }
+    }
+
+    function projWindowChange(delta) {
+        projWindowScale += delta * 0.1;
+        if (projWindowScale < 0.5) projWindowScale = 0.5;
+        if (projWindowScale > 2.0) projWindowScale = 2.0;
+        applyProjScales();
+    }
+
+    function projFontChange(delta) {
+        projScale += delta * 0.1;
+        if (projScale < 0.5) projScale = 0.5;
+        if (projScale > 2.0) projScale = 2.0;
+        applyProjScales();
+    }
+
+    function toggleProjTheme() {
+        const overlay = document.getElementById('projector-overlay');
+        projThemeLight = !projThemeLight;
+        overlay.classList.toggle('light-mode', projThemeLight);
+        overlay.classList.toggle('dark-mode', !projThemeLight);
+        const btn = document.getElementById('proj-theme-btn');
+        if (btn) btn.querySelector('i').className = projThemeLight ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    }
+
     function buildStackProjector() {
         return `
-        <div class="flex flex-col md:flex-row gap-8 items-center justify-center p-8 bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl mx-auto shadow-2xl">
-            <!-- Visualizer Tube Column -->
-            <div class="flex flex-col items-center justify-center p-8 bg-slate-950/40 border border-slate-800 rounded-xl min-h-[400px] w-[320px] relative">
-                <div class="absolute top-4 left-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Stack View</div>
-                
-                <div class="flex flex-col items-center w-full max-w-[280px] mt-4" id="proj-stack-elements" style="min-height: 380px;">
-                    <!-- 8 slots will be rendered dynamically -->
-                </div>
+        <div style="display:flex;gap:32px;align-items:flex-start;justify-content:center;padding:32px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:16px;min-width:700px;">
+            <!-- Visualizer Can -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">▲ TOP</div>
+                <div id="proj-stack-elements" style="display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:340px;width:200px;justify-content:flex-end;"></div>
+                <div style="width:120px;height:4px;background:var(--accent-blue);border-radius:2px;"></div>
+                <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">BASE</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">Size: <strong style="color:var(--text-primary);" id="proj-stack-size-label">0</strong> / ${PROJ_STACK_LIMIT}</div>
             </div>
-            
-            <!-- Controls Column -->
-            <div class="w-64 flex flex-col justify-between gap-6 p-6 bg-slate-950/40 border border-slate-800 rounded-xl shadow-sm">
-                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Operations</div>
-                <div class="flex flex-col gap-4">
-                    <button class="w-full px-4 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer" id="proj-stack-push-btn" onclick="stackPush()">
-                        <i class="fa-solid fa-plus-circle text-lg"></i> Push
-                    </button>
-                    <button class="w-full px-4 py-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer" id="proj-stack-pop-btn" onclick="stackPop()">
-                        <i class="fa-solid fa-minus-circle text-lg"></i> Pop
-                    </button>
-                </div>
-                
-                <div class="border-t border-slate-800 pt-4">
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-slate-400">Current Size:</span>
-                        <span class="font-bold text-lg text-slate-300"><span id="proj-stack-size-label">0</span> / 8</span>
-                    </div>
-                </div>
+            <!-- Controls -->
+            <div style="display:flex;flex-direction:column;gap:12px;width:180px;padding:24px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;">
+                <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Operations</div>
+                <button id="proj-stack-push-btn" onclick="stackPush()" style="width:100%;padding:14px;background:#3b82f6;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;"><i class="fa-solid fa-arrow-down"></i> Push</button>
+                <button id="proj-stack-pop-btn" onclick="stackPop()" style="width:100%;padding:14px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;"><i class="fa-solid fa-arrow-up"></i> Pop</button>
+                <button id="proj-stack-peek-btn" onclick="stackPeek()" style="width:100%;padding:14px;background:#facc15;color:#1e293b;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;"><i class="fa-solid fa-eye"></i> Peek</button>
             </div>
-
-            <!-- Logs Column -->
-            <div class="w-72 flex flex-col bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs shadow-xl relative min-h-[300px]">
-                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-800 pb-2 mb-2">
-                    <span>Console Log</span>
-                </div>
-                <div class="flex-1 overflow-y-auto space-y-1.5 flex flex-col pr-1 max-h-[320px]" id="proj-stack-log">
-                </div>
+            <!-- Log -->
+            <div style="width:260px;background:#020617;border:1px solid #1e293b;border-radius:12px;padding:16px;font-family:'Fira Code',monospace;font-size:12px;color:#94a3b8;min-height:300px;overflow-y:auto;">
+                <div style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #1e293b;padding-bottom:8px;margin-bottom:8px;">Console Log</div>
+                <div id="proj-stack-log" style="display:flex;flex-direction:column;gap:4px;"></div>
             </div>
         </div>`;
     }
 
     function buildQueueProjector() {
         return `
-        <div class="flex flex-col gap-6 p-8 bg-slate-900 border border-slate-800 rounded-2xl max-w-5xl mx-auto shadow-2xl w-full">
-            <!-- Visualization Track Panel -->
-            <div class="w-full flex flex-col items-center justify-center p-6 bg-slate-950/40 border border-slate-800 rounded-xl relative min-h-[180px]">
-                <div class="absolute top-4 left-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Queue Track View</div>
-                
-                <div class="w-full flex flex-col gap-4 mt-6">
-                    <!-- Flow Badges (Front / Rear) -->
-                    <div class="flex justify-between items-center w-full px-4 text-xs font-bold">
-                        <span class="text-rose-400 bg-rose-950/30 px-3 py-1 rounded-full border border-rose-900 shadow-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-arrow-left animate-pulse"></i> DEQUEUE (Front)
-                        </span>
-                        <span class="text-emerald-400 bg-emerald-950/30 px-3 py-1 rounded-full border border-emerald-900 shadow-sm flex items-center gap-1.5">
-                            ENQUEUE (Rear) <i class="fa-solid fa-arrow-right animate-pulse"></i>
-                        </span>
-                    </div>
-                    
-                    <!-- Queue Track -->
-                    <div class="queue-track w-full min-h-[100px] h-[100px] border-2 border-dashed border-emerald-500/25 bg-slate-950/40 rounded-2xl flex items-center justify-start gap-4 p-4 relative overflow-x-auto shadow-inner" id="proj-queue-track">
-                        <div class="queue-arrow-left"></div>
-                        <div class="queue-arrow-right"></div>
-                        <span class="text-slate-500 italic text-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" id="proj-queue-empty-label">Empty Queue</span>
-                    </div>
-                </div>
+        <div style="display:flex;flex-direction:column;gap:24px;padding:32px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:16px;min-width:800px;">
+            <!-- Labels row -->
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:12px;font-weight:700;color:var(--accent-red);background:var(--accent-red-glow);padding:4px 12px;border-radius:20px;border:1px solid var(--accent-red);">← DEQUEUE (Front)</span>
+                <span style="font-size:12px;font-weight:700;color:var(--text-muted);">Queue</span>
+                <span style="font-size:12px;font-weight:700;color:var(--accent-green);background:var(--accent-green-glow);padding:4px 12px;border-radius:20px;border:1px solid var(--accent-green);">ENQUEUE (Rear) →</span>
             </div>
-            
-            <!-- Controls and Logs Row -->
-            <div class="flex flex-col md:flex-row gap-6 items-stretch w-full justify-between">
-                <!-- Controls Panel -->
-                <div class="flex-1 flex flex-col md:flex-row justify-between gap-4 p-6 bg-slate-950/40 border border-slate-800 rounded-xl shadow-sm">
-                    <div class="flex-1 flex flex-col justify-between gap-4">
-                        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Operations</div>
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <button class="flex-1 px-4 py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer" id="proj-queue-enq-btn" onclick="queueEnqueue()">
-                                <i class="fa-solid fa-arrow-right-to-bracket text-lg"></i> Enqueue
-                            </button>
-                            <button class="flex-1 px-4 py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer" id="proj-queue-deq-btn" onclick="queueDequeue()">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i> Dequeue
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="w-full md:w-44 border-t md:border-t-0 md:border-l border-slate-800 pt-4 md:pt-0 md:pl-4 flex flex-col justify-center">
-                        <div class="flex items-center justify-between text-xs mb-1.5">
-                            <span class="text-slate-400">Current Size:</span>
-                            <span class="font-bold text-slate-300"><span id="proj-queue-size-label">0</span> / 7</span>
-                        </div>
-                        <div class="flex items-center justify-between text-xs text-slate-400">
-                            <span>Front index: <strong class="text-slate-300" id="proj-queue-front-idx">-1</strong></span>
-                            <span>Rear index: <strong class="text-slate-300" id="proj-queue-rear-idx">-1</strong></span>
-                        </div>
-                    </div>
+            <!-- Queue track -->
+            <div id="proj-queue-track" style="display:flex;align-items:center;gap:4px;min-height:90px;padding:12px 20px;background:var(--accent-green-glow);border-radius:10px;border:1.5px dashed rgba(16,185,129,0.3);width:100%;box-sizing:border-box;overflow:hidden;position:relative;">
+                <div class="queue-arrow-left"></div>
+                <div class="queue-arrow-right"></div>
+                <span id="proj-queue-empty-label" style="color:var(--text-muted);font-style:italic;font-size:13px;">Empty Queue</span>
+            </div>
+            <!-- Controls and log row -->
+            <div style="display:flex;gap:24px;align-items:center;justify-content:center;">
+                <div style="display:flex;gap:12px;">
+                    <button id="proj-queue-enq-btn" onclick="queueEnqueue()" style="padding:14px 28px;background:#10b981;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enqueue</button>
+                    <button id="proj-queue-deq-btn" onclick="queueDequeue()" style="padding:14px 28px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.2s;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Dequeue</button>
                 </div>
-                
-                <!-- Logs Panel -->
-                <div class="w-full md:w-80 flex flex-col bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs shadow-xl relative min-h-[160px]">
-                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-800 pb-2 mb-2">
-                        <span>Console Log</span>
-                    </div>
-                    <div class="flex-1 overflow-y-auto space-y-1.5 flex flex-col pr-1 max-h-[180px]" id="proj-queue-log">
-                    </div>
+                <div style="width:300px;background:#020617;border:1px solid #1e293b;border-radius:12px;padding:12px;font-family:'Fira Code',monospace;font-size:11px;color:#94a3b8;height:120px;overflow-y:auto;">
+                    <div style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #1e293b;padding-bottom:6px;margin-bottom:6px;">Console Log</div>
+                    <div id="proj-queue-log" style="display:flex;flex-direction:column;gap:4px;"></div>
                 </div>
             </div>
         </div>`;
@@ -1409,50 +1441,33 @@
     function renderProjectorStack() {
         const container = document.getElementById('proj-stack-elements');
         if (!container) return;
-        
         container.innerHTML = '';
 
-        for (let i = STACK_LIMIT - 1; i >= 0; i--) {
-            const slot = document.createElement('div');
-            slot.className = 'flex items-center justify-center gap-3 w-full';
-            
-            const idxLabel = document.createElement('div');
-            idxLabel.className = 'w-16 text-right font-mono text-xs text-slate-400 dark:text-slate-500';
-            idxLabel.textContent = `arr[${i}]`;
-            
-            const box = document.createElement('div');
-            
-            const topPtr = document.createElement('div');
-            topPtr.className = 'w-16 font-bold text-xs flex items-center gap-1 text-left min-h-[20px]';
-            
+        // Render items bottom-to-top; flex-direction:column-reverse shows index 0 at bottom
+        for (let i = 0; i < PROJ_STACK_LIMIT; i++) {
+            const el = document.createElement('div');
             if (i < stackData.length) {
-                const val = stackData[i];
-                box.className = 'stack-item w-[140px] h-[40px] flex items-center justify-center font-bold font-mono text-lg rounded-lg border-2 ' + 
-                              (i === stackData.length - 1 ? 'stack-item-top bg-blue-500 border-blue-500 text-white shadow-md' : 'bg-blue-500/10 dark:bg-blue-500/20 border-blue-400 text-blue-600 dark:text-blue-400');
-                box.textContent = val;
-                box.id = 'proj-stack-item-' + i;
-                
+                el.id = 'proj-stack-item-' + i;
+                el.className = 'proj-stack-item';
+                el.textContent = stackData[i];
                 if (i === stackData.length - 1) {
-                    topPtr.innerHTML = '<span class="text-blue-400 animate-pulse">◀ TOP</span>';
+                    el.classList.add('proj-stack-item-top');
                 }
             } else {
-                box.className = 'w-[140px] h-[40px] flex items-center justify-center font-mono text-xs text-slate-500 bg-slate-800/10 border-2 border-dashed border-slate-700 rounded-lg select-none';
-                box.textContent = '-';
+                el.className = 'proj-stack-item proj-stack-slot-empty';
             }
-            
-            slot.appendChild(idxLabel);
-            slot.appendChild(box);
-            slot.appendChild(topPtr);
-            container.appendChild(slot);
+            container.appendChild(el);
         }
 
         const sizeLabel = document.getElementById('proj-stack-size-label');
         if (sizeLabel) sizeLabel.textContent = stackData.length;
-        
+
         const pushBtn = document.getElementById('proj-stack-push-btn');
-        const popBtn = document.getElementById('proj-stack-pop-btn');
-        if (pushBtn) pushBtn.disabled = stackAnimating || stackData.length >= STACK_LIMIT;
-        if (popBtn) popBtn.disabled = stackAnimating || stackData.length === 0;
+        const popBtn  = document.getElementById('proj-stack-pop-btn');
+        const peekBtn = document.getElementById('proj-stack-peek-btn');
+        if (pushBtn) pushBtn.disabled = stackAnimating || stackData.length >= PROJ_STACK_LIMIT;
+        if (popBtn)  popBtn.disabled  = stackAnimating || stackData.length === 0;
+        if (peekBtn) peekBtn.disabled = stackAnimating || stackData.length === 0;
 
         const mainLog = document.getElementById('stack-log');
         const projLog = document.getElementById('proj-stack-log');
@@ -1464,62 +1479,72 @@
     function renderProjectorQueue() {
         const track = document.getElementById('proj-queue-track');
         if (!track) return;
-        
-        track.innerHTML = '';
 
-        for (let i = 0; i < QUEUE_LIMIT; i++) {
-            const slotWrapper = document.createElement('div');
-            slotWrapper.className = 'flex flex-col items-center gap-1 flex-shrink-0';
-            
-            const idxLabel = document.createElement('div');
-            idxLabel.className = 'font-mono text-[10px] text-slate-400 dark:text-slate-500';
-            idxLabel.textContent = `[${i}]`;
-            
-            const box = document.createElement('div');
-            
-            const ptrLabel = document.createElement('div');
-            ptrLabel.className = 'text-[9px] font-bold h-[12px] flex items-center justify-center';
-            
-            if (i < queueData.length) {
-                const val = queueData[i];
-                box.className = 'queue-item w-[68px] h-[60px] flex flex-col items-center justify-center font-bold font-mono text-lg rounded-lg border-2 ' + 
-                              (i === 0 ? 'bg-rose-500/10 dark:bg-rose-500/20 border-rose-500 text-rose-600 dark:text-rose-455' : 
-                               i === queueData.length - 1 ? 'bg-emerald-500/10 dark:bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-455' : 
-                               'bg-slate-100 dark:bg-slate-800 border-slate-350 dark:border-slate-700 text-slate-700 dark:text-slate-300');
-                box.textContent = val;
-                box.id = 'proj-queue-item-' + i;
-                
-                let ptrText = '';
-                if (i === 0 && i === queueData.length - 1) {
-                    ptrText = '<span class="text-rose-500 font-extrabold">F & R</span>';
-                } else if (i === 0) {
-                    ptrText = '<span class="text-rose-500">FRONT</span>';
-                } else if (i === queueData.length - 1) {
-                    ptrText = '<span class="text-emerald-500">REAR</span>';
+        const arrowLeft = track.querySelector('.queue-arrow-left');
+        const arrowRight = track.querySelector('.queue-arrow-right');
+        track.innerHTML = '';
+        if (arrowLeft) track.appendChild(arrowLeft);
+        if (arrowRight) track.appendChild(arrowRight);
+
+        if (queueData.length === 0) {
+            const emptySpan = document.createElement('span');
+            emptySpan.id = 'proj-queue-empty-label';
+            emptySpan.style.cssText = 'color:#475569;font-style:italic;font-size:13px;';
+            emptySpan.textContent = 'Empty Queue';
+            track.appendChild(emptySpan);
+        } else {
+            for (let i = 0; i < QUEUE_LIMIT; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'queue-slot';
+
+                const box = document.createElement('div');
+
+                if (i < queueData.length) {
+                    const idxLabel = document.createElement('div');
+                    idxLabel.style.cssText = 'font-size:10px;font-family:Fira Code,monospace;font-weight:600;color:#64748b;text-align:center;margin-bottom:2px;height:14px;';
+                    idxLabel.textContent = `[${i}]`;
+                    slot.appendChild(idxLabel);
+
+                    box.className = 'queue-item';
+                    box.id = 'proj-queue-item-' + i;
+
+                    const valSpan = document.createElement('span');
+                    valSpan.textContent = queueData[i];
+
+                    const labelSpan = document.createElement('span');
+                    labelSpan.style.cssText = 'font-size:8px;font-family:Inter,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-top:2px;';
+
+                    if (i === 0 && i === queueData.length - 1) {
+                        labelSpan.textContent = 'F & R';
+                        labelSpan.style.color = '#a78bfa';
+                    } else if (i === 0) {
+                        labelSpan.textContent = 'FRONT';
+                        labelSpan.style.color = '#f87171';
+                    } else if (i === queueData.length - 1) {
+                        labelSpan.textContent = 'REAR';
+                        labelSpan.style.color = '#10b981';
+                    } else {
+                        labelSpan.style.display = 'none';
+                    }
+
+                    box.appendChild(valSpan);
+                    box.appendChild(labelSpan);
+                } else {
+                    const spacer = document.createElement('div');
+                    spacer.style.cssText = 'height:14px;margin-bottom:2px;';
+                    slot.appendChild(spacer);
+                    box.className = 'queue-item slot-empty';
                 }
-                ptrLabel.innerHTML = ptrText;
-            } else {
-                box.className = 'queue-item w-[68px] h-[60px] flex items-center justify-center font-mono text-xs text-slate-300 dark:text-slate-700 bg-slate-500/5 dark:bg-slate-400/5 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-lg select-none';
-                box.textContent = '-';
+
+                slot.appendChild(box);
+                track.appendChild(slot);
             }
-            
-            slotWrapper.appendChild(idxLabel);
-            slotWrapper.appendChild(box);
-            slotWrapper.appendChild(ptrLabel);
-            track.appendChild(slotWrapper);
         }
 
         const enqBtn = document.getElementById('proj-queue-enq-btn');
         const deqBtn = document.getElementById('proj-queue-deq-btn');
         if (enqBtn) enqBtn.disabled = queueAnimating || queueData.length >= QUEUE_LIMIT;
         if (deqBtn) deqBtn.disabled = queueAnimating || queueData.length === 0;
-
-        const sizeEl = document.getElementById('proj-queue-size-label');
-        const frontEl = document.getElementById('proj-queue-front-idx');
-        const rearEl = document.getElementById('proj-queue-rear-idx');
-        if (sizeEl) sizeEl.textContent = queueData.length;
-        if (frontEl) frontEl.textContent = queueData.length === 0 ? '-1' : '0';
-        if (rearEl) rearEl.textContent = queueData.length === 0 ? '-1' : (queueData.length - 1);
 
         const mainLog = document.getElementById('queue-log');
         const projLog = document.getElementById('proj-queue-log');
@@ -1531,14 +1556,21 @@
     function closeProjector() {
         document.getElementById('projector-overlay').style.display = 'none';
         currentProjector = null;
+        if (stackData.length > STACK_LIMIT) {
+            stackData = stackData.slice(0, STACK_LIMIT);
+            stackLog(`Returned from Projector Mode: Stack truncated to regular capacity of ${STACK_LIMIT}.`, 'info');
+        }
+        renderStack();
     }
 
     function projFontChange(direction) {
-        projScale = Math.max(0.4, Math.min(3.0, projScale + direction * 0.15));
-        const wrapper = document.getElementById('projector-scale-wrapper');
-        if (wrapper) {
-            wrapper.style.transform = `scale(${projScale})`;
-        }
+        projScale = Math.max(0.6, Math.min(2.5, projScale + direction * 0.1));
+        applyProjScales();
+    }
+
+    function projWindowChange(direction) {
+        projWindowScale = Math.max(0.5, Math.min(2.0, projWindowScale + direction * 0.1));
+        applyProjScales();
     }    /* ============================================================
        QUIZ
     ============================================================ */
