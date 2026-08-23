@@ -6623,6 +6623,30 @@ body.dark-mode .highlight-line,
     color: #ffffff !important;
 }
 
+/* BST Python code box (dark editor style) */
+.bst-code-container {
+    background: #090d16;
+    border-color: rgba(59, 130, 246, 0.25);
+    color: #d4d4d4;
+}
+
+.bst-code-container > div {
+    color: #93a1b5;
+}
+
+.bst-code-container .highlight-line span {
+    color: inherit !important;
+}
+
+.bst-code-container .py-kw { color: #c586c0; }
+.bst-code-container .py-fn { color: #dcdcaa; }
+.bst-code-container .py-str { color: #ce9178; }
+.bst-code-container .py-com { color: #6a9955; font-style: italic; }
+.bst-code-container .py-num { color: #b5cea8; }
+.bst-code-container .py-id { color: #9cdcfe; }
+.bst-code-container .py-op { color: #d4d4d4; }
+.bst-code-container .py-self { color: #4ec9b0; }
+
 /* Stepper Controls Bar */
 .stepper-control-bar {
     display: flex;
@@ -6689,6 +6713,99 @@ body.dark-mode .highlight-line,
     background: rgba(59, 130, 246, 0.12);
     color: var(--accent-blue);
     font-family: 'Fira Code', monospace;
+}
+
+/* Player Bar (below the graph) */
+.sim-player-bar {
+    background: var(--bg-card, #ffffff);
+    border: 1px solid var(--border-color, rgba(0,0,0,0.08));
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sim-player-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    min-height: 44px;
+}
+
+.sim-player-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.sim-player-title i {
+    color: #6366f1;
+}
+
+.sim-player-find {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.sim-player-find .sim-find-label {
+    font-size: 15px;
+}
+
+.sim-player-find .sim-find-select {
+    width: 170px;
+    padding: 10px 36px 10px 14px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.sim-player-find .sim-find-input {
+    width: 150px;
+    min-width: 130px;
+    padding: 10px 14px;
+    font-size: 15px;
+}
+
+.sim-player-find .sim-find-eq {
+    font-size: 16px;
+}
+
+.sim-player-progress {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(148, 163, 184, 0.25);
+    overflow: hidden;
+}
+
+.sim-player-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    transition: width 0.25s ease;
+}
+
+.sim-player-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.stepper-btn.play-big {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 14px;
 }
 
 /* Projector / Fullscreen Modal */
@@ -6789,8 +6906,9 @@ body.dark-mode .highlight-line,
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 20px 28px;
+    padding: 0 28px 20px;
     position: relative;
+    min-height: 0;
 }
 
 #projector-scale-wrapper {
@@ -6799,7 +6917,49 @@ body.dark-mode .highlight-line,
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sim-projector-overlay .card.glass {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 100%;
+}
+
+.sim-projector-overlay #projector-scale-wrapper {
+    height: 100%;
+}
+
+.sim-projector-overlay #projector-scale-wrapper > div {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.sim-projector-overlay .card.glass > .flex {
+    flex: 1;
+    min-height: 0;
+}
+
+.sim-projector-overlay .card.glass .grid {
+    min-height: 0;
+}
+
+.sim-projector-overlay .card.glass .grid > div {
+    min-height: 0;
+}
+
+.sim-projector-overlay .sim-panel {
+    min-height: 0;
 }
 
 @supports (zoom: 1) {
@@ -6858,15 +7018,16 @@ body.dark-mode .highlight-line,
     flex-shrink: 0;
 }
 
-.proj-transport-bar {
+.proj-top-strip {
+    position: sticky;
+    top: 0;
+    z-index: 40;
     display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin: 0 -28px 0;
+    padding: 10px 28px;
     background: var(--bg-card, #ffffff);
-    border: 1px solid var(--border-color, rgba(0,0,0,0.08));
-    border-radius: 12px;
-    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.08));
 }
 
 .proj-controls-toggle {
@@ -6874,33 +7035,56 @@ body.dark-mode .highlight-line,
 }
 
 .sim-projector-overlay .proj-controls-root {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: contents;
 }
 
-.sim-projector-overlay .proj-transport-bar {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    margin: -20px -28px 0;
-    padding: 10px 28px;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-radius: 0;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    background: var(--bg-card, #ffffff);
+.sim-projector-overlay.light-mode .sim-player-bar {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.1);
 }
 
-.sim-projector-overlay.light-mode .proj-transport-bar {
+.sim-projector-overlay.dark-mode .sim-player-bar {
+    background: rgba(15, 23, 42, 0.96);
+    border-color: rgba(255,255,255,0.08);
+}
+
+.sim-projector-overlay .sim-player-bar {
+    padding: 10px 14px;
+    gap: 8px;
+}
+
+.sim-projector-overlay .sim-player-top {
+    min-height: 40px;
+}
+
+.sim-projector-overlay .sim-player-find .sim-find-select {
+    width: 160px;
+    padding: 9px 34px 9px 12px;
+    font-size: 14px;
+}
+
+.sim-projector-overlay .sim-player-find .sim-find-input {
+    width: 140px;
+    min-width: 120px;
+    padding: 9px 12px;
+    font-size: 14px;
+}
+
+.sim-projector-overlay .sim-seq-bar {
+    padding: 8px 12px;
+}
+
+.sim-projector-overlay .stepper-btn.play-big {
+    width: 40px;
+    height: 40px;
+}
+
+.sim-projector-overlay.light-mode .proj-top-strip {
     background: #ffffff;
     border-bottom-color: rgba(0,0,0,0.1);
 }
 
-.sim-projector-overlay.dark-mode .proj-transport-bar {
+.sim-projector-overlay.dark-mode .proj-top-strip {
     background: rgba(15, 23, 42, 0.96);
     border-bottom-color: rgba(255,255,255,0.08);
 }
@@ -6920,10 +7104,10 @@ body.dark-mode .highlight-line,
 
 .sim-projector-overlay .proj-setup-section {
     position: fixed;
-    top: 56px;
+    top: 58px;
     left: 0;
     right: 0;
-    height: calc(100vh - 56px);
+    height: calc(100vh - 58px);
     width: 100%;
     transform: translateY(105%);
     visibility: hidden;
@@ -7189,6 +7373,59 @@ body.dark-mode .highlight-line,
 
 .sim-input::placeholder {
     color: var(--text-muted);
+}
+
+.sim-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--bg-secondary);
+}
+
+/* Find [dropdown] = [input] controls */
+.sim-find-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.sim-find-label i {
+    color: #6366f1;
+}
+
+.sim-find-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    flex: 0 0 auto;
+    width: 150px;
+    padding: 12px 38px 12px 16px;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 14px;
+}
+
+.sim-find-eq {
+    font-family: 'Fira Code', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.sim-find-input {
+    flex: 0 1 180px;
+    width: 180px;
+    min-width: 140px;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 10px;
 }
 
 .sim-input-bar-large {

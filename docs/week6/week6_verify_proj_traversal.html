@@ -995,7 +995,6 @@
             </div>
             <div class="proj-toolbar-title" id="projector-title">Simulation</div>
             <div class="proj-toolbar-right">
-                <button class="proj-btn" id="proj-fs-btn" onclick="toggleSimFullscreen()" title="Toggle Fullscreen"><i class="fa-solid fa-expand"></i> Fullscreen</button>
                 <button class="proj-btn proj-btn-theme" id="proj-theme-btn" onclick="toggleProjTheme()"><i class="fa-solid fa-sun"></i></button>
                 <button class="proj-btn proj-btn-close" onclick="closeSimProjector()"><i class="fa-solid fa-xmark"></i> Exit</button>
             </div>
@@ -1378,9 +1377,6 @@
     }
 
     function closeSimProjector() {
-        if (document.fullscreenElement) {
-            try { document.exitFullscreen(); } catch (e) {}
-        }
         if (projRoot) {
             projRoot.unmount();
             projRoot = null;
@@ -1392,44 +1388,6 @@
         });
         currentSimType = null;
     }
-
-    function toggleSimFullscreen() {
-        const overlay = document.getElementById('projector-overlay');
-        if (!document.fullscreenElement) {
-            if (overlay.requestFullscreen) {
-                overlay.requestFullscreen().catch(() => {});
-            } else if (overlay.webkitRequestFullscreen) {
-                overlay.webkitRequestFullscreen();
-            } else if (overlay.msRequestFullscreen) {
-                overlay.msRequestFullscreen();
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen().catch(() => {});
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-        }
-    }
-
-    document.addEventListener('fullscreenchange', () => {
-        const fsBtn = document.getElementById('proj-fs-btn');
-        if (fsBtn) {
-            const isFs = !!document.fullscreenElement;
-            fsBtn.innerHTML = isFs ? '<i class="fa-solid fa-compress"></i> Exit Fullscreen' : '<i class="fa-solid fa-expand"></i> Fullscreen';
-        }
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            const overlay = document.getElementById('projector-overlay');
-            if (overlay && overlay.style.display !== 'none') {
-                closeSimProjector();
-            }
-        }
-    });
 
     function applyProjZoom() {
         const overlay = document.getElementById('projector-overlay');
@@ -1947,7 +1905,7 @@
                 const treeBottomPadding = 12;
                 const maxLevelStep = projMode ? 44 : 38;
                 const treeLevelStep = Math.min(maxLevelStep, Math.floor((100 - treeRootY - treeBottomPadding) / maxTreeDepth));
-                const canvasHeight = projMode ? 'min(680px, max(260px, 58vh))' : '400px';
+                const canvasHeight = projMode ? 'min(760px, max(280px, calc(100vh - 320px)))' : '400px';
                 const algorithmOptions = [
                     { id: 'preorder', num: '01', title: 'Pre-order', desc: 'Root → Left → Right', icon: 'fa-diagram-project', group: 'dfs' },
                     { id: 'inorder', num: '02', title: 'In-order', desc: 'Left → Root → Right', icon: 'fa-sort-amount-down', group: 'dfs' },
@@ -2854,10 +2812,10 @@
             };
 
             const renderContent = () => {
-                const canvasHeight = projMode ? 'min(560px, max(260px, 46vh))' : '400px';
-                const codeHeight = projMode ? 'min(420px, max(180px, 36vh))' : '380px';
-                const stackHeight = projMode ? 'min(110px, max(80px, 10vh))' : '100px';
-                const logHeight = projMode ? 'min(140px, max(90px, 12vh))' : '130px';
+                const canvasHeight = projMode ? 'min(640px, max(300px, 52vh))' : '400px';
+                const codeHeight = projMode ? 'min(480px, max(220px, 42vh))' : '380px';
+                const stackHeight = projMode ? 'min(130px, max(90px, 12vh))' : '100px';
+                const logHeight = projMode ? 'min(160px, max(110px, 14vh))' : '130px';
 
                 const operationOptions = [
                     { id: 'search', num: '01', title: 'Search', icon: 'fa-magnifying-glass', group: 'search' },
@@ -2920,61 +2878,19 @@
 
                             {/* Operation Specific Input Bar */}
                             <div className="sim-input-bar sim-input-bar-large">
-                                {activeTab === 'search' && (
-                                    <div className="flex items-center gap-3 flex-wrap">
-                                        <input
-                                            type="number"
-                                            value={inputVal}
-                                            onChange={e => setInputVal(e.target.value)}
-                                            onKeyDown={e => { if (e.key === 'Enter' && inputVal) triggerSearch(inputVal, 'target'); }}
-                                            placeholder="Search Target..."
-                                            className="sim-input sim-input-large"
-                                            style={{borderColor:'rgba(99,102,241,0.5)'}}
-                                        />
-                                        <button onClick={() => triggerSearch(inputVal, 'target')} className="sim-btn sim-btn-large indigo" disabled={!inputVal}>
-                                            <i className="fa-solid fa-magnifying-glass"></i> Search Key
-                                        </button>
-                                        <button onClick={() => {
-                                            const keys = inOrderKeys;
-                                            const rKey = keys.length > 0 ? keys[Math.floor(Math.random() * keys.length)] : Math.floor(Math.random() * 90) + 10;
-                                            setInputVal(String(rKey));
-                                            triggerSearch(rKey, 'target');
-                                        }} className="sim-btn sim-btn-large">
-                                            <i className="fa-solid fa-dice"></i> Random Search
-                                        </button>
-                                        <button onClick={() => triggerSearch(null, 'min')} className="sim-btn sim-btn-large" style={{borderColor:'rgba(6,182,212,0.5)',color:'var(--accent-cyan)'}}>
-                                            <i className="fa-solid fa-arrow-down-short-wide"></i> Find Min
-                                        </button>
-                                        <button onClick={() => triggerSearch(null, 'max')} className="sim-btn sim-btn-large" style={{borderColor:'rgba(168,85,247,0.5)',color:'var(--accent-purple)'}}>
-                                            <i className="fa-solid fa-arrow-up-wide-short"></i> Find Max
-                                        </button>
-                                    </div>
-                                )}
-
                                 {activeTab === 'insert' && (
                                     <div className="flex items-center gap-3 flex-wrap">
                                         <input
                                             type="number"
                                             value={inputVal}
                                             onChange={e => setInputVal(e.target.value)}
-                                            onKeyDown={e => { if (e.key === 'Enter' && inputVal) triggerInsert(inputVal); }}
                                             placeholder="New Key..."
                                             className="sim-input sim-input-large"
                                             style={{borderColor:'rgba(16,185,129,0.5)'}}
                                         />
-                                        <button onClick={() => triggerInsert(inputVal)} className="sim-btn sim-btn-large green" disabled={!inputVal}>
-                                            <i className="fa-solid fa-plus"></i> Insert Key
-                                        </button>
-                                        <button onClick={() => {
-                                            const rKey = Math.floor(Math.random() * 90) + 10;
-                                            setInputVal(String(rKey));
-                                            triggerInsert(rKey);
-                                        }} className="sim-btn sim-btn-large">
-                                            <i className="fa-solid fa-dice"></i> Random Key +
-                                        </button>
-                                        <button onClick={() => { setTree(null); setSteps([]); setCurrentStepIndex(0); setIsPlaying(false); setInputVal(BST_DEFAULT_INPUT); setCurrentAction('Cleared Tree'); }} className="sim-btn sim-btn-large red" style={{background:'rgba(239,68,68,0.15)',color:'#fca5a5',borderColor:'rgba(239,68,68,0.4)'}}>
-                                            <i className="fa-solid fa-trash-can"></i> Clear Tree
-                                        </button>
+                                        <button onClick={() => triggerInsert(inputVal)} className="sim-btn sim-btn-large green" disabled={!inputVal}>Insert Key</button>
+                                        <button onClick={() => triggerInsert(Math.floor(Math.random() * 90) + 10)} className="sim-btn sim-btn-large">Random Key +</button>
+                                        <button onClick={() => { setTree(null); setSteps([]); setCurrentStepIndex(0); setIsPlaying(false); setInputVal(BST_DEFAULT_INPUT); setCurrentAction('Ready'); }} className="sim-btn sim-btn-large red" style={{background:'rgba(239,68,68,0.15)',color:'#fca5a5',borderColor:'rgba(239,68,68,0.4)'}}>Clear Tree</button>
                                     </div>
                                 )}
 
@@ -2984,41 +2900,11 @@
                                             type="number"
                                             value={inputVal}
                                             onChange={e => setInputVal(e.target.value)}
-                                            onKeyDown={e => { if (e.key === 'Enter' && inputVal) triggerDelete(inputVal); }}
                                             placeholder="Key to Delete..."
                                             className="sim-input sim-input-large"
                                             style={{borderColor:'rgba(239,68,68,0.5)'}}
                                         />
-                                        <button onClick={() => triggerDelete(inputVal)} className="sim-btn sim-btn-large red" disabled={!inputVal}>
-                                            <i className="fa-solid fa-trash"></i> Delete Key
-                                        </button>
-                                        <button onClick={() => {
-                                            const keys = inOrderKeys;
-                                            if (keys.length === 0) return;
-                                            const rKey = keys[Math.floor(Math.random() * keys.length)];
-                                            setInputVal(String(rKey));
-                                            triggerDelete(rKey);
-                                        }} className="sim-btn sim-btn-large" disabled={inOrderKeys.length === 0}>
-                                            <i className="fa-solid fa-dice"></i> Random Delete
-                                        </button>
-                                        <button onClick={() => {
-                                            const keys = inOrderKeys;
-                                            if (keys.length === 0) return;
-                                            const minKey = Math.min(...keys);
-                                            setInputVal(String(minKey));
-                                            triggerDelete(minKey);
-                                        }} className="sim-btn sim-btn-large" style={{borderColor:'rgba(239,68,68,0.4)'}} disabled={inOrderKeys.length === 0}>
-                                            <i className="fa-solid fa-arrow-down-short-wide"></i> Delete Min
-                                        </button>
-                                        <button onClick={() => {
-                                            const keys = inOrderKeys;
-                                            if (keys.length === 0) return;
-                                            const maxKey = Math.max(...keys);
-                                            setInputVal(String(maxKey));
-                                            triggerDelete(maxKey);
-                                        }} className="sim-btn sim-btn-large" style={{borderColor:'rgba(239,68,68,0.4)'}} disabled={inOrderKeys.length === 0}>
-                                            <i className="fa-solid fa-arrow-up-wide-short"></i> Delete Max
-                                        </button>
+                                        <button onClick={() => triggerDelete(inputVal)} className="sim-btn sim-btn-large red" disabled={!inputVal}>Delete Key</button>
                                     </div>
                                 )}
                             </div>
@@ -3101,6 +2987,107 @@
                                     </div>
                                 </div>
 
+                                {/* Player Bar (below the graph) */}
+                                <div className="sim-player-bar">
+                                    <div className="sim-player-top">
+                                        {activeTab === 'search' ? (
+                                            <div className="sim-player-find">
+                                                <span className="sim-find-label">
+                                                    <i className="fa-solid fa-magnifying-glass"></i> Find
+                                                </span>
+                                                <select
+                                                    value={searchMode}
+                                                    onChange={handleSearchModeChange}
+                                                    className="sim-input sim-find-select"
+                                                    style={{borderColor:'rgba(99,102,241,0.5)'}}
+                                                >
+                                                    <option value="target">Target</option>
+                                                    <option value="min">Minimum</option>
+                                                    <option value="max">Maximum</option>
+                                                </select>
+                                                {searchMode === 'target' && (
+                                                    <>
+                                                        <span className="sim-find-eq">=</span>
+                                                        <input
+                                                            type="number"
+                                                            value={inputVal}
+                                                            onChange={e => setInputVal(e.target.value)}
+                                                            onKeyDown={handleSearchInputKeyDown}
+                                                            placeholder="Key... (Enter)"
+                                                            className="sim-input sim-find-input"
+                                                            style={{borderColor:'rgba(99,102,241,0.5)'}}
+                                                        />
+                                                    </>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <span className="sim-player-title">
+                                                <i className="fa-solid fa-wave-square"></i>
+                                                {currentAction}
+                                            </span>
+                                        )}
+                                        <span className="step-indicator-badge">
+                                            Step {currentStepIndex + 1} / {steps.length || 1}
+                                        </span>
+                                    </div>
+                                    <div className="sim-player-progress">
+                                        <div className="sim-player-progress-fill" style={{width: `${steps.length > 1 ? Math.round((currentStepIndex / (steps.length - 1)) * 100) : 0}%`}}></div>
+                                    </div>
+                                    <div className="sim-player-controls">
+                                        <div className="stepper-btn-group">
+                                            <button
+                                                onClick={() => { setIsPlaying(false); if (currentStepIndex > 0) setCurrentStepIndex(p => p - 1); }}
+                                                disabled={currentStepIndex === 0}
+                                                className="stepper-btn"
+                                                title="Previous Step"
+                                            >
+                                                <i className="fa-solid fa-backward-step"></i> Prev
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    if (currentStepIndex >= steps.length - 1) {
+                                                        setCurrentStepIndex(0);
+                                                        setIsPlaying(true);
+                                                    } else {
+                                                        setIsPlaying(!isPlaying);
+                                                    }
+                                                }}
+                                                disabled={steps.length < 2}
+                                                className="stepper-btn primary play-big"
+                                                title={isPlaying ? "Pause" : "Play"}
+                                            >
+                                                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+                                            </button>
+                                            <button
+                                                onClick={() => { setIsPlaying(false); if (currentStepIndex < steps.length - 1) setCurrentStepIndex(p => p + 1); }}
+                                                disabled={currentStepIndex >= steps.length - 1}
+                                                className="stepper-btn"
+                                            >
+                                                Next <i className="fa-solid fa-forward-step"></i>
+                                            </button>
+                                            <button
+                                                onClick={() => { setIsPlaying(false); setCurrentStepIndex(0); }}
+                                                className="stepper-btn"
+                                                title="Replay from start"
+                                            >
+                                                <i className="fa-solid fa-rotate-left"></i> Replay
+                                            </button>
+                                        </div>
+                                        <div className="sim-speed-bar">
+                                            <span className="sim-seq-label">Speed</span>
+                                            {[0.5, 1, 2].map(s => (
+                                                <button
+                                                    key={s}
+                                                    onClick={() => setSpeed(s)}
+                                                    className={`sim-speed-btn ${speed === s ? 'active' : ''}`}
+                                                >
+                                                    {s}x
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {/* Operation Log */}
                                 <div className="sim-panel" style={{height: logHeight}}>
                                     <div className="sim-panel-header">
@@ -3115,75 +3102,6 @@
                                             </div>
                                         ))}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Player Bar (Standalone below grid, spanning full width) */}
-                        <div className="sim-player-bar">
-                            <div className="sim-player-top">
-                                <span className="sim-player-title">
-                                    <i className="fa-solid fa-wave-square"></i>
-                                    {currentAction}
-                                </span>
-                                <span className="step-indicator-badge">
-                                    Step {currentStepIndex + 1} / {steps.length || 1}
-                                </span>
-                            </div>
-                            <div className="sim-player-progress">
-                                <div className="sim-player-progress-fill" style={{width: `${steps.length > 1 ? Math.round((currentStepIndex / (steps.length - 1)) * 100) : 0}%`}}></div>
-                            </div>
-                            <div className="sim-player-controls">
-                                <div className="stepper-btn-group">
-                                    <button
-                                        onClick={() => { setIsPlaying(false); if (currentStepIndex > 0) setCurrentStepIndex(p => p - 1); }}
-                                        disabled={currentStepIndex === 0}
-                                        className="stepper-btn"
-                                        title="Previous Step"
-                                    >
-                                        <i className="fa-solid fa-backward-step"></i> Prev
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            if (currentStepIndex >= steps.length - 1) {
-                                                setCurrentStepIndex(0);
-                                                setIsPlaying(true);
-                                            } else {
-                                                setIsPlaying(!isPlaying);
-                                            }
-                                        }}
-                                        disabled={steps.length < 2}
-                                        className="stepper-btn primary play-big"
-                                        title={isPlaying ? "Pause" : "Play"}
-                                    >
-                                        <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
-                                    </button>
-                                    <button
-                                        onClick={() => { setIsPlaying(false); if (currentStepIndex < steps.length - 1) setCurrentStepIndex(p => p + 1); }}
-                                        disabled={currentStepIndex >= steps.length - 1}
-                                        className="stepper-btn"
-                                    >
-                                        Next <i className="fa-solid fa-forward-step"></i>
-                                    </button>
-                                    <button
-                                        onClick={() => { setIsPlaying(false); setCurrentStepIndex(0); }}
-                                        className="stepper-btn"
-                                        title="Replay from start"
-                                    >
-                                        <i className="fa-solid fa-rotate-left"></i> Replay
-                                    </button>
-                                </div>
-                                <div className="sim-speed-bar">
-                                    <span className="sim-seq-label">Speed</span>
-                                    {[0.5, 1, 2].map(s => (
-                                        <button
-                                            key={s}
-                                            onClick={() => setSpeed(s)}
-                                            className={`sim-speed-btn ${speed === s ? 'active' : ''}`}
-                                        >
-                                            {s}x
-                                        </button>
-                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -3216,5 +3134,13 @@
             ReactDOM.createRoot(bstRootEl).render(<BSTSimulator />);
         }
     </script>
+<script>
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const btns = document.querySelectorAll('.sim-projector-btn');
+        if (btns[0]) btns[0].click();
+    }, 2000);
+});
+</script>
 </body>
 </html>
