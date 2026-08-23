@@ -1206,7 +1206,7 @@
     <!-- ═══════════════════════════════════════════════════════════════ -->
     <script>
     let projZoom = 1.0;
-    let projIsLight = false;
+    let projIsLight = true;
     let currentSimType = null;
 
     function openSimProjector(type) {
@@ -1215,20 +1215,18 @@
         const title   = document.getElementById('projector-title');
         const wrapper = document.getElementById('projector-scale-wrapper');
 
-        // Default dark mode for projector
-        projIsLight = false;
-        overlay.classList.remove('light-mode');
-        overlay.classList.add('dark-mode');
+        // Default light mode for projector as requested
+        projIsLight = true;
+        overlay.classList.add('light-mode');
+        overlay.classList.remove('dark-mode');
         const themeBtn = document.getElementById('proj-theme-btn');
-        if (themeBtn) themeBtn.querySelector('i').className = 'fa-solid fa-sun';
+        if (themeBtn) themeBtn.querySelector('i').className = 'fa-solid fa-moon';
 
         projZoom = 1.0;
         document.getElementById('proj-zoom-label').textContent = '100%';
-        applyProjZoom();
 
         if (type === 'traversal') {
             title.textContent = 'Tree Traversals — Projector Screen';
-            // Mount a second React root into the projector wrapper
             wrapper.innerHTML = '<div id="proj-traversal-root"></div>';
             const rootEl = document.getElementById('proj-traversal-root');
             if (rootEl && window._TraversalSimulator) {
@@ -1243,12 +1241,12 @@
             }
         }
 
+        applyProjZoom();
         overlay.style.display = 'flex';
     }
 
     function closeSimProjector() {
         document.getElementById('projector-overlay').style.display = 'none';
-        // Unmount any React roots inside projector to free memory
         ['proj-traversal-root', 'proj-bst-root'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.innerHTML = '';
@@ -1257,11 +1255,17 @@
     }
 
     function applyProjZoom() {
-        const wrapper = document.getElementById('projector-scale-wrapper');
-        if (wrapper) {
-            wrapper.style.transform = `scale(${projZoom})`;
+        const canvasEls = document.querySelectorAll('.proj-scale-canvas');
+        if (canvasEls && canvasEls.length > 0) {
+            canvasEls.forEach(el => {
+                el.style.transform = `scale(${projZoom})`;
+            });
+        } else {
+            const wrapper = document.getElementById('projector-scale-wrapper');
+            if (wrapper) wrapper.style.transform = `scale(${projZoom})`;
         }
-        document.getElementById('proj-zoom-label').textContent = Math.round(projZoom * 100) + '%';
+        const zoomLabel = document.getElementById('proj-zoom-label');
+        if (zoomLabel) zoomLabel.textContent = Math.round(projZoom * 100) + '%';
     }
 
     function projZoomChange(delta) {
@@ -1412,7 +1416,7 @@
             const [speed, setSpeed] = useState(1);
 
             const timerRef = useRef(null);
-            const logEndRef = useRef(null);
+            const logBoxRef = useRef(null);
 
             const getSelectedTree = () => {
                 if (treeType === 'skewed') return SKEWED_TREE;
@@ -1420,7 +1424,6 @@
                 return STANDARD_TREE;
             };
 
-            // Pre-compute all steps for any tree and traversal algorithm
             const computeSteps = (tree, type) => {
                 const generatedSteps = [];
                 let visited = [];
@@ -1428,103 +1431,112 @@
                 let logHistory = [];
                 let stack = [];
 
-                // Step 0: Initial Ready State
+                if (!tree) return generatedSteps;
+
+                // Initial Step
+                logHistory.push(`Initialized ${type.toUpperCase()} traversal on root node ${tree.value}`);
                 generatedSteps.push({
                     highlightedNode: null,
                     visitedNodes: [],
                     sequence: [],
-                    logs: ["Simulation ready. Press Step / Play to begin."],
+                    logs: [...logHistory],
                     callStack: []
                 });
 
                 if (type === 'preorder') {
-                    const traverse = (node) => {
-                        if (!node) return;
-                        // Visit Root
-                        logHistory.push(`Visiting Node: ${node.value} (Root)`);
+                    const stackArr = [tree];
+                    while (stackArr.length > 0) {
+                        const node = stackArr.pop();
                         visited.push(node.id);
                         seq.push(node.value);
+                        logHistory.push(`Visited node ${node.value}`);
                         generatedSteps.push({
                             highlightedNode: node.id,
                             visitedNodes: [...visited],
                             sequence: [...seq],
                             logs: [...logHistory],
-                            callStack: []
+                            callStack: stackArr.map(n => n.value)
                         });
-                        // Recurse Left & Right
-                        traverse(node.left);
-                        traverse(node.right);
-                    };
-                    traverse(tree);
+
+                        if (node.right) stackArr.push(node.right);
+                        if (node.left) stackArr.push(node.left);
+                    }
                 } else if (type === 'inorder') {
-                    const traverse = (node) => {
-                        if (!node) return;
-                        traverse(node.left);
-                        logHistory.push(`Visiting Node: ${node.value} (In-order Root)`);
-                        visited.push(node.id);
-                        seq.push(node.value);
+                    let curr = tree;
+                    const stackArr = [];
+                    while (curr || stackArr.length > 0) {
+                        while (curr) {
+                            stackArr.push(curr);
+                            logHistory.push(`Push node ${curr.value} to processing stack`);
+                            generatedSteps.push({
+                                highlightedNode: curr.id,
+                                visitedNodes: [...visited],
+                                sequence: [...seq],
+                                logs: [...logHistory],
+                                callStack: stackArr.map(n => n.value)
+                            });
+                            curr = curr.left;
+                        }
+                        curr = stackArr.pop();
+                        visited.push(curr.id);
+                        seq.push(curr.value);
+                        logHistory.push(`Popped & Visited node ${curr.value}`);
                         generatedSteps.push({
-                            highlightedNode: node.id,
+                            highlightedNode: curr.id,
                             visitedNodes: [...visited],
                             sequence: [...seq],
                             logs: [...logHistory],
-                            callStack: []
+                            callStack: stackArr.map(n => n.value)
                         });
-                        traverse(node.right);
-                    };
-                    traverse(tree);
+                        curr = curr.right;
+                    }
                 } else if (type === 'postorder') {
-                    const traverse = (node) => {
-                        if (!node) return;
-                        traverse(node.left);
-                        traverse(node.right);
-                        logHistory.push(`Visiting Node: ${node.value} (Post-order Root)`);
+                    const s1 = [tree];
+                    const s2 = [];
+                    while (s1.length > 0) {
+                        const node = s1.pop();
+                        s2.push(node);
+                        if (node.left) s1.push(node.left);
+                        if (node.right) s1.push(node.right);
+                    }
+                    while (s2.length > 0) {
+                        const node = s2.pop();
                         visited.push(node.id);
                         seq.push(node.value);
+                        logHistory.push(`Visited node ${node.value}`);
                         generatedSteps.push({
                             highlightedNode: node.id,
                             visitedNodes: [...visited],
                             sequence: [...seq],
                             logs: [...logHistory],
-                            callStack: []
+                            callStack: s2.map(n => n.value)
                         });
-                    };
-                    traverse(tree);
+                    }
                 } else if (type === 'bfs') {
                     const queue = [tree];
                     while (queue.length > 0) {
                         const node = queue.shift();
-                        logHistory.push(`Dequeued & Visiting: ${node.value}`);
                         visited.push(node.id);
                         seq.push(node.value);
+                        logHistory.push(`Dequeued & Visited node ${node.value}`);
                         generatedSteps.push({
                             highlightedNode: node.id,
                             visitedNodes: [...visited],
                             sequence: [...seq],
                             logs: [...logHistory],
-                            callStack: []
+                            callStack: queue.map(n => n.value)
                         });
+
                         if (node.left) queue.push(node.left);
                         if (node.right) queue.push(node.right);
                     }
                 } else if (type === 'rec_pre') {
                     const traverse = (node) => {
                         if (!node) return;
-                        // CALL
                         stack.push(node.value);
                         logHistory.push(`CALL traverse(${node.value})`);
-                        generatedSteps.push({
-                            highlightedNode: node.id,
-                            visitedNodes: [...visited],
-                            sequence: [...seq],
-                            logs: [...logHistory],
-                            callStack: [...stack]
-                        });
-
-                        // VISIT
                         visited.push(node.id);
                         seq.push(node.value);
-                        logHistory.push(`VISIT ${node.value}`);
                         generatedSteps.push({
                             highlightedNode: node.id,
                             visitedNodes: [...visited],
@@ -1536,7 +1548,6 @@
                         if (node.left) traverse(node.left);
                         if (node.right) traverse(node.right);
 
-                        // RETURN
                         logHistory.push(`RETURN traverse(${node.value})`);
                         stack.pop();
                         generatedSteps.push({
@@ -1670,8 +1681,11 @@
                 };
             }, [isPlaying, steps, speed]);
 
+            // Scroll ONLY the inner log container, keeping the page scroll freely accessible
             useEffect(() => {
-                logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                if (logBoxRef.current) {
+                    logBoxRef.current.scrollTop = logBoxRef.current.scrollHeight;
+                }
             }, [currentStepIndex]);
 
             const currentStep = steps[currentStepIndex] || {
@@ -1708,137 +1722,138 @@
 
             const renderContent = () => {
                 const currentTree = getSelectedTree();
+                const canvasHeight = projMode ? '460px' : '360px';
+
                 return (
-                    <div className="flex flex-col gap-4">
-                        {/* Top Bar: Tree Selection & Projector Mode Button */}
-                        <div className="sim-topbar">
-                            <div className="sim-algo-bar">
-                                <span className="sim-seq-label">Tree Variant:</span>
-                                {[
-                                    { id: 'standard', label: 'Balanced Tree' },
-                                    { id: 'skewed', label: 'Skewed Variant 1' },
-                                    { id: 'unbalanced', label: 'Unbalanced Variant 2' }
-                                ].map(t => (
-                                    <button
-                                        key={t.id}
-                                        onClick={() => setTreeType(t.id)}
-                                        className={`sim-tab-btn ${treeType === t.id ? 'active' : ''}`}
-                                    >
-                                        {t.label}
-                                    </button>
-                                ))}
-                            </div>
-
-                            {!projMode && (
-                                <button
-                                    onClick={() => window.openSimProjector('traversal')}
-                                    className="sim-projector-btn"
-                                >
-                                    <i className="fa-solid fa-expand"></i> Projector Mode
-                                </button>
-                            )}
-                        </div>
-
-                        {/* Traversal Algorithm Selectors */}
-                        <div className="sim-algo-bar">
-                            <span className="sim-seq-label">Algorithm:</span>
-                            {[
-                                { id: 'preorder', label: 'Pre-order (DFS)' },
-                                { id: 'inorder', label: 'In-order (DFS)' },
-                                { id: 'postorder', label: 'Post-order (DFS)' },
-                                { id: 'bfs', label: 'Level-order (BFS)' },
-                                { id: 'rec_pre', label: 'Recursive Pre-order' },
-                                { id: 'rec_in', label: 'Recursive In-order' },
-                                { id: 'rec_post', label: 'Recursive Post-order' }
-                            ].map(algo => (
-                                <button
-                                    key={algo.id}
-                                    onClick={() => setTraversalType(algo.id)}
-                                    className={`sim-tab-btn ${traversalType === algo.id ? 'active' : ''}`}
-                                >
-                                    {algo.label}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Stepper Control Bar */}
-                        <div className="stepper-control-bar">
-                            <div className="stepper-btn-group">
-                                <button
-                                    onClick={handlePrev}
-                                    disabled={currentStepIndex === 0}
-                                    className="stepper-btn"
-                                    title="Previous Step"
-                                >
-                                    <i className="fa-solid fa-backward-step"></i> Previous
-                                </button>
-
-                                <button
-                                    onClick={handlePlayPause}
-                                    className="stepper-btn primary"
-                                    title={isPlaying ? "Pause Auto-play" : "Play / Resume"}
-                                >
-                                    <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
-                                    {isPlaying ? 'Pause' : 'Play'}
-                                </button>
-
-                                <button
-                                    onClick={handleNext}
-                                    disabled={currentStepIndex >= steps.length - 1}
-                                    className="stepper-btn"
-                                    title="Next Step"
-                                >
-                                    Next <i className="fa-solid fa-forward-step"></i>
-                                </button>
-
-                                <button
-                                    onClick={handleReset}
-                                    className="stepper-btn"
-                                    title="Reset Step"
-                                >
-                                    <i className="fa-solid fa-rotate-left"></i> Reset
-                                </button>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <span className="step-indicator-badge">
-                                    Step {currentStepIndex + 1} / {steps.length || 1}
-                                </span>
-
-                                <div className="sim-speed-bar">
-                                    <span className="sim-seq-label">Speed</span>
-                                    {[0.5, 1, 2].map(s => (
+                    <div className="flex flex-col gap-3">
+                        {/* Top Controls Area */}
+                        <div className="flex flex-col gap-2">
+                            {/* Top Bar: Tree Selection & Projector Mode Button */}
+                            <div className="sim-topbar">
+                                <div className="sim-algo-bar">
+                                    <span className="sim-seq-label">Tree:</span>
+                                    {[
+                                        { id: 'standard', label: 'Balanced' },
+                                        { id: 'skewed', label: 'Skewed' },
+                                        { id: 'unbalanced', label: 'Unbalanced' }
+                                    ].map(t => (
                                         <button
-                                            key={s}
-                                            onClick={() => setSpeed(s)}
-                                            className={`sim-speed-btn ${speed === s ? 'active' : ''}`}
+                                            key={t.id}
+                                            onClick={() => setTreeType(t.id)}
+                                            className={`sim-tab-btn ${treeType === t.id ? 'active' : ''}`}
                                         >
-                                            {s}x
+                                            {t.label}
                                         </button>
                                     ))}
+                                </div>
+
+                                <div className="sim-algo-bar">
+                                    <span className="sim-seq-label">Algorithm:</span>
+                                    {[
+                                        { id: 'preorder', label: 'Pre-order (DFS)' },
+                                        { id: 'inorder', label: 'In-order (DFS)' },
+                                        { id: 'postorder', label: 'Post-order (DFS)' },
+                                        { id: 'bfs', label: 'Level-order (BFS)' },
+                                        { id: 'rec_pre', label: 'Rec Pre' },
+                                        { id: 'rec_in', label: 'Rec In' },
+                                        { id: 'rec_post', label: 'Rec Post' }
+                                    ].map(algo => (
+                                        <button
+                                            key={algo.id}
+                                            onClick={() => setTraversalType(algo.id)}
+                                            className={`sim-tab-btn ${traversalType === algo.id ? 'active' : ''}`}
+                                        >
+                                            {algo.label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {!projMode && (
+                                    <button
+                                        onClick={() => window.openSimProjector('traversal')}
+                                        className="sim-projector-btn"
+                                    >
+                                        <i className="fa-solid fa-expand"></i> Projector Mode
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Stepper Control Bar & Visited Sequence Row */}
+                            <div className="flex flex-wrap items-center justify-between gap-2 sim-topbar" style={{padding:'8px 12px'}}>
+                                <div className="stepper-btn-group">
+                                    <button
+                                        onClick={handlePrev}
+                                        disabled={currentStepIndex === 0}
+                                        className="stepper-btn"
+                                        title="Previous Step"
+                                    >
+                                        <i className="fa-solid fa-backward-step"></i> Prev
+                                    </button>
+
+                                    <button
+                                        onClick={handlePlayPause}
+                                        className="stepper-btn primary"
+                                        title={isPlaying ? "Pause Auto-play" : "Play / Resume"}
+                                    >
+                                        <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+                                        {isPlaying ? 'Pause' : 'Play'}
+                                    </button>
+
+                                    <button
+                                        onClick={handleNext}
+                                        disabled={currentStepIndex >= steps.length - 1}
+                                        className="stepper-btn"
+                                        title="Next Step"
+                                    >
+                                        Next <i className="fa-solid fa-forward-step"></i>
+                                    </button>
+
+                                    <button
+                                        onClick={handleReset}
+                                        className="stepper-btn"
+                                        title="Reset Step"
+                                    >
+                                        <i className="fa-solid fa-rotate-left"></i> Reset
+                                    </button>
+
+                                    <span className="step-indicator-badge">
+                                        Step {currentStepIndex + 1} / {steps.length || 1}
+                                    </span>
+
+                                    <div className="sim-speed-bar">
+                                        <span className="sim-seq-label">Speed</span>
+                                        {[0.5, 1, 2].map(s => (
+                                            <button
+                                                key={s}
+                                                onClick={() => setSpeed(s)}
+                                                className={`sim-speed-btn ${speed === s ? 'active' : ''}`}
+                                            >
+                                                {s}x
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="sim-seq-bar" style={{margin:0, flex:1, minWidth:'260px', padding:'6px 12px'}}>
+                                    <span className="sim-seq-label">
+                                        <i className="fa-solid fa-list-ol" style={{color:'var(--accent-green)',marginRight:'4px'}}></i> Sequence:
+                                    </span>
+                                    <div className="sim-seq-text" style={{fontSize:'12px'}}>
+                                        {currentStep.sequence && currentStep.sequence.length > 0 ? (
+                                            currentStep.sequence.join(' → ')
+                                        ) : (
+                                            <span className="sim-empty-label" style={{display:'inline'}}>No nodes visited yet...</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Sequence Output Bar */}
-                        <div className="sim-seq-bar">
-                            <span className="sim-seq-label">
-                                <i className="fa-solid fa-list-ol" style={{color:'var(--accent-green)',marginRight:'4px'}}></i> Visited Sequence:
-                            </span>
-                            <div className="sim-seq-text">
-                                {currentStep.sequence && currentStep.sequence.length > 0 ? (
-                                    currentStep.sequence.join(' → ')
-                                ) : (
-                                    <span className="sim-empty-label" style={{display:'inline'}}>No nodes visited yet...</span>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Main Visualizer Area: Tree SVG + Side Stack & Log */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        {/* Visualizer Area (Scalable in Projector Mode) */}
+                        <div className={`grid grid-cols-1 lg:grid-cols-3 gap-4 ${projMode ? 'proj-scale-canvas' : ''}`}>
                             {/* Tree Canvas */}
-                            <div className="lg:col-span-2 sim-canvas tree-container" style={{height:'360px',display:'flex',alignItems:'center',justifyContent:'center'}}>
-                                <div style={{position:'relative',width:'100%',height:'100%',maxWidth:'640px',margin:'0 auto'}}>
+                            <div className="lg:col-span-2 sim-canvas tree-container" style={{height: canvasHeight, display:'flex',alignItems:'center',justifyContent:'center'}}>
+                                <div style={{position:'relative',width:'100%',height:'100%',maxWidth:'680px',margin:'0 auto'}}>
                                     <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
                                         <TreeEdges node={currentTree} x={50} y={10} level={0} />
                                     </svg>
@@ -1854,7 +1869,7 @@
                             </div>
 
                             {/* Right Panels: Stack & Logs */}
-                            <div className="flex flex-col gap-3" style={{height:'360px'}}>
+                            <div className="flex flex-col gap-3" style={{height: canvasHeight}}>
                                 {/* Recursion Call Stack Panel */}
                                 <div className="sim-panel flex-1">
                                     <div className="sim-panel-header">
@@ -1881,7 +1896,7 @@
                                         <span><i className="fa-solid fa-terminal" style={{color:'var(--accent-blue)',marginRight:'4px'}}></i> Operation Log</span>
                                         <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>Step {currentStepIndex + 1}</span>
                                     </div>
-                                    <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-1">
+                                    <div ref={logBoxRef} className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-1">
                                         {currentStep.logs && currentStep.logs.map((logMsg, i) => (
                                             <div
                                                 key={i}
@@ -1996,7 +2011,7 @@
             const [speed, setSpeed] = useState(1);
 
             const timerRef = useRef(null);
-            const logEndRef = useRef(null);
+            const logBoxRef = useRef(null);
 
             // Initialize default tree (50, 30, 70, 20, 40, 80)
             const initDefaultTree = () => {
@@ -2354,6 +2369,13 @@
                 };
             }, [isPlaying, steps, speed]);
 
+            // Scroll ONLY the inner log container, keeping the page scroll freely accessible
+            useEffect(() => {
+                if (logBoxRef.current) {
+                    logBoxRef.current.scrollTop = logBoxRef.current.scrollHeight;
+                }
+            }, [currentStepIndex]);
+
             const currentStep = steps[currentStepIndex] || {
                 highlightedNode: null,
                 activeLine: null,
@@ -2408,163 +2430,171 @@
             };
 
             const renderContent = () => {
+                const canvasHeight = projMode ? '380px' : '260px';
+                const codeHeight = projMode ? '380px' : '260px';
+                const stackHeight = projMode ? '160px' : '130px';
+
                 return (
-                    <div className="flex flex-col gap-4">
-                        {/* Top Controls: Tabs & Operation Triggers */}
-                        <div className="sim-topbar">
-                            <div className="sim-algo-bar">
-                                {[
-                                    { id: 'node', label: 'Node Info', icon: 'fa-info-circle' },
-                                    { id: 'search', label: 'Search', icon: 'fa-magnifying-glass' },
-                                    { id: 'insert', label: 'Insert', icon: 'fa-plus' },
-                                    { id: 'delete', label: 'Delete', icon: 'fa-trash' }
-                                ].map(t => (
-                                    <button
-                                        key={t.id}
-                                        onClick={() => { setActiveTab(t.id); setCurrentSnippet(t.id); }}
-                                        className={`sim-tab-btn ${activeTab === t.id ? 'active' : ''}`}
-                                    >
-                                        <i className={`fa-solid ${t.icon}`}></i> {t.label}
-                                    </button>
-                                ))}
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <button onClick={initDefaultTree} className="sim-btn">
-                                    <i className="fa-solid fa-rotate-right"></i> Reset Default Tree
-                                </button>
-
-                                {!projMode && (
-                                    <button
-                                        onClick={() => window.openSimProjector('bst')}
-                                        className="sim-projector-btn"
-                                    >
-                                        <i className="fa-solid fa-expand"></i> Projector Mode
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Operation Specific Input Bar */}
-                        <div className="sim-input-bar">
-                            {activeTab === 'node' && (
-                                <div style={{display:'flex',alignItems:'center',gap:'8px',fontSize:'12px',color:'var(--text-secondary)'}}>
-                                    <i className="fa-solid fa-lightbulb" style={{color:'var(--accent-orange)'}}></i>
-                                    <span>Select <strong>Search</strong>, <strong>Insert</strong>, or <strong>Delete</strong> tab above to perform live BST operations.</span>
-                                </div>
-                            )}
-
-                            {activeTab === 'search' && (
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <input
-                                        type="number"
-                                        value={inputVal}
-                                        onChange={e => setInputVal(e.target.value)}
-                                        placeholder="Target Key..."
-                                        className="sim-input"
-                                        style={{borderColor:'rgba(99,102,241,0.5)'}}
-                                    />
-                                    <button onClick={() => triggerSearch(inputVal, 'target')} className="sim-btn indigo">Find Target</button>
-                                    <button onClick={() => triggerSearch(null, 'min')} className="sim-btn">Find Min</button>
-                                    <button onClick={() => triggerSearch(null, 'max')} className="sim-btn">Find Max</button>
-                                </div>
-                            )}
-
-                            {activeTab === 'insert' && (
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <input
-                                        type="number"
-                                        value={inputVal}
-                                        onChange={e => setInputVal(e.target.value)}
-                                        placeholder="New Key..."
-                                        className="sim-input"
-                                        style={{borderColor:'rgba(16,185,129,0.5)'}}
-                                    />
-                                    <button onClick={() => triggerInsert(inputVal)} className="sim-btn green">Insert Key</button>
-                                    <button onClick={() => triggerInsert(Math.floor(Math.random() * 90) + 10)} className="sim-btn">Random Key +</button>
-                                    <button onClick={() => setTree(null)} className="sim-btn red" style={{background:'rgba(239,68,68,0.15)',color:'#fca5a5',borderColor:'rgba(239,68,68,0.4)'}}>Clear Tree</button>
-                                </div>
-                            )}
-
-                            {activeTab === 'delete' && (
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <input
-                                        type="number"
-                                        value={inputVal}
-                                        onChange={e => setInputVal(e.target.value)}
-                                        placeholder="Key to Delete..."
-                                        className="sim-input"
-                                        style={{borderColor:'rgba(239,68,68,0.5)'}}
-                                    />
-                                    <button onClick={() => triggerDelete(inputVal)} className="sim-btn red">Delete Key</button>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Stepper Control Bar */}
-                        <div className="stepper-control-bar">
-                            <div className="stepper-btn-group">
-                                <button
-                                    onClick={() => { setIsPlaying(false); if (currentStepIndex > 0) setCurrentStepIndex(p => p - 1); }}
-                                    disabled={currentStepIndex === 0}
-                                    className="stepper-btn"
-                                >
-                                    <i className="fa-solid fa-backward-step"></i> Previous
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        if (currentStepIndex >= steps.length - 1) {
-                                            setCurrentStepIndex(0);
-                                            setIsPlaying(true);
-                                        } else {
-                                            setIsPlaying(!isPlaying);
-                                        }
-                                    }}
-                                    className="stepper-btn primary"
-                                >
-                                    <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
-                                    {isPlaying ? 'Pause' : 'Play'}
-                                </button>
-                                <button
-                                    onClick={() => { setIsPlaying(false); if (currentStepIndex < steps.length - 1) setCurrentStepIndex(p => p + 1); }}
-                                    disabled={currentStepIndex >= steps.length - 1}
-                                    className="stepper-btn"
-                                >
-                                    Next <i className="fa-solid fa-forward-step"></i>
-                                </button>
-                                <button
-                                    onClick={() => { setIsPlaying(false); setCurrentStepIndex(0); }}
-                                    className="stepper-btn"
-                                >
-                                    <i className="fa-solid fa-rotate-left"></i> Reset
-                                </button>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <span className="step-indicator-badge">
-                                    Step {currentStepIndex + 1} / {steps.length || 1}
-                                </span>
-                                <div className="sim-speed-bar">
-                                    <span className="sim-seq-label">Speed</span>
-                                    {[0.5, 1, 2].map(s => (
+                    <div className="flex flex-col gap-3">
+                        {/* Top Controls Area (Fixed Header in Projector) */}
+                        <div className="flex flex-col gap-2">
+                            {/* Top Controls: Tabs & Operation Triggers */}
+                            <div className="sim-topbar">
+                                <div className="sim-algo-bar">
+                                    {[
+                                        { id: 'node', label: 'Node Info', icon: 'fa-info-circle' },
+                                        { id: 'search', label: 'Search', icon: 'fa-magnifying-glass' },
+                                        { id: 'insert', label: 'Insert', icon: 'fa-plus' },
+                                        { id: 'delete', label: 'Delete', icon: 'fa-trash' }
+                                    ].map(t => (
                                         <button
-                                            key={s}
-                                            onClick={() => setSpeed(s)}
-                                            className={`sim-speed-btn ${speed === s ? 'active' : ''}`}
+                                            key={t.id}
+                                            onClick={() => { setActiveTab(t.id); setCurrentSnippet(t.id); }}
+                                            className={`sim-tab-btn ${activeTab === t.id ? 'active' : ''}`}
                                         >
-                                            {s}x
+                                            <i className={`fa-solid ${t.icon}`}></i> {t.label}
                                         </button>
                                     ))}
                                 </div>
+
+                                <div className="flex items-center gap-2">
+                                    <button onClick={initDefaultTree} className="sim-btn">
+                                        <i className="fa-solid fa-rotate-right"></i> Reset Default Tree
+                                    </button>
+
+                                    {!projMode && (
+                                        <button
+                                            onClick={() => window.openSimProjector('bst')}
+                                            className="sim-projector-btn"
+                                        >
+                                            <i className="fa-solid fa-expand"></i> Projector Mode
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Operation Specific Input Bar */}
+                            <div className="sim-input-bar" style={{padding:'8px 12px'}}>
+                                {activeTab === 'node' && (
+                                    <div style={{display:'flex',alignItems:'center',gap:'8px',fontSize:'12px',color:'var(--text-secondary)'}}>
+                                        <i className="fa-solid fa-lightbulb" style={{color:'var(--accent-orange)'}}></i>
+                                        <span>Select <strong>Search</strong>, <strong>Insert</strong>, or <strong>Delete</strong> tab above to perform live BST operations.</span>
+                                    </div>
+                                )}
+
+                                {activeTab === 'search' && (
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <input
+                                            type="number"
+                                            value={inputVal}
+                                            onChange={e => setInputVal(e.target.value)}
+                                            placeholder="Target Key..."
+                                            className="sim-input"
+                                            style={{borderColor:'rgba(99,102,241,0.5)'}}
+                                        />
+                                        <button onClick={() => triggerSearch(inputVal, 'target')} className="sim-btn indigo">Find Target</button>
+                                        <button onClick={() => triggerSearch(null, 'min')} className="sim-btn">Find Min</button>
+                                        <button onClick={() => triggerSearch(null, 'max')} className="sim-btn">Find Max</button>
+                                    </div>
+                                )}
+
+                                {activeTab === 'insert' && (
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <input
+                                            type="number"
+                                            value={inputVal}
+                                            onChange={e => setInputVal(e.target.value)}
+                                            placeholder="New Key..."
+                                            className="sim-input"
+                                            style={{borderColor:'rgba(16,185,129,0.5)'}}
+                                        />
+                                        <button onClick={() => triggerInsert(inputVal)} className="sim-btn green">Insert Key</button>
+                                        <button onClick={() => triggerInsert(Math.floor(Math.random() * 90) + 10)} className="sim-btn">Random Key +</button>
+                                        <button onClick={() => setTree(null)} className="sim-btn red" style={{background:'rgba(239,68,68,0.15)',color:'#fca5a5',borderColor:'rgba(239,68,68,0.4)'}}>Clear Tree</button>
+                                    </div>
+                                )}
+
+                                {activeTab === 'delete' && (
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <input
+                                            type="number"
+                                            value={inputVal}
+                                            onChange={e => setInputVal(e.target.value)}
+                                            placeholder="Key to Delete..."
+                                            className="sim-input"
+                                            style={{borderColor:'rgba(239,68,68,0.5)'}}
+                                        />
+                                        <button onClick={() => triggerDelete(inputVal)} className="sim-btn red">Delete Key</button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Stepper Control Bar */}
+                            <div className="stepper-control-bar" style={{padding:'8px 12px'}}>
+                                <div className="stepper-btn-group">
+                                    <button
+                                        onClick={() => { setIsPlaying(false); if (currentStepIndex > 0) setCurrentStepIndex(p => p - 1); }}
+                                        disabled={currentStepIndex === 0}
+                                        className="stepper-btn"
+                                        title="Previous Step"
+                                    >
+                                        <i className="fa-solid fa-backward-step"></i> Prev
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (currentStepIndex >= steps.length - 1) {
+                                                setCurrentStepIndex(0);
+                                                setIsPlaying(true);
+                                            } else {
+                                                setIsPlaying(!isPlaying);
+                                            }
+                                        }}
+                                        className="stepper-btn primary"
+                                    >
+                                        <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+                                        {isPlaying ? 'Pause' : 'Play'}
+                                    </button>
+                                    <button
+                                        onClick={() => { setIsPlaying(false); if (currentStepIndex < steps.length - 1) setCurrentStepIndex(p => p + 1); }}
+                                        disabled={currentStepIndex >= steps.length - 1}
+                                        className="stepper-btn"
+                                    >
+                                        Next <i className="fa-solid fa-forward-step"></i>
+                                    </button>
+                                    <button
+                                        onClick={() => { setIsPlaying(false); setCurrentStepIndex(0); }}
+                                        className="stepper-btn"
+                                    >
+                                        <i className="fa-solid fa-rotate-left"></i> Reset
+                                    </button>
+                                </div>
+
+                                <div className="flex items-center gap-3">
+                                    <span className="step-indicator-badge">
+                                        Step {currentStepIndex + 1} / {steps.length || 1}
+                                    </span>
+                                    <div className="sim-speed-bar">
+                                        <span className="sim-seq-label">Speed</span>
+                                        {[0.5, 1, 2].map(s => (
+                                            <button
+                                                key={s}
+                                                onClick={() => setSpeed(s)}
+                                                className={`sim-speed-btn ${speed === s ? 'active' : ''}`}
+                                            >
+                                                {s}x
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Main Visualizer: Code Tracing + Tree SVG Canvas */}
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        {/* Main Visualizer: Code Tracing + Tree SVG Canvas (Scalable) */}
+                        <div className={`grid grid-cols-1 lg:grid-cols-12 gap-4 ${projMode ? 'proj-scale-canvas' : ''}`}>
                             {/* Left: Code Tracing & Recursion Stack */}
                             <div className="lg:col-span-5 flex flex-col gap-3">
                                 {/* Code Panel */}
-                                <div className="sim-panel" style={{height:'260px'}}>
+                                <div className="sim-panel" style={{height: codeHeight}}>
                                     <div className="sim-panel-header">
                                         <span><i className="fa-solid fa-code" style={{color:'var(--accent-purple)',marginRight:'4px'}}></i> Python Code Trace</span>
                                         <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>{currentSnippet}.py</span>
@@ -2584,7 +2614,7 @@
                                 </div>
 
                                 {/* Stack Panel */}
-                                <div className="sim-panel" style={{height:'130px'}}>
+                                <div className="sim-panel" style={{height: stackHeight}}>
                                     <div className="sim-panel-header">
                                         <span><i className="fa-solid fa-layer-group" style={{color:'var(--accent-purple)',marginRight:'4px'}}></i> Recursion Call Stack</span>
                                         <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>{currentStep.callStack ? currentStep.callStack.length : 0} frames</span>
@@ -2611,7 +2641,7 @@
                             {/* Right: SVG Tree Canvas & Operations Log */}
                             <div className="lg:col-span-7 flex flex-col gap-3">
                                 {/* SVG Tree Canvas */}
-                                <div className="sim-canvas tree-container" style={{height:'260px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                                <div className="sim-canvas tree-container" style={{height: canvasHeight, display:'flex',alignItems:'center',justifyContent:'center'}}>
                                     {tree ? (
                                         <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
                                             <g transform="translate(0, 30)">
@@ -2624,19 +2654,18 @@
                                 </div>
 
                                 {/* Operation Log */}
-                                <div className="sim-panel" style={{height:'130px'}}>
+                                <div className="sim-panel" style={{height: stackHeight}}>
                                     <div className="sim-panel-header">
                                         <span><i className="fa-solid fa-terminal" style={{color:'var(--accent-green)',marginRight:'4px'}}></i> Operation Log</span>
                                         <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>Step {currentStepIndex + 1}</span>
                                     </div>
-                                    <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-1">
+                                    <div ref={logBoxRef} className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-1">
                                         {currentStep.logs && currentStep.logs.map((l, idx) => (
                                             <div key={idx} className="sim-log-line">
                                                 <span style={{color:'var(--text-muted)',userSelect:'none'}}>{(idx + 1).toString().padStart(2, '0')}</span>
                                                 <span className={idx === currentStep.logs.length - 1 ? 'active' : ''}>{l}</span>
                                             </div>
                                         ))}
-                                        <div ref={logEndRef} />
                                     </div>
                                 </div>
                             </div>

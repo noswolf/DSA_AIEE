@@ -6748,15 +6748,24 @@ body.dark-mode .highlight-line,
     flex: 1;
     overflow-y: auto;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 24px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 24px;
 }
 
 #projector-scale-wrapper {
     width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.proj-scale-canvas {
     transform-origin: top center;
     transition: transform 0.2s ease;
+    width: 100%;
 }
 
 .proj-toolbar-group {
