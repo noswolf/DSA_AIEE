@@ -5789,11 +5789,12 @@ body.light-mode .heap-cell.active {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     padding: 10px 20px;
-    background: rgba(255,255,255,0.04);
+    background: rgba(15, 23, 42, 0.92);
     border-bottom: 1px solid rgba(255,255,255,0.08);
     flex-shrink: 0;
+    min-height: 56px;
 }
 .proj-toolbar-group {
     display: flex;
@@ -5803,6 +5804,7 @@ body.light-mode .heap-cell.active {
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px;
+    flex-shrink: 0;
 }
 .proj-toolbar-label {
     font-size: 11px;
@@ -5813,15 +5815,23 @@ body.light-mode .heap-cell.active {
     padding-right: 4px;
 }
 .proj-toolbar-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    flex: 1;
+    min-width: 0;
     text-align: center;
     font-size: 14px;
     font-weight: 600;
     color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.proj-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
 }
 .proj-btn {
     background: rgba(255,255,255,0.08);
@@ -5841,7 +5851,6 @@ body.light-mode .heap-cell.active {
     background: rgba(239,68,68,0.12);
     border-color: rgba(239,68,68,0.3);
     color: #f87171;
-    margin-left: auto;
 }
 .proj-btn-close:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
 
@@ -5850,7 +5859,7 @@ body.light-mode .heap-cell.active {
     background: #f0f4f8;
 }
 .sim-projector-overlay.light-mode .sim-projector-toolbar {
-    background: rgba(0,0,0,0.04);
+    background: #ffffff;
     border-bottom-color: rgba(0,0,0,0.08);
 }
 .sim-projector-overlay.light-mode .proj-toolbar-group {
@@ -6464,7 +6473,8 @@ body:not(.light-mode) .queue-item.slot-empty,
 .queue-log-entry.dequeue { border-color: #ef4444; color: #fca5a5; }
 
 /* ── Code block (same as week4 .oop-code) ── */
-.w5-code {
+.w5-code,
+.oop-code {
     background: #0f172a;
     color: #e2e8f0;
     border: 1px solid rgba(59, 130, 246, 0.25);
@@ -6478,14 +6488,22 @@ body:not(.light-mode) .queue-item.slot-empty,
     margin: 12px 0;
     overflow-x: auto;
 }
-.w5-code.green { border-left-color: var(--accent-green); border-color: rgba(16,185,129,0.25); }
-.w5-code .kw  { color: #c084fc; }
-.w5-code .fn  { color: #60a5fa; }
-.w5-code .cn  { color: #fbbf24; }
-.w5-code .st  { color: #34d399; }
-.w5-code .cm  { color: #64748b; }
-.w5-code .kv  { color: #f97316; }
-.w5-code .err { color: #f87171; }
+.w5-code.green,
+.oop-code.green { border-left-color: var(--accent-green); border-color: rgba(16,185,129,0.25); }
+.w5-code .kw,
+.oop-code .kw  { color: #c084fc; }
+.w5-code .fn,
+.oop-code .fn  { color: #60a5fa; }
+.w5-code .cn,
+.oop-code .cn  { color: #fbbf24; }
+.w5-code .st,
+.oop-code .st  { color: #34d399; }
+.w5-code .cm,
+.oop-code .cm  { color: #64748b; }
+.w5-code .kv,
+.oop-code .kv  { color: #f97316; }
+.w5-code .err,
+.oop-code .err { color: #f87171; }
 
 /* ── Comparison table ── */
 .compare-table {
@@ -6585,7 +6603,24 @@ body.dark-mode .highlight-line,
 .code-container {
     font-family: 'Fira Code', 'Consolas', monospace;
     font-size: 0.8rem;
-    line-height: 1.4;
+    line-height: 1.55;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px;
+    color: var(--text-secondary);
+}
+
+.sim-projector-overlay .code-container {
+    background: #0f172a;
+    border-color: rgba(59, 130, 246, 0.25);
+    color: #cbd5e1;
+}
+
+.sim-projector-overlay .code-container .highlight-line {
+    background-color: #ca8a04 !important;
+    border-left: 4px solid #fef08a !important;
+    color: #ffffff !important;
 }
 
 /* Stepper Controls Bar */
@@ -6658,6 +6693,7 @@ body.dark-mode .highlight-line,
 
 /* Projector / Fullscreen Modal */
 .sim-projector-overlay {
+    --proj-zoom: 1;
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(2, 4, 10, 0.95);
@@ -6666,7 +6702,7 @@ body.dark-mode .highlight-line,
     z-index: 9999;
     display: flex;
     flex-direction: column;
-    padding: 24px 32px;
+    padding: 0;
     overflow: hidden;
 }
 
@@ -6734,38 +6770,261 @@ body.dark-mode .highlight-line,
 .sim-projector-toolbar {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 16px;
+    padding: 10px 20px;
+    background: rgba(15, 23, 42, 0.92);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
     flex-shrink: 0;
+    min-height: 56px;
 }
 
 .sim-projector-overlay.light-mode .sim-projector-toolbar {
+    background: #ffffff;
     border-bottom-color: rgba(0, 0, 0, 0.1);
 }
 
 .sim-projector-content {
     flex: 1;
-    overflow-y: auto;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 16px 24px;
+    padding: 20px 28px;
+    position: relative;
 }
 
 #projector-scale-wrapper {
     width: 100%;
-    max-width: 1440px;
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
-.proj-scale-canvas {
-    transform-origin: top center;
-    transition: transform 0.2s ease;
+@supports (zoom: 1) {
+    .proj-scale-canvas {
+        width: 100%;
+        zoom: var(--proj-zoom, 1);
+        transform: none;
+    }
+}
+
+@supports not (zoom: 1) {
+    .proj-scale-canvas {
+        width: 100%;
+        transform: scale(var(--proj-zoom, 1));
+        transform-origin: top left;
+    }
+}
+
+.proj-controls-root {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.proj-setup-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.proj-drawer-header {
+    display: none;
+}
+
+.sim-projector-overlay .proj-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.08));
+    font-size: 14px;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg-card, #ffffff);
+}
+
+.sim-projector-overlay.dark-mode .proj-drawer-header {
+    background: rgba(15, 23, 42, 0.98);
+}
+
+.sim-projector-overlay .proj-drawer-close {
+    flex-shrink: 0;
+}
+
+.proj-transport-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: var(--bg-card, #ffffff);
+    border: 1px solid var(--border-color, rgba(0,0,0,0.08));
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+
+.proj-controls-toggle {
+    display: none;
+}
+
+.sim-projector-overlay .proj-controls-root {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sim-projector-overlay .proj-transport-bar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    margin: -20px -28px 0;
+    padding: 10px 28px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-radius: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    background: var(--bg-card, #ffffff);
+}
+
+.sim-projector-overlay.light-mode .proj-transport-bar {
+    background: #ffffff;
+    border-bottom-color: rgba(0,0,0,0.1);
+}
+
+.sim-projector-overlay.dark-mode .proj-transport-bar {
+    background: rgba(15, 23, 42, 0.96);
+    border-bottom-color: rgba(255,255,255,0.08);
+}
+
+.sim-projector-overlay .proj-controls-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.sim-projector-overlay .proj-controls-toggle.active {
+    border-color: var(--accent-blue, #3b82f6);
+    color: var(--accent-blue, #3b82f6);
+    background: rgba(59, 130, 246, 0.12);
+}
+
+.sim-projector-overlay .proj-setup-section {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    height: calc(100vh - 56px);
     width: 100%;
+    transform: translateY(105%);
+    visibility: hidden;
+    transition: transform 0.22s ease, visibility 0.22s ease;
+    background: var(--bg-card, #ffffff);
+    border-top: 1px solid var(--border-color, rgba(0,0,0,0.08));
+    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+    padding: 20px clamp(16px, 4vw, 48px) 32px;
+    overflow-y: auto;
+    z-index: 50;
+}
+
+.sim-projector-overlay .proj-setup-section > * {
+    flex-shrink: 0;
+}
+
+.sim-projector-overlay.light-mode .proj-setup-section {
+    background: #ffffff;
+    border-top-color: rgba(0,0,0,0.1);
+}
+
+.sim-projector-overlay.dark-mode .proj-setup-section {
+    background: rgba(15, 23, 42, 0.98);
+    border-top-color: rgba(255,255,255,0.08);
+}
+
+.sim-projector-overlay .proj-setup-section.open {
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.sim-projector-overlay .proj-setup-section .sim-topbar,
+.sim-projector-overlay .proj-setup-section .sim-input-bar,
+.sim-projector-overlay .proj-setup-section .sim-seq-bar {
+    flex-wrap: wrap;
+    overflow: visible;
+}
+
+.sim-projector-overlay .sim-topbar,
+.sim-projector-overlay .sim-panel,
+.sim-projector-overlay .sim-input-bar,
+.sim-projector-overlay .sim-seq-bar {
+    font-size: 14px;
+}
+
+.sim-projector-overlay .sim-topbar,
+.sim-projector-overlay .stepper-control-bar,
+.sim-projector-overlay .sim-input-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.sim-projector-overlay .sim-tab-btn,
+.sim-projector-overlay .stepper-btn,
+.sim-projector-overlay .sim-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+    flex-shrink: 0;
+}
+
+.sim-projector-overlay .sim-algo-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.sim-projector-overlay .sim-algo-card {
+    padding: 14px 14px 12px 16px;
+}
+
+.sim-projector-overlay .sim-algo-card-num {
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+.sim-projector-overlay .sim-algo-card-top i {
+    font-size: 18px;
+}
+
+.sim-projector-overlay .sim-algo-card-title {
+    font-size: 15px;
+}
+
+.sim-projector-overlay .sim-algo-card-desc {
+    font-size: 12px;
+}
+
+.sim-projector-overlay .sim-panel-header {
+    font-size: 12px;
+}
+
+.sim-projector-overlay .sim-log-line,
+.sim-projector-overlay .sim-stack-frame,
+.sim-projector-overlay .sim-seq-text {
+    font-size: 13px;
+}
+
+.sim-projector-overlay .sim-input {
+    font-size: 14px;
+    padding: 8px 14px;
+    width: 150px;
 }
 
 .proj-toolbar-group {
@@ -6932,6 +7191,46 @@ body.dark-mode .highlight-line,
     color: var(--text-muted);
 }
 
+.sim-input-bar-large {
+    padding: 14px 16px;
+    gap: 12px;
+}
+
+.sim-input-large {
+    flex: 1 1 240px;
+    width: auto;
+    min-width: 220px;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.sim-btn-large {
+    padding: 12px 18px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.sim-projector-overlay .sim-input-bar-large {
+    padding: 18px 20px;
+    gap: 14px;
+}
+
+.sim-projector-overlay .sim-input-bar.sim-input-bar-large {
+    flex-wrap: wrap;
+    overflow-x: visible;
+}
+
+.sim-projector-overlay .sim-input-large {
+    padding: 14px 18px;
+    font-size: 18px;
+}
+
+.sim-projector-overlay .sim-btn-large {
+    padding: 14px 22px;
+    font-size: 16px;
+}
+
 .sim-btn {
     display: inline-flex;
     align-items: center;
@@ -6950,6 +7249,16 @@ body.dark-mode .highlight-line,
 .sim-btn:hover {
     background: var(--bg-secondary);
     color: var(--text-primary);
+}
+
+.sim-btn:disabled,
+.sim-btn:disabled:hover {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: none;
+    background: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-muted);
 }
 
 .sim-btn.blue  { background: var(--accent-blue);   border-color: var(--accent-blue);   color: #fff; }
@@ -6988,6 +7297,295 @@ body.dark-mode .highlight-line,
     background: #6366f1;
     border-color: #6366f1;
     color: #fff;
+}
+
+.sim-algo-cards-section {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.sim-algo-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.sim-algo-card {
+    --algo-color: var(--accent-blue);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 12px 12px 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-align: left;
+    overflow: hidden;
+    transition: all 0.18s ease;
+}
+
+.sim-algo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--algo-color);
+    opacity: 0.72;
+}
+
+.sim-algo-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--algo-color);
+    color: var(--text-primary);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.sim-algo-card.algo-dfs { --algo-color: var(--accent-blue); }
+.sim-algo-card.algo-bfs { --algo-color: var(--accent-green); }
+.sim-algo-card.algo-rec { --algo-color: var(--accent-purple); }
+
+.sim-algo-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+}
+
+.sim-algo-card-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 3px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--algo-color);
+    color: var(--algo-color);
+    background: var(--bg-primary);
+}
+
+.sim-algo-card-top i {
+    font-size: 16px;
+    color: var(--algo-color);
+}
+
+.sim-algo-card-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.sim-algo-card-desc {
+    font-size: 11px;
+    line-height: 1.35;
+    color: var(--text-muted);
+}
+
+.sim-algo-card.algo-dfs.active {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: #fff;
+}
+
+.sim-algo-card.algo-bfs.active {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    color: #fff;
+}
+
+.sim-algo-card.algo-rec.active {
+    background: var(--accent-purple);
+    border-color: var(--accent-purple);
+    color: #fff;
+}
+
+.sim-algo-card.active::before {
+    background: rgba(255, 255, 255, 0.85);
+    opacity: 1;
+}
+
+.sim-algo-card.active .sim-algo-card-num {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.38);
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.sim-algo-card.active .sim-algo-card-top i,
+.sim-algo-card.active .sim-algo-card-title {
+    color: #fff;
+}
+
+.sim-algo-card.active .sim-algo-card-desc {
+    color: rgba(255, 255, 255, 0.86);
+}
+
+.sim-algo-tabs-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.sim-algo-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.sim-algo-tabs-large {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+    padding: 6px;
+    border-radius: 14px;
+}
+
+.sim-algo-tabs-large .sim-algo-tab {
+    justify-content: center;
+    padding: 12px 10px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.sim-algo-tabs-large .sim-algo-tab-num {
+    font-size: 12px;
+}
+
+.sim-algo-tabs-large .sim-algo-tab i {
+    font-size: 16px;
+}
+
+.sim-algo-tab {
+    --algo-color: var(--accent-blue);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    min-width: 0;
+    transition: all 0.15s ease;
+}
+
+.sim-algo-tab-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sim-algo-tab:hover {
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+}
+
+.sim-algo-tab.algo-dfs { --algo-color: var(--accent-blue); }
+.sim-algo-tab.algo-bfs { --algo-color: var(--accent-green); }
+.sim-algo-tab.algo-rec { --algo-color: var(--accent-purple); }
+.sim-algo-tab.algo-info { --algo-color: var(--accent-orange); }
+.sim-algo-tab.algo-search { --algo-color: #6366f1; }
+.sim-algo-tab.algo-insert { --algo-color: var(--accent-green); }
+.sim-algo-tab.algo-delete { --algo-color: var(--accent-red); }
+
+.sim-bst-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bst-ops-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.bst-ops-hint i {
+    color: var(--accent-orange);
+}
+
+.sim-algo-tab-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--algo-color);
+}
+
+.sim-algo-tab i {
+    font-size: 12px;
+    color: var(--algo-color);
+}
+
+.sim-algo-tab.active {
+    background: var(--algo-color);
+    border-color: var(--algo-color);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.sim-algo-tab.active .sim-algo-tab-num,
+.sim-algo-tab.active i {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+@media (max-width: 1100px) {
+    .sim-algo-cards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .sim-algo-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .sim-algo-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1100px) {
+    .sim-algo-tabs-large {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .sim-algo-tabs-large {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .sim-algo-tabs-large {
+        grid-template-columns: 1fr;
+    }
 }
 
 .sim-speed-bar {
@@ -7089,5 +7687,28 @@ body.dark-mode .highlight-line,
     text-transform: uppercase;
     letter-spacing: 0.05em;
     flex-shrink: 0;
+}
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.5);
 }
 

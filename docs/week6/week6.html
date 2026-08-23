@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 6: Trees &amp; Binary Search Trees | DSA AIEE</title>
-    <meta name="description" content="Interactive guide for Trees, Tree Traversals (DFS/BFS), and Binary Search Tree (BST) Operations — Week 6 of 01526121 DSA AIEE.">
+    <meta name="description" content="Interactive guide for Trees, Tree Traversals (DFS/BFS), and Binary Search Tree (BST) Operations — Week 6 of 01546203 DSA AIEE.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Week CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=bst-setup-fullscreen-20260824">
 
     <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -246,6 +246,62 @@
 
                                 <text x="350" y="255" text-anchor="middle" fill="#10b981" font-weight="bold" font-size="12">Leaf Nodes (Height = 0, Degree = 0)</text>
                             </svg>
+                        </div>
+                    </div>
+
+                    <!-- Binary Tree Definition & Types Grid -->
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px; margin-bottom:20px;">
+                        <div class="card glass">
+                            <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">
+                                <i class="fa-solid fa-code-branch" style="color:var(--accent-blue);margin-right:8px;"></i>
+                                Binary Tree Definition &amp; Properties
+                            </h3>
+                            <p style="font-size:14px; color:var(--text-secondary); line-height:1.7; margin-bottom:12px;">
+                                A <strong>Binary Tree</strong> is a tree where each node has <strong>at most two children</strong>, conventionally called the <strong>left child</strong> and <strong>right child</strong>.
+                            </p>
+                            <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:10px; font-size:14px;">
+                                <li style="display:flex; gap:8px;">
+                                    <strong style="width:150px; flex-shrink:0; color:var(--accent-blue);">Max Nodes / Level:</strong>
+                                    <span style="color:var(--text-secondary);">Level $k$ can hold at most $2^k$ nodes.</span>
+                                </li>
+                                <li style="display:flex; gap:8px;">
+                                    <strong style="width:150px; flex-shrink:0; color:var(--accent-blue);">Max Total Nodes:</strong>
+                                    <span style="color:var(--text-secondary);">A binary tree of height $h$ can hold at most $2^{h+1} - 1$ nodes.</span>
+                                </li>
+                                <li style="display:flex; gap:8px;">
+                                    <strong style="width:150px; flex-shrink:0; color:var(--accent-blue);">Minimum Height:</strong>
+                                    <span style="color:var(--text-secondary);">A tree with $N$ nodes has height at least $\lfloor \log_2 N \rfloor$.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card glass">
+                            <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">
+                                <i class="fa-solid fa-shapes" style="color:var(--accent-purple);margin-right:8px;"></i>
+                                Types of Trees
+                            </h3>
+                            <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:10px; font-size:14px;">
+                                <li style="display:flex; gap:8px;">
+                                    <strong style="width:130px; flex-shrink:0; color:var(--accent-purple);">Full Tree:</strong>
+                                    <span style="color:var(--text-secondary);">Every node has either 0 or 2 children.</span>
+                                </li>
+                                <li style="display:flex; gap:8px;">
+                                    <strong style="width:130px; flex-shrink:0; color:var(--accent-purple);">Complete Tree:</strong>
+                                    <span style="color:var(--text-secondary);">All levels are filled except possibly the last, which is filled left-to-right.</span>
+                                </li>
+                                <li style="display:flex; gap:8px;">
+                                    <strong style="width:130px; flex-shrink:0; color:var(--accent-purple);">Perfect Tree:</strong>
+                                    <span style="color:var(--text-secondary);">All internal nodes have 2 children and all leaves are at the same depth.</span>
+                                </li>
+                                <li style="display:flex; gap:8px;">
+                                    <strong style="width:130px; flex-shrink:0; color:var(--accent-purple);">Balanced Tree:</strong>
+                                    <span style="color:var(--text-secondary);">Left and right subtree heights differ by at most 1 for every node.</span>
+                                </li>
+                                <li style="display:flex; gap:8px;">
+                                    <strong style="width:130px; flex-shrink:0; color:var(--accent-purple);">Degenerate Tree:</strong>
+                                    <span style="color:var(--text-secondary);">Each node has only one child, behaving like a linked list.</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
@@ -628,6 +684,73 @@
                         </div>
                     </div>
 
+                    <!-- BST Comparison & Motivation Grid -->
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:20px; margin-bottom:20px;">
+                        <div class="card glass">
+                            <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                                <i class="fa-solid fa-scale-balanced" style="color:var(--accent-cyan);margin-right:8px;"></i>
+                                BST vs Regular Binary Tree
+                            </h3>
+                            <div style="overflow-x:auto;">
+                                <table class="compare-table" style="width:100%; font-size:13px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Feature</th>
+                                            <th>Regular Binary Tree</th>
+                                            <th>Binary Search Tree</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Ordering Rule</strong></td>
+                                            <td>No required ordering</td>
+                                            <td>Left &lt; Node &lt; Right</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Search Strategy</strong></td>
+                                            <td>May require checking many nodes</td>
+                                            <td>Can discard one subtree per comparison</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Typical Search</strong></td>
+                                            <td><span class="badge-on">O(N)</span></td>
+                                            <td><span class="badge-ok">O(log N)</span> average</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Main Use</strong></td>
+                                            <td>General hierarchy / expression structure</td>
+                                            <td>Dynamic sorted set / fast lookup</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card glass">
+                            <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">
+                                <i class="fa-solid fa-lightbulb" style="color:var(--accent-orange);margin-right:8px;"></i>
+                                Why Use a BST?
+                            </h3>
+                            <p style="font-size:14px; color:var(--text-secondary); line-height:1.7; margin-bottom:12px;">
+                                A BST is useful when data arrives dynamically and you need both <strong>sorted order</strong> and <strong>fast lookup</strong> without rebuilding the whole structure.
+                            </p>
+                            <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:10px; font-size:14px;">
+                                <li style="display:flex; gap:8px;">
+                                    <i class="fa-solid fa-check" style="color:var(--accent-green);margin-top:3px;"></i>
+                                    <span style="color:var(--text-secondary);">Supports dynamic insert and delete while preserving sorted order.</span>
+                                </li>
+                                <li style="display:flex; gap:8px;">
+                                    <i class="fa-solid fa-check" style="color:var(--accent-green);margin-top:3px;"></i>
+                                    <span style="color:var(--text-secondary);">In-order traversal produces keys in ascending sorted order.</span>
+                                </li>
+                                <li style="display:flex; gap:8px;">
+                                    <i class="fa-solid fa-check" style="color:var(--accent-green);margin-top:3px;"></i>
+                                    <span style="color:var(--text-secondary);">Foundation for balanced search trees such as AVL and Red-Black trees.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <!-- Section Footer Navigation -->
                     <div class="section-nav-footer">
                         <button class="sec-nav-btn prev-btn" onclick="showSection('traversal-sim-section')">
@@ -867,11 +990,14 @@
                 <span class="proj-toolbar-label">Zoom</span>
                 <button class="proj-btn" onclick="projZoomChange(-1)" title="Zoom Out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
                 <button class="proj-btn" onclick="projZoomChange(1)" title="Zoom In"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                <button class="proj-btn" onclick="projZoomReset()" title="Reset Zoom">1:1</button>
                 <span id="proj-zoom-label" style="font-size:12px;font-weight:700;font-family:'Fira Code',monospace;color:var(--text-muted);min-width:38px;text-align:center;">100%</span>
             </div>
             <div class="proj-toolbar-title" id="projector-title">Simulation</div>
-            <button class="proj-btn proj-btn-theme" id="proj-theme-btn" onclick="toggleProjTheme()"><i class="fa-solid fa-sun"></i></button>
-            <button class="proj-btn proj-btn-close" onclick="closeSimProjector()"><i class="fa-solid fa-xmark"></i> Exit</button>
+            <div class="proj-toolbar-right">
+                <button class="proj-btn proj-btn-theme" id="proj-theme-btn" onclick="toggleProjTheme()"><i class="fa-solid fa-sun"></i></button>
+                <button class="proj-btn proj-btn-close" onclick="closeSimProjector()"><i class="fa-solid fa-xmark"></i> Exit</button>
+            </div>
         </div>
         <div class="sim-projector-content" id="projector-content">
             <div id="projector-scale-wrapper"></div>
@@ -1208,6 +1334,7 @@
     let projZoom = 1.0;
     let projIsLight = true;
     let currentSimType = null;
+    let projRoot = null;
 
     function openSimProjector(type) {
         currentSimType = type;
@@ -1230,14 +1357,18 @@
             wrapper.innerHTML = '<div id="proj-traversal-root"></div>';
             const rootEl = document.getElementById('proj-traversal-root');
             if (rootEl && window._TraversalSimulator) {
-                ReactDOM.createRoot(rootEl).render(React.createElement(window._TraversalSimulator, { projMode: true }));
+                if (projRoot) { projRoot.unmount(); projRoot = null; }
+                projRoot = ReactDOM.createRoot(rootEl);
+                projRoot.render(React.createElement(window._TraversalSimulator, { projMode: true }));
             }
         } else {
             title.textContent = 'BST Operations Lab — Projector Screen';
             wrapper.innerHTML = '<div id="proj-bst-root"></div>';
             const rootEl = document.getElementById('proj-bst-root');
             if (rootEl && window._BSTSimulator) {
-                ReactDOM.createRoot(rootEl).render(React.createElement(window._BSTSimulator, { projMode: true }));
+                if (projRoot) { projRoot.unmount(); projRoot = null; }
+                projRoot = ReactDOM.createRoot(rootEl);
+                projRoot.render(React.createElement(window._BSTSimulator, { projMode: true }));
             }
         }
 
@@ -1246,6 +1377,10 @@
     }
 
     function closeSimProjector() {
+        if (projRoot) {
+            projRoot.unmount();
+            projRoot = null;
+        }
         document.getElementById('projector-overlay').style.display = 'none';
         ['proj-traversal-root', 'proj-bst-root'].forEach(id => {
             const el = document.getElementById(id);
@@ -1255,21 +1390,36 @@
     }
 
     function applyProjZoom() {
-        const canvasEls = document.querySelectorAll('.proj-scale-canvas');
-        if (canvasEls && canvasEls.length > 0) {
-            canvasEls.forEach(el => {
-                el.style.transform = `scale(${projZoom})`;
-            });
-        } else {
-            const wrapper = document.getElementById('projector-scale-wrapper');
-            if (wrapper) wrapper.style.transform = `scale(${projZoom})`;
+        const overlay = document.getElementById('projector-overlay');
+        if (overlay) {
+            overlay.style.setProperty('--proj-zoom', String(projZoom));
         }
+        const wrapper = document.getElementById('projector-scale-wrapper');
+        if (wrapper) {
+            wrapper.style.zoom = '';
+            wrapper.style.transform = '';
+        }
+        document.querySelectorAll('.proj-scale-canvas').forEach(el => {
+            if ('zoom' in el.style) {
+                el.style.zoom = String(projZoom);
+                el.style.transform = '';
+            } else {
+                el.style.zoom = '';
+                el.style.transform = `scale(${projZoom})`;
+                el.style.transformOrigin = 'top left';
+            }
+        });
         const zoomLabel = document.getElementById('proj-zoom-label');
         if (zoomLabel) zoomLabel.textContent = Math.round(projZoom * 100) + '%';
     }
 
     function projZoomChange(delta) {
         projZoom = Math.max(0.6, Math.min(2.0, projZoom + delta * 0.1));
+        applyProjZoom();
+    }
+
+    function projZoomReset() {
+        projZoom = 1.0;
         applyProjZoom();
     }
 
@@ -1348,10 +1498,17 @@
             }
         };
 
+        const getTreeDepth = (node) => {
+            if (!node) return 0;
+            return 1 + Math.max(getTreeDepth(node.left), getTreeDepth(node.right));
+        };
+
         // --- TREE SVG RENDERING HELPER ---
-        const TreeNodeVisual = ({ node, x, y, level, highlightedNode, visitedNodes }) => {
+        const TreeNodeVisual = ({ node, x, y, level, highlightedNode, visitedNodes, projMode = false, levelStep }) => {
             if (!node) return null;
-            const spread = 24 / Math.pow(1.9, Math.min(level, 3));
+            const spread = (projMode ? 26 : 24) / Math.pow(1.9, Math.min(level, 3));
+            const effectiveLevelStep = levelStep !== undefined ? levelStep : (projMode ? 18 : 16);
+            const nodeSize = projMode ? 60 : 40;
             const isHighlighted = highlightedNode === node.id;
             const isVisited = visitedNodes && visitedNodes.includes(node.id);
 
@@ -1371,33 +1528,43 @@
             return (
                 <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
                     <div
-                        className={`absolute w-10 h-10 -ml-5 rounded-full border-2 flex items-center justify-center text-sm transition-all duration-300 node-enter ${bgClass} ${scaleClass} ${shadowClass}`}
-                        style={{ left: `${x}%`, top: `${y}%`, zIndex: 10 }}
+                        className={`absolute rounded-full border-2 flex items-center justify-center transition-all duration-300 node-enter ${bgClass} ${scaleClass} ${shadowClass}`}
+                        style={{
+                            left: `${x}%`,
+                            top: `${y}%`,
+                            zIndex: 10,
+                            width: nodeSize,
+                            height: nodeSize,
+                            marginLeft: -nodeSize / 2,
+                            fontSize: projMode ? 20 : 14,
+                            borderWidth: projMode ? 3 : 2
+                        }}
                     >
                         {node.value || node.key}
                     </div>
-                    <TreeNodeVisual node={node.left} x={x - spread} y={y + 16} level={level + 1} highlightedNode={highlightedNode} visitedNodes={visitedNodes} />
-                    <TreeNodeVisual node={node.right} x={x + spread} y={y + 16} level={level + 1} highlightedNode={highlightedNode} visitedNodes={visitedNodes} />
+                    <TreeNodeVisual node={node.left} x={x - spread} y={y + effectiveLevelStep} level={level + 1} highlightedNode={highlightedNode} visitedNodes={visitedNodes} projMode={projMode} levelStep={effectiveLevelStep} />
+                    <TreeNodeVisual node={node.right} x={x + spread} y={y + effectiveLevelStep} level={level + 1} highlightedNode={highlightedNode} visitedNodes={visitedNodes} projMode={projMode} levelStep={effectiveLevelStep} />
                 </div>
             );
         };
 
-        const TreeEdges = ({ node, x, y, level }) => {
+        const TreeEdges = ({ node, x, y, level, projMode = false, levelStep }) => {
             if (!node) return null;
-            const spread = 24 / Math.pow(1.9, Math.min(level, 3));
-            const childY = y + 16;
+            const spread = (projMode ? 26 : 24) / Math.pow(1.9, Math.min(level, 3));
+            const effectiveLevelStep = levelStep !== undefined ? levelStep : (projMode ? 18 : 16);
+            const childY = y + effectiveLevelStep;
             return (
                 <>
                     {node.left && (
                         <>
-                            <line x1={`${x}%`} y1={`${y + 2}%`} x2={`${x - spread}%`} y2={`${childY}%`} stroke="#94a3b8" strokeWidth="2" />
-                            <TreeEdges node={node.left} x={x - spread} y={childY} level={level + 1} />
+                            <line x1={`${x}%`} y1={`${y + 2}%`} x2={`${x - spread}%`} y2={`${childY}%`} stroke="#94a3b8" strokeWidth={projMode ? 3 : 2} />
+                            <TreeEdges node={node.left} x={x - spread} y={childY} level={level + 1} projMode={projMode} levelStep={effectiveLevelStep} />
                         </>
                     )}
                     {node.right && (
                         <>
-                            <line x1={`${x}%`} y1={`${y + 2}%`} x2={`${x + spread}%`} y2={`${childY}%`} stroke="#94a3b8" strokeWidth="2" />
-                            <TreeEdges node={node.right} x={x + spread} y={childY} level={level + 1} />
+                            <line x1={`${x}%`} y1={`${y + 2}%`} x2={`${x + spread}%`} y2={`${childY}%`} stroke="#94a3b8" strokeWidth={projMode ? 3 : 2} />
+                            <TreeEdges node={node.right} x={x + spread} y={childY} level={level + 1} projMode={projMode} levelStep={effectiveLevelStep} />
                         </>
                     )}
                 </>
@@ -1414,6 +1581,7 @@
             const [currentStepIndex, setCurrentStepIndex] = useState(0);
             const [isPlaying, setIsPlaying] = useState(false);
             const [speed, setSpeed] = useState(1);
+            const [projControlsOpen, setProjControlsOpen] = useState(false);
 
             const timerRef = useRef(null);
             const logBoxRef = useRef(null);
@@ -1722,64 +1890,117 @@
 
             const renderContent = () => {
                 const currentTree = getSelectedTree();
-                const canvasHeight = projMode ? '460px' : '360px';
+                const maxTreeDepth = Math.max(getTreeDepth(currentTree) - 1, 1);
+                const treeRootY = 10;
+                const treeBottomPadding = 12;
+                const maxLevelStep = projMode ? 44 : 38;
+                const treeLevelStep = Math.min(maxLevelStep, Math.floor((100 - treeRootY - treeBottomPadding) / maxTreeDepth));
+                const canvasHeight = projMode ? 'min(76vh, 880px)' : '400px';
+                const algorithmOptions = [
+                    { id: 'preorder', num: '01', title: 'Pre-order', desc: 'Root → Left → Right', icon: 'fa-diagram-project', group: 'dfs' },
+                    { id: 'inorder', num: '02', title: 'In-order', desc: 'Left → Root → Right', icon: 'fa-sort-amount-down', group: 'dfs' },
+                    { id: 'postorder', num: '03', title: 'Post-order', desc: 'Left → Right → Root', icon: 'fa-tree', group: 'dfs' },
+                    { id: 'bfs', num: '04', title: 'Level-order', desc: 'Level by level', icon: 'fa-layer-group', group: 'bfs' },
+                    { id: 'rec_pre', num: '05', title: 'Rec Pre', desc: 'Recursive Pre-order', icon: 'fa-rotate-right', group: 'rec' },
+                    { id: 'rec_in', num: '06', title: 'Rec In', desc: 'Recursive In-order', icon: 'fa-code-branch', group: 'rec' },
+                    { id: 'rec_post', num: '07', title: 'Rec Post', desc: 'Recursive Post-order', icon: 'fa-sitemap', group: 'rec' }
+                ];
 
                 return (
                     <div className="flex flex-col gap-3">
-                        {/* Top Controls Area */}
-                        <div className="flex flex-col gap-2">
-                            {/* Top Bar: Tree Selection & Projector Mode Button */}
-                            <div className="sim-topbar">
-                                <div className="sim-algo-bar">
-                                    <span className="sim-seq-label">Tree:</span>
-                                    {[
-                                        { id: 'standard', label: 'Balanced' },
-                                        { id: 'skewed', label: 'Skewed' },
-                                        { id: 'unbalanced', label: 'Unbalanced' }
-                                    ].map(t => (
-                                        <button
-                                            key={t.id}
-                                            onClick={() => setTreeType(t.id)}
-                                            className={`sim-tab-btn ${treeType === t.id ? 'active' : ''}`}
-                                        >
-                                            {t.label}
+                        {/* Controls Root: setup drawer + compact transport bar */}
+                        <div className="proj-controls-root">
+                            {/* Setup controls: visible normally, drawer in projector mode */}
+                            <div className={`proj-setup-section ${projMode && projControlsOpen ? 'open' : ''}`}>
+                                {projMode && (
+                                    <div className="proj-drawer-header">
+                                        <span><i className="fa-solid fa-sliders"></i> Setup Controls</span>
+                                        <button onClick={() => setProjControlsOpen(false)} className="sim-btn proj-drawer-close">
+                                            <i className="fa-solid fa-xmark"></i> Close
                                         </button>
-                                    ))}
-                                </div>
-
-                                <div className="sim-algo-bar">
-                                    <span className="sim-seq-label">Algorithm:</span>
-                                    {[
-                                        { id: 'preorder', label: 'Pre-order (DFS)' },
-                                        { id: 'inorder', label: 'In-order (DFS)' },
-                                        { id: 'postorder', label: 'Post-order (DFS)' },
-                                        { id: 'bfs', label: 'Level-order (BFS)' },
-                                        { id: 'rec_pre', label: 'Rec Pre' },
-                                        { id: 'rec_in', label: 'Rec In' },
-                                        { id: 'rec_post', label: 'Rec Post' }
-                                    ].map(algo => (
-                                        <button
-                                            key={algo.id}
-                                            onClick={() => setTraversalType(algo.id)}
-                                            className={`sim-tab-btn ${traversalType === algo.id ? 'active' : ''}`}
-                                        >
-                                            {algo.label}
-                                        </button>
-                                    ))}
-                                </div>
-
-                                {!projMode && (
-                                    <button
-                                        onClick={() => window.openSimProjector('traversal')}
-                                        className="sim-projector-btn"
-                                    >
-                                        <i className="fa-solid fa-expand"></i> Projector Mode
-                                    </button>
+                                    </div>
                                 )}
+
+                                {projMode ? (
+                                    <div className="sim-algo-cards-section">
+                                        <span className="sim-seq-label">Algorithm:</span>
+                                        <div className="sim-algo-cards">
+                                            {algorithmOptions.map(algo => (
+                                                <button
+                                                    key={algo.id}
+                                                    onClick={() => setTraversalType(algo.id)}
+                                                    className={`sim-algo-card algo-${algo.group} ${traversalType === algo.id ? 'active' : ''}`}
+                                                >
+                                                    <span className="sim-algo-card-top">
+                                                        <span className="sim-algo-card-num">{algo.num}</span>
+                                                        <i className={`fa-solid ${algo.icon}`}></i>
+                                                    </span>
+                                                    <span className="sim-algo-card-title">{algo.title}</span>
+                                                    <span className="sim-algo-card-desc">{algo.desc}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="sim-algo-tabs-row">
+                                        <span className="sim-seq-label">Algorithm:</span>
+                                        <div className="sim-algo-tabs sim-algo-tabs-large">
+                                            {algorithmOptions.map(algo => (
+                                                <button
+                                                    key={algo.id}
+                                                    onClick={() => setTraversalType(algo.id)}
+                                                    title={algo.desc}
+                                                    className={`sim-algo-tab algo-${algo.group} ${traversalType === algo.id ? 'active' : ''}`}
+                                                >
+                                                    <span className="sim-algo-tab-num">{algo.num}</span>
+                                                    <i className={`fa-solid ${algo.icon}`}></i>
+                                                    <span className="sim-algo-tab-label">{algo.title}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="sim-topbar">
+                                    <div className="sim-algo-bar">
+                                        <span className="sim-seq-label">Tree:</span>
+                                        {[
+                                            { id: 'standard', label: 'Balanced' },
+                                            { id: 'skewed', label: 'Skewed' },
+                                            { id: 'unbalanced', label: 'Unbalanced' }
+                                        ].map(t => (
+                                            <button
+                                                key={t.id}
+                                                onClick={() => setTreeType(t.id)}
+                                                className={`sim-tab-btn ${treeType === t.id ? 'active' : ''}`}
+                                            >
+                                                {t.label}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {!projMode && (
+                                        <button
+                                            onClick={() => window.openSimProjector('traversal')}
+                                            className="sim-projector-btn"
+                                        >
+                                            <i className="fa-solid fa-expand"></i> Projector Mode
+                                        </button>
+                                    )}
+                                </div>
                             </div>
 
-                            {/* Stepper Control Bar & Visited Sequence Row */}
-                            <div className="flex flex-wrap items-center justify-between gap-2 sim-topbar" style={{padding:'8px 12px'}}>
+                            {/* Compact transport bar */}
+                            <div className="proj-transport-bar">
+                                {projMode && (
+                                    <button
+                                        onClick={() => setProjControlsOpen(open => !open)}
+                                        className={`sim-btn proj-controls-toggle ${projControlsOpen ? 'active' : ''}`}
+                                    >
+                                        <i className="fa-solid fa-sliders"></i> Controls
+                                    </button>
+                                )}
+
                                 <div className="stepper-btn-group">
                                     <button
                                         onClick={handlePrev}
@@ -1815,47 +2036,33 @@
                                     >
                                         <i className="fa-solid fa-rotate-left"></i> Reset
                                     </button>
-
-                                    <span className="step-indicator-badge">
-                                        Step {currentStepIndex + 1} / {steps.length || 1}
-                                    </span>
-
-                                    <div className="sim-speed-bar">
-                                        <span className="sim-seq-label">Speed</span>
-                                        {[0.5, 1, 2].map(s => (
-                                            <button
-                                                key={s}
-                                                onClick={() => setSpeed(s)}
-                                                className={`sim-speed-btn ${speed === s ? 'active' : ''}`}
-                                            >
-                                                {s}x
-                                            </button>
-                                        ))}
-                                    </div>
                                 </div>
 
-                                <div className="sim-seq-bar" style={{margin:0, flex:1, minWidth:'260px', padding:'6px 12px'}}>
-                                    <span className="sim-seq-label">
-                                        <i className="fa-solid fa-list-ol" style={{color:'var(--accent-green)',marginRight:'4px'}}></i> Sequence:
-                                    </span>
-                                    <div className="sim-seq-text" style={{fontSize:'12px'}}>
-                                        {currentStep.sequence && currentStep.sequence.length > 0 ? (
-                                            currentStep.sequence.join(' → ')
-                                        ) : (
-                                            <span className="sim-empty-label" style={{display:'inline'}}>No nodes visited yet...</span>
-                                        )}
-                                    </div>
+                                <span className="step-indicator-badge">
+                                    Step {currentStepIndex + 1} / {steps.length || 1}
+                                </span>
+
+                                <div className="sim-speed-bar">
+                                    <span className="sim-seq-label">Speed</span>
+                                    {[0.5, 1, 2].map(s => (
+                                        <button
+                                            key={s}
+                                            onClick={() => setSpeed(s)}
+                                            className={`sim-speed-btn ${speed === s ? 'active' : ''}`}
+                                        >
+                                            {s}x
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
-                        </div>
 
                         {/* Visualizer Area (Scalable in Projector Mode) */}
                         <div className={`grid grid-cols-1 lg:grid-cols-3 gap-4 ${projMode ? 'proj-scale-canvas' : ''}`}>
                             {/* Tree Canvas */}
                             <div className="lg:col-span-2 sim-canvas tree-container" style={{height: canvasHeight, display:'flex',alignItems:'center',justifyContent:'center'}}>
-                                <div style={{position:'relative',width:'100%',height:'100%',maxWidth:'680px',margin:'0 auto'}}>
+                                <div style={{position:'relative',width:'100%',height:'100%',maxWidth: projMode ? '100%' : '680px',margin:'0 auto'}}>
                                     <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
-                                        <TreeEdges node={currentTree} x={50} y={10} level={0} />
+                                        <TreeEdges node={currentTree} x={50} y={10} level={0} projMode={projMode} levelStep={treeLevelStep} />
                                     </svg>
                                     <TreeNodeVisual
                                         node={currentTree}
@@ -1864,16 +2071,18 @@
                                         level={0}
                                         highlightedNode={currentStep.highlightedNode}
                                         visitedNodes={currentStep.visitedNodes}
+                                        projMode={projMode}
+                                        levelStep={treeLevelStep}
                                     />
                                 </div>
                             </div>
 
                             {/* Right Panels: Stack & Logs */}
                             <div className="flex flex-col gap-3" style={{height: canvasHeight}}>
-                                {/* Recursion Call Stack Panel */}
+                                {/* Call / Algorithm Stack Panel */}
                                 <div className="sim-panel flex-1">
                                     <div className="sim-panel-header">
-                                        <span><i className="fa-solid fa-layer-group" style={{color:'var(--accent-purple)',marginRight:'4px'}}></i> Recursion Call Stack</span>
+                                        <span><i className="fa-solid fa-layer-group" style={{color:'var(--accent-purple)',marginRight:'4px'}}></i> Call / Algorithm Stack</span>
                                         <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>Depth: {currentStep.callStack ? currentStep.callStack.length : 0}</span>
                                     </div>
                                     <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-1">
@@ -1906,10 +2115,23 @@
                                                 {logMsg}
                                             </div>
                                         ))}
-                                        <div ref={logEndRef} />
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div className="sim-seq-bar" style={{margin:0, padding:'6px 12px'}}>
+                            <span className="sim-seq-label">
+                                <i className="fa-solid fa-list-ol" style={{color:'var(--accent-green)',marginRight:'4px'}}></i> Sequence:
+                            </span>
+                            <div className="sim-seq-text" style={{fontSize:'12px'}}>
+                                {currentStep.sequence && currentStep.sequence.length > 0 ? (
+                                    currentStep.sequence.join(' → ')
+                                ) : (
+                                    <span className="sim-empty-label" style={{display:'inline'}}>No nodes visited yet...</span>
+                                )}
+                            </div>
+                        </div>
                         </div>
                     </div>
                 );
@@ -1991,6 +2213,8 @@
     return root`
         };
 
+        const BST_DEFAULT_INPUT = '40';
+
         class BSTNodeModel {
             constructor(key) {
                 this.id = Math.random().toString(36).substr(2, 9);
@@ -2002,13 +2226,15 @@
 
         const BSTSimulator = ({ projMode = false }) => {
             const [tree, setTree] = useState(null);
-            const [activeTab, setActiveTab] = useState('node');
-            const [currentSnippet, setCurrentSnippet] = useState('node');
-            const [inputVal, setInputVal] = useState('');
+            const [activeTab, setActiveTab] = useState('search');
+            const [currentSnippet, setCurrentSnippet] = useState('search');
+            const [inputVal, setInputVal] = useState(BST_DEFAULT_INPUT);
+            const [searchMode, setSearchMode] = useState('target');
             const [steps, setSteps] = useState([]);
             const [currentStepIndex, setCurrentStepIndex] = useState(0);
             const [isPlaying, setIsPlaying] = useState(false);
             const [speed, setSpeed] = useState(1);
+            const [projControlsOpen, setProjControlsOpen] = useState(false);
 
             const timerRef = useRef(null);
             const logBoxRef = useRef(null);
@@ -2023,6 +2249,8 @@
                 root.right.right = new BSTNodeModel(80);
                 setTree(root);
                 setCurrentStepIndex(0);
+                setIsPlaying(false);
+                setInputVal(BST_DEFAULT_INPUT);
                 setSteps([{
                     highlightedNode: null,
                     activeLine: null,
@@ -2183,16 +2411,18 @@
                         highlightedNode: node ? node.id : null,
                         activeLine: 1,
                         logs: [`CALL ${callName}`],
-                        callStack: [...stack]
+                        callStack: [...stack],
+                        treeSnapshot: deepClone(newTree)
                     });
 
                     if (!node) {
                         const newNode = new BSTNodeModel(k);
                         generatedSteps.push({
                             highlightedNode: newNode.id,
-                            activeLine: 2,
+                            activeLine: 3,
                             logs: [`Found empty position. Creating new node with key ${k}.`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(newTree)
                         });
                         stack.pop();
                         return newNode;
@@ -2203,23 +2433,40 @@
                             highlightedNode: node.id,
                             activeLine: 5,
                             logs: [`${k} < ${node.key} → Recursing Left to find insertion spot`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(newTree)
                         });
                         node.left = insertRec(node.left, k, lvl + 1);
+                        generatedSteps.push({
+                            highlightedNode: node.left ? node.left.id : node.id,
+                            activeLine: 6,
+                            logs: [`Re-linked left child of ${node.key}. Tree structure updated.`],
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(newTree)
+                        });
                     } else if (k > node.key) {
                         generatedSteps.push({
                             highlightedNode: node.id,
                             activeLine: 7,
                             logs: [`${k} > ${node.key} → Recursing Right to find insertion spot`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(newTree)
                         });
                         node.right = insertRec(node.right, k, lvl + 1);
+                        generatedSteps.push({
+                            highlightedNode: node.right ? node.right.id : node.id,
+                            activeLine: 8,
+                            logs: [`Re-linked right child of ${node.key}. Tree structure updated.`],
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(newTree)
+                        });
                     } else {
                         generatedSteps.push({
                             highlightedNode: node.id,
                             activeLine: 9,
                             logs: [`Key ${k} already exists in BST. Duplicate ignored.`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(newTree)
                         });
                     }
 
@@ -2228,10 +2475,17 @@
                 };
 
                 newTree = insertRec(newTree, key);
+                generatedSteps.push({
+                    highlightedNode: newTree ? newTree.id : null,
+                    activeLine: 9,
+                    logs: [`Insert complete. Final tree state shown.`],
+                    callStack: [],
+                    treeSnapshot: deepClone(newTree)
+                });
                 setTree(newTree);
                 setSteps(generatedSteps);
                 setCurrentStepIndex(0);
-                setInputVal('');
+                setInputVal(BST_DEFAULT_INPUT);
             };
 
             // Pre-compute steps for Delete
@@ -2258,15 +2512,17 @@
                         highlightedNode: node ? node.id : null,
                         activeLine: 1,
                         logs: [`CALL ${callName}`],
-                        callStack: [...stack]
+                        callStack: [...stack],
+                        treeSnapshot: deepClone(rootCopy)
                     });
 
                     if (!node) {
                         generatedSteps.push({
                             highlightedNode: null,
-                            activeLine: 2,
+                            activeLine: 3,
                             logs: [`Target ${k} not found in BST.`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(rootCopy)
                         });
                         stack.pop();
                         return null;
@@ -2277,50 +2533,70 @@
                             highlightedNode: node.id,
                             activeLine: 4,
                             logs: [`${k} < ${node.key} → Go Left`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(rootCopy)
                         });
                         node.left = deleteRec(node.left, k, lvl + 1);
+                        generatedSteps.push({
+                            highlightedNode: node.left ? node.left.id : null,
+                            activeLine: 5,
+                            logs: [`Re-linked left child of ${node.key}. Tree structure updated.`],
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(rootCopy)
+                        });
                     } else if (k > node.key) {
                         generatedSteps.push({
                             highlightedNode: node.id,
                             activeLine: 6,
                             logs: [`${k} > ${node.key} → Go Right`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(rootCopy)
                         });
                         node.right = deleteRec(node.right, k, lvl + 1);
+                        generatedSteps.push({
+                            highlightedNode: node.right ? node.right.id : null,
+                            activeLine: 7,
+                            logs: [`Re-linked right child of ${node.key}. Tree structure updated.`],
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(rootCopy)
+                        });
                     } else {
                         // Found node
                         generatedSteps.push({
                             highlightedNode: node.id,
                             activeLine: 8,
                             logs: [`Found node with key ${k} to delete!`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(rootCopy)
                         });
 
                         if (!node.left && !node.right) {
                             generatedSteps.push({
                                 highlightedNode: node.id,
-                                activeLine: 10,
+                                activeLine: 11,
                                 logs: [`Case 0 (Leaf): Removing node ${k} directly.`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(rootCopy)
                             });
                             stack.pop();
                             return null;
                         } else if (!node.left) {
                             generatedSteps.push({
                                 highlightedNode: node.id,
-                                activeLine: 13,
+                                activeLine: 14,
                                 logs: [`Case 1 (Right Child only): Bypassing ${k} with child ${node.right.key}.`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(rootCopy)
                             });
                             stack.pop();
                             return node.right;
                         } else if (!node.right) {
                             generatedSteps.push({
                                 highlightedNode: node.id,
-                                activeLine: 15,
+                                activeLine: 16,
                                 logs: [`Case 1 (Left Child only): Bypassing ${k} with child ${node.left.key}.`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(rootCopy)
                             });
                             stack.pop();
                             return node.left;
@@ -2328,12 +2604,27 @@
                             const successor = getMin(node.right);
                             generatedSteps.push({
                                 highlightedNode: successor.id,
-                                activeLine: 18,
+                                activeLine: 19,
                                 logs: [`Case 2 (Two Children): Found In-Order Successor ${successor.key} (min of right subtree).`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(rootCopy)
                             });
                             node.key = successor.key;
+                            generatedSteps.push({
+                                highlightedNode: node.id,
+                                activeLine: 20,
+                                logs: [`Replaced key ${k} with successor key ${successor.key}.`],
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(rootCopy)
+                            });
                             node.right = deleteRec(node.right, successor.key, lvl + 1);
+                            generatedSteps.push({
+                                highlightedNode: node.right ? node.right.id : null,
+                                activeLine: 21,
+                                logs: [`Re-linked right child of ${node.key}. Successor removed.`],
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(rootCopy)
+                            });
                         }
                     }
 
@@ -2342,10 +2633,17 @@
                 };
 
                 rootCopy = deleteRec(rootCopy, key);
+                generatedSteps.push({
+                    highlightedNode: rootCopy ? rootCopy.id : null,
+                    activeLine: 22,
+                    logs: [`Delete complete. Final tree state shown.`],
+                    callStack: [],
+                    treeSnapshot: deepClone(rootCopy)
+                });
                 setTree(rootCopy);
                 setSteps(generatedSteps);
                 setCurrentStepIndex(0);
-                setInputVal('');
+                setInputVal(BST_DEFAULT_INPUT);
             };
 
             // Auto-play timer
@@ -2383,30 +2681,49 @@
                 callStack: []
             };
 
+            const displayTree = currentStep.treeSnapshot !== undefined ? currentStep.treeSnapshot : tree;
+
+            const getTreeDepth = (node) => {
+                if (!node) return 0;
+                return 1 + Math.max(getTreeDepth(node.left), getTreeDepth(node.right));
+            };
+
+            const getInOrderKeys = (node) => {
+                if (!node) return [];
+                return [...getInOrderKeys(node.left), node.key, ...getInOrderKeys(node.right)];
+            };
+
+            const maxTreeDepth = getTreeDepth(displayTree);
+            const treeLevelStep = Math.min(projMode ? 44 : 38, Math.floor((100 - 5 - 12) / Math.max(maxTreeDepth - 1, 1)));
+            const treeSpreadBase = projMode ? 26 : 24;
+            const treeNodeRadius = projMode ? 30 : 20;
+            const treeNodeFontSize = projMode ? 20 : 14;
+            const inOrderKeys = getInOrderKeys(displayTree);
+
             const renderTreeSvg = (node, x, y, level) => {
                 if (!node) return null;
-                const spread = 24 / Math.pow(1.8, Math.min(level, 3));
+                const spread = treeSpreadBase / Math.pow(1.9, Math.min(level, 3));
                 const isHi = currentStep.highlightedNode === node.id;
 
                 return (
                     <g key={node.id}>
                         {node.left && (
                             <>
-                                <line x1={`${x}%`} y1={`${y}%`} x2={`${x - spread}%`} y2={`${y + 14}%`} stroke="#94a3b8" strokeWidth="2" />
-                                {renderTreeSvg(node.left, x - spread, y + 14, level + 1)}
+                                <line x1={`${x}%`} y1={`${y}%`} x2={`${x - spread}%`} y2={`${y + treeLevelStep}%`} stroke="#94a3b8" strokeWidth={projMode ? 3 : 2} />
+                                {renderTreeSvg(node.left, x - spread, y + treeLevelStep, level + 1)}
                             </>
                         )}
                         {node.right && (
                             <>
-                                <line x1={`${x}%`} y1={`${y}%`} x2={`${x + spread}%`} y2={`${y + 14}%`} stroke="#94a3b8" strokeWidth="2" />
-                                {renderTreeSvg(node.right, x + spread, y + 14, level + 1)}
+                                <line x1={`${x}%`} y1={`${y}%`} x2={`${x + spread}%`} y2={`${y + treeLevelStep}%`} stroke="#94a3b8" strokeWidth={projMode ? 3 : 2} />
+                                {renderTreeSvg(node.right, x + spread, y + treeLevelStep, level + 1)}
                             </>
                         )}
                         <g className="transition-all duration-300">
                             <circle
                                 cx={`${x}%`}
                                 cy={`${y}%`}
-                                r="18"
+                                r={treeNodeRadius}
                                 fill={isHi ? "#facc15" : "#3b82f6"}
                                 stroke={isHi ? "#ca8a04" : "#1e40af"}
                                 strokeWidth={isHi ? 3 : 2}
@@ -2419,7 +2736,7 @@
                                 textAnchor="middle"
                                 fill={isHi ? "#713f12" : "white"}
                                 fontWeight="bold"
-                                fontSize="13"
+                                fontSize={treeNodeFontSize}
                                 className="pointer-events-none font-mono"
                             >
                                 {node.key}
@@ -2430,107 +2747,131 @@
             };
 
             const renderContent = () => {
-                const canvasHeight = projMode ? '380px' : '260px';
-                const codeHeight = projMode ? '380px' : '260px';
-                const stackHeight = projMode ? '160px' : '130px';
+                const canvasHeight = projMode ? 'min(76vh, 880px)' : '400px';
+                const codeHeight = projMode ? 'min(46vh, 560px)' : '380px';
+                const stackHeight = projMode ? 'min(13vh, 150px)' : '100px';
+                const logHeight = projMode ? 'min(20vh, 220px)' : '130px';
+
+                const operationOptions = [
+                    { id: 'search', num: '01', title: 'Search', icon: 'fa-magnifying-glass', group: 'search' },
+                    { id: 'insert', num: '02', title: 'Insert', icon: 'fa-plus', group: 'insert' },
+                    { id: 'delete', num: '03', title: 'Delete', icon: 'fa-trash', group: 'delete' }
+                ];
 
                 return (
                     <div className="flex flex-col gap-3">
-                        {/* Top Controls Area (Fixed Header in Projector) */}
-                        <div className="flex flex-col gap-2">
-                            {/* Top Controls: Tabs & Operation Triggers */}
-                            <div className="sim-topbar">
-                                <div className="sim-algo-bar">
-                                    {[
-                                        { id: 'node', label: 'Node Info', icon: 'fa-info-circle' },
-                                        { id: 'search', label: 'Search', icon: 'fa-magnifying-glass' },
-                                        { id: 'insert', label: 'Insert', icon: 'fa-plus' },
-                                        { id: 'delete', label: 'Delete', icon: 'fa-trash' }
-                                    ].map(t => (
+                        {/* Controls Root: setup drawer + compact transport bar */}
+                        <div className="proj-controls-root">
+                            {/* Setup controls: visible normally, drawer in projector mode */}
+                            <div className={`proj-setup-section ${projMode && projControlsOpen ? 'open' : ''}`}>
+                                {projMode && (
+                                    <div className="proj-drawer-header">
+                                        <span><i className="fa-solid fa-sliders"></i> Setup Controls</span>
+                                        <button onClick={() => setProjControlsOpen(false)} className="sim-btn proj-drawer-close">
+                                            <i className="fa-solid fa-xmark"></i> Close
+                                        </button>
+                                    </div>
+                                )}
+                            <div className="sim-algo-tabs-row">
+                                <div className="flex items-center justify-between gap-2 flex-wrap">
+                                    <span className="sim-seq-label">Operation:</span>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <button onClick={initDefaultTree} className="sim-btn">
+                                            <i className="fa-solid fa-rotate-right"></i> Reset Default Tree
+                                        </button>
+                                        {!projMode && (
+                                            <button
+                                                onClick={() => window.openSimProjector('bst')}
+                                                className="sim-projector-btn"
+                                            >
+                                                <i className="fa-solid fa-expand"></i> Projector Mode
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="sim-algo-tabs sim-algo-tabs-large sim-bst-tabs">
+                                    {operationOptions.map(t => (
                                         <button
                                             key={t.id}
                                             onClick={() => { setActiveTab(t.id); setCurrentSnippet(t.id); }}
-                                            className={`sim-tab-btn ${activeTab === t.id ? 'active' : ''}`}
+                                            title={t.title}
+                                            className={`sim-algo-tab algo-${t.group} ${activeTab === t.id ? 'active' : ''}`}
                                         >
-                                            <i className={`fa-solid ${t.icon}`}></i> {t.label}
+                                            <span className="sim-algo-tab-num">{t.num}</span>
+                                            <span className="sim-algo-tab-label">
+                                                <i className={`fa-solid ${t.icon}`}></i>
+                                                {t.title}
+                                            </span>
                                         </button>
                                     ))}
                                 </div>
-
-                                <div className="flex items-center gap-2">
-                                    <button onClick={initDefaultTree} className="sim-btn">
-                                        <i className="fa-solid fa-rotate-right"></i> Reset Default Tree
-                                    </button>
-
-                                    {!projMode && (
-                                        <button
-                                            onClick={() => window.openSimProjector('bst')}
-                                            className="sim-projector-btn"
-                                        >
-                                            <i className="fa-solid fa-expand"></i> Projector Mode
-                                        </button>
-                                    )}
+                                <div className="bst-ops-hint">
+                                    <i className="fa-solid fa-lightbulb"></i>
+                                    <span>Select <strong>Search</strong>, <strong>Insert</strong>, or <strong>Delete</strong> above to perform live BST operations.</span>
                                 </div>
                             </div>
 
                             {/* Operation Specific Input Bar */}
-                            <div className="sim-input-bar" style={{padding:'8px 12px'}}>
-                                {activeTab === 'node' && (
-                                    <div style={{display:'flex',alignItems:'center',gap:'8px',fontSize:'12px',color:'var(--text-secondary)'}}>
-                                        <i className="fa-solid fa-lightbulb" style={{color:'var(--accent-orange)'}}></i>
-                                        <span>Select <strong>Search</strong>, <strong>Insert</strong>, or <strong>Delete</strong> tab above to perform live BST operations.</span>
-                                    </div>
-                                )}
-
+                            <div className="sim-input-bar sim-input-bar-large">
                                 {activeTab === 'search' && (
-                                    <div className="flex items-center gap-2 flex-wrap">
+                                    <div className="flex items-center gap-3 flex-wrap">
                                         <input
                                             type="number"
                                             value={inputVal}
                                             onChange={e => setInputVal(e.target.value)}
                                             placeholder="Target Key..."
-                                            className="sim-input"
+                                            className="sim-input sim-input-large"
                                             style={{borderColor:'rgba(99,102,241,0.5)'}}
                                         />
-                                        <button onClick={() => triggerSearch(inputVal, 'target')} className="sim-btn indigo">Find Target</button>
-                                        <button onClick={() => triggerSearch(null, 'min')} className="sim-btn">Find Min</button>
-                                        <button onClick={() => triggerSearch(null, 'max')} className="sim-btn">Find Max</button>
+                                        <button onClick={() => { setSearchMode('target'); triggerSearch(inputVal, 'target'); }} className={`sim-btn sim-btn-large ${searchMode === 'target' ? 'indigo' : ''}`} disabled={!inputVal}>Find Target</button>
+                                        <button onClick={() => { setSearchMode('min'); triggerSearch(null, 'min'); }} className={`sim-btn sim-btn-large ${searchMode === 'min' ? 'indigo' : ''}`}>Find Min</button>
+                                        <button onClick={() => { setSearchMode('max'); triggerSearch(null, 'max'); }} className={`sim-btn sim-btn-large ${searchMode === 'max' ? 'indigo' : ''}`}>Find Max</button>
                                     </div>
                                 )}
 
                                 {activeTab === 'insert' && (
-                                    <div className="flex items-center gap-2 flex-wrap">
+                                    <div className="flex items-center gap-3 flex-wrap">
                                         <input
                                             type="number"
                                             value={inputVal}
                                             onChange={e => setInputVal(e.target.value)}
                                             placeholder="New Key..."
-                                            className="sim-input"
+                                            className="sim-input sim-input-large"
                                             style={{borderColor:'rgba(16,185,129,0.5)'}}
                                         />
-                                        <button onClick={() => triggerInsert(inputVal)} className="sim-btn green">Insert Key</button>
-                                        <button onClick={() => triggerInsert(Math.floor(Math.random() * 90) + 10)} className="sim-btn">Random Key +</button>
-                                        <button onClick={() => setTree(null)} className="sim-btn red" style={{background:'rgba(239,68,68,0.15)',color:'#fca5a5',borderColor:'rgba(239,68,68,0.4)'}}>Clear Tree</button>
+                                        <button onClick={() => triggerInsert(inputVal)} className="sim-btn sim-btn-large green" disabled={!inputVal}>Insert Key</button>
+                                        <button onClick={() => triggerInsert(Math.floor(Math.random() * 90) + 10)} className="sim-btn sim-btn-large">Random Key +</button>
+                                        <button onClick={() => { setTree(null); setSteps([]); setCurrentStepIndex(0); setIsPlaying(false); setInputVal(BST_DEFAULT_INPUT); }} className="sim-btn sim-btn-large red" style={{background:'rgba(239,68,68,0.15)',color:'#fca5a5',borderColor:'rgba(239,68,68,0.4)'}}>Clear Tree</button>
                                     </div>
                                 )}
 
                                 {activeTab === 'delete' && (
-                                    <div className="flex items-center gap-2 flex-wrap">
+                                    <div className="flex items-center gap-3 flex-wrap">
                                         <input
                                             type="number"
                                             value={inputVal}
                                             onChange={e => setInputVal(e.target.value)}
                                             placeholder="Key to Delete..."
-                                            className="sim-input"
+                                            className="sim-input sim-input-large"
                                             style={{borderColor:'rgba(239,68,68,0.5)'}}
                                         />
-                                        <button onClick={() => triggerDelete(inputVal)} className="sim-btn red">Delete Key</button>
+                                        <button onClick={() => triggerDelete(inputVal)} className="sim-btn sim-btn-large red" disabled={!inputVal}>Delete Key</button>
                                     </div>
                                 )}
                             </div>
+                            </div>
 
-                            {/* Stepper Control Bar */}
-                            <div className="stepper-control-bar" style={{padding:'8px 12px'}}>
+                            {/* Compact transport bar */}
+                            <div className="proj-transport-bar">
+                                {projMode && (
+                                    <button
+                                        onClick={() => setProjControlsOpen(open => !open)}
+                                        className={`sim-btn proj-controls-toggle ${projControlsOpen ? 'active' : ''}`}
+                                    >
+                                        <i className="fa-solid fa-sliders"></i> Controls
+                                    </button>
+                                )}
+
                                 <div className="stepper-btn-group">
                                     <button
                                         onClick={() => { setIsPlaying(false); if (currentStepIndex > 0) setCurrentStepIndex(p => p - 1); }}
@@ -2549,6 +2890,7 @@
                                                 setIsPlaying(!isPlaying);
                                             }
                                         }}
+                                        disabled={steps.length < 2}
                                         className="stepper-btn primary"
                                     >
                                         <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
@@ -2587,7 +2929,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
                         {/* Main Visualizer: Code Tracing + Tree SVG Canvas (Scalable) */}
                         <div className={`grid grid-cols-1 lg:grid-cols-12 gap-4 ${projMode ? 'proj-scale-canvas' : ''}`}>
@@ -2599,7 +2940,7 @@
                                         <span><i className="fa-solid fa-code" style={{color:'var(--accent-purple)',marginRight:'4px'}}></i> Python Code Trace</span>
                                         <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>{currentSnippet}.py</span>
                                     </div>
-                                    <div className="code-container custom-scrollbar overflow-y-auto flex-1" style={{fontSize:'12px'}}>
+                                    <div className="code-container custom-scrollbar overflow-y-auto flex-1" style={{fontSize: projMode ? '14px' : '12px'}}>
                                         {BST_SNIPPETS[currentSnippet].trim().split('\n').map((line, idx) => (
                                             <div
                                                 key={idx}
@@ -2642,19 +2983,21 @@
                             <div className="lg:col-span-7 flex flex-col gap-3">
                                 {/* SVG Tree Canvas */}
                                 <div className="sim-canvas tree-container" style={{height: canvasHeight, display:'flex',alignItems:'center',justifyContent:'center'}}>
-                                    {tree ? (
-                                        <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
-                                            <g transform="translate(0, 30)">
-                                                {renderTreeSvg(tree, 50, 5, 0)}
-                                            </g>
-                                        </svg>
-                                    ) : (
-                                        <span className="sim-empty-label">Empty BST Canvas. Use 'Insert' above to add nodes.</span>
-                                    )}
+                                    <div style={{position:'relative',width:'100%',height:'100%',maxWidth: projMode ? '100%' : '680px',margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center'}}>
+                                        {displayTree ? (
+                                            <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
+                                                <g transform="translate(0, 30)">
+                                                    {renderTreeSvg(displayTree, 50, 5, 0)}
+                                                </g>
+                                            </svg>
+                                        ) : (
+                                            <span className="sim-empty-label">Empty BST Canvas. Use 'Insert' above to add nodes.</span>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Operation Log */}
-                                <div className="sim-panel" style={{height: stackHeight}}>
+                                <div className="sim-panel" style={{height: logHeight}}>
                                     <div className="sim-panel-header">
                                         <span><i className="fa-solid fa-terminal" style={{color:'var(--accent-green)',marginRight:'4px'}}></i> Operation Log</span>
                                         <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>Step {currentStepIndex + 1}</span>
@@ -2669,6 +3012,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
                         </div>
                     </div>
                 );
