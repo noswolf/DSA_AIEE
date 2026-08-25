@@ -13,7 +13,7 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Week CSS -->
-    <link rel="stylesheet" href="styles.css?v=bst-setup-fullscreen-20260824">
+    <link rel="stylesheet" href="styles.css?v=bst-autotrig-nav50-20260825">
 
     <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -1629,6 +1629,7 @@
         const TraversalSimulator = ({ projMode = false }) => {
             const [treeType, setTreeType] = useState('standard');
             const [traversalType, setTraversalType] = useState('preorder');
+            const [isAdvanced, setIsAdvanced] = useState(false);
             const [steps, setSteps] = useState([]);
             const [currentStepIndex, setCurrentStepIndex] = useState(0);
             const [isPlaying, setIsPlaying] = useState(false);
@@ -1644,7 +1645,7 @@
                 return STANDARD_TREE;
             };
 
-            const computeSteps = (tree, type) => {
+            const computeSteps = (tree, type, advanced) => {
                 const generatedSteps = [];
                 let visited = [];
                 let seq = [];
@@ -1653,8 +1654,80 @@
 
                 if (!tree) return generatedSteps;
 
-                // Initial Step
-                logHistory.push(`Initialized ${type.toUpperCase()} traversal on root node ${tree.value}`);
+                if (!advanced) {
+                    // ── BASIC CONCEPTUAL TRAVERSAL ──
+                    // Demonstrates high-level visiting sequence without internal algo pointers or stack frames
+                    logHistory.push(`[Basic Mode] Initialized ${TRAVERSAL_TITLES[type] || type.toUpperCase()} on root node ${tree.value}`);
+                    generatedSteps.push({
+                        highlightedNode: null,
+                        visitedNodes: [],
+                        sequence: [],
+                        logs: [...logHistory],
+                        callStack: []
+                    });
+
+                    const basicOrderList = [];
+                    if (type === 'preorder') {
+                        const dfs = (node) => {
+                            if (!node) return;
+                            basicOrderList.push({ node, note: 'Root visited first' });
+                            dfs(node.left);
+                            dfs(node.right);
+                        };
+                        dfs(tree);
+                    } else if (type === 'inorder') {
+                        const dfs = (node) => {
+                            if (!node) return;
+                            dfs(node.left);
+                            basicOrderList.push({ node, note: 'Root visited after left subtree' });
+                            dfs(node.right);
+                        };
+                        dfs(tree);
+                    } else if (type === 'postorder') {
+                        const dfs = (node) => {
+                            if (!node) return;
+                            dfs(node.left);
+                            dfs(node.right);
+                            basicOrderList.push({ node, note: 'Root visited after both left & right subtrees' });
+                        };
+                        dfs(tree);
+                    } else if (type === 'bfs') {
+                        const queue = [tree];
+                        while (queue.length > 0) {
+                            const node = queue.shift();
+                            basicOrderList.push({ node, note: 'Visited in level-by-level sequence' });
+                            if (node.left) queue.push(node.left);
+                            if (node.right) queue.push(node.right);
+                        }
+                    }
+
+                    basicOrderList.forEach((item, idx) => {
+                        visited.push(item.node.id);
+                        seq.push(item.node.value);
+                        logHistory.push(`Step ${idx + 1}: Visited node ${item.node.value} (${item.note})`);
+                        generatedSteps.push({
+                            highlightedNode: null,
+                            visitedNodes: [...visited],
+                            sequence: [...seq],
+                            logs: [...logHistory],
+                            callStack: []
+                        });
+                    });
+
+                    logHistory.push(`Traversal complete! Final sequence: ${seq.join(' → ')}`);
+                    generatedSteps.push({
+                        highlightedNode: null,
+                        visitedNodes: [...visited],
+                        sequence: [...seq],
+                        logs: [...logHistory],
+                        callStack: []
+                    });
+
+                    return generatedSteps;
+                }
+
+                // ── ADVANCED ALGORITHMIC TRAVERSAL ──
+                logHistory.push(`[Advanced Mode] Initialized ${type.toUpperCase()} traversal on root node ${tree.value}`);
                 generatedSteps.push({
                     highlightedNode: null,
                     visitedNodes: [],
@@ -1713,17 +1786,51 @@
                 } else if (type === 'postorder') {
                     const s1 = [tree];
                     const s2 = [];
+
+                    // Phase 1: Build output stack S2 using two-stack method
+                    logHistory.push(`[Phase 1] Initialized S1 with root node ${tree.value}. S2 is empty.`);
+                    generatedSteps.push({
+                        highlightedNode: tree.id,
+                        visitedNodes: [...visited],
+                        sequence: [...seq],
+                        logs: [...logHistory],
+                        callStack: []
+                    });
+
                     while (s1.length > 0) {
                         const node = s1.pop();
                         s2.push(node);
+                        logHistory.push(`Pop ${node.value} from S1 → push to Output Stack S2`);
+
                         if (node.left) s1.push(node.left);
                         if (node.right) s1.push(node.right);
+
+                        logHistory.push(`S1: [${s1.map(n => n.value).join(', ')}] | S2: [${s2.map(n => n.value).join(', ')}]`);
+                        generatedSteps.push({
+                            highlightedNode: node.id,
+                            visitedNodes: [...visited],
+                            sequence: [...seq],
+                            logs: [...logHistory],
+                            callStack: s2.map(n => n.value)
+                        });
                     }
+
+                    // Transition to Phase 2
+                    logHistory.push(`[Phase 2] S1 empty. Now popping nodes from S2 to visit in post-order!`);
+                    generatedSteps.push({
+                        highlightedNode: null,
+                        visitedNodes: [...visited],
+                        sequence: [...seq],
+                        logs: [...logHistory],
+                        callStack: s2.map(n => n.value)
+                    });
+
+                    // Phase 2: Pop from S2 to visit
                     while (s2.length > 0) {
                         const node = s2.pop();
                         visited.push(node.id);
                         seq.push(node.value);
-                        logHistory.push(`Visited node ${node.value}`);
+                        logHistory.push(`Popped & Visited node ${node.value} from S2`);
                         generatedSteps.push({
                             highlightedNode: node.id,
                             visitedNodes: [...visited],
@@ -1871,14 +1978,14 @@
                 return generatedSteps;
             };
 
-            // Recalculate steps whenever treeType or traversalType changes
+            // Recalculate steps whenever treeType, traversalType, or isAdvanced changes
             useEffect(() => {
                 setIsPlaying(false);
                 if (timerRef.current) clearInterval(timerRef.current);
-                const newSteps = computeSteps(getSelectedTree(), traversalType);
+                const newSteps = computeSteps(getSelectedTree(), traversalType, isAdvanced);
                 setSteps(newSteps);
                 setCurrentStepIndex(0);
-            }, [treeType, traversalType]);
+            }, [treeType, traversalType, isAdvanced]);
 
             // Auto-play timer effect
             useEffect(() => {
@@ -1948,14 +2055,19 @@
                 const maxLevelStep = projMode ? 44 : 38;
                 const treeLevelStep = Math.min(maxLevelStep, Math.floor((100 - treeRootY - treeBottomPadding) / maxTreeDepth));
                 const canvasHeight = projMode ? 'min(680px, max(260px, 58vh))' : '400px';
-                const algorithmOptions = [
+                const algorithmOptions = isAdvanced ? [
+                    { id: 'preorder', num: '01', title: 'Pre-order', desc: 'Root → Left → Right (Stack)', icon: 'fa-diagram-project', group: 'dfs' },
+                    { id: 'inorder', num: '02', title: 'In-order', desc: 'Left → Root → Right (Stack)', icon: 'fa-sort-amount-down', group: 'dfs' },
+                    { id: 'postorder', num: '03', title: 'Post-order', desc: 'Left → Right → Root (2-Stack)', icon: 'fa-tree', group: 'dfs' },
+                    { id: 'bfs', num: '04', title: 'Level-order', desc: 'Level by level (Queue)', icon: 'fa-layer-group', group: 'bfs' },
+                    { id: 'rec_pre', num: '05', title: 'Rec Pre', desc: 'Recursive Pre-order (Call Stack)', icon: 'fa-rotate-right', group: 'rec' },
+                    { id: 'rec_in', num: '06', title: 'Rec In', desc: 'Recursive In-order (Call Stack)', icon: 'fa-code-branch', group: 'rec' },
+                    { id: 'rec_post', num: '07', title: 'Rec Post', desc: 'Recursive Post-order (Call Stack)', icon: 'fa-sitemap', group: 'rec' }
+                ] : [
                     { id: 'preorder', num: '01', title: 'Pre-order', desc: 'Root → Left → Right', icon: 'fa-diagram-project', group: 'dfs' },
                     { id: 'inorder', num: '02', title: 'In-order', desc: 'Left → Root → Right', icon: 'fa-sort-amount-down', group: 'dfs' },
                     { id: 'postorder', num: '03', title: 'Post-order', desc: 'Left → Right → Root', icon: 'fa-tree', group: 'dfs' },
-                    { id: 'bfs', num: '04', title: 'Level-order', desc: 'Level by level', icon: 'fa-layer-group', group: 'bfs' },
-                    { id: 'rec_pre', num: '05', title: 'Rec Pre', desc: 'Recursive Pre-order', icon: 'fa-rotate-right', group: 'rec' },
-                    { id: 'rec_in', num: '06', title: 'Rec In', desc: 'Recursive In-order', icon: 'fa-code-branch', group: 'rec' },
-                    { id: 'rec_post', num: '07', title: 'Rec Post', desc: 'Recursive Post-order', icon: 'fa-sitemap', group: 'rec' }
+                    { id: 'bfs', num: '04', title: 'Level-order', desc: 'Level by level', icon: 'fa-layer-group', group: 'bfs' }
                 ];
 
                 return (
@@ -2013,7 +2125,36 @@
                                     </div>
                                 )}
 
-                                <div className="sim-topbar">
+                                <div className="sim-topbar" style={{flexWrap:'wrap', gap:'10px', alignItems:'center'}}>
+                                    {/* Basic vs Advanced Mode Switch */}
+                                    <div className="sim-mode-toggle-group">
+                                        <span className="sim-seq-label" style={{marginRight:'4px'}}>Mode:</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setIsAdvanced(false);
+                                                if (traversalType.startsWith('rec_')) {
+                                                    const fallback = traversalType === 'rec_pre' ? 'preorder' : traversalType === 'rec_in' ? 'inorder' : 'postorder';
+                                                    setTraversalType(fallback);
+                                                }
+                                            }}
+                                            className={`sim-mode-pill ${!isAdvanced ? 'active basic' : ''}`}
+                                            title="Basic Concept Mode: High-level node visiting sequence (Blue pointer only, clean conceptual steps)"
+                                        >
+                                            <i className="fa-solid fa-wand-magic-sparkles"></i>
+                                            <span>Basic</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsAdvanced(true)}
+                                            className={`sim-mode-pill ${isAdvanced ? 'active advanced' : ''}`}
+                                            title="Advanced Algorithm Mode: Full algorithm simulation (Yellow execution pointer, Call / Algorithm Stack)"
+                                        >
+                                            <i className="fa-solid fa-microchip"></i>
+                                            <span>Advanced</span>
+                                        </button>
+                                    </div>
+
                                     <div className="sim-algo-bar">
                                         <span className="sim-seq-label">Tree:</span>
                                         {[
@@ -2035,6 +2176,7 @@
                                         <button
                                             onClick={() => window.openSimProjector('traversal')}
                                             className="sim-projector-btn"
+                                            style={{marginLeft:'auto'}}
                                         >
                                             <i className="fa-solid fa-expand"></i> Projector Mode
                                         </button>
@@ -2077,25 +2219,48 @@
 
                             {/* Right Panels: Stack & Logs */}
                             <div className="flex flex-col gap-3" style={{height: canvasHeight}}>
-                                {/* Call / Algorithm Stack Panel */}
-                                <div className="sim-panel flex-1">
-                                    <div className="sim-panel-header">
-                                        <span><i className="fa-solid fa-layer-group" style={{color:'var(--accent-purple)',marginRight:'4px'}}></i> Call / Algorithm Stack</span>
-                                        <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>Depth: {currentStep.callStack ? currentStep.callStack.length : 0}</span>
+                                {/* Call / Algorithm Stack Panel (Only in Advanced Mode) */}
+                                {isAdvanced ? (
+                                    <div className="sim-panel flex-1">
+                                        <div className="sim-panel-header">
+                                            <span>
+                                                <i className="fa-solid fa-layer-group" style={{color:'var(--accent-purple)',marginRight:'4px'}}></i>
+                                                {traversalType === 'bfs' ? 'Queue' : traversalType === 'postorder' ? 'Stack (S2)' : 'Stack'}
+                                            </span>
+                                            <span style={{fontFamily:'Fira Code,monospace',fontSize:'10px'}}>
+                                                {traversalType === 'bfs' ? 'Size' : 'Depth'}: {currentStep.callStack ? currentStep.callStack.length : 0}
+                                            </span>
+                                        </div>
+                                        <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-1">
+                                            {(!currentStep.callStack || currentStep.callStack.length === 0) ? (
+                                                <span className="sim-empty-label">{traversalType === 'bfs' ? 'Queue Empty' : 'Stack Empty'}</span>
+                                            ) : (
+                                                [...currentStep.callStack].reverse().map((fn, idx) => (
+                                                    <div key={idx} className="sim-stack-frame stack-enter">
+                                                        <span>{traversalType.startsWith('rec_') ? `traverse(${fn})` : `Node ${fn}`}</span>
+                                                        <span style={{fontSize:'9px',opacity:0.7}}>
+                                                            {traversalType.startsWith('rec_') ? `frame ${currentStep.callStack.length - idx}` : (idx === 0 ? 'TOP' : `-${idx}`)}
+                                                        </span>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-1">
-                                        {(!currentStep.callStack || currentStep.callStack.length === 0) ? (
-                                            <span className="sim-empty-label">Stack Empty</span>
-                                        ) : (
-                                            [...currentStep.callStack].reverse().map((fn, idx) => (
-                                                <div key={idx} className="sim-stack-frame stack-enter">
-                                                    <span>traverse({fn})</span>
-                                                    <span style={{fontSize:'9px',opacity:0.7}}>frame {currentStep.callStack.length - idx}</span>
-                                                </div>
-                                            ))
-                                        )}
+                                ) : (
+                                    <div className="sim-panel" style={{padding:'12px 14px', background:'rgba(59, 130, 246, 0.06)', border:'1px solid rgba(59, 130, 246, 0.2)'}}>
+                                        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'4px'}}>
+                                            <span style={{fontSize:'12px', fontWeight:700, color:'var(--accent-blue)', display:'flex', alignItems:'center', gap:'6px'}}>
+                                                <i className="fa-solid fa-wand-magic-sparkles"></i> Basic Concept Mode
+                                            </span>
+                                            <span className="tag" style={{fontSize:'10px', padding:'2px 8px', background:'rgba(59,130,246,0.15)', color:'var(--accent-blue)', borderRadius:'4px'}}>
+                                                Visiting Order
+                                            </span>
+                                        </div>
+                                        <p style={{fontSize:'11px', color:'var(--text-secondary)', margin:0, lineHeight:1.5}}>
+                                            Showing the pure node visiting order (blue nodes). Switch to <strong>Advanced Mode</strong> to trace the algorithm stack and execution pointer.
+                                        </p>
                                     </div>
-                                </div>
+                                )}
 
                                 {/* Operation Log Panel */}
                                 <div className="sim-panel flex-1">
@@ -2277,7 +2442,7 @@
     return root`
         };
 
-        const BST_DEFAULT_INPUT = '40';
+        const BST_DEFAULT_INPUT = '';
 
         class BSTNodeModel {
             constructor(key) {
@@ -2314,12 +2479,21 @@
         };
 
         const BSTSimulator = ({ projMode = false }) => {
+            const createDefaultTree = () => {
+                const root = new BSTNodeModel(50);
+                root.left = new BSTNodeModel(30);
+                root.right = new BSTNodeModel(70);
+                root.left.left = new BSTNodeModel(20);
+                root.left.right = new BSTNodeModel(40);
+                root.right.right = new BSTNodeModel(80);
+                return root;
+            };
+
             const [tree, setTree] = useState(null);
             const [activeTab, setActiveTab] = useState('search');
             const [currentSnippet, setCurrentSnippet] = useState('search');
-            const [inputVal, setInputVal] = useState(BST_DEFAULT_INPUT);
+            const [inputVal, setInputVal] = useState('40');
             const [bstSubAction, setBstSubAction] = useState('target');
-            const [searchMode, setSearchMode] = useState('target');
             const [currentAction, setCurrentAction] = useState('Ready');
             const [steps, setSteps] = useState([]);
             const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -2329,31 +2503,6 @@
 
             const timerRef = useRef(null);
             const logBoxRef = useRef(null);
-
-            // Initialize default tree (50, 30, 70, 20, 40, 80)
-            const initDefaultTree = () => {
-                const root = new BSTNodeModel(50);
-                root.left = new BSTNodeModel(30);
-                root.right = new BSTNodeModel(70);
-                root.left.left = new BSTNodeModel(20);
-                root.left.right = new BSTNodeModel(40);
-                root.right.right = new BSTNodeModel(80);
-                setTree(root);
-                setCurrentStepIndex(0);
-                setIsPlaying(false);
-                setInputVal(BST_DEFAULT_INPUT);
-                setCurrentAction('Ready');
-                setSteps([{
-                    highlightedNode: null,
-                    activeLine: null,
-                    logs: ["System initialized with default tree: [50, 30, 70, 20, 40, 80]."],
-                    callStack: []
-                }]);
-            };
-
-            useEffect(() => {
-                initDefaultTree();
-            }, []);
 
             const deepClone = (node) => {
                 if (!node) return null;
@@ -2365,35 +2514,37 @@
             };
 
             // Pre-compute steps for Search, Min, Max
-            const triggerSearch = (targetVal, type = "target") => {
-                if (!tree) return;
+            const triggerSearch = (targetVal, type = "target", baseTree = null) => {
+                const startTree = baseTree ? deepClone(baseTree) : createDefaultTree();
+                setTree(startTree);
                 setCurrentSnippet(type === 'min' ? 'min' : type === 'max' ? 'max' : 'search');
                 setCurrentAction(type === 'min' ? 'Finding Minimum' : type === 'max' ? 'Finding Maximum' : `Searching for ${targetVal}`);
                 setIsPlaying(false);
 
                 const generatedSteps = [];
-                let logHistory = [];
                 let stack = [];
                 const t = parseInt(targetVal);
 
                 if (type === 'min') {
-                    let node = tree;
+                    let node = startTree;
                     let lvl = 0;
-                    generatedSteps.push({ highlightedNode: null, activeLine: 1, logs: ["Calling findMin(root)..."], callStack: [] });
+                    generatedSteps.push({ highlightedNode: null, activeLine: 1, logs: ["Calling findMin(root)..."], callStack: [], treeSnapshot: deepClone(startTree) });
                     while (node) {
                         stack.push({ name: `findMin(${node.key})`, level: lvl });
                         generatedSteps.push({
                             highlightedNode: node.id,
                             activeLine: 2,
                             logs: [`At node ${node.key}: checking if node.left is None`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(startTree)
                         });
                         if (!node.left) {
                             generatedSteps.push({
                                 highlightedNode: node.id,
                                 activeLine: 3,
                                 logs: [`Found Minimum Key: ${node.key}!`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(startTree)
                             });
                             break;
                         }
@@ -2401,23 +2552,25 @@
                         lvl++;
                     }
                 } else if (type === 'max') {
-                    let node = tree;
+                    let node = startTree;
                     let lvl = 0;
-                    generatedSteps.push({ highlightedNode: null, activeLine: 1, logs: ["Calling findMax(root)..."], callStack: [] });
+                    generatedSteps.push({ highlightedNode: null, activeLine: 1, logs: ["Calling findMax(root)..."], callStack: [], treeSnapshot: deepClone(startTree) });
                     while (node) {
                         stack.push({ name: `findMax(${node.key})`, level: lvl });
                         generatedSteps.push({
                             highlightedNode: node.id,
                             activeLine: 2,
                             logs: [`At node ${node.key}: checking if node.right is None`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(startTree)
                         });
                         if (!node.right) {
                             generatedSteps.push({
                                 highlightedNode: node.id,
                                 activeLine: 3,
                                 logs: [`Found Maximum Key: ${node.key}!`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(startTree)
                             });
                             break;
                         }
@@ -2434,7 +2587,8 @@
                             highlightedNode: node ? node.id : null,
                             activeLine: 1,
                             logs: [`CALL ${callName}`],
-                            callStack: [...stack]
+                            callStack: [...stack],
+                            treeSnapshot: deepClone(startTree)
                         });
 
                         if (!node) {
@@ -2442,7 +2596,8 @@
                                 highlightedNode: null,
                                 activeLine: 2,
                                 logs: [`Base Case: Node is None. Target ${t} Not Found.`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(startTree)
                             });
                             stack.pop();
                             return;
@@ -2453,7 +2608,8 @@
                                 highlightedNode: node.id,
                                 activeLine: 4,
                                 logs: [`Target Found! Key ${t} matches node ${node.key}.`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(startTree)
                             });
                             stack.pop();
                             return;
@@ -2464,7 +2620,8 @@
                                 highlightedNode: node.id,
                                 activeLine: 6,
                                 logs: [`${t} < ${node.key} → Recursing Left Subtree`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(startTree)
                             });
                             searchRec(node.left, lvl + 1);
                         } else {
@@ -2472,43 +2629,33 @@
                                 highlightedNode: node.id,
                                 activeLine: 8,
                                 logs: [`${t} > ${node.key} → Recursing Right Subtree`],
-                                callStack: [...stack]
+                                callStack: [...stack],
+                                treeSnapshot: deepClone(startTree)
                             });
                             searchRec(node.right, lvl + 1);
                         }
                         stack.pop();
                     };
-                    searchRec(tree);
+                    searchRec(startTree);
                 }
 
                 setSteps(generatedSteps);
                 setCurrentStepIndex(0);
             };
 
-            const handleSearchModeChange = (e) => {
-                const mode = e.target.value;
-                setSearchMode(mode);
-                if (mode === 'min') triggerSearch(null, 'min');
-                else if (mode === 'max') triggerSearch(null, 'max');
-            };
-
-            const handleSearchInputKeyDown = (e) => {
-                if (e.key === 'Enter' && searchMode === 'target' && inputVal) {
-                    triggerSearch(inputVal, 'target');
-                }
-            };
-
             // Pre-compute steps for Insert
-            const triggerInsert = (val) => {
+            const triggerInsert = (val, baseTree = null) => {
                 const key = parseInt(val);
                 if (isNaN(key)) return;
+                const startTree = baseTree ? deepClone(baseTree) : createDefaultTree();
+                setTree(startTree);
                 setCurrentSnippet('insert');
                 setCurrentAction(`Inserting ${key}`);
                 setIsPlaying(false);
 
                 const generatedSteps = [];
                 let stack = [];
-                let newTree = tree ? deepClone(tree) : null;
+                let newTree = deepClone(startTree);
 
                 const insertRec = (node, k, lvl = 0) => {
                     const callName = `insert(${node ? node.key : 'None'}, ${k})`;
@@ -2589,23 +2736,23 @@
                     callStack: [],
                     treeSnapshot: deepClone(newTree)
                 });
-                setTree(newTree);
                 setSteps(generatedSteps);
                 setCurrentStepIndex(0);
-                setInputVal(BST_DEFAULT_INPUT);
             };
 
             // Pre-compute steps for Delete
-            const triggerDelete = (val) => {
+            const triggerDelete = (val, baseTree = null) => {
                 const key = parseInt(val);
-                if (isNaN(key) || !tree) return;
+                if (isNaN(key)) return;
+                const startTree = baseTree ? deepClone(baseTree) : createDefaultTree();
+                setTree(startTree);
                 setCurrentSnippet('delete');
                 setCurrentAction(`Deleting ${key}`);
                 setIsPlaying(false);
 
                 const generatedSteps = [];
                 let stack = [];
-                let rootCopy = deepClone(tree);
+                let rootCopy = deepClone(startTree);
 
                 const getMin = (n) => {
                     while (n.left) n = n.left;
@@ -2748,10 +2895,54 @@
                     callStack: [],
                     treeSnapshot: deepClone(rootCopy)
                 });
-                setTree(rootCopy);
                 setSteps(generatedSteps);
                 setCurrentStepIndex(0);
-                setInputVal(BST_DEFAULT_INPUT);
+            };
+
+            // Master trigger to run the appropriate operation based on current state
+            const executeOperation = (tab, subAction, val) => {
+                const defaultTree = createDefaultTree();
+                if (tab === 'search') {
+                    if (subAction === 'min') triggerSearch(null, 'min', defaultTree);
+                    else if (subAction === 'max') triggerSearch(null, 'max', defaultTree);
+                    else if (val !== '' && !isNaN(parseInt(val))) triggerSearch(val, 'target', defaultTree);
+                } else if (tab === 'insert') {
+                    if (subAction === 'clear') {
+                        setTree(null);
+                        setSteps([{
+                            highlightedNode: null,
+                            activeLine: null,
+                            logs: ["Tree cleared. Use 'Insert Key' to construct a new BST."],
+                            callStack: [],
+                            treeSnapshot: null
+                        }]);
+                        setCurrentStepIndex(0);
+                        setIsPlaying(false);
+                        setCurrentAction('Tree Cleared');
+                    } else if (val !== '' && !isNaN(parseInt(val))) {
+                        triggerInsert(val, defaultTree);
+                    }
+                } else if (tab === 'delete') {
+                    if (subAction === 'min') triggerDelete(20, defaultTree);
+                    else if (subAction === 'max') triggerDelete(80, defaultTree);
+                    else if (val !== '' && !isNaN(parseInt(val))) triggerDelete(val, defaultTree);
+                }
+            };
+
+            // Auto-trigger and replay when activeTab, bstSubAction, or inputVal changes
+            useEffect(() => {
+                const timer = setTimeout(() => {
+                    executeOperation(activeTab, bstSubAction, inputVal);
+                }, 200);
+                return () => clearTimeout(timer);
+            }, [activeTab, bstSubAction, inputVal]);
+
+            const initDefaultTree = () => {
+                const root = createDefaultTree();
+                setTree(root);
+                setIsPlaying(false);
+                setCurrentStepIndex(0);
+                executeOperation(activeTab, bstSubAction, inputVal);
             };
 
             // Auto-play timer
@@ -2789,16 +2980,11 @@
                 callStack: []
             };
 
-            const displayTree = currentStep.treeSnapshot !== undefined ? currentStep.treeSnapshot : tree;
+            const displayTree = currentStep.treeSnapshot !== undefined ? currentStep.treeSnapshot : (tree || createDefaultTree());
 
             const getTreeDepth = (node) => {
                 if (!node) return 0;
                 return 1 + Math.max(getTreeDepth(node.left), getTreeDepth(node.right));
-            };
-
-            const getInOrderKeys = (node) => {
-                if (!node) return [];
-                return [...getInOrderKeys(node.left), node.key, ...getInOrderKeys(node.right)];
             };
 
             const maxTreeDepth = getTreeDepth(displayTree);
@@ -2806,7 +2992,6 @@
             const treeSpreadBase = projMode ? 24 : 24;
             const treeNodeRadius = projMode ? 23 : 20;
             const treeNodeFontSize = projMode ? 16 : 14;
-            const inOrderKeys = getInOrderKeys(displayTree);
 
             const renderTreeSvg = (node, x, y, level) => {
                 if (!node) return null;
@@ -2861,9 +3046,9 @@
                 const logHeight = projMode ? 'min(140px, max(90px, 12vh))' : '130px';
 
                 const operationOptions = [
-                    { id: 'search', num: '01', title: 'Search', icon: 'fa-magnifying-glass', group: 'search' },
-                    { id: 'insert', num: '02', title: 'Insert', icon: 'fa-plus', group: 'insert' },
-                    { id: 'delete', num: '03', title: 'Delete', icon: 'fa-trash', group: 'delete' }
+                    { id: 'search', num: '01', title: 'Search', icon: 'fa-magnifying-glass', group: 'search', defaultVal: '40', subAction: 'target' },
+                    { id: 'insert', num: '02', title: 'Insert', icon: 'fa-plus', group: 'insert', defaultVal: '25', subAction: 'insert' },
+                    { id: 'delete', num: '03', title: 'Delete', icon: 'fa-trash', group: 'delete', defaultVal: '30', subAction: 'target' }
                 ];
 
                 return (
@@ -2901,7 +3086,12 @@
                                     {operationOptions.map(t => (
                                         <button
                                             key={t.id}
-                                            onClick={() => { setActiveTab(t.id); setCurrentSnippet(t.id); setBstSubAction(t.id === 'insert' ? 'insert' : 'target'); }}
+                                            onClick={() => {
+                                                setActiveTab(t.id);
+                                                setCurrentSnippet(t.id);
+                                                setBstSubAction(t.subAction);
+                                                setInputVal(t.defaultVal);
+                                            }}
                                             title={t.title}
                                             className={`sim-algo-tab algo-${t.group} ${activeTab === t.id ? 'active' : ''}`}
                                         >
@@ -2918,7 +3108,6 @@
                                     <span>Select <strong>Search</strong>, <strong>Insert</strong>, or <strong>Delete</strong> above to perform live BST operations.</span>
                                 </div>
                             </div>
-
 
                             </div>
 
@@ -2994,7 +3183,7 @@
                                                 </g>
                                             </svg>
                                         ) : (
-                                            <span className="sim-empty-label">Empty BST Canvas. Use 'Insert' above to add nodes.</span>
+                                            <span className="sim-empty-label">Empty BST Canvas. Use 'Insert Key' above to add nodes.</span>
                                         )}
                                     </div>
                                 </div>
@@ -3006,92 +3195,77 @@
                                             {/* Inline Controls */}
                                             {activeTab === 'search' && (
                                                 <div style={{display:'flex', gap:'5px', alignItems:'center'}}>
-                                                    <select className="sim-input" style={{padding:'2px 8px', fontSize:'0.85rem', height:'28px', width: '130px'}} onChange={(e) => {
-                                                        const val = e.target.value;
-                                                        setBstSubAction(val);
-                                                        if (val === 'random') {
-                                                            const keys = inOrderKeys;
-                                                            const rKey = keys.length > 0 ? keys[Math.floor(Math.random() * keys.length)] : Math.floor(Math.random() * 90) + 10;
-                                                            setInputVal(String(rKey));
-                                                            triggerSearch(rKey, 'target');
-                                                            setBstSubAction('target');
-                                                        } else if (val === 'min') { triggerSearch(null, 'min'); setBstSubAction('target'); }
-                                                        else if (val === 'max') { triggerSearch(null, 'max'); setBstSubAction('target'); }
-                                                    }} value={['target', 'random', 'min', 'max'].includes(bstSubAction) ? bstSubAction : 'target'}>
+                                                    <select
+                                                        className="sim-input"
+                                                        style={{padding:'2px 8px', fontSize:'0.85rem', height:'28px', width: '130px'}}
+                                                        onChange={(e) => setBstSubAction(e.target.value)}
+                                                        value={['target', 'min', 'max'].includes(bstSubAction) ? bstSubAction : 'target'}
+                                                    >
                                                         <option value="target">Search Key</option>
-                                                        <option value="random">Random Search</option>
                                                         <option value="min">Find Min</option>
                                                         <option value="max">Find Max</option>
                                                     </select>
-                                                    {(!['min', 'max'].includes(bstSubAction || 'target')) && (
-                                                        <input type="number" value={inputVal} onChange={e => setInputVal(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && inputVal) triggerSearch(inputVal, 'target'); }} className="sim-input" style={{padding:'2px 8px', fontSize:'0.85rem', width:'80px', height:'28px'}} placeholder="Key..." />
+                                                    {bstSubAction === 'target' && (
+                                                        <input
+                                                            type="number"
+                                                            value={inputVal}
+                                                            onChange={e => setInputVal(e.target.value)}
+                                                            onFocus={e => e.target.select()}
+                                                            className="sim-input"
+                                                            style={{padding:'2px 8px', fontSize:'0.85rem', width:'80px', height:'28px'}}
+                                                            placeholder="Key..."
+                                                        />
                                                     )}
                                                 </div>
                                             )}
 
                                             {activeTab === 'insert' && (
                                                 <div style={{display:'flex', gap:'5px', alignItems:'center'}}>
-                                                    <select className="sim-input" style={{padding:'2px 8px', fontSize:'0.85rem', height:'28px', width: '130px'}} onChange={(e) => {
-                                                        const val = e.target.value;
-                                                        setBstSubAction(val);
-                                                        if (val === 'random') {
-                                                            const rKey = Math.floor(Math.random() * 90) + 10;
-                                                            setInputVal(String(rKey));
-                                                            triggerInsert(rKey);
-                                                            setBstSubAction('insert');
-                                                        } else if (val === 'clear') {
-                                                            setTree(null); setSteps([]); setCurrentStepIndex(0); setIsPlaying(false); setInputVal(BST_DEFAULT_INPUT); setCurrentAction('Cleared Tree');
-                                                            setBstSubAction('insert');
-                                                        }
-                                                    }} value={['insert', 'random', 'clear'].includes(bstSubAction) ? bstSubAction : 'insert'}>
+                                                    <select
+                                                        className="sim-input"
+                                                        style={{padding:'2px 8px', fontSize:'0.85rem', height:'28px', width: '130px'}}
+                                                        onChange={(e) => setBstSubAction(e.target.value)}
+                                                        value={['insert', 'clear'].includes(bstSubAction) ? bstSubAction : 'insert'}
+                                                    >
                                                         <option value="insert">Insert Key</option>
-                                                        <option value="random">Random Key</option>
                                                         <option value="clear">Clear Tree</option>
                                                     </select>
-                                                    {(!['clear'].includes(bstSubAction || 'insert')) && (
-                                                        <input type="number" value={inputVal} onChange={e => setInputVal(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && inputVal) triggerInsert(inputVal); }} className="sim-input" style={{padding:'2px 8px', fontSize:'0.85rem', width:'80px', height:'28px'}} placeholder="New Key..." />
+                                                    {bstSubAction === 'insert' && (
+                                                        <input
+                                                            type="number"
+                                                            value={inputVal}
+                                                            onChange={e => setInputVal(e.target.value)}
+                                                            onFocus={e => e.target.select()}
+                                                            className="sim-input"
+                                                            style={{padding:'2px 8px', fontSize:'0.85rem', width:'80px', height:'28px'}}
+                                                            placeholder="New Key..."
+                                                        />
                                                     )}
                                                 </div>
                                             )}
 
                                             {activeTab === 'delete' && (
                                                 <div style={{display:'flex', gap:'5px', alignItems:'center'}}>
-                                                    <select className="sim-input" style={{padding:'2px 8px', fontSize:'0.85rem', height:'28px', width: '130px'}} onChange={(e) => {
-                                                        const val = e.target.value;
-                                                        setBstSubAction(val);
-                                                        if (val === 'random') {
-                                                            const keys = inOrderKeys;
-                                                            if (keys.length > 0) {
-                                                                const rKey = keys[Math.floor(Math.random() * keys.length)];
-                                                                setInputVal(String(rKey));
-                                                                triggerDelete(rKey);
-                                                            }
-                                                            setBstSubAction('target');
-                                                        } else if (val === 'min') {
-                                                            const keys = inOrderKeys;
-                                                            if (keys.length > 0) {
-                                                                const minKey = Math.min(...keys);
-                                                                setInputVal(String(minKey));
-                                                                triggerDelete(minKey);
-                                                            }
-                                                            setBstSubAction('target');
-                                                        } else if (val === 'max') {
-                                                            const keys = inOrderKeys;
-                                                            if (keys.length > 0) {
-                                                                const maxKey = Math.max(...keys);
-                                                                setInputVal(String(maxKey));
-                                                                triggerDelete(maxKey);
-                                                            }
-                                                            setBstSubAction('target');
-                                                        }
-                                                    }} value={['target', 'random', 'min', 'max'].includes(bstSubAction) ? bstSubAction : 'target'}>
+                                                    <select
+                                                        className="sim-input"
+                                                        style={{padding:'2px 8px', fontSize:'0.85rem', height:'28px', width: '130px'}}
+                                                        onChange={(e) => setBstSubAction(e.target.value)}
+                                                        value={['target', 'min', 'max'].includes(bstSubAction) ? bstSubAction : 'target'}
+                                                    >
                                                         <option value="target">Delete Key</option>
-                                                        <option value="random">Random Delete</option>
                                                         <option value="min">Delete Min</option>
                                                         <option value="max">Delete Max</option>
                                                     </select>
-                                                    {(!['min', 'max'].includes(bstSubAction || 'target')) && (
-                                                        <input type="number" value={inputVal} onChange={e => setInputVal(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && inputVal) triggerDelete(inputVal); }} className="sim-input" style={{padding:'2px 8px', fontSize:'0.85rem', width:'80px', height:'28px'}} placeholder="Key..." />
+                                                    {bstSubAction === 'target' && (
+                                                        <input
+                                                            type="number"
+                                                            value={inputVal}
+                                                            onChange={e => setInputVal(e.target.value)}
+                                                            onFocus={e => e.target.select()}
+                                                            className="sim-input"
+                                                            style={{padding:'2px 8px', fontSize:'0.85rem', width:'80px', height:'28px'}}
+                                                            placeholder="Key..."
+                                                        />
                                                     )}
                                                 </div>
                                             )}
@@ -3129,7 +3303,12 @@
                                                 <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
                                             </button>
                                             <button
-                                                onClick={() => { setIsPlaying(false); if (currentStepIndex < steps.length - 1) setCurrentStepIndex(p => p + 1); }}
+                                                onClick={() => {
+                                                    setIsPlaying(false);
+                                                    if (currentStepIndex < steps.length - 1) {
+                                                        setCurrentStepIndex(p => p + 1);
+                                                    }
+                                                }}
                                                 disabled={currentStepIndex >= steps.length - 1}
                                                 className="stepper-btn"
                                             >

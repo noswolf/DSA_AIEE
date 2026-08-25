@@ -4985,6 +4985,7 @@ body.light-mode .tree-legend {
 
 .sec-nav-btn {
     flex: 1;
+    max-width: calc(50% - 10px);
     min-width: 0;
     border-radius: 12px;
     padding: 16px 24px;
@@ -5019,6 +5020,7 @@ body.light-mode .tree-legend {
 }
 
 .sec-nav-btn.next-btn {
+    margin-left: auto;
     align-items: flex-end;
     text-align: right;
     background: linear-gradient(135deg, #10b981, #059669) !important;
@@ -7947,5 +7949,60 @@ body.dark-mode .highlight-line,
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(148, 163, 184, 0.5);
+}
+
+/* ── Traversal Simulator Mode Toggle (Basic vs Advanced) ── */
+.sim-mode-toggle-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 3px 4px;
+    border-radius: 9px;
+}
+
+.sim-mode-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.sim-mode-pill:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.light-mode .sim-mode-pill:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.sim-mode-pill.active.basic {
+    background: rgba(59, 130, 246, 0.18);
+    border-color: rgba(59, 130, 246, 0.5);
+    color: var(--accent-blue);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+.sim-mode-pill.active.advanced {
+    background: rgba(168, 85, 247, 0.18);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: var(--accent-purple);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+}
+
+.sim-projector-overlay .sim-mode-pill {
+    font-size: 13px;
+    padding: 7px 14px;
 }
 
