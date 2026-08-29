@@ -49,7 +49,6 @@
 
             <nav class="sidebar-nav">
                 <span class="nav-section-title">Module Sections</span>
-
                 <button class="nav-item active" data-target="basics-section">
                     <i class="fa-solid fa-book-open"></i> <span>Module 0: Tree Basics</span>
                 </button>
@@ -59,17 +58,20 @@
                 <button class="nav-item" data-target="traversal-sim-section">
                     <i class="fa-solid fa-play-circle"></i> <span>Module 2: Traversal Simulator</span>
                 </button>
+                <button class="nav-item" data-target="realworld-section">
+                    <i class="fa-solid fa-earth-americas"></i> <span>Module 3: Real-World Applications</span>
+                </button>
                 <button class="nav-item" data-target="bst-basics-section">
-                    <i class="fa-solid fa-sitemap"></i> <span>Module 3: BST Fundamentals</span>
+                    <i class="fa-solid fa-sitemap"></i> <span>Module 4: BST Fundamentals</span>
                 </button>
                 <button class="nav-item" data-target="bst-ops-section">
-                    <i class="fa-solid fa-code"></i> <span>Module 4: BST Operations</span>
+                    <i class="fa-solid fa-code"></i> <span>Module 5: BST Operations</span>
                 </button>
                 <button class="nav-item" data-target="bst-sim-section">
-                    <i class="fa-solid fa-laptop-code"></i> <span>Module 5: BST Simulator</span>
+                    <i class="fa-solid fa-laptop-code"></i> <span>Module 6: BST Simulator</span>
                 </button>
                 <button class="nav-item" data-target="quiz-section">
-                    <i class="fa-solid fa-clipboard-question"></i> <span>Module 6: Knowledge Quiz</span>
+                    <i class="fa-solid fa-clipboard-question"></i> <span>Module 7: Knowledge Quiz</span>
                 </button>
             </nav>
 
@@ -563,9 +565,499 @@
                             <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
                             <span class="nav-title">Module 1: Tree Traversals</span>
                         </button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('realworld-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 3: Real-World Applications</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ======================================= -->
+                <!-- MODULE 3: Real-World Applications       -->
+                <!-- ======================================= -->
+                <section id="realworld-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(14,165,233,0.15);color:#0ea5e9;">
+                                <i class="fa-solid fa-earth-americas mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 3: Real-World Traversal Applications</h2>
+                                <p>Tree traversals are not just theoretical algorithms &mdash; they power mission-critical software systems across compilers, operating system kernels, search engines, and storage managers. Explore three tangible real-world applications with live step-by-step simulations.</p>
+                                <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+                                    <span class="tag" style="background:rgba(59,130,246,0.1); color:var(--accent-blue);">Compilers &amp; Infix Parsing</span>
+                                    <span class="tag" style="background:rgba(168,85,247,0.1); color:var(--accent-purple);">File System Indexing</span>
+                                    <span class="tag" style="background:rgba(249,115,22,0.1); color:var(--accent-orange);">Disk Space Aggregation</span>
+                                    <span class="tag" style="background:rgba(16,185,129,0.1); color:var(--accent-green);">Interactive Labs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Application Architecture Matrix -->
+                    <div class="card glass" style="margin-bottom:24px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">
+                            <i class="fa-solid fa-sitemap" style="color:var(--accent-cyan);margin-right:8px;"></i>
+                            Why Traversal Order Dictates Real-World System Design
+                        </h3>
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+                            <!-- Inorder Summary -->
+                            <div style="background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.25); border-radius:10px; padding:16px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                                    <span style="background:var(--accent-blue); color:#fff; width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:bold;">1</span>
+                                    <strong style="color:var(--accent-blue); font-size:15px;">In-Order (L &rarr; Root &rarr; R)</strong>
+                                </div>
+                                <p style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">
+                                    <strong>Natural Sequence Generator:</strong> Visits the left operand, then operator, then right operand.
+                                </p>
+                                <div style="font-size:12px; color:var(--text-muted); background:var(--bg-secondary); padding:8px 10px; border-radius:6px;">
+                                    <strong style="color:var(--text-primary);">Key Application:</strong> Reconstructing mathematical formulas (Infix) from Expression Trees and retrieving strictly sorted records from database BST indexes.
+                                </div>
+                            </div>
+
+                            <!-- Preorder Summary -->
+                            <div style="background:rgba(168,85,247,0.06); border:1px solid rgba(168,85,247,0.25); border-radius:10px; padding:16px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                                    <span style="background:var(--accent-purple); color:#fff; width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:bold;">2</span>
+                                    <strong style="color:var(--accent-purple); font-size:15px;">Pre-Order (Root &rarr; L &rarr; R)</strong>
+                                </div>
+                                <p style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">
+                                    <strong>Top-Down Explorer &amp; Creator:</strong> Visits and creates parent entities before exploring child branches.
+                                </p>
+                                <div style="font-size:12px; color:var(--text-muted); background:var(--bg-secondary); padding:8px 10px; border-radius:6px;">
+                                    <strong style="color:var(--text-primary);">Key Application:</strong> File system search (e.g. <code>find</code>, <code>grep -r</code>), directory copying (parent directory must exist before child files are created), and AST prefix serialization.
+                                </div>
+                            </div>
+
+                            <!-- Postorder Summary -->
+                            <div style="background:rgba(249,115,22,0.06); border:1px solid rgba(249,115,22,0.25); border-radius:10px; padding:16px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                                    <span style="background:var(--accent-orange); color:#fff; width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:bold;">3</span>
+                                    <strong style="color:var(--accent-orange); font-size:15px;">Post-Order (L &rarr; R &rarr; Root)</strong>
+                                </div>
+                                <p style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:10px;">
+                                    <strong>Bottom-Up Dependency Resolver:</strong> Processes all descendants before handling the parent container.
+                                </p>
+                                <div style="font-size:12px; color:var(--text-muted); background:var(--bg-secondary); padding:8px 10px; border-radius:6px;">
+                                    <strong style="color:var(--text-primary);">Key Application:</strong> Calculating folder size (e.g. <code>du -sh</code> / Windows Folder Properties) and safe memory deallocation (free children before parent to prevent memory leaks).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SIMULATION 1: INORDER EXPRESSION EVALUATOR -->
+                    <div class="card glass" style="margin-bottom:24px;" id="inorder-app-card">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                            <div>
+                                <span class="tag" style="background:rgba(59,130,246,0.12); color:var(--accent-blue); font-weight:700; margin-bottom:6px; display:inline-block;">
+                                    <i class="fa-solid fa-calculator"></i> In-Order Application
+                                </span>
+                                <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);">
+                                    1. Expression Tree &amp; Infix Notation Generator
+                                </h3>
+                                <p style="font-size:13px;color:var(--text-secondary);margin-top:4px;">
+                                    Compilers represent arithmetic expressions as binary syntax trees where internal nodes are operators and leaf nodes are numeric operands. An <strong>In-Order Traversal</strong> naturally reconstructs human-readable <strong>Infix notation</strong> with correct operator precedence.
+                                </p>
+                            </div>
+                            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:8px; padding:6px 12px; font-family:'Fira Code',monospace; font-size:13px; color:var(--accent-blue);">
+                                Target Expression: (4 &times; 2) + (10 &divide; 5)
+                            </div>
+                        </div>
+
+                        <!-- Live Interactive Visualizer -->
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
+                            <!-- SVG Expression Canvas -->
+                            <div class="sim-panel" style="min-height:280px; display:flex; flex-direction:column;">
+                                <div class="sim-panel-header">
+                                    <span><i class="fa-solid fa-diagram-project" style="color:var(--accent-blue);margin-right:6px;"></i> Expression Tree SVG</span>
+                                    <span id="rw-inorder-status-badge" class="badge-o1" style="font-size:11px;">Ready</span>
+                                </div>
+                                <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:10px; background:var(--bg-secondary); border-radius:6px; position:relative;">
+                                    <svg id="rw-inorder-svg" viewBox="0 0 460 210" style="width:100%; max-height:240px; overflow:visible;">
+                                        <!-- Lines/Edges -->
+                                        <line id="rw-in-edge-1" x1="230" y1="35" x2="120" y2="95" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-in-edge-2" x1="230" y1="35" x2="340" y2="95" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-in-edge-3" x1="120" y1="95" x2="65" y2="165" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-in-edge-4" x1="120" y1="95" x2="175" y2="165" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-in-edge-5" x1="340" y1="95" x2="285" y2="165" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-in-edge-6" x1="340" y1="95" x2="395" y2="165" stroke="#94a3b8" stroke-width="2" />
+
+                                        <!-- Nodes -->
+                                        <!-- Root + -->
+                                        <g id="rw-in-node-plus" transform="translate(230, 35)">
+                                            <circle r="18" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2" />
+                                            <text y="5" text-anchor="middle" fill="#fff" font-weight="bold" font-size="16">+</text>
+                                            <text y="-24" text-anchor="middle" fill="var(--text-muted)" font-size="10" font-family="'Fira Code', monospace">Root Op</text>
+                                        </g>
+
+                                        <!-- Left Op * -->
+                                        <g id="rw-in-node-mul" transform="translate(120, 95)">
+                                            <circle r="16" fill="#60a5fa" stroke="#2563eb" stroke-width="2" />
+                                            <text y="5" text-anchor="middle" fill="#fff" font-weight="bold" font-size="15">&times;</text>
+                                        </g>
+
+                                        <!-- Right Op / -->
+                                        <g id="rw-in-node-div" transform="translate(340, 95)">
+                                            <circle r="16" fill="#60a5fa" stroke="#2563eb" stroke-width="2" />
+                                            <text y="5" text-anchor="middle" fill="#fff" font-weight="bold" font-size="15">&divide;</text>
+                                        </g>
+
+                                        <!-- Leaf Operands: 4, 2, 10, 5 -->
+                                        <g id="rw-in-node-4" transform="translate(65, 165)">
+                                            <circle r="15" fill="#10b981" stroke="#047857" stroke-width="2" />
+                                            <text y="5" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">4</text>
+                                        </g>
+                                        <g id="rw-in-node-2" transform="translate(175, 165)">
+                                            <circle r="15" fill="#10b981" stroke="#047857" stroke-width="2" />
+                                            <text y="5" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">2</text>
+                                        </g>
+                                        <g id="rw-in-node-10" transform="translate(285, 165)">
+                                            <circle r="15" fill="#10b981" stroke="#047857" stroke-width="2" />
+                                            <text y="5" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">10</text>
+                                        </g>
+                                        <g id="rw-in-node-5" transform="translate(395, 165)">
+                                            <circle r="15" fill="#10b981" stroke="#047857" stroke-width="2" />
+                                            <text y="5" text-anchor="middle" fill="#fff" font-weight="bold" font-size="13">5</text>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Controls & Token Stream Output -->
+                            <div class="sim-panel" style="min-height:280px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div class="sim-panel-header">
+                                        <span><i class="fa-solid fa-stream" style="color:var(--accent-purple);margin-right:6px;"></i> Live Infix Token Assembly</span>
+                                        <span id="rw-inorder-step-num" style="font-family:'Fira Code',monospace;font-size:11px;">Step 0 / 7</span>
+                                    </div>
+                                    <!-- Infix token stream chips -->
+                                    <div id="rw-inorder-tokens-box" style="display:flex; flex-wrap:wrap; gap:6px; padding:12px; min-height:48px; background:var(--bg-secondary); border-radius:6px; margin-bottom:12px; align-items:center;">
+                                        <span style="color:var(--text-muted); font-size:12px; font-style:italic;">Click 'Play' or 'Next' to assemble infix expression...</span>
+                                    </div>
+
+                                    <!-- Expression Math Calculation breakdown -->
+                                    <div id="rw-inorder-calc-box" style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); border-radius:6px; padding:10px; font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+                                        <strong style="color:var(--accent-blue); display:block; margin-bottom:4px;"><i class="fa-solid fa-microchip"></i> Traversal Formula:</strong>
+                                        <span>In-Order: Left Subtree &rarr; Root (+) &rarr; Right Subtree</span>
+                                    </div>
+
+                                    <!-- Step Log Box -->
+                                    <div class="sim-panel-header" style="border:none; padding:0 0 4px 0;">
+                                        <span><i class="fa-solid fa-terminal" style="color:var(--accent-green);margin-right:4px;"></i> Log</span>
+                                    </div>
+                                    <div id="rw-inorder-log" class="custom-scrollbar" style="max-height:65px; overflow-y:auto; font-family:'Fira Code',monospace; font-size:11px; color:var(--text-secondary); background:var(--bg-secondary); padding:8px; border-radius:6px;">
+                                        [00] Ready. Click Play to start In-Order traversal.
+                                    </div>
+                                </div>
+
+                                <!-- Player Bar -->
+                                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border-color);">
+                                    <div class="stepper-btn-group">
+                                        <button class="stepper-btn" onclick="rwInorderApp.prev()" id="rw-in-prev-btn" title="Previous Step">
+                                            <i class="fa-solid fa-backward-step"></i> Prev
+                                        </button>
+                                        <button class="stepper-btn primary play-big" onclick="rwInorderApp.togglePlay()" id="rw-in-play-btn" title="Play / Pause">
+                                            <i class="fa-solid fa-play"></i>
+                                        </button>
+                                        <button class="stepper-btn" onclick="rwInorderApp.next()" id="rw-in-next-btn" title="Next Step">
+                                            Next <i class="fa-solid fa-forward-step"></i>
+                                        </button>
+                                        <button class="stepper-btn" onclick="rwInorderApp.reset()" title="Reset">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                        </button>
+                                    </div>
+                                    <div class="sim-speed-bar">
+                                        <button class="sim-speed-btn active" onclick="rwInorderApp.setSpeed(1, this)">1x</button>
+                                        <button class="sim-speed-btn" onclick="rwInorderApp.setSpeed(2, this)">2x</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SIMULATION 2: PREORDER FILE SYSTEM EXPLORER -->
+                    <div class="card glass" style="margin-bottom:24px;" id="preorder-app-card">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                            <div>
+                                <span class="tag" style="background:rgba(168,85,247,0.12); color:var(--accent-purple); font-weight:700; margin-bottom:6px; display:inline-block;">
+                                    <i class="fa-solid fa-folder-tree"></i> Pre-Order Application
+                                </span>
+                                <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);">
+                                    2. File System Search &amp; Directory Deep Exploration
+                                </h3>
+                                <p style="font-size:13px;color:var(--text-secondary);margin-top:4px;">
+                                    Tools like <code>grep -r</code>, <code>find</code>, and file indexers use <strong>Pre-Order Traversal (Root &rarr; Left &rarr; Right)</strong>. Visiting the parent folder first allows the program to inspect folder metadata, check permissions, and decide whether to descend into subdirectories.
+                                </p>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <label style="font-size:12px; color:var(--text-muted); font-weight:600;">Search Target:</label>
+                                <select id="rw-pre-target-select" onchange="rwPreorderApp.setTarget(this.value)" class="sim-input" style="padding:4px 8px; font-size:12px; height:30px;">
+                                    <option value="report.pdf">report.pdf</option>
+                                    <option value="notes.txt">notes.txt</option>
+                                    <option value="photo.png">photo.png</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Live Interactive Visualizer -->
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
+                            <!-- SVG File Tree Canvas -->
+                            <div class="sim-panel" style="min-height:280px; display:flex; flex-direction:column;">
+                                <div class="sim-panel-header">
+                                    <span><i class="fa-solid fa-folder-open" style="color:var(--accent-purple);margin-right:6px;"></i> File System Hierarchy</span>
+                                    <span id="rw-preorder-status-badge" class="badge-o1" style="font-size:11px;">Scanning</span>
+                                </div>
+                                <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:10px; background:var(--bg-secondary); border-radius:6px; position:relative;">
+                                    <svg id="rw-preorder-svg" viewBox="0 0 460 210" style="width:100%; max-height:240px; overflow:visible;">
+                                        <!-- Lines/Edges -->
+                                        <line id="rw-pre-edge-1" x1="230" y1="30" x2="120" y2="85" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-pre-edge-2" x1="230" y1="30" x2="340" y2="85" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-pre-edge-3" x1="120" y1="85" x2="65" y2="155" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-pre-edge-4" x1="120" y1="85" x2="175" y2="155" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-pre-edge-5" x1="340" y1="85" x2="285" y2="155" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-pre-edge-6" x1="340" y1="85" x2="395" y2="155" stroke="#94a3b8" stroke-width="2" />
+
+                                        <!-- Nodes (Folders and Files) -->
+                                        <!-- Root: root/ -->
+                                        <g id="rw-pre-node-root" transform="translate(230, 30)">
+                                            <rect x="-35" y="-14" width="70" height="28" rx="6" fill="#a855f7" stroke="#7e22ce" stroke-width="2" />
+                                            <text y="4" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">root/</text>
+                                        </g>
+
+                                        <!-- Left Folder: docs/ -->
+                                        <g id="rw-pre-node-docs" transform="translate(120, 85)">
+                                            <rect x="-32" y="-13" width="64" height="26" rx="5" fill="#c084fc" stroke="#9333ea" stroke-width="2" />
+                                            <text y="4" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">docs/</text>
+                                        </g>
+
+                                        <!-- Right Folder: media/ -->
+                                        <g id="rw-pre-node-media" transform="translate(340, 85)">
+                                            <rect x="-32" y="-13" width="64" height="26" rx="5" fill="#c084fc" stroke="#9333ea" stroke-width="2" />
+                                            <text y="4" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">media/</text>
+                                        </g>
+
+                                        <!-- Files under docs/: report.pdf and notes.txt -->
+                                        <g id="rw-pre-node-report" transform="translate(65, 155)">
+                                            <rect x="-38" y="-12" width="76" height="24" rx="4" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5" />
+                                            <text y="3" text-anchor="middle" fill="#fff" font-size="10" font-family="'Fira Code', monospace">report.pdf</text>
+                                        </g>
+                                        <g id="rw-pre-node-notes" transform="translate(175, 155)">
+                                            <rect x="-36" y="-12" width="72" height="24" rx="4" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5" />
+                                            <text y="3" text-anchor="middle" fill="#fff" font-size="10" font-family="'Fira Code', monospace">notes.txt</text>
+                                        </g>
+
+                                        <!-- Files under media/: audio.mp3 and photo.png -->
+                                        <g id="rw-pre-node-audio" transform="translate(285, 155)">
+                                            <rect x="-38" y="-12" width="76" height="24" rx="4" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5" />
+                                            <text y="3" text-anchor="middle" fill="#fff" font-size="10" font-family="'Fira Code', monospace">audio.mp3</text>
+                                        </g>
+                                        <g id="rw-pre-node-photo" transform="translate(395, 155)">
+                                            <rect x="-36" y="-12" width="72" height="24" rx="4" fill="#3b82f6" stroke="#1d4ed8" stroke-width="1.5" />
+                                            <text y="3" text-anchor="middle" fill="#fff" font-size="10" font-family="'Fira Code', monospace">photo.png</text>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Controls & Search Path Monitor -->
+                            <div class="sim-panel" style="min-height:280px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div class="sim-panel-header">
+                                        <span><i class="fa-solid fa-compass" style="color:var(--accent-orange);margin-right:6px;"></i> Active Search Path</span>
+                                        <span id="rw-preorder-step-num" style="font-family:'Fira Code',monospace;font-size:11px;">Step 0 / 7</span>
+                                    </div>
+                                    <!-- Current traversal breadcrumb -->
+                                    <div id="rw-preorder-path-box" style="display:flex; align-items:center; padding:10px 12px; min-height:48px; background:var(--bg-secondary); border-radius:6px; margin-bottom:12px; font-family:'Fira Code',monospace; font-size:13px; color:var(--text-primary);">
+                                        <span>/</span>
+                                    </div>
+
+                                    <!-- Search Result Box -->
+                                    <div id="rw-preorder-result-box" style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.2); border-radius:6px; padding:10px; font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+                                        <strong style="color:var(--accent-purple); display:block; margin-bottom:4px;"><i class="fa-solid fa-magnifying-glass"></i> Traversal Order:</strong>
+                                        <span>Pre-Order visits current folder first, then descends into left child, then right child.</span>
+                                    </div>
+
+                                    <!-- Step Log Box -->
+                                    <div class="sim-panel-header" style="border:none; padding:0 0 4px 0;">
+                                        <span><i class="fa-solid fa-terminal" style="color:var(--accent-green);margin-right:4px;"></i> Exploration Log</span>
+                                    </div>
+                                    <div id="rw-preorder-log" class="custom-scrollbar" style="max-height:65px; overflow-y:auto; font-family:'Fira Code',monospace; font-size:11px; color:var(--text-secondary); background:var(--bg-secondary); padding:8px; border-radius:6px;">
+                                        [00] Ready. Click Play to start Pre-Order file search.
+                                    </div>
+                                </div>
+
+                                <!-- Player Bar -->
+                                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border-color);">
+                                    <div class="stepper-btn-group">
+                                        <button class="stepper-btn" onclick="rwPreorderApp.prev()" id="rw-pre-prev-btn" title="Previous Step">
+                                            <i class="fa-solid fa-backward-step"></i> Prev
+                                        </button>
+                                        <button class="stepper-btn primary play-big" onclick="rwPreorderApp.togglePlay()" id="rw-pre-play-btn" title="Play / Pause">
+                                            <i class="fa-solid fa-play"></i>
+                                        </button>
+                                        <button class="stepper-btn" onclick="rwPreorderApp.next()" id="rw-pre-next-btn" title="Next Step">
+                                            Next <i class="fa-solid fa-forward-step"></i>
+                                        </button>
+                                        <button class="stepper-btn" onclick="rwPreorderApp.reset()" title="Reset">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                        </button>
+                                    </div>
+                                    <div class="sim-speed-bar">
+                                        <button class="sim-speed-btn active" onclick="rwPreorderApp.setSpeed(1, this)">1x</button>
+                                        <button class="sim-speed-btn" onclick="rwPreorderApp.setSpeed(2, this)">2x</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SIMULATION 3: POSTORDER DIRECTORY SIZE CALCULATOR -->
+                    <div class="card glass" style="margin-bottom:24px;" id="postorder-app-card">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                            <div>
+                                <span class="tag" style="background:rgba(249,115,22,0.12); color:var(--accent-orange); font-weight:700; margin-bottom:6px; display:inline-block;">
+                                    <i class="fa-solid fa-hard-drive"></i> Post-Order Application
+                                </span>
+                                <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);">
+                                    3. Directory Size &amp; Disk Usage Aggregator (du -sh)
+                                </h3>
+                                <p style="font-size:13px;color:var(--text-secondary);margin-top:4px;">
+                                    In operating systems (like Linux <code>du</code> or Windows folder properties), a directory does not store its total recursive size on disk. The OS must compute size <strong>Bottom-Up using Post-Order Traversal (Left &rarr; Right &rarr; Root)</strong>: calculating child files and subfolders first before determining the parent folder size.
+                                </p>
+                            </div>
+                            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:8px; padding:6px 12px; font-family:'Fira Code',monospace; font-size:13px; color:var(--accent-orange);">
+                                Total Target: project/ (280 KB)
+                            </div>
+                        </div>
+
+                        <!-- Live Interactive Visualizer -->
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
+                            <!-- SVG Directory Size Canvas -->
+                            <div class="sim-panel" style="min-height:280px; display:flex; flex-direction:column;">
+                                <div class="sim-panel-header">
+                                    <span><i class="fa-solid fa-chart-pie" style="color:var(--accent-orange);margin-right:6px;"></i> Storage Tree Hierarchy</span>
+                                    <span id="rw-postorder-status-badge" class="badge-o1" style="font-size:11px;">Pending</span>
+                                </div>
+                                <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:10px; background:var(--bg-secondary); border-radius:6px; position:relative;">
+                                    <svg id="rw-postorder-svg" viewBox="0 0 460 210" style="width:100%; max-height:240px; overflow:visible;">
+                                        <!-- Lines/Edges -->
+                                        <line id="rw-post-edge-1" x1="230" y1="30" x2="120" y2="85" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-post-edge-2" x1="230" y1="30" x2="340" y2="85" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-post-edge-3" x1="120" y1="85" x2="65" y2="155" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-post-edge-4" x1="120" y1="85" x2="175" y2="155" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-post-edge-5" x1="340" y1="85" x2="285" y2="155" stroke="#94a3b8" stroke-width="2" />
+                                        <line id="rw-post-edge-6" x1="340" y1="85" x2="395" y2="155" stroke="#94a3b8" stroke-width="2" />
+
+                                        <!-- Nodes (Folders and Files with Sizes) -->
+                                        <!-- Root: project/ -->
+                                        <g id="rw-post-node-root" transform="translate(230, 30)">
+                                            <rect x="-42" y="-14" width="84" height="28" rx="6" fill="#f97316" stroke="#c2410c" stroke-width="2" />
+                                            <text y="-1" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">project/</text>
+                                            <text id="rw-post-size-root" y="10" text-anchor="middle" fill="#fef08a" font-size="9" font-family="'Fira Code', monospace">size: ?</text>
+                                        </g>
+
+                                        <!-- Left Folder: src/ -->
+                                        <g id="rw-post-node-src" transform="translate(120, 85)">
+                                            <rect x="-35" y="-13" width="70" height="26" rx="5" fill="#fb923c" stroke="#ea580c" stroke-width="2" />
+                                            <text y="-1" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">src/</text>
+                                            <text id="rw-post-size-src" y="10" text-anchor="middle" fill="#fef08a" font-size="9" font-family="'Fira Code', monospace">size: ?</text>
+                                        </g>
+
+                                        <!-- Right Folder: assets/ -->
+                                        <g id="rw-post-node-assets" transform="translate(340, 85)">
+                                            <rect x="-38" y="-13" width="76" height="26" rx="5" fill="#fb923c" stroke="#ea580c" stroke-width="2" />
+                                            <text y="-1" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">assets/</text>
+                                            <text id="rw-post-size-assets" y="10" text-anchor="middle" fill="#fef08a" font-size="9" font-family="'Fira Code', monospace">size: ?</text>
+                                        </g>
+
+                                        <!-- Files under src/: app.py (120KB) and util.py (80KB) -->
+                                        <g id="rw-post-node-app" transform="translate(65, 155)">
+                                            <rect x="-36" y="-12" width="72" height="24" rx="4" fill="#10b981" stroke="#047857" stroke-width="1.5" />
+                                            <text y="-1" text-anchor="middle" fill="#fff" font-size="10" font-family="'Fira Code', monospace">app.py</text>
+                                            <text y="9" text-anchor="middle" fill="#d1fae5" font-size="8" font-family="'Fira Code', monospace">120 KB</text>
+                                        </g>
+                                        <g id="rw-post-node-util" transform="translate(175, 155)">
+                                            <rect x="-36" y="-12" width="72" height="24" rx="4" fill="#10b981" stroke="#047857" stroke-width="1.5" />
+                                            <text y="-1" text-anchor="middle" fill="#fff" font-size="10" font-family="'Fira Code', monospace">util.py</text>
+                                            <text y="9" text-anchor="middle" fill="#d1fae5" font-size="8" font-family="'Fira Code', monospace">80 KB</text>
+                                        </g>
+
+                                        <!-- Files under assets/: icon.svg (45KB) and style.css (35KB) -->
+                                        <g id="rw-post-node-icon" transform="translate(285, 155)">
+                                            <rect x="-36" y="-12" width="72" height="24" rx="4" fill="#10b981" stroke="#047857" stroke-width="1.5" />
+                                            <text y="-1" text-anchor="middle" fill="#fff" font-size="10" font-family="'Fira Code', monospace">icon.svg</text>
+                                            <text y="9" text-anchor="middle" fill="#d1fae5" font-size="8" font-family="'Fira Code', monospace">45 KB</text>
+                                        </g>
+                                        <g id="rw-post-node-style" transform="translate(395, 155)">
+                                            <rect x="-36" y="-12" width="72" height="24" rx="4" fill="#10b981" stroke="#047857" stroke-width="1.5" />
+                                            <text y="-1" text-anchor="middle" fill="#fff" font-size="10" font-family="'Fira Code', monospace">style.css</text>
+                                            <text y="9" text-anchor="middle" fill="#d1fae5" font-size="8" font-family="'Fira Code', monospace">35 KB</text>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Controls & Bottom-Up Aggregation Monitor -->
+                            <div class="sim-panel" style="min-height:280px; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <div class="sim-panel-header">
+                                        <span><i class="fa-solid fa-calculator" style="color:var(--accent-green);margin-right:6px;"></i> Bottom-Up Size Accumulation</span>
+                                        <span id="rw-postorder-step-num" style="font-family:'Fira Code',monospace;font-size:11px;">Step 0 / 7</span>
+                                    </div>
+                                    <!-- Dynamic size summary card -->
+                                    <div id="rw-postorder-sum-box" style="display:flex; flex-direction:column; gap:4px; padding:10px 12px; min-height:48px; background:var(--bg-secondary); border-radius:6px; margin-bottom:12px; font-family:'Fira Code',monospace; font-size:12px; color:var(--text-primary);">
+                                        <span style="color:var(--text-muted);">Waiting to calculate...</span>
+                                    </div>
+
+                                    <!-- Bottom-up formula explanation -->
+                                    <div id="rw-postorder-formula-box" style="background:rgba(249,115,22,0.08); border:1px solid rgba(249,115,22,0.2); border-radius:6px; padding:10px; font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+                                        <strong style="color:var(--accent-orange); display:block; margin-bottom:4px;"><i class="fa-solid fa-arrow-up"></i> Post-Order Invariant:</strong>
+                                        <span>Folder size = sum of all child files + sum of all subfolder sizes.</span>
+                                    </div>
+
+                                    <!-- Step Log Box -->
+                                    <div class="sim-panel-header" style="border:none; padding:0 0 4px 0;">
+                                        <span><i class="fa-solid fa-terminal" style="color:var(--accent-green);margin-right:4px;"></i> Size Calculation Log</span>
+                                    </div>
+                                    <div id="rw-postorder-log" class="custom-scrollbar" style="max-height:65px; overflow-y:auto; font-family:'Fira Code',monospace; font-size:11px; color:var(--text-secondary); background:var(--bg-secondary); padding:8px; border-radius:6px;">
+                                        [00] Ready. Click Play to calculate disk usage with Post-Order.
+                                    </div>
+                                </div>
+
+                                <!-- Player Bar -->
+                                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border-color);">
+                                    <div class="stepper-btn-group">
+                                        <button class="stepper-btn" onclick="rwPostorderApp.prev()" id="rw-post-prev-btn" title="Previous Step">
+                                            <i class="fa-solid fa-backward-step"></i> Prev
+                                        </button>
+                                        <button class="stepper-btn primary play-big" onclick="rwPostorderApp.togglePlay()" id="rw-post-play-btn" title="Play / Pause">
+                                            <i class="fa-solid fa-play"></i>
+                                        </button>
+                                        <button class="stepper-btn" onclick="rwPostorderApp.next()" id="rw-post-next-btn" title="Next Step">
+                                            Next <i class="fa-solid fa-forward-step"></i>
+                                        </button>
+                                        <button class="stepper-btn" onclick="rwPostorderApp.reset()" title="Reset">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                        </button>
+                                    </div>
+                                    <div class="sim-speed-bar">
+                                        <button class="sim-speed-btn active" onclick="rwPostorderApp.setSpeed(1, this)">1x</button>
+                                        <button class="sim-speed-btn" onclick="rwPostorderApp.setSpeed(2, this)">2x</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section Footer Navigation -->
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('traversal-sim-section')">
+                            <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
+                            <span class="nav-title">Module 2: Traversal Simulator</span>
+                        </button>
                         <button class="sec-nav-btn next-btn" onclick="showSection('bst-basics-section')">
                             <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
-                            <span class="nav-title">Module 3: BST Fundamentals</span>
+                            <span class="nav-title">Module 4: BST Fundamentals</span>
                         </button>
                     </div>
                 </section>
@@ -580,7 +1072,7 @@
                                 <i class="fa-solid fa-sitemap mod-glow-icon"></i>
                             </div>
                             <div class="mod-header-text">
-                                <h2>Module 3: Binary Search Tree (BST) Fundamentals</h2>
+                                <h2>Module 4: Binary Search Tree (BST) Fundamentals</h2>
                                 <p>A <strong>Binary Search Tree (BST)</strong> is a specialized binary tree with a strict ordering property enabling fast binary search, dynamic insertions, and deletions in <strong>O(log N)</strong> average time.</p>
                             </div>
                         </div>
@@ -753,13 +1245,13 @@
 
                     <!-- Section Footer Navigation -->
                     <div class="section-nav-footer">
-                        <button class="sec-nav-btn prev-btn" onclick="showSection('traversal-sim-section')">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('realworld-section')">
                             <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
-                            <span class="nav-title">Module 2: Traversal Simulator</span>
+                            <span class="nav-title">Module 3: Real-World Applications</span>
                         </button>
                         <button class="sec-nav-btn next-btn" onclick="showSection('bst-ops-section')">
                             <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
-                            <span class="nav-title">Module 4: BST Operations</span>
+                            <span class="nav-title">Module 5: BST Operations</span>
                         </button>
                     </div>
                 </section>
@@ -774,7 +1266,7 @@
                                 <i class="fa-solid fa-code mod-glow-icon"></i>
                             </div>
                             <div class="mod-header-text">
-                                <h2>Module 4: BST Operations (Search, Insert, Delete)</h2>
+                                <h2>Module 5: BST Operations (Search, Insert, Delete)</h2>
                                 <p>Every operation in a BST exploits the ordering invariant: at each step we compare the target key with the current node, eliminating half of the remaining tree in each decision step.</p>
                             </div>
                         </div>
@@ -906,11 +1398,11 @@
                     <div class="section-nav-footer">
                         <button class="sec-nav-btn prev-btn" onclick="showSection('bst-basics-section')">
                             <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
-                            <span class="nav-title">Module 3: BST Fundamentals</span>
+                            <span class="nav-title">Module 4: BST Fundamentals</span>
                         </button>
                         <button class="sec-nav-btn next-btn" onclick="showSection('bst-sim-section')">
                             <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
-                            <span class="nav-title">Module 5: BST Simulator</span>
+                            <span class="nav-title">Module 6: BST Simulator</span>
                         </button>
                     </div>
                 </section>
@@ -925,7 +1417,7 @@
                                 <i class="fa-solid fa-laptop-code mod-glow-icon"></i>
                             </div>
                             <div class="mod-header-text">
-                                <h2>Module 5: Interactive Binary Search Tree Lab</h2>
+                                <h2>Module 6: Interactive Binary Search Tree Lab</h2>
                                 <p>Perform Search, Insert, and Delete operations on a live BST. Watch the <strong>Step-by-Step execution (◀ Prev, ▶ Play, Next ▶)</strong> synchronize with the active line in Python code, the visual recursion stack, and the tree canvas.</p>
                             </div>
                         </div>
@@ -938,11 +1430,11 @@
                     <div class="section-nav-footer" style="margin-top:24px;">
                         <button class="sec-nav-btn prev-btn" onclick="showSection('bst-ops-section')">
                             <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
-                            <span class="nav-title">Module 4: BST Operations</span>
+                            <span class="nav-title">Module 5: BST Operations</span>
                         </button>
                         <button class="sec-nav-btn next-btn" onclick="showSection('quiz-section')">
                             <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
-                            <span class="nav-title">Module 6: Knowledge Quiz</span>
+                            <span class="nav-title">Module 7: Knowledge Quiz</span>
                         </button>
                     </div>
                 </section>
@@ -957,7 +1449,7 @@
                                 <i class="fa-solid fa-clipboard-question mod-glow-icon"></i>
                             </div>
                             <div class="mod-header-text">
-                                <h2>Module 6: Tree &amp; BST Knowledge Quiz</h2>
+                                <h2>Module 7: Tree &amp; BST Knowledge Quiz</h2>
                                 <p>Test your understanding of tree terminology, depth/height calculations, DFS/BFS traversal orders, BST invariants, insertion/deletion steps, and computational complexities.</p>
                             </div>
                         </div>
@@ -971,7 +1463,7 @@
                     <div class="section-nav-footer" style="margin-top:24px;">
                         <button class="sec-nav-btn prev-btn" onclick="showSection('bst-sim-section')">
                             <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
-                            <span class="nav-title">Module 5: BST Simulator</span>
+                            <span class="nav-title">Module 6: BST Simulator</span>
                         </button>
                         <div></div>
                     </div>
@@ -1063,8 +1555,599 @@
             });
         }
 
-        // ═══════════════════════════════════════════════════════════════
-        // MODULE 6: QUIZ ENGINE (12 Comprehensive Questions)
+            </script>
+
+    <!-- =============================================================== -->
+    <!-- MODULE 3 JAVASCRIPT: Real-World Traversal Interactive Apps      -->
+    <!-- =============================================================== -->
+    <script>
+    // -------------------------------------------------------------
+    // App 1: In-Order Traversal Expression Evaluator
+    // -------------------------------------------------------------
+    const rwInorderApp = {
+        step: 0,
+        timer: null,
+        speed: 1000,
+        steps: [
+            {
+                node: "rw-in-node-4",
+                edge: "rw-in-edge-3",
+                token: "4",
+                type: "operand",
+                tokens: ["4"],
+                calc: "Visiting Leftmost Operand: 4",
+                log: "[01] In-Order Step 1: Visit Leftmost Leaf operand (4). Token '4' appended to Infix stream."
+            },
+            {
+                node: "rw-in-node-mul",
+                edge: "rw-in-edge-1",
+                token: "&times;",
+                type: "operator",
+                tokens: ["4", "&times;"],
+                calc: "Visiting Left Subtree Operator: &times;",
+                log: "[02] In-Order Step 2: Visit Left Subtree Root operator (&times;). Token '&times;' appended."
+            },
+            {
+                node: "rw-in-node-2",
+                edge: "rw-in-edge-4",
+                token: "2",
+                type: "operand",
+                tokens: ["4", "&times;", "2"],
+                calc: "Left Subtree Complete: (4 &times; 2) = 8",
+                log: "[03] In-Order Step 3: Visit Right Child of Left Subtree (2). Left expression (4 &times; 2) evaluates to 8."
+            },
+            {
+                node: "rw-in-node-plus",
+                edge: null,
+                token: "+",
+                type: "root-op",
+                tokens: ["(", "4", "&times;", "2", ")", "+"],
+                calc: "Visiting Tree Root Operator: + (Connects Left & Right Subtrees)",
+                log: "[04] In-Order Step 4: Visit Tree Root (+). Natural Infix precedence isolates left and right expressions with (+)."
+            },
+            {
+                node: "rw-in-node-10",
+                edge: "rw-in-edge-5",
+                token: "10",
+                type: "operand",
+                tokens: ["(", "4", "&times;", "2", ")", "+", "10"],
+                calc: "Visiting Right Subtree Left Operand: 10",
+                log: "[05] In-Order Step 5: Descend into Right Subtree. Visit Left child operand (10)."
+            },
+            {
+                node: "rw-in-node-div",
+                edge: "rw-in-edge-2",
+                token: "&divide;",
+                type: "operator",
+                tokens: ["(", "4", "&times;", "2", ")", "+", "10", "&divide;"],
+                calc: "Visiting Right Subtree Operator: &divide;",
+                log: "[06] In-Order Step 6: Visit Right Subtree Root operator (&divide;). Token '&divide;' appended."
+            },
+            {
+                node: "rw-in-node-5",
+                edge: "rw-in-edge-6",
+                token: "5",
+                type: "operand",
+                tokens: ["(", "4", "&times;", "2", ")", "+", "(", "10", "&divide;", "5", ")", "=", "10"],
+                calc: "Final Evaluation: 8 + 2 = 10",
+                log: "[07] In-Order Step 7: Visit Rightmost Leaf (5). Subtree (10 &divide; 5) = 2. Final Infix evaluation: 8 + 2 = 10!"
+            }
+        ],
+        updateUI() {
+            const allNodes = ["rw-in-node-plus", "rw-in-node-mul", "rw-in-node-div", "rw-in-node-4", "rw-in-node-2", "rw-in-node-10", "rw-in-node-5"];
+            allNodes.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const circle = el.querySelector("circle");
+                    if (circle) {
+                        circle.style.filter = "none";
+                        circle.style.strokeWidth = "2";
+                    }
+                }
+            });
+
+            const tokensBox = document.getElementById("rw-inorder-tokens-box");
+            const calcBox = document.getElementById("rw-inorder-calc-box");
+            const logBox = document.getElementById("rw-inorder-log");
+            const stepNum = document.getElementById("rw-inorder-step-num");
+            const badge = document.getElementById("rw-inorder-status-badge");
+            const prevBtn = document.getElementById("rw-in-prev-btn");
+            const nextBtn = document.getElementById("rw-in-next-btn");
+
+            if (prevBtn) prevBtn.disabled = (this.step === 0);
+            if (nextBtn) nextBtn.disabled = (this.step >= this.steps.length);
+
+            if (this.step === 0) {
+                if (tokensBox) tokensBox.innerHTML = "<span style='color:var(--text-muted); font-size:12px; font-style:italic;'>Click 'Play' or 'Next' to assemble infix expression...</span>";
+                if (calcBox) calcBox.innerHTML = "<strong style='color:var(--accent-blue); display:block; margin-bottom:4px;'><i class='fa-solid fa-microchip'></i> Traversal Formula:</strong><span>In-Order: Left Subtree &rarr; Root (+) &rarr; Right Subtree</span>";
+                if (stepNum) stepNum.textContent = "Step 0 / " + this.steps.length;
+                if (badge) { badge.textContent = "Ready"; badge.className = "badge-o1"; }
+                return;
+            }
+
+            const current = this.steps[this.step - 1];
+            if (stepNum) stepNum.textContent = "Step " + this.step + " / " + this.steps.length;
+            if (badge) {
+                badge.textContent = (this.step === this.steps.length) ? "Completed (= 10)" : "Processing (" + current.token + ")";
+                badge.className = (this.step === this.steps.length) ? "badge-ok" : "badge-on";
+            }
+
+            // Highlight active node
+            const activeEl = document.getElementById(current.node);
+            if (activeEl) {
+                const circle = activeEl.querySelector("circle");
+                if (circle) {
+                    circle.style.filter = "drop-shadow(0 0 8px #38bdf8)";
+                    circle.style.strokeWidth = "4";
+                }
+            }
+
+            // Render token chips
+            if (tokensBox) {
+                tokensBox.innerHTML = current.tokens.map((t, idx) => {
+                    const isLast = (idx === current.tokens.length - 1);
+                    const bg = (t === "=" || t === "10") ? "rgba(16,185,129,0.2)" : (t === "+" || t === "&times;" || t === "&divide;") ? "rgba(168,85,247,0.2)" : "rgba(59,130,246,0.15)";
+                    const col = (t === "=" || t === "10") ? "var(--accent-green)" : (t === "+" || t === "&times;" || t === "&divide;") ? "var(--accent-purple)" : "var(--accent-blue)";
+                    return `<span style="padding:4px 10px; border-radius:6px; background:${bg}; color:${col}; font-family:'Fira Code',monospace; font-weight:bold; font-size:13px; border:1px solid ${col}; ${isLast ? 'transform:scale(1.08);' : ''}">${t}</span>`;
+                }).join("");
+            }
+
+            if (calcBox) {
+                calcBox.innerHTML = `<strong style='color:var(--accent-blue); display:block; margin-bottom:4px;'><i class='fa-solid fa-calculator'></i> Current State:</strong><span>${current.calc}</span>`;
+            }
+
+            if (logBox) {
+                logBox.innerHTML = `<div>${current.log}</div>` + logBox.innerHTML;
+            }
+        },
+        next() {
+            if (this.step < this.steps.length) {
+                this.step++;
+                this.updateUI();
+            } else {
+                this.pause();
+            }
+        },
+        prev() {
+            if (this.step > 0) {
+                this.step--;
+                this.updateUI();
+            }
+        },
+        reset() {
+            this.pause();
+            this.step = 0;
+            const logBox = document.getElementById("rw-inorder-log");
+            if (logBox) logBox.innerHTML = "[00] Reset. Ready for In-Order traversal.";
+            this.updateUI();
+        },
+        togglePlay() {
+            if (this.timer) {
+                this.pause();
+            } else {
+                if (this.step >= this.steps.length) this.step = 0;
+                const playBtn = document.getElementById("rw-in-play-btn");
+                if (playBtn) playBtn.innerHTML = "<i class='fa-solid fa-pause'></i>";
+                this.timer = setInterval(() => {
+                    if (this.step < this.steps.length) {
+                        this.next();
+                    } else {
+                        this.pause();
+                    }
+                }, this.speed);
+            }
+        },
+        pause() {
+            if (this.timer) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
+            const playBtn = document.getElementById("rw-in-play-btn");
+            if (playBtn) playBtn.innerHTML = "<i class='fa-solid fa-play'></i>";
+        },
+        setSpeed(val, btn) {
+            this.speed = (val === 2) ? 500 : 1000;
+            document.querySelectorAll("#inorder-app-card .sim-speed-btn").forEach(b => b.classList.remove("active"));
+            if (btn) btn.classList.add("active");
+            if (this.timer) {
+                this.pause();
+                this.togglePlay();
+            }
+        }
+    };
+
+    // -------------------------------------------------------------
+    // App 2: Pre-Order Traversal File System Explorer
+    // -------------------------------------------------------------
+    const rwPreorderApp = {
+        step: 0,
+        timer: null,
+        speed: 1000,
+        target: "report.pdf",
+        steps: [
+            {
+                node: "rw-pre-node-root",
+                path: "/root",
+                name: "root/",
+                isTarget: false,
+                log: "[01] Pre-Order Step 1: Inspect root folder (/root). Check folder permissions & subdirectories."
+            },
+            {
+                node: "rw-pre-node-docs",
+                path: "/root/docs",
+                name: "docs/",
+                isTarget: false,
+                log: "[02] Pre-Order Step 2: Descend into Left branch (/root/docs/). Inspect metadata before scanning child files."
+            },
+            {
+                node: "rw-pre-node-report",
+                path: "/root/docs/report.pdf",
+                name: "report.pdf",
+                isTarget: true,
+                log: "[03] Pre-Order Step 3: Inspect file (/root/docs/report.pdf)."
+            },
+            {
+                node: "rw-pre-node-notes",
+                path: "/root/docs/notes.txt",
+                name: "notes.txt",
+                isTarget: false,
+                log: "[04] Pre-Order Step 4: Inspect file (/root/docs/notes.txt)."
+            },
+            {
+                node: "rw-pre-node-media",
+                path: "/root/media",
+                name: "media/",
+                isTarget: false,
+                log: "[05] Pre-Order Step 5: Backtrack and descend into Right branch (/root/media/)."
+            },
+            {
+                node: "rw-pre-node-audio",
+                path: "/root/media/audio.mp3",
+                name: "audio.mp3",
+                isTarget: false,
+                log: "[06] Pre-Order Step 6: Inspect file (/root/media/audio.mp3)."
+            },
+            {
+                node: "rw-pre-node-photo",
+                path: "/root/media/photo.png",
+                name: "photo.png",
+                isTarget: false,
+                log: "[07] Pre-Order Step 7: Inspect file (/root/media/photo.png)."
+            }
+        ],
+        setTarget(val) {
+            this.target = val;
+            this.reset();
+        },
+        updateUI() {
+            const allNodes = ["rw-pre-node-root", "rw-pre-node-docs", "rw-pre-node-report", "rw-pre-node-notes", "rw-pre-node-media", "rw-pre-node-audio", "rw-pre-node-photo"];
+            allNodes.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const rect = el.querySelector("rect");
+                    if (rect) {
+                        rect.style.filter = "none";
+                        rect.style.strokeWidth = "2";
+                    }
+                }
+            });
+
+            const pathBox = document.getElementById("rw-preorder-path-box");
+            const resultBox = document.getElementById("rw-preorder-result-box");
+            const logBox = document.getElementById("rw-preorder-log");
+            const stepNum = document.getElementById("rw-preorder-step-num");
+            const badge = document.getElementById("rw-preorder-status-badge");
+            const prevBtn = document.getElementById("rw-pre-prev-btn");
+            const nextBtn = document.getElementById("rw-pre-next-btn");
+
+            if (prevBtn) prevBtn.disabled = (this.step === 0);
+            if (nextBtn) nextBtn.disabled = (this.step >= this.steps.length);
+
+            if (this.step === 0) {
+                if (pathBox) pathBox.innerHTML = "<span style='color:var(--text-muted); font-size:12px; font-style:italic;'>/ (Ready to explore)</span>";
+                if (resultBox) resultBox.innerHTML = `<strong style='color:var(--accent-purple); display:block; margin-bottom:4px;'><i class='fa-solid fa-magnifying-glass'></i> Search Target:</strong><span>Searching for: <code>${this.target}</code></span>`;
+                if (stepNum) stepNum.textContent = "Step 0 / " + this.steps.length;
+                if (badge) { badge.textContent = "Standby"; badge.className = "badge-o1"; }
+                return;
+            }
+
+            const current = this.steps[this.step - 1];
+            const isMatch = (current.name === this.target);
+
+            if (stepNum) stepNum.textContent = "Step " + this.step + " / " + this.steps.length;
+            if (badge) {
+                if (isMatch) {
+                    badge.textContent = "Target Match!";
+                    badge.className = "badge-ok";
+                } else if (this.step === this.steps.length) {
+                    badge.textContent = "Scan Complete";
+                    badge.className = "badge-o1";
+                } else {
+                    badge.textContent = "Scanning " + current.name;
+                    badge.className = "badge-on";
+                }
+            }
+
+            // Highlight active node
+            const activeEl = document.getElementById(current.node);
+            if (activeEl) {
+                const rect = activeEl.querySelector("rect");
+                if (rect) {
+                    rect.style.filter = isMatch ? "drop-shadow(0 0 10px #10b981)" : "drop-shadow(0 0 8px #c084fc)";
+                    rect.style.strokeWidth = "3.5";
+                }
+            }
+
+            if (pathBox) {
+                pathBox.innerHTML = `<span style="color:var(--accent-purple); font-weight:bold;">${current.path}</span>`;
+            }
+
+            if (resultBox) {
+                if (isMatch) {
+                    resultBox.innerHTML = `<strong style='color:var(--accent-green); display:block; margin-bottom:4px;'><i class='fa-solid fa-circle-check'></i> Target Found!</strong><span>Exact match <code>${this.target}</code> discovered at: <code>${current.path}</code></span>`;
+                } else {
+                    resultBox.innerHTML = `<strong style='color:var(--accent-purple); display:block; margin-bottom:4px;'><i class='fa-solid fa-folder-tree'></i> Top-Down Traversal:</strong><span>Inspecting: <code>${current.path}</code> (Searching for: <code>${this.target}</code>)</span>`;
+                }
+            }
+
+            if (logBox) {
+                const matchSuffix = isMatch ? " <strong style='color:var(--accent-green);'>[MATCH FOUND!]</strong>" : "";
+                logBox.innerHTML = `<div>${current.log}${matchSuffix}</div>` + logBox.innerHTML;
+            }
+        },
+        next() {
+            if (this.step < this.steps.length) {
+                this.step++;
+                this.updateUI();
+            } else {
+                this.pause();
+            }
+        },
+        prev() {
+            if (this.step > 0) {
+                this.step--;
+                this.updateUI();
+            }
+        },
+        reset() {
+            this.pause();
+            this.step = 0;
+            const logBox = document.getElementById("rw-preorder-log");
+            if (logBox) logBox.innerHTML = "[00] Reset. Ready for Pre-Order file exploration.";
+            this.updateUI();
+        },
+        togglePlay() {
+            if (this.timer) {
+                this.pause();
+            } else {
+                if (this.step >= this.steps.length) this.step = 0;
+                const playBtn = document.getElementById("rw-pre-play-btn");
+                if (playBtn) playBtn.innerHTML = "<i class='fa-solid fa-pause'></i>";
+                this.timer = setInterval(() => {
+                    if (this.step < this.steps.length) {
+                        this.next();
+                    } else {
+                        this.pause();
+                    }
+                }, this.speed);
+            }
+        },
+        pause() {
+            if (this.timer) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
+            const playBtn = document.getElementById("rw-pre-play-btn");
+            if (playBtn) playBtn.innerHTML = "<i class='fa-solid fa-play'></i>";
+        },
+        setSpeed(val, btn) {
+            this.speed = (val === 2) ? 500 : 1000;
+            document.querySelectorAll("#preorder-app-card .sim-speed-btn").forEach(b => b.classList.remove("active"));
+            if (btn) btn.classList.add("active");
+            if (this.timer) {
+                this.pause();
+                this.togglePlay();
+            }
+        }
+    };
+
+    // -------------------------------------------------------------
+    // App 3: Post-Order Traversal Directory Size Calculator
+    // -------------------------------------------------------------
+    const rwPostorderApp = {
+        step: 0,
+        timer: null,
+        speed: 1000,
+        steps: [
+            {
+                node: "rw-post-node-app",
+                targetSizeEl: null,
+                calcText: "Leaf file: app.py = 120 KB",
+                sumText: "src/ queue: [app.py: 120 KB]",
+                log: "[01] Post-Order Step 1: Read leaf file (app.py). Size = 120 KB."
+            },
+            {
+                node: "rw-post-node-util",
+                targetSizeEl: null,
+                calcText: "Leaf file: util.py = 80 KB",
+                sumText: "src/ queue: [app.py: 120 KB, util.py: 80 KB]",
+                log: "[02] Post-Order Step 2: Read leaf file (util.py). Size = 80 KB."
+            },
+            {
+                node: "rw-post-node-src",
+                targetSizeEl: "rw-post-size-src",
+                newSize: "size: 200 KB",
+                calcText: "Accumulate Left Folder: size(src/) = 120 + 80 = 200 KB",
+                sumText: "src/ folder total = 200 KB",
+                log: "[03] Post-Order Step 3: All children of src/ resolved! Compute src/ = 120 + 80 = 200 KB."
+            },
+            {
+                node: "rw-post-node-icon",
+                targetSizeEl: null,
+                calcText: "Leaf file: icon.svg = 45 KB",
+                sumText: "assets/ queue: [icon.svg: 45 KB]",
+                log: "[04] Post-Order Step 4: Descend into Right branch. Read leaf file (icon.svg). Size = 45 KB."
+            },
+            {
+                node: "rw-post-node-style",
+                targetSizeEl: null,
+                calcText: "Leaf file: style.css = 35 KB",
+                sumText: "assets/ queue: [icon.svg: 45 KB, style.css: 35 KB]",
+                log: "[05] Post-Order Step 5: Read leaf file (style.css). Size = 35 KB."
+            },
+            {
+                node: "rw-post-node-assets",
+                targetSizeEl: "rw-post-size-assets",
+                newSize: "size: 80 KB",
+                calcText: "Accumulate Right Folder: size(assets/) = 45 + 35 = 80 KB",
+                sumText: "assets/ folder total = 80 KB",
+                log: "[06] Post-Order Step 6: All children of assets/ resolved! Compute assets/ = 45 + 35 = 80 KB."
+            },
+            {
+                node: "rw-post-node-root",
+                targetSizeEl: "rw-post-size-root",
+                newSize: "size: 280 KB",
+                calcText: "Root Total: size(project/) = src(200 KB) + assets(80 KB) = 280 KB",
+                sumText: "Total Disk Usage: 280 KB",
+                log: "[07] Post-Order Step 7: Both subdirectories complete! Total recursive project/ size = 200 + 80 = 280 KB."
+            }
+        ],
+        updateUI() {
+            const allNodes = ["rw-post-node-root", "rw-post-node-src", "rw-post-node-assets", "rw-post-node-app", "rw-post-node-util", "rw-post-node-icon", "rw-post-node-style"];
+            allNodes.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const rect = el.querySelector("rect");
+                    if (rect) {
+                        rect.style.filter = "none";
+                        rect.style.strokeWidth = "2";
+                    }
+                }
+            });
+
+            const sumBox = document.getElementById("rw-postorder-sum-box");
+            const formulaBox = document.getElementById("rw-postorder-formula-box");
+            const logBox = document.getElementById("rw-postorder-log");
+            const stepNum = document.getElementById("rw-postorder-step-num");
+            const badge = document.getElementById("rw-postorder-status-badge");
+            const prevBtn = document.getElementById("rw-post-prev-btn");
+            const nextBtn = document.getElementById("rw-post-next-btn");
+
+            if (prevBtn) prevBtn.disabled = (this.step === 0);
+            if (nextBtn) nextBtn.disabled = (this.step >= this.steps.length);
+
+            if (this.step === 0) {
+                const sizeSrc = document.getElementById("rw-post-size-src");
+                const sizeAssets = document.getElementById("rw-post-size-assets");
+                const sizeRoot = document.getElementById("rw-post-size-root");
+                if (sizeSrc) sizeSrc.textContent = "size: ?";
+                if (sizeAssets) sizeAssets.textContent = "size: ?";
+                if (sizeRoot) sizeRoot.textContent = "size: ?";
+
+                if (sumBox) sumBox.innerHTML = "<span style='color:var(--text-muted); font-size:12px; font-style:italic;'>Waiting to calculate...</span>";
+                if (formulaBox) formulaBox.innerHTML = "<strong style='color:var(--accent-orange); display:block; margin-bottom:4px;'><i class='fa-solid fa-arrow-up'></i> Post-Order Invariant:</strong><span>Folder size = sum of all child files + sum of all subfolder sizes.</span>";
+                if (stepNum) stepNum.textContent = "Step 0 / " + this.steps.length;
+                if (badge) { badge.textContent = "Pending"; badge.className = "badge-o1"; }
+                return;
+            }
+
+            // Sync SVG sizes up to current step
+            const sizeSrc = document.getElementById("rw-post-size-src");
+            const sizeAssets = document.getElementById("rw-post-size-assets");
+            const sizeRoot = document.getElementById("rw-post-size-root");
+            if (sizeSrc) sizeSrc.textContent = (this.step >= 3) ? "size: 200 KB" : "size: ?";
+            if (sizeAssets) sizeAssets.textContent = (this.step >= 6) ? "size: 80 KB" : "size: ?";
+            if (sizeRoot) sizeRoot.textContent = (this.step >= 7) ? "size: 280 KB" : "size: ?";
+
+            const current = this.steps[this.step - 1];
+
+            if (stepNum) stepNum.textContent = "Step " + this.step + " / " + this.steps.length;
+            if (badge) {
+                badge.textContent = (this.step === this.steps.length) ? "Total: 280 KB" : "Aggregating...";
+                badge.className = (this.step === this.steps.length) ? "badge-ok" : "badge-on";
+            }
+
+            // Highlight active node
+            const activeEl = document.getElementById(current.node);
+            if (activeEl) {
+                const rect = activeEl.querySelector("rect");
+                if (rect) {
+                    rect.style.filter = "drop-shadow(0 0 10px #f97316)";
+                    rect.style.strokeWidth = "3.5";
+                }
+            }
+
+            if (sumBox) {
+                sumBox.innerHTML = `<span style="color:var(--accent-orange); font-weight:bold;">${current.sumText}</span>`;
+            }
+
+            if (formulaBox) {
+                formulaBox.innerHTML = `<strong style='color:var(--accent-orange); display:block; margin-bottom:4px;'><i class='fa-solid fa-calculator'></i> Bottom-Up Calculation:</strong><span>${current.calcText}</span>`;
+            }
+
+            if (logBox) {
+                logBox.innerHTML = `<div>${current.log}</div>` + logBox.innerHTML;
+            }
+        },
+        next() {
+            if (this.step < this.steps.length) {
+                this.step++;
+                this.updateUI();
+            } else {
+                this.pause();
+            }
+        },
+        prev() {
+            if (this.step > 0) {
+                this.step--;
+                this.updateUI();
+            }
+        },
+        reset() {
+            this.pause();
+            this.step = 0;
+            const logBox = document.getElementById("rw-postorder-log");
+            if (logBox) logBox.innerHTML = "[00] Reset. Ready for Post-Order size aggregation.";
+            this.updateUI();
+        },
+        togglePlay() {
+            if (this.timer) {
+                this.pause();
+            } else {
+                if (this.step >= this.steps.length) this.step = 0;
+                const playBtn = document.getElementById("rw-post-play-btn");
+                if (playBtn) playBtn.innerHTML = "<i class='fa-solid fa-pause'></i>";
+                this.timer = setInterval(() => {
+                    if (this.step < this.steps.length) {
+                        this.next();
+                    } else {
+                        this.pause();
+                    }
+                }, this.speed);
+            }
+        },
+        pause() {
+            if (this.timer) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
+            const playBtn = document.getElementById("rw-post-play-btn");
+            if (playBtn) playBtn.innerHTML = "<i class='fa-solid fa-play'></i>";
+        },
+        setSpeed(val, btn) {
+            this.speed = (val === 2) ? 500 : 1000;
+            document.querySelectorAll("#postorder-app-card .sim-speed-btn").forEach(b => b.classList.remove("active"));
+            if (btn) btn.classList.add("active");
+            if (this.timer) {
+                this.pause();
+                this.togglePlay();
+            }
+        }
+    };
+    </script>
+    <script>
+
+        // MODULE 7: QUIZ ENGINE (12 Comprehensive Questions)
         // ═══════════════════════════════════════════════════════════════
         const quizQuestions = [
             {
