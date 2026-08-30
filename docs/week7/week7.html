@@ -238,7 +238,13 @@
                         </div>
                     </div>
 
-                    
+                    <div class="section-nav-footer">
+                        <div></div>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('representation-section')">
+                            <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
+                            <span class="nav-title">Module 1: Graph Representation</span>
+                        </button>
+                    </div>
                 </section>
 
                 <!-- ═══════════════════════════════════════ -->
@@ -298,6 +304,10 @@ graph = {
                             </div>
                         </div>
                     </div>
+                    <div class="section-nav-footer">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('basics-section')"><span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span><span class="nav-title">Module 0: Graph Basics</span></button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('queues-section')"><span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span><span class="nav-title">Module 2: Queue Sandbox</span></button>
+                    </div>
                 </section>
 
                 <!-- ═══════════════════════════════════════ -->
@@ -318,6 +328,10 @@ graph = {
 
                     <div id="queue-sandbox-root">
                         <!-- Queue & Priority Queue Sandbox React component mounts here -->
+                    </div>
+                    <div class="section-nav-footer" style="margin-top:24px;">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('representation-section')"><span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span><span class="nav-title">Module 1: Graph Representation</span></button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('dfs-section')"><span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span><span class="nav-title">Module 3: Depth-First Search</span></button>
                     </div>
                 </section>
 
@@ -340,6 +354,10 @@ graph = {
                     <div id="dfs-sim-root">
                         <!-- DFS Simulator React component mounts here -->
                     </div>
+                    <div class="section-nav-footer" style="margin-top:24px;">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('queues-section')"><span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span><span class="nav-title">Module 2: Queue Sandbox</span></button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('bfs-section')"><span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span><span class="nav-title">Module 4: Breadth-First Search</span></button>
+                    </div>
                 </section>
 
                 <!-- ═══════════════════════════════════════ -->
@@ -360,6 +378,10 @@ graph = {
 
                     <div id="bfs-sim-root">
                         <!-- BFS Simulator React component mounts here -->
+                    </div>
+                    <div class="section-nav-footer" style="margin-top:24px;">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('dfs-section')"><span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span><span class="nav-title">Module 3: Depth-First Search</span></button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('dijkstra-section')"><span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span><span class="nav-title">Module 5: Dijkstra's Algorithm</span></button>
                     </div>
                 </section>
 
@@ -382,6 +404,10 @@ graph = {
                     <div id="dijkstra-sim-root">
                         <!-- Dijkstra Simulator React component mounts here -->
                     </div>
+                    <div class="section-nav-footer" style="margin-top:24px;">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('bfs-section')"><span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span><span class="nav-title">Module 4: Breadth-First Search</span></button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('playground-section')"><span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span><span class="nav-title">Module 6: Graph Playground</span></button>
+                    </div>
                 </section>
 
                 <!-- ═══════════════════════════════════════ -->
@@ -403,6 +429,10 @@ graph = {
                     <div id="playground-sim-root">
                         <!-- Playground React component mounts here -->
                     </div>
+                    <div class="section-nav-footer" style="margin-top:24px;">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('dijkstra-section')"><span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span><span class="nav-title">Module 5: Dijkstra's Algorithm</span></button>
+                        <button class="sec-nav-btn next-btn" onclick="showSection('quiz-section')"><span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span><span class="nav-title">Module 7: Graph Algorithms Quiz</span></button>
+                    </div>
                 </section>
 
                 <!-- ═══════════════════════════════════════ -->
@@ -423,6 +453,10 @@ graph = {
 
                     <div id="quiz-sim-root">
                         <!-- Quiz React component mounts here -->
+                    </div>
+                    <div class="section-nav-footer" style="margin-top:24px;">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('playground-section')"><span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span><span class="nav-title">Module 6: Graph Playground</span></button>
+                        <div></div>
                     </div>
                 </section>
 
@@ -2144,18 +2178,28 @@ graph = {
         const contentSections = document.querySelectorAll(".content-section");
         const sectionTitle = document.getElementById("current-section-title");
 
+        window.showSection = (target) => {
+            const targetSection = document.getElementById(target);
+            if (!targetSection) return;
+
+            contentSections.forEach(section => section.classList.remove("active"));
+            navItems.forEach(item => item.classList.remove("active"));
+
+            targetSection.classList.add("active");
+            const matchingNav = Array.from(navItems).find(item => item.getAttribute("data-target") === target);
+            if (matchingNav) {
+                matchingNav.classList.add("active");
+                sectionTitle.textContent = matchingNav.querySelector("span")?.textContent || "Week 7";
+            }
+
+            const contentBody = document.querySelector(".content-body");
+            if (contentBody) contentBody.scrollTop = 0;
+        };
+
         navItems.forEach(item => {
             item.addEventListener("click", () => {
                 const target = item.getAttribute("data-target");
-
-                navItems.forEach(n => n.classList.remove("active"));
-                contentSections.forEach(c => c.classList.remove("active"));
-
-                item.classList.add("active");
-                document.getElementById(target).classList.add("active");
-
-                const label = item.querySelector("span").textContent;
-                sectionTitle.textContent = label;
+                if (target) window.showSection(target);
             });
         });
 
