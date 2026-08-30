@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 7: Graph Algorithms | DSA AIEE</title>
+    <meta name="description" content="Interactive guide for graphs, representation, DFS, BFS, and Dijkstra's algorithm — Week 7 of 01546203 DSA AIEE.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Link to Week 6 Base Stylesheet -->
+    <link rel="stylesheet" href="../week6/styles.css">
+    <!-- Graph specific styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Tailwind CSS (preflight: false to protect custom styles) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
+    <!-- MathJax for nice equations -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="light-mode">
+    <div class="app-container">
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <span class="logo-icon"><i class="fa-solid fa-circle-nodes"></i></span>
+                    <div class="logo-text">
+                        <h1>Week 7</h1>
+                        <span class="subtitle">Graph Algorithms</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Toggle Sidebar">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-section-title">Module Sections</span>
+                <button class="nav-item active" data-target="basics-section">
+                    <i class="fa-solid fa-book-open"></i> <span>Module 0: Graph Basics</span>
+                </button>
+                <button class="nav-item" data-target="representation-section">
+                    <i class="fa-solid fa-table-list"></i> <span>Module 1: Representation</span>
+                </button>
+                <button class="nav-item" data-target="queues-section">
+                    <i class="fa-solid fa-layer-group"></i> <span>Module 2: Queue Sandboxes</span>
+                </button>
+                <button class="nav-item" data-target="dfs-section">
+                    <i class="fa-solid fa-code-branch"></i> <span>Module 3: Recursive DFS</span>
+                </button>
+                <button class="nav-item" data-target="bfs-section">
+                    <i class="fa-solid fa-water"></i> <span>Module 4: BFS</span>
+                </button>
+                <button class="nav-item" data-target="dijkstra-section">
+                    <i class="fa-solid fa-route"></i> <span>Module 5: Dijkstra's Algo</span>
+                </button>
+                <button class="nav-item" data-target="playground-section">
+                    <i class="fa-solid fa-laptop-code"></i> <span>Module 6: Graph Playground</span>
+                </button>
+                <button class="nav-item" data-target="quiz-section">
+                    <i class="fa-solid fa-clipboard-question"></i> <span>Module 7: Knowledge Quiz</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="interpreter-status">
+                    <span class="status-dot ready"></span>
+                    <span class="status-text">Interactive Guides Ready</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ── Main Content ── -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div>
+                    <span class="breadcrumb">Week 7 &gt; Graph Algorithms</span>
+                    <h2 id="current-section-title">Module 0: Graph Basics</h2>
+                </div>
+                <div style="display:flex; gap:12px;">
+                    <a href="../index.html" class="btn btn-secondary" id="back-dashboard-btn" title="Back to Dashboard">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <button class="btn btn-secondary" id="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Body -->
+            <div class="content-body">
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 0: Graph Basics                  -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="basics-section" class="content-section active">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">
+                                <i class="fa-solid fa-circle-nodes mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 0: Graph Theory Fundamentals</h2>
+                                <p>A <strong>Graph</strong> is a non-linear data structure modeling relationships. It consists of a set of vertices (nodes) and edges (connections). Graphs are used to build networks (social relationships, road maps, Internet routing) and map dependency relations (prerequisites, package compilers).</p>
+                                <div style="display:flex; gap:12px; margin-top:12px; flex-wrap:wrap;">
+                                    <span class="tag" style="background:rgba(59,130,246,0.1); color:var(--accent-blue);">G = (V, E)</span>
+                                    <span class="tag" style="background:rgba(168,85,247,0.1); color:var(--accent-purple);">Non-Linear Connections</span>
+                                    <span class="tag" style="background:rgba(16,185,129,0.1); color:var(--accent-green);">Reachability</span>
+                                    <span class="tag" style="background:rgba(249,115,22,0.1); color:var(--accent-orange);">Traversal Order</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Definitions and Directed vs Undirected Grid -->
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px; margin-bottom:20px;">
+                        <div class="card glass">
+                            <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;padding:16px 20px 0 20px;">
+                                <i class="fa-solid fa-list-check" style="color:var(--accent-blue);margin-right:8px;"></i>
+                                Key Definitions
+                            </h3>
+                            <div class="card-body" style="padding-top:0;">
+                                <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:10px; font-size:14px;">
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:100px; flex-shrink:0; color:var(--accent-blue);">Vertex / Node:</strong>
+                                        <span style="color:var(--text-secondary);">An individual data object or point in the graph (denoted as $v \in V$).</span>
+                                    </li>
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:100px; flex-shrink:0; color:var(--accent-blue);">Edge / Arc:</strong>
+                                        <span style="color:var(--text-secondary);">A link representing a relationship between two vertices (denoted as $e \in E$).</span>
+                                    </li>
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:100px; flex-shrink:0; color:var(--accent-blue);">Adjacent:</strong>
+                                        <span style="color:var(--text-secondary);">Vertices $u$ and $v$ are adjacent if there is an edge connecting them directly.</span>
+                                    </li>
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:100px; flex-shrink:0; color:var(--accent-blue);">Path:</strong>
+                                        <span style="color:var(--text-secondary);">A sequence of vertices such that consecutive vertices are connected by edges.</span>
+                                    </li>
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:100px; flex-shrink:0; color:var(--accent-blue);">Cycle:</strong>
+                                        <span style="color:var(--text-secondary);">A path that starts and ends at the exact same vertex.</span>
+                                    </li>
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:100px; flex-shrink:0; color:var(--accent-blue);">Loop:</strong>
+                                        <span style="color:var(--text-secondary);">An edge that connects a vertex to itself.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card glass">
+                            <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;padding:16px 20px 0 20px;">
+                                <i class="fa-solid fa-arrows-spin" style="color:var(--accent-purple);margin-right:8px;"></i>
+                                Graph Types &amp; Edges
+                            </h3>
+                            <div class="card-body" style="padding-top:0;">
+                                <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:10px; font-size:14px;">
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:120px; flex-shrink:0; color:var(--accent-purple);">Undirected Graph:</strong>
+                                        <span style="color:var(--text-secondary);">Edges have no direction. Edge $(u, v)$ means a mutual link. Degree of a node is the total number of incident edges.</span>
+                                    </li>
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:120px; flex-shrink:0; color:var(--accent-purple);">Directed Graph:</strong>
+                                        <span style="color:var(--text-secondary);">Edges have arrows. $(u, v)$ means you can only go from $u$ to $v$.</span>
+                                    </li>
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:120px; flex-shrink:0; color:var(--accent-purple);">In-Degree:</strong>
+                                        <span style="color:var(--text-secondary);">Number of incoming edges pointing directly to the node.</span>
+                                    </li>
+                                    <li style="display:flex; gap:8px;">
+                                        <strong style="width:120px; flex-shrink:0; color:var(--accent-purple);">Out-Degree:</strong>
+                                        <span style="color:var(--text-secondary);">Number of outgoing edges pointing away from the node.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Graph Anatomy SVG Card -->
+                    <div class="card glass" style="margin-bottom:20px;">
+                        <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;padding:16px 20px 0 20px;">
+                            <i class="fa-solid fa-diagram-project" style="color:var(--accent-cyan);margin-right:8px;"></i>
+                            Anatomy of Directed vs Undirected Connections
+                        </h3>
+                        <div class="card-body" style="padding-top:0;">
+                            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; padding:20px;">
+                                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; text-align:center;">
+                                    <div>
+                                        <h4 style="font-size:14px; font-weight:700; color:var(--accent-blue); margin-bottom:8px;">Directed Link (Arrow Edge)</h4>
+                                        <svg viewBox="0 0 240 120" style="width:100%; height:120px; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:8px;">
+                                            <defs>
+                                                <marker id="arr-anatomy" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 8 8">
+                                                    <path d="M0,0 L8,4 L0,8 Z" fill="var(--accent-blue)" />
+                                                </marker>
+                                            </defs>
+                                            <line x1="82" y1="60" x2="157" y2="60" stroke="var(--accent-blue)" stroke-width="3" marker-end="url(#arr-anatomy)" />
+                                            <circle cx="60" cy="60" r="22" fill="var(--bg-card)" stroke="var(--text-muted)" stroke-width="2" />
+                                            <circle cx="180" cy="60" r="22" fill="var(--bg-card)" stroke="var(--text-muted)" stroke-width="2" />
+                                            <text x="60" y="60" text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold">A</text>
+                                            <text x="180" y="60" text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold">B</text>
+                                            <text x="120" y="35" text-anchor="middle" fill="var(--text-muted)" font-size="10" font-family="'Fira Code', monospace">A &rarr; B only</text>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 style="font-size:14px; font-weight:700; color:var(--accent-green); margin-bottom:8px;">Undirected Link (Mutual Edge)</h4>
+                                        <svg viewBox="0 0 240 120" style="width:100%; height:120px; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:8px;">
+                                            <line x1="60" y1="60" x2="180" y2="60" stroke="var(--accent-green)" stroke-width="4" />
+                                            <circle cx="60" cy="60" r="22" fill="var(--bg-card)" stroke="var(--text-muted)" stroke-width="2" />
+                                            <circle cx="180" cy="60" r="22" fill="var(--bg-card)" stroke="var(--text-muted)" stroke-width="2" />
+                                            <text x="60" y="60" text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold">C</text>
+                                            <text x="180" y="60" text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-weight="bold">D</text>
+                                            <text x="120" y="35" text-anchor="middle" fill="var(--text-muted)" font-size="10" font-family="'Fira Code', monospace">C &harr; D bidirectional</text>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 1: Representation                -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="representation-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(6,182,212,0.15);color:var(--accent-cyan);">
+                                <i class="fa-solid fa-table-list mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 1: Graph Representation</h2>
+                                <p>To implement graph algorithms in computer programs, we need structures that record nodes and their connections. The two primary mathematical representations are <strong>Adjacency Matrix</strong> and <strong>Adjacency List</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px; margin-bottom:20px;">
+                        <div class="card glass">
+                            <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;padding:16px 20px 0 20px;">
+                                <i class="fa-solid fa-table" style="color:var(--accent-cyan);margin-right:8px;"></i>
+                                Adjacency Matrix
+                            </h3>
+                            <div class="card-body" style="padding-top:0;">
+                                <p>A 2D array of size V x V where element <code>matrix[i][j]</code> is <code>1</code> (or weight) if an edge exists from node i to node j, and <code>0</code> otherwise.</p>
+                                <div class="code-block" style="margin-top:12px;">
+                                    <pre style="margin:0;"><code style="color:var(--text-secondary);"># Adjacency Matrix representing 3 nodes A, B, C
+# Link: A &rarr; B (weight 2), B &rarr; C (weight 5)
+matrix = [
+    [0, 2, 0], # A's outgoing to [A, B, C]
+    [0, 0, 5], # B's outgoing to [A, B, C]
+    [0, 0, 0]  # C's outgoing to [A, B, C]
+]</code></pre>
+                                </div>
+                                <p style="font-size:12px; color:var(--text-muted); margin-top:10px;"><i class="fa-solid fa-circle-info"></i> Good for dense graphs, but wastes memory O(V^2) for sparse graphs.</p>
+                            </div>
+                        </div>
+
+                        <div class="card glass">
+                            <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;padding:16px 20px 0 20px;">
+                                <i class="fa-solid fa-rectangle-list" style="color:var(--accent-blue);margin-right:8px;"></i>
+                                Adjacency List
+                            </h3>
+                            <div class="card-body" style="padding-top:0;">
+                                <p>An array or dictionary where each vertex maps to a list/dictionary of its immediate neighbors and edge costs.</p>
+                                <div class="code-block" style="margin-top:12px;">
+                                    <pre style="margin:0;"><code style="color:var(--text-secondary);"># Adjacency List using Python dict
+# Node maps to a dict of neighbor: weight
+graph = {
+    'A': {'B': 2},
+    'B': {'C': 5},
+    'C': {}
+}</code></pre>
+                                </div>
+                                <p style="font-size:12px; color:var(--text-muted); margin-top:10px;"><i class="fa-solid fa-circle-info"></i> Standard representation for algorithms. Memory efficient O(V + E).</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 2: Queues Sandbox                -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="queues-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(168,85,247,0.15);color:var(--accent-purple);">
+                                <i class="fa-solid fa-layer-group mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 2: Queue &amp; Priority Queue Sandbox</h2>
+                                <p>Before analyzing traversal algorithms, we must understand how items are inserted and removed. BFS uses a standard <strong>First In, First Out (FIFO) Queue</strong>. Dijkstra uses a <strong>Priority Queue (Smallest weight first)</strong>. Play with the sandboxes below to see how items are ordered!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="queue-sandbox-root">
+                        <!-- Queue & Priority Queue Sandbox React component mounts here -->
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 3: Recursive DFS                 -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="dfs-section" class="content-section guided-module module-dfs">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(249,115,22,0.15);color:var(--accent-orange);">
+                                <i class="fa-solid fa-code-branch mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 3: Depth-First Search (DFS)</h2>
+                                <p>Follow one branch as far as it can go, then watch the search backtrack. The call stack shows where DFS will return next.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dfs-sim-root">
+                        <!-- DFS Simulator React component mounts here -->
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 4: BFS                           -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="bfs-section" class="content-section guided-module module-bfs">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(16,185,129,0.15);color:var(--accent-green);">
+                                <i class="fa-solid fa-water mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 4: Breadth-First Search (BFS)</h2>
+                                <p>Watch the search spread one level at a time. The FIFO queue shows which node will be visited next.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="bfs-sim-root">
+                        <!-- BFS Simulator React component mounts here -->
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 5: Dijkstra's Algorithm          -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="dijkstra-section" class="content-section guided-module module-dijkstra">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(59,130,246,0.15);color:var(--accent-blue);">
+                                <i class="fa-solid fa-route mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 5: Dijkstra's Shortest Path Algorithm</h2>
+                                <p>Watch the smallest known distance win at every step. Edge weights and the priority queue explain each choice.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dijkstra-sim-root">
+                        <!-- Dijkstra Simulator React component mounts here -->
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 6: Playground                    -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="playground-section" class="content-section guided-module module-playground">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(168,85,247,0.15);color:var(--accent-purple);">
+                                <i class="fa-solid fa-laptop-code mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 6: Graph Algorithms Playground</h2>
+                                <p>Build a small graph, choose an algorithm, then run it step by step. Start with the default graph before creating your own.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="playground-sim-root">
+                        <!-- Playground React component mounts here -->
+                    </div>
+                </section>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!-- MODULE 7: Knowledge Quiz                -->
+                <!-- ═══════════════════════════════════════ -->
+                <section id="quiz-section" class="content-section">
+                    <div class="header-block">
+                        <div class="module-header-block welcome-header-block">
+                            <div class="mod-header-icon-wrap" style="background:rgba(239,68,68,0.15);color:var(--accent-red);">
+                                <i class="fa-solid fa-clipboard-question mod-glow-icon"></i>
+                            </div>
+                            <div class="mod-header-text">
+                                <h2>Module 7: Graph Algorithms Quiz</h2>
+                                <p>Test your understanding of vertices, degrees, adjacency lists, traversal queues, DFS/BFS search orders, and Dijkstra relaxation steps with the interactive quiz below.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-sim-root">
+                        <!-- Quiz React component mounts here -->
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- React Application Logic -->
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // ── Teaching Graph Data ──
+        const TEACHING_NODES = [
+            { id: 0, x: 100, y: 200, label: 'A' },
+            { id: 1, x: 220, y: 100, label: 'B' },
+            { id: 2, x: 220, y: 300, label: 'C' },
+            { id: 3, x: 380, y: 100, label: 'D' },
+            { id: 4, x: 380, y: 220, label: 'E' },
+            { id: 5, x: 380, y: 340, label: 'F' },
+            { id: 6, x: 540, y: 160, label: 'G' },
+            { id: 7, x: 680, y: 230, label: 'H' }
+        ];
+
+        const TEACHING_EDGES = [
+            { id: 0, from: 0, to: 1, weight: 2 },
+            { id: 1, from: 0, to: 2, weight: 4 },
+            { id: 2, from: 1, to: 3, weight: 1 },
+            { id: 3, from: 1, to: 4, weight: 3 },
+            { id: 4, from: 2, to: 4, weight: 1 },
+            { id: 5, from: 2, to: 5, weight: 3 },
+            { id: 6, from: 4, to: 6, weight: 5 },
+            { id: 7, from: 3, to: 6, weight: 8 },
+            { id: 8, from: 5, to: 7, weight: 7 },
+            { id: 9, from: 6, to: 7, weight: 4 }
+        ];
+
+        // ── Python Code Snippets ──
+        const DFS_CODE = `def DFS_recursive(node, visited, result):
+    visited.add(node)
+    result.append(node.name)
+    
+    # Process neighbors sorted alphabetically
+    neighbors = sorted(node.neighbors)
+    for neighbor in neighbors:
+        if neighbor not in visited:
+            DFS_recursive(neighbor, visited, result)
+`;
+
+        const BFS_CODE = `def BFS(start_node):
+    visited = set()
+    queue = Queue()
+    result = []
+
+    visited.add(start_node)
+    queue.enqueue(start_node)
+    
+    while not queue.is_empty():
+        node = queue.dequeue()
+        result.append(node.name)
+
+        for neighbor in sorted(node.neighbors):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.enqueue(neighbor)
+`;
+
+        const DIJKSTRA_CODE = `def dijkstra(start_node, all_nodes):
+    distance = {node: float('inf') for node in all_nodes}
+    distance[start_node] = 0
+    pq = PriorityQueue()
+    pq.enqueue(start_node, 0)
+    previous = {node: None for node in all_nodes}
+
+    while not pq.is_empty():
+        curr_node = pq.dequeue()
+        curr_dist = distance[curr_node]
+
+        for neighbor, weight in curr_node.neighbors.items():
+            alt = curr_dist + weight
+            if alt < distance[neighbor]:
+                distance[neighbor] = alt
+                previous[neighbor] = curr_node
+                pq.enqueue(neighbor, alt)
+`;
+
+        // ── Helper functions for step generators ──
+        function generateDfsSteps(nodes, edges, startNodeLabel) {
+            const adj = {};
+            nodes.forEach(n => adj[n.label] = []);
+            edges.forEach(e => {
+                const uNode = nodes.find(n => n.id === e.from);
+                const vNode = nodes.find(n => n.id === e.to);
+                if (uNode && vNode) {
+                    adj[uNode.label].push({ to: vNode.label, id: e.id });
+                }
+            });
+            Object.keys(adj).forEach(u => adj[u].sort((a, b) => a.to.localeCompare(b.to)));
+
+            const visited = new Set();
+            const result = [];
+            const steps = [];
+            const stack = [];
+            const logs = [];
+
+            steps.push({
+                message: `Initialize DFS starting from node ${startNodeLabel}.`,
+                activeLine: 1,
+                visited: [],
+                result: [],
+                stack: [],
+                current: null,
+                activeEdge: null,
+                logs: ["DFS Initialized."]
+            });
+
+            function dfs(nodeLabel, parentLabel, edgeId) {
+                visited.add(nodeLabel);
+                stack.push(nodeLabel);
+                logs.push(`Visited node ${nodeLabel}. Push to Call Stack.`);
+                
+                steps.push({
+                    message: `Call DFS_recursive for node ${nodeLabel}.`,
+                    activeLine: 2,
+                    visited: Array.from(visited),
+                    result: [...result],
+                    stack: [...stack],
+                    current: nodeLabel,
+                    activeEdge: edgeId,
+                    logs: [...logs]
+                });
+
+                result.push(nodeLabel);
+                logs.push(`Append ${nodeLabel} to Traversed Sequence result.`);
+                steps.push({
+                    message: `Append node ${nodeLabel} to result sequence list.`,
+                    activeLine: 3,
+                    visited: Array.from(visited),
+                    result: [...result],
+                    stack: [...stack],
+                    current: nodeLabel,
+                    activeEdge: edgeId,
+                    logs: [...logs]
+                });
+
+                const neighbors = adj[nodeLabel] || [];
+                logs.push(`Get neighbors of ${nodeLabel} sorted alphabetically: ${neighbors.map(n=>n.to).join(', ') || 'none'}`);
+                steps.push({
+                    message: `Sort neighbors of node ${nodeLabel} alphabetically.`,
+                    activeLine: 6,
+                    visited: Array.from(visited),
+                    result: [...result],
+                    stack: [...stack],
+                    current: nodeLabel,
+                    activeEdge: edgeId,
+                    logs: [...logs]
+                });
+
+                for (let i = 0; i < neighbors.length; i++) {
+                    const neighbor = neighbors[i];
+                    logs.push(`Check neighbor ${neighbor.to} of node ${nodeLabel}.`);
+                    steps.push({
+                        message: `Examine neighbor node ${neighbor.to}.`,
+                        activeLine: 7,
+                        visited: Array.from(visited),
+                        result: [...result],
+                        stack: [...stack],
+                        current: nodeLabel,
+                        activeEdge: neighbor.id,
+                        logs: [...logs]
+                    });
+
+                    if (!visited.has(neighbor.to)) {
+                        logs.push(`Neighbor ${neighbor.to} is unvisited. Recursively call DFS.`);
+                        dfs(neighbor.to, nodeLabel, neighbor.id);
+                        
+                        // On backtrack return
+                        logs.push(`Returned back to node ${nodeLabel}'s recursive frame.`);
+                        steps.push({
+                            message: `Backtrack: Return to recursive frame of node ${nodeLabel}.`,
+                            activeLine: 8,
+                            visited: Array.from(visited),
+                            result: [...result],
+                            stack: [...stack],
+                            current: nodeLabel,
+                            activeEdge: neighbor.id,
+                            logs: [...logs]
+                        });
+                    } else {
+                        logs.push(`Neighbor ${neighbor.to} is already visited. Skip edge.`);
+                        steps.push({
+                            message: `Neighbor ${neighbor.to} is already visited. Skip edge.`,
+                            activeLine: 7,
+                            visited: Array.from(visited),
+                            result: [...result],
+                            stack: [...stack],
+                            current: nodeLabel,
+                            activeEdge: neighbor.id,
+                            logs: [...logs]
+                        });
+                    }
+                }
+
+                stack.pop();
+                logs.push(`Exit node ${nodeLabel}'s recursive frame. Pop from Call Stack.`);
+                steps.push({
+                    message: `Pop node ${nodeLabel} from stack and backtrack.`,
+                    activeLine: 8,
+                    visited: Array.from(visited),
+                    result: [...result],
+                    stack: [...stack],
+                    current: parentLabel,
+                    activeEdge: edgeId,
+                    logs: [...logs]
+                });
+            }
+
+            dfs(startNodeLabel, null, null);
+            
+            logs.push("DFS traversal finished.");
+            steps.push({
+                message: "DFS Traversal finished successfully.",
+                activeLine: 1,
+                visited: Array.from(visited),
+                result: [...result],
+                stack: [],
+                current: null,
+                activeEdge: null,
+                logs: [...logs]
+            });
+            
+            return steps;
+        }
+
+        function generateBfsSteps(nodes, edges, startNodeLabel) {
+            const adj = {};
+            nodes.forEach(n => adj[n.label] = []);
+            edges.forEach(e => {
+                const uNode = nodes.find(n => n.id === e.from);
+                const vNode = nodes.find(n => n.id === e.to);
+                if (uNode && vNode) {
+                    adj[uNode.label].push({ to: vNode.label, id: e.id });
+                }
+            });
+            Object.keys(adj).forEach(u => adj[u].sort((a, b) => a.to.localeCompare(b.to)));
+
+            const visited = new Set();
+            const queue = [];
+            const result = [];
+            const steps = [];
+            const logs = [];
+
+            steps.push({
+                message: `Initialize BFS starting from node ${startNodeLabel}.`,
+                activeLine: 1,
+                visited: [],
+                result: [],
+                queue: [],
+                current: null,
+                activeEdge: null,
+                logs: ["BFS Initialized."]
+            });
+
+            visited.add(startNodeLabel);
+            queue.push(startNodeLabel);
+            logs.push(`Visited start node ${startNodeLabel}. Enqueue ${startNodeLabel}.`);
+            steps.push({
+                message: `Mark start node ${startNodeLabel} as visited and enqueue it.`,
+                activeLine: 6,
+                visited: Array.from(visited),
+                result: [...result],
+                queue: [...queue],
+                current: startNodeLabel,
+                activeEdge: null,
+                logs: [...logs]
+            });
+
+            while (queue.length > 0) {
+                steps.push({
+                    message: "Queue is not empty. Continue search loop.",
+                    activeLine: 9,
+                    visited: Array.from(visited),
+                    result: [...result],
+                    queue: [...queue],
+                    current: null,
+                    activeEdge: null,
+                    logs: [...logs]
+                });
+
+                const curr = queue.shift();
+                result.push(curr);
+                logs.push(`Dequeue node ${curr}. Append ${curr} to result.`);
+                steps.push({
+                    message: `Dequeue node ${curr} and process it.`,
+                    activeLine: 10,
+                    visited: Array.from(visited),
+                    result: [...result],
+                    queue: [...queue],
+                    current: curr,
+                    activeEdge: null,
+                    logs: [...logs]
+                });
+
+                const neighbors = adj[curr] || [];
+                logs.push(`Sort neighbors of ${curr} alphabetically: ${neighbors.map(n=>n.to).join(', ') || 'none'}`);
+                steps.push({
+                    message: `Sort neighbors of node ${curr} alphabetically.`,
+                    activeLine: 13,
+                    visited: Array.from(visited),
+                    result: [...result],
+                    queue: [...queue],
+                    current: curr,
+                    activeEdge: null,
+                    logs: [...logs]
+                });
+
+                for (let i = 0; i < neighbors.length; i++) {
+                    const neighbor = neighbors[i];
+                    logs.push(`Examine neighbor ${neighbor.to} of node ${curr}.`);
+                    steps.push({
+                        message: `Examine neighbor node ${neighbor.to}.`,
+                        activeLine: 14,
+                        visited: Array.from(visited),
+                        result: [...result],
+                        queue: [...queue],
+                        current: curr,
+                        activeEdge: neighbor.id,
+                        logs: [...logs]
+                    });
+
+                    if (!visited.has(neighbor.to)) {
+                        visited.add(neighbor.to);
+                        queue.push(neighbor.to);
+                        logs.push(`Neighbor ${neighbor.to} is unvisited. Mark as visited and enqueue.`);
+                        steps.push({
+                            message: `Mark neighbor ${neighbor.to} as visited and enqueue it.`,
+                            activeLine: 15,
+                            visited: Array.from(visited),
+                            result: [...result],
+                            queue: [...queue],
+                            current: curr,
+                            activeEdge: neighbor.id,
+                            logs: [...logs]
+                        });
+                    } else {
+                        logs.push(`Neighbor ${neighbor.to} is already visited. Skip.`);
+                        steps.push({
+                            message: `Neighbor ${neighbor.to} is already visited. Skip edge.`,
+                            activeLine: 14,
+                            visited: Array.from(visited),
+                            result: [...result],
+                            queue: [...queue],
+                            current: curr,
+                            activeEdge: neighbor.id,
+                            logs: [...logs]
+                        });
+                    }
+                }
+            }
+
+            logs.push("BFS traversal finished.");
+            steps.push({
+                message: "BFS Traversal finished successfully.",
+                activeLine: 1,
+                visited: Array.from(visited),
+                result: [...result],
+                queue: [],
+                current: null,
+                activeEdge: null,
+                logs: [...logs]
+            });
+
+            return steps;
+        }
+
+        function generateDijkstraSteps(nodes, edges, startNodeLabel) {
+            const adj = {};
+            nodes.forEach(n => adj[n.label] = []);
+            edges.forEach(e => {
+                const uNode = nodes.find(n => n.id === e.from);
+                const vNode = nodes.find(n => n.id === e.to);
+                if (uNode && vNode) {
+                    adj[uNode.label].push({ to: vNode.label, weight: e.weight, id: e.id });
+                }
+            });
+
+            const dist = {};
+            const prev = {};
+            const visited = new Set();
+            const pq = []; // items of { node, priority }
+            const steps = [];
+            const logs = [];
+
+            nodes.forEach(n => {
+                dist[n.label] = Infinity;
+                prev[n.label] = "-";
+            });
+
+            dist[startNodeLabel] = 0;
+            pq.push({ node: startNodeLabel, priority: 0 });
+
+            logs.push("Initialize Dijkstra distances to Infinity, start node A to 0.");
+            steps.push({
+                message: `Initialize start node ${startNodeLabel} distance to 0, enqueue with priority 0.`,
+                activeLine: 2,
+                visited: [],
+                dist: { ...dist },
+                prev: { ...prev },
+                pq: [...pq],
+                current: null,
+                activeEdge: null,
+                logs: [...logs]
+            });
+
+            while (pq.length > 0) {
+                pq.sort((a, b) => a.priority - b.priority || a.node.localeCompare(b.node));
+                steps.push({
+                    message: "Priority Queue is not empty. Continue search loop.",
+                    activeLine: 8,
+                    visited: Array.from(visited),
+                    dist: { ...dist },
+                    prev: { ...prev },
+                    pq: [...pq],
+                    current: null,
+                    activeEdge: null,
+                    logs: [...logs]
+                });
+
+                const curr = pq.shift();
+                
+                if (visited.has(curr.node)) {
+                    logs.push(`Node ${curr.node} is already settled. Skip.`);
+                    steps.push({
+                        message: `Node ${curr.node} is already settled. Skip.`,
+                        activeLine: 9,
+                        visited: Array.from(visited),
+                        dist: { ...dist },
+                        prev: { ...prev },
+                        pq: [...pq],
+                        current: curr.node,
+                        activeEdge: null,
+                        logs: [...logs]
+                    });
+                    continue;
+                }
+
+                visited.add(curr.node);
+                logs.push(`Settle node ${curr.node} with shortest known distance ${curr.priority}.`);
+                steps.push({
+                    message: `Settle node ${curr.node} with shortest known distance.`,
+                    activeLine: 9,
+                    visited: Array.from(visited),
+                    dist: { ...dist },
+                    prev: { ...prev },
+                    pq: [...pq],
+                    current: curr.node,
+                    activeEdge: null,
+                    logs: [...logs]
+                });
+
+                const neighbors = adj[curr.node] || [];
+                for (let i = 0; i < neighbors.length; i++) {
+                    const neighbor = neighbors[i];
+                    logs.push(`Examine outgoing edge from ${curr.node} to ${neighbor.to} (weight ${neighbor.weight}).`);
+                    steps.push({
+                        message: `Examine neighbor node ${neighbor.to}.`,
+                        activeLine: 12,
+                        visited: Array.from(visited),
+                        dist: { ...dist },
+                        prev: { ...prev },
+                        pq: [...pq],
+                        current: curr.node,
+                        activeEdge: neighbor.id,
+                        logs: [...logs]
+                    });
+
+                    if (visited.has(neighbor.to)) {
+                        logs.push(`Neighbor ${neighbor.to} is already settled. Skip relaxation.`);
+                        steps.push({
+                            message: `Neighbor ${neighbor.to} is already settled. Skip.`,
+                            activeLine: 12,
+                            visited: Array.from(visited),
+                            dist: { ...dist },
+                            prev: { ...prev },
+                            pq: [...pq],
+                            current: curr.node,
+                            activeEdge: neighbor.id,
+                            logs: [...logs]
+                        });
+                        continue;
+                    }
+
+                    const alt = dist[curr.node] + neighbor.weight;
+                    logs.push(`Calculate path distance to ${neighbor.to}: ${dist[curr.node]} + ${neighbor.weight} = ${alt}.`);
+                    steps.push({
+                        message: `Calculate tentative path distance.`,
+                        activeLine: 13,
+                        visited: Array.from(visited),
+                        dist: { ...dist },
+                        prev: { ...prev },
+                        pq: [...pq],
+                        current: curr.node,
+                        activeEdge: neighbor.id,
+                        logs: [...logs]
+                    });
+
+                    steps.push({
+                        message: `Check if new path ${alt} is smaller than current ${dist[neighbor.to]}.`,
+                        activeLine: 14,
+                        visited: Array.from(visited),
+                        dist: { ...dist },
+                        prev: { ...prev },
+                        pq: [...pq],
+                        current: curr.node,
+                        activeEdge: neighbor.id,
+                        logs: [...logs]
+                    });
+
+                    if (alt < dist[neighbor.to]) {
+                        dist[neighbor.to] = alt;
+                        prev[neighbor.to] = curr.node;
+                        pq.push({ node: neighbor.to, priority: alt });
+                        pq.sort((a, b) => a.priority - b.priority || a.node.localeCompare(b.node));
+
+                        logs.push(`Relax edge! Update distance[${neighbor.to}] = ${alt}, prev[${neighbor.to}] = ${curr.node}, and enqueue ${neighbor.to}.`);
+                        steps.push({
+                            message: `Relax edge: Distance of ${neighbor.to} becomes ${alt}.`,
+                            activeLine: 15,
+                            visited: Array.from(visited),
+                            dist: { ...dist },
+                            prev: { ...prev },
+                            pq: [...pq],
+                            current: curr.node,
+                            activeEdge: neighbor.id,
+                            relax: true,
+                            logs: [...logs]
+                        });
+                    } else {
+                        logs.push(`Tentative distance ${alt} is not smaller than ${dist[neighbor.to]}. Skip relaxation.`);
+                        steps.push({
+                            message: `No update. Existing distance of ${neighbor.to} is shorter.`,
+                            activeLine: 14,
+                            visited: Array.from(visited),
+                            dist: { ...dist },
+                            prev: { ...prev },
+                            pq: [...pq],
+                            current: curr.node,
+                            activeEdge: neighbor.id,
+                            logs: [...logs]
+                        });
+                    }
+                }
+            }
+
+            logs.push("Dijkstra calculation finished.");
+            steps.push({
+                message: "Dijkstra algorithm finished successfully.",
+                activeLine: 1,
+                visited: Array.from(visited),
+                dist: { ...dist },
+                prev: { ...prev },
+                pq: [],
+                current: null,
+                activeEdge: null,
+                logs: [...logs]
+            });
+
+            return steps;
+        }
+
+        // ── Queue & Priority Queue Sandbox Component ──
+        const QueueSandbox = () => {
+            const [queueItems, setQueueItems] = useState(["A", "B"]);
+            const [pqItems, setPqItems] = useState([
+                { value: "A", priority: 4 },
+                { value: "C", priority: 2 },
+                { value: "E", priority: 7 }
+            ]);
+            const [qInput, setQInput] = useState("");
+            const [pqValInput, setPqValInput] = useState("");
+            const [pqPrioInput, setPqPrioInput] = useState("1");
+
+            const enqueueQ = () => {
+                if (!qInput.trim()) return;
+                if (queueItems.length >= 10) return;
+                setQueueItems([...queueItems, qInput.trim().toUpperCase()]);
+                setQInput("");
+            };
+
+            const dequeueQ = () => {
+                if (queueItems.length === 0) return;
+                const copy = [...queueItems];
+                copy.shift();
+                setQueueItems(copy);
+            };
+
+            const enqueuePq = () => {
+                if (!pqValInput.trim()) return;
+                if (pqItems.length >= 10) return;
+                const prio = parseInt(pqPrioInput) || 1;
+                const newItems = [...pqItems, { value: pqValInput.trim().toUpperCase(), priority: prio }];
+                newItems.sort((a, b) => a.priority - b.priority || a.value.localeCompare(b.value));
+                setPqItems(newItems);
+                setPqValInput("");
+                setPqPrioInput("1");
+            };
+
+            const dequeuePq = () => {
+                if (pqItems.length === 0) return;
+                const copy = [...pqItems];
+                copy.shift();
+                setPqItems(copy);
+            };
+
+            return (
+                <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(320px, 1fr))', gap:'20px'}}>
+                    <div class="card glass">
+                        <div class="card-header">
+                            <i class="fa-solid fa-arrow-right-arrow-left card-icon" style={{color:'var(--accent-blue)'}}></i>
+                            <h3>FIFO Queue Sandbox (First In, First Out)</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>BFS uses a standard queue. Nodes are dequeued in the exact order they arrive.</p>
+                            <div style={{display:'flex', gap:'8px', marginBottom:'16px'}}>
+                                <input
+                                    type="text"
+                                    value={qInput}
+                                    onChange={e => setQInput(e.target.value)}
+                                    class="sim-input"
+                                    style={{flex:1, minWidth:'unset'}}
+                                    placeholder="Value..."
+                                    onKeyDown={e => e.key === 'Enter' && enqueueQ()}
+                                />
+                                <button onClick={enqueueQ} disabled={queueItems.length >= 10} class="sim-btn blue"><i class="fa-solid fa-plus"></i> Enqueue</button>
+                                <button onClick={dequeueQ} class="sim-btn"><i class="fa-solid fa-minus"></i> Dequeue</button>
+                            </div>
+                            <div class="sandbox-track">
+                                {queueItems.length === 0 ? (
+                                    <span class="sim-empty-label">Queue Empty</span>
+                                ) : (
+                                    queueItems.map((val, idx) => (
+                                        <div key={idx} class={`pill-card ${idx === 0 ? 'primary' : ''}`}>
+                                            <span class="pill-val">{val}</span>
+                                            <span class="pill-meta">{idx === 0 ? 'Front (Next)' : `Idx ${idx}`}</span>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                            <p style={{fontSize:'11px', color:'var(--text-muted)', marginTop:'8px', marginBottom:'0'}}>
+                                {queueItems.length} / 10 items
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card glass">
+                        <div class="card-header">
+                            <i class="fa-solid fa-ranking-star card-icon" style={{color:'var(--accent-green)'}}></i>
+                            <h3>Priority Queue Sandbox (Lowest Distance First)</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Dijkstra uses a priority queue. Nodes are sorted dynamically; the one with the smallest distance priority is dequeued first.</p>
+                            <div style={{display:'flex', gap:'8px', flexWrap:'wrap', marginBottom:'16px'}}>
+                                <input
+                                    type="text"
+                                    value={pqValInput}
+                                    onChange={e => setPqValInput(e.target.value)}
+                                    class="sim-input"
+                                    style={{width:'90px', minWidth:'unset'}}
+                                    placeholder="Value..."
+                                    onKeyDown={e => e.key === 'Enter' && enqueuePq()}
+                                />
+                                <input
+                                    type="number"
+                                    value={pqPrioInput}
+                                    onChange={e => setPqPrioInput(e.target.value)}
+                                    class="sim-input"
+                                    style={{width:'80px', minWidth:'unset'}}
+                                    placeholder="Dist..."
+                                    onKeyDown={e => e.key === 'Enter' && enqueuePq()}
+                                />
+                                <button onClick={enqueuePq} disabled={pqItems.length >= 10} class="sim-btn green"><i class="fa-solid fa-plus"></i> Enqueue</button>
+                                <button onClick={dequeuePq} class="sim-btn"><i class="fa-solid fa-minus"></i> Dequeue</button>
+                            </div>
+                            <div class="sandbox-track">
+                                {pqItems.length === 0 ? (
+                                    <span class="sim-empty-label">Priority Queue Empty</span>
+                                ) : (
+                                    pqItems.map((item, idx) => (
+                                        <div key={idx} class={`pill-card ${idx === 0 ? 'success' : ''}`}>
+                                            <span class="pill-val">{item.value}</span>
+                                            <span class="pill-meta" style={{fontSize:'8px'}}>priority: {item.priority}</span>
+                                            <span class="pill-meta" style={{fontSize:'8px', marginTop:'0'}}>{idx === 0 ? 'Min (Next)' : `Idx ${idx}`}</span>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                            <p style={{fontSize:'11px', color:'var(--text-muted)', marginTop:'8px', marginBottom:'0'}}>
+                                {pqItems.length} / 10 items
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ── Generic Media Player Controls Component ──
+        const MediaControls = ({ stepIndex, totalSteps, isPlaying, setIsPlaying, onPrev, onNext, onReplay, speed, setSpeed }) => {
+            return (
+                <div class="sim-player-bar" style={{marginTop:'10px', marginBottom:'10px', padding:'10px 12px'}}>
+                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'8px'}}>
+                        <div style={{display:'flex', gap:'8px'}}>
+                            <button onClick={onPrev} disabled={stepIndex === 0} class="stepper-btn" title="Previous Step">
+                                <i class="fa-solid fa-backward-step"></i> Prev
+                            </button>
+                            <button onClick={() => setIsPlaying(!isPlaying)} disabled={totalSteps <= 1} class="stepper-btn primary play-big" title={isPlaying ? "Pause" : "Play"}>
+                                <i class={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+                            </button>
+                            <button onClick={onNext} disabled={stepIndex === totalSteps - 1} class="stepper-btn" title="Next Step">
+                                Next <i class="fa-solid fa-forward-step"></i>
+                            </button>
+                            <button onClick={onReplay} class="stepper-btn" title="Replay Simulation">
+                                <i class="fa-solid fa-rotate-left"></i> Replay
+                            </button>
+                        </div>
+                        <span class="step-indicator-badge">
+                            Step {stepIndex + 1} / {totalSteps || 1}
+                        </span>
+                    </div>
+                    <div class="sim-player-progress" style={{marginBottom:'8px'}}>
+                        <div class="sim-player-progress-fill" style={{width: `${totalSteps > 1 ? Math.round((stepIndex / (totalSteps - 1)) * 100) : 0}%`}}></div>
+                    </div>
+                    <div style={{display:'flex', justifyContent:'flex-end'}}>
+                        <div class="sim-speed-bar">
+                            <span class="sim-seq-label">Playback Speed</span>
+                            {[0.5, 1, 2].map(s => (
+                                <button key={s} onClick={() => setSpeed(s)} class={`sim-speed-btn ${speed === s ? 'active' : ''}`}>
+                                    {s}x
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ── SVG Graph Visualizer Helper Component ──
+        const GraphVisualizerCanvas = ({ nodes, edges, currentStep, showWeights = false, highlightShortestPath = [] }) => {
+            const visitedSet = new Set(currentStep.visited || []);
+            const queueOrStackSet = new Set(
+                currentStep.stack || currentStep.queue || (currentStep.pq ? currentStep.pq.map(item => item.node) : [])
+            );
+            const activeEdge = currentStep.activeEdge;
+            const isRelaxStep = currentStep.relax;
+
+            const pathEdgesSet = new Set();
+            if (highlightShortestPath && highlightShortestPath.length > 0) {
+                for (let i = 0; i < highlightShortestPath.length - 1; i++) {
+                    const u = highlightShortestPath[i];
+                    const v = highlightShortestPath[i + 1];
+                    const edge = edges.find(e => {
+                        const fromNode = nodes.find(n => n.id === e.from);
+                        const toNode = nodes.find(n => n.id === e.to);
+                        if (!fromNode || !toNode) return false;
+                        return (fromNode.label === u && toNode.label === v) ||
+                               (toNode.label === u && fromNode.label === v);
+                    });
+                    if (edge) {
+                        pathEdgesSet.add(edge.id);
+                    }
+                }
+            }
+
+            return (
+                <div style={{background:'var(--bg-secondary)', border:'1px solid var(--border-color)', borderRadius:'12px', padding:'12px', flex:1}}>
+                    <svg class="graph-canvas" viewBox="0 0 780 400" style={{overflow:'visible'}}>
+                        <defs>
+                            <marker id="arrow-visited" markerWidth="7" markerHeight="6" refX="28" refY="3" orient="auto">
+                                <path d="M0,0 L7,3 L0,6 Z" fill="var(--accent-green)" />
+                            </marker>
+                            <marker id="arrow-active" markerWidth="7" markerHeight="6" refX="28" refY="3" orient="auto">
+                                <path d="M0,0 L7,3 L0,6 Z" fill="var(--accent-blue)" />
+                            </marker>
+                            <marker id="arrow-relax" markerWidth="7" markerHeight="6" refX="28" refY="3" orient="auto">
+                                <path d="M0,0 L7,3 L0,6 Z" fill="var(--accent-orange)" />
+                            </marker>
+                            <marker id="arrow-path" markerWidth="7" markerHeight="6" refX="28" refY="3" orient="auto">
+                                <path d="M0,0 L7,3 L0,6 Z" fill="var(--accent-purple)" />
+                            </marker>
+                            <marker id="arrow-default" markerWidth="7" markerHeight="6" refX="28" refY="3" orient="auto">
+                                <path d="M0,0 L7,3 L0,6 Z" fill="var(--text-muted)" />
+                            </marker>
+                        </defs>
+
+                        {edges.map(e => {
+                            const u = nodes.find(n => n.id === e.from);
+                            const v = nodes.find(n => n.id === e.to);
+                            if (!u || !v) return null;
+
+                            let edgeClass = "graph-edge";
+                            let markerId = "arrow-default";
+
+                            if (pathEdgesSet.has(e.id)) {
+                                edgeClass += " path";
+                                markerId = "arrow-path";
+                            } else if (e.id === activeEdge) {
+                                if (isRelaxStep) {
+                                    edgeClass += " relax";
+                                    markerId = "arrow-relax";
+                                } else {
+                                    edgeClass += " active";
+                                    markerId = "arrow-active";
+                                }
+                            } else if (visitedSet.has(u.label) && visitedSet.has(v.label)) {
+                                edgeClass += " visited";
+                                markerId = "arrow-visited";
+                            }
+
+                            const mx = (u.x + v.x) / 2;
+                            const my = (u.y + v.y) / 2;
+
+                            return (
+                                <g key={e.id}>
+                                    <line
+                                        x1={u.x}
+                                        y1={u.y}
+                                        x2={v.x}
+                                        y2={v.y}
+                                        class={edgeClass}
+                                        marker-end={`url(#${markerId})`}
+                                    />
+                                    {showWeights && e.weight && (
+                                        <g>
+                                            <rect x={mx - 14} y={my - 12} width="28" height="24" class="edge-weight-rect" />
+                                            <text x={mx} y={my} class="edge-weight-text">{e.weight}</text>
+                                        </g>
+                                    )}
+                                </g>
+                            );
+                        })}
+
+                        {nodes.map(n => {
+                            let nodeClass = "graph-node";
+                            const isCurrent = currentStep.current === n.label;
+                            const isVisited = visitedSet.has(n.label);
+                            const isFrontier = queueOrStackSet.has(n.label);
+                            const isPathNode = highlightShortestPath && highlightShortestPath.includes(n.label);
+
+                            if (isPathNode) {
+                                nodeClass += " path";
+                            } else if (isCurrent) {
+                                nodeClass += " current";
+                            } else if (isVisited) {
+                                nodeClass += " visited";
+                            } else if (isFrontier) {
+                                nodeClass += " frontier";
+                            }
+
+                            return (
+                                <g key={n.id} class="graph-node-group">
+                                    <circle cx={n.x} cy={n.y} r="24" class={nodeClass} />
+                                    <text x={n.x} y={n.y} class="graph-label">{n.label}</text>
+                                </g>
+                            );
+                        })}
+                    </svg>
+                </div>
+            );
+        };
+
+        // ── Shared Simulator Shell (For DFS & BFS) ──
+        const AlgorithmSimulator = ({ title, code, steps, algoType, defaultNodes = TEACHING_NODES, defaultEdges = TEACHING_EDGES }) => {
+            const [stepIndex, setStepIndex] = useState(0);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [speed, setSpeed] = useState(1);
+            const consoleEndRef = useRef(null);
+
+            const currentStep = steps[stepIndex] || {};
+
+            useEffect(() => {
+                let timer = null;
+                if (isPlaying) {
+                    timer = setTimeout(() => {
+                        if (stepIndex < steps.length - 1) {
+                            setStepIndex(stepIndex + 1);
+                        } else {
+                            setIsPlaying(false);
+                        }
+                    }, 1500 / speed);
+                }
+                return () => clearTimeout(timer);
+            }, [isPlaying, stepIndex, speed, steps.length]);
+
+            useEffect(() => {
+                if (consoleEndRef.current) {
+                    consoleEndRef.current.scrollTop = consoleEndRef.current.scrollHeight;
+                }
+            }, [currentStep.logs]);
+
+            const handlePrev = () => {
+                setIsPlaying(false);
+                if (stepIndex > 0) setStepIndex(stepIndex - 1);
+            };
+
+            const handleNext = () => {
+                setIsPlaying(false);
+                if (stepIndex < steps.length - 1) setStepIndex(stepIndex + 1);
+            };
+
+            const handleReplay = () => {
+                setIsPlaying(false);
+                setStepIndex(0);
+            };
+
+            return (
+                <div class={`guided-simulator ${algoType}-guide`}>
+
+                    <div class="graph-observation-layout">
+                    <div class="primary-stage">
+                        <GraphVisualizerCanvas nodes={defaultNodes} edges={defaultEdges} currentStep={currentStep} showWeights={false} />
+                        <div class="stage-caption">
+                            <span class="live-dot"></span>
+                            <strong>{currentStep.logs?.[currentStep.logs.length - 1] || 'Ready to begin'}</strong>
+                        </div>
+                    </div>
+
+                    <div class="quick-state-grid">
+                        <div class="sim-panel frontier-focus">
+                            <div class="sim-panel-header">
+                                <span><i class={`fa-solid ${algoType === 'dfs' ? 'fa-layer-group' : 'fa-list-ol'}`}></i> {algoType === 'dfs' ? 'Call Stack' : 'FIFO Queue'}</span>
+                                <span>{(algoType === 'dfs' ? currentStep.stack?.length : currentStep.queue?.length) || 0} items</span>
+                            </div>
+                            <div class="frontier-items">
+                                {(algoType === 'dfs' ? currentStep.stack : currentStep.queue)?.length ? (
+                                    (algoType === 'dfs' ? currentStep.stack : currentStep.queue).map((item, idx, arr) => (
+                                        <div key={idx} class={`frontier-chip ${idx === arr.length - 1 || (algoType === 'bfs' && idx === 0) ? 'next' : ''}`}>{item}</div>
+                                    ))
+                                ) : <span class="sim-empty-label">Empty</span>}
+                            </div>
+                        </div>
+                        <div class="state-box status-card visited-card"><div class="state-title"><i class="fa-solid fa-check-double"></i> Visited</div><div class="state-value status-values">{currentStep.visited?.join('  ') || 'None yet'}</div></div>
+                        <div class="state-box status-card order-card"><div class="state-title"><i class="fa-solid fa-arrow-right-arrow-left"></i> Order</div><div class="state-value status-values accent-result">{currentStep.result?.join(' -> ') || 'Start the simulation'}</div></div>
+                    </div>
+                    </div>
+
+                    <div class="card glass control-focus compact-player">
+                        <MediaControls
+                            stepIndex={stepIndex}
+                            totalSteps={steps.length}
+                            isPlaying={isPlaying}
+                            setIsPlaying={setIsPlaying}
+                            onPrev={handlePrev}
+                            onNext={handleNext}
+                            onReplay={handleReplay}
+                            speed={speed}
+                            setSpeed={setSpeed}
+                        />
+                    </div>
+
+                    <details class="details-drawer">
+                        <summary><i class="fa-solid fa-magnifying-glass-plus"></i> Explore the code and step details</summary>
+                        <div class="details-grid">
+                        <div style={{display:'flex', flexDirection:'column', gap:'12px'}}>
+                            <div class="sim-panel" style={{flex: 1, minHeight: '260px'}}>
+                                <div class="sim-panel-header">
+                                    <span><i class="fa-solid fa-code" style={{color:'var(--accent-purple)', marginRight:'6px'}}></i>Python Code Trace</span>
+                                    <span style={{fontFamily:'Fira Code, monospace', fontSize:'10px'}}>{algoType}.py</span>
+                                </div>
+                                <div class="code-container custom-scrollbar overflow-y-auto" style={{fontSize: '12px', flex:1}}>
+                                    {code.trim().split('\n').map((line, idx) => {
+                                        const lineNum = idx + 1;
+                                        const isHighlight = currentStep.activeLine === lineNum;
+                                        return (
+                                            <div key={idx} class={`px-2 py-0.5 whitespace-pre rounded ${isHighlight ? 'highlight-line font-bold' : ''}`}>
+                                                <span style={{display:'inline-block', width:'24px', color:'var(--text-muted)', userSelect:'none'}}>{lineNum}</span>
+                                                {line}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            <div class="sim-panel legacy-frontier" style={{height:'100px'}}>
+                                <div class="sim-panel-header">
+                                    <span>
+                                        <i class={`fa-solid ${algoType === 'dfs' ? 'fa-layer-group' : 'fa-list-ol'}`} style={{color:'var(--accent-blue)', marginRight:'6px'}}></i>
+                                        {algoType === 'dfs' ? 'Recursion Call Stack' : 'FIFO Traversal Queue'}
+                                    </span>
+                                    <span style={{fontFamily:'Fira Code, monospace', fontSize:'10px'}}>
+                                        {(algoType === 'dfs' ? currentStep.stack?.length : currentStep.queue?.length) || 0} items
+                                    </span>
+                                </div>
+                                <div class="flex-1 overflow-x-auto custom-scrollbar flex gap-2 items-center px-4" style={{background:'var(--bg-secondary)'}}>
+                                    {algoType === 'dfs' ? (
+                                        !currentStep.stack || currentStep.stack.length === 0 ? (
+                                            <span class="sim-empty-label">Stack Empty</span>
+                                        ) : (
+                                            currentStep.stack.map((s, idx) => (
+                                                <div key={idx} class="sim-stack-frame stack-enter" style={{margin:'0', padding:'4px 10px', height:'32px', display:'inline-flex', alignItems:'center', background: idx === currentStep.stack.length - 1 ? 'var(--accent-blue)' : 'var(--bg-card)'}}>
+                                                    <span style={{color: idx === currentStep.stack.length - 1 ? '#fff' : 'var(--text-primary)', fontWeight:'700'}}>{s}</span>
+                                                </div>
+                                            ))
+                                        )
+                                    ) : (
+                                        !currentStep.queue || currentStep.queue.length === 0 ? (
+                                            <span class="sim-empty-label">Queue Empty</span>
+                                        ) : (
+                                            currentStep.queue.map((q, idx) => (
+                                                <div key={idx} class="pill-card" style={{minWidth:'unset', display:'inline-flex', flexDirection:'row', gap:'4px', padding:'4px 8px'}}>
+                                                    <span class="pill-val">{q}</span>
+                                                    <span class="pill-meta" style={{marginTop:'0'}}>{idx === 0 ? 'Front' : `Idx ${idx}`}</span>
+                                                </div>
+                                            ))
+                                        )
+                                    )}
+                                </div>
+                            </div>
+
+                            <div class="legacy-state-grid" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px'}}>
+                                <div class="state-box">
+                                    <div class="state-title">Visited Set</div>
+                                    <div class="state-value" style={{fontSize:'12px', minHeight:'20px'}}>
+                                        {currentStep.visited?.join(' | ') || 'empty'}
+                                    </div>
+                                </div>
+                                <div class="state-box">
+                                    <div class="state-title">Traversal Sequence</div>
+                                    <div class="state-value" style={{fontSize:'12px', minHeight:'20px', color:'var(--accent-green)'}}>
+                                        {currentStep.result?.join(' &rarr; ') ? <span dangerouslySetInnerHTML={{__html: currentStep.result.join(' &rarr; ')}}></span> : 'empty'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{display:'flex', flexDirection:'column', gap:'12px'}}>
+                            <div class="sim-panel" style={{height:'300px'}}>
+                                <div class="sim-panel-header">
+                                    <span><i class="fa-solid fa-terminal" style={{color:'var(--accent-green)', marginRight:'6px'}}></i>Console Logs</span>
+                                    <span style={{fontFamily:'Fira Code, monospace', fontSize:'10px'}}>Active step</span>
+                                </div>
+                                <div ref={consoleEndRef} class="log-surface flex-1 overflow-y-auto custom-scrollbar p-3" style={{fontFamily:'Fira Code, monospace', fontSize:'11px', display:'flex', flexDirection:'column', gap:'3px'}}>
+                                    {currentStep.logs?.map((log, idx) => (
+                                        <div key={idx} class="sim-log-line" style={{margin:'0'}}>
+                                            <span style={{color:'var(--text-muted)', marginRight:'6px'}}>{(idx + 1).toString().padStart(2, '0')}</span>
+                                            <span class={idx === currentStep.logs.length - 1 ? 'active' : ''}>{log}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </details>
+                </div>
+            );
+        };
+
+        // ── Dijkstra's Algorithm Specific Simulator Component ──
+        const DijkstraSimulator = () => {
+            const steps = generateDijkstraSteps(TEACHING_NODES, TEACHING_EDGES, "A");
+            const [stepIndex, setStepIndex] = useState(0);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [speed, setSpeed] = useState(1);
+            const [destInput, setDestInput] = useState("");
+            const [shortestPath, setShortestPath] = useState([]);
+            const consoleEndRef = useRef(null);
+
+            const currentStep = steps[stepIndex] || {};
+
+            useEffect(() => {
+                let timer = null;
+                if (isPlaying) {
+                    timer = setTimeout(() => {
+                        if (stepIndex < steps.length - 1) {
+                            setStepIndex(stepIndex + 1);
+                        } else {
+                            setIsPlaying(false);
+                        }
+                    }, 1500 / speed);
+                }
+                return () => clearTimeout(timer);
+            }, [isPlaying, stepIndex, speed, steps.length]);
+
+            useEffect(() => {
+                if (consoleEndRef.current) {
+                    consoleEndRef.current.scrollTop = consoleEndRef.current.scrollHeight;
+                }
+            }, [currentStep.logs]);
+
+            const handlePrev = () => {
+                setIsPlaying(false);
+                if (stepIndex > 0) setStepIndex(stepIndex - 1);
+            };
+
+            const handleNext = () => {
+                setIsPlaying(false);
+                if (stepIndex < steps.length - 1) setStepIndex(stepIndex + 1);
+            };
+
+            const handleReplay = () => {
+                setIsPlaying(false);
+                setStepIndex(0);
+                setShortestPath([]);
+            };
+
+            const findShortestPath = () => {
+                const dest = destInput.trim().toUpperCase();
+                if (!dest || !"ABCDEFGH".includes(dest)) {
+                    alert("Please enter a valid destination node between A and H.");
+                    return;
+                }
+                if (stepIndex < steps.length - 1) {
+                    alert("Please complete or skip to the end of the simulation first.");
+                    return;
+                }
+
+                const path = [];
+                let curr = dest;
+                const lastStepPrev = steps[steps.length - 1].prev;
+
+                while (curr && curr !== "-") {
+                    path.push(curr);
+                    curr = lastStepPrev[curr];
+                }
+                path.reverse();
+
+                if (path[0] === "A") {
+                    setShortestPath(path);
+                } else {
+                    alert(`No path exists from A to ${dest}`);
+                    setShortestPath([]);
+                }
+            };
+
+            return (
+                <div class="guided-simulator dijkstra-guide">
+                    
+
+                    <div class="dijkstra-layout">
+                            <details class="details-drawer dijkstra-code-drawer">
+                                <summary><i class="fa-solid fa-code"></i> Explore the Python code trace</summary>
+                            <div class="sim-panel" style={{height: '240px'}}>
+                                <div class="sim-panel-header">
+                                    <span><i class="fa-solid fa-code" style={{color:'var(--accent-purple)', marginRight:'6px'}}></i>Python Code Trace</span>
+                                    <span style={{fontFamily:'Fira Code, monospace', fontSize:'10px'}}>dijkstra.py</span>
+                                </div>
+                                <div class="code-container custom-scrollbar overflow-y-auto" style={{fontSize: '12px', flex:1}}>
+                                    {DIJKSTRA_CODE.trim().split('\n').map((line, idx) => {
+                                        const lineNum = idx + 1;
+                                        const isHighlight = currentStep.activeLine === lineNum;
+                                        return (
+                                            <div key={idx} class={`px-2 py-0.5 whitespace-pre rounded ${isHighlight ? 'highlight-line font-bold' : ''}`}>
+                                                <span style={{display:'inline-block', width:'24px', color:'var(--text-muted)', userSelect:'none'}}>{lineNum}</span>
+                                                {line}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            </details>
+
+                        <div class="dijkstra-visual-column">
+                            <div style={{display:'flex', flexDirection:'row', gap:'12px'}}>
+                                <div class="primary-stage dijkstra-graph-stage">
+                                    <GraphVisualizerCanvas
+                                        nodes={TEACHING_NODES}
+                                        edges={TEACHING_EDGES}
+                                        currentStep={currentStep}
+                                        showWeights={true}
+                                        highlightShortestPath={shortestPath}
+                                    />
+                                    <div class="stage-caption">
+                                        <span class="live-dot"></span>
+                                        <strong>{currentStep.logs?.[currentStep.logs.length - 1] || 'Press Play to begin from node A.'}</strong>
+                                    </div>
+                                </div>     
+                                <div style={{display:'flex', flexDirection:'column', gap:'12px'}}>
+                                    <div class="sim-panel dijkstra-queue">
+                                        <div class="sim-panel-header">
+                                            <span>Choose the smallest distance</span>
+                                            <span style={{fontFamily:'Fira Code, monospace', fontSize:'10px'}}>{currentStep.pq?.length || 0} items</span>
+                                        </div>
+                                        <div class="flex-1 overflow-x-auto custom-scrollbar flex gap-2 items-center px-4" style={{background:'var(--bg-secondary)'}}>
+                                            {!currentStep.pq || currentStep.pq.length === 0 ? (
+                                                <span class="sim-empty-label">Priority Queue Empty</span>
+                                            ) : (
+                                                currentStep.pq.map((item, idx) => (
+                                                    <div key={idx} class={`pill-card ${idx === 0 ? 'success' : ''}`} style={{minWidth:'unset', display:'inline-flex', flexDirection:'row', gap:'6px', padding:'4px 8px'}}>
+                                                        <span class="pill-val">{item.node}</span>
+                                                        <span class="pill-meta" style={{fontSize:'8px', marginTop:'0'}}>cost: {item.priority}</span>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div class="card glass dijkstra-distance-card" style={{borderRadius:'8px'}}>
+                                        <div class="sim-panel-header">
+                                            <span>Check updated distances</span>
+                                        </div>
+                                        <div class="card-body" style={{padding:'8px'}}>
+                                            <div class="dijkstra-table-container custom-scrollbar">
+                                                <table class="dijkstra-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Vertex</th>
+                                                            <th>Distance</th>
+                                                            <th>Previous</th>
+                                                            <th>Visited</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {TEACHING_NODES.map(node => {
+                                                            const isSettled = currentStep.visited?.includes(node.label);
+                                                            const isCurrent = currentStep.current === node.label;
+                                                            const valDist = currentStep.dist?.[node.label];
+                                                            const valPrev = currentStep.prev?.[node.label];
+    
+                                                            return (
+                                                                <tr key={node.id} class={`${isCurrent ? 'active' : ''} ${isSettled ? 'settled' : ''}`}>
+                                                                    <td>{node.label}</td>
+                                                                    <td>{valDist === Infinity ? 'inf' : valDist}</td>
+                                                                    <td>{valPrev || '-'}</td>
+                                                                    <td>{isSettled ? 'Yes' : 'No'}</td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card glass dijkstra-path-tracer" style={{borderRadius:'8px', padding:'12px'}}>
+                                        <div style={{display:'flex', gap:'8px', alignItems:'center', flexWrap:'wrap'}}>
+                                            <span style={{fontSize:'12px', fontWeight:'700', color:'var(--text-primary)', textTransform:'uppercase'}}>Trace Shortest Path from A to:</span>
+                                            <input
+                                                type="text"
+                                                value={destInput}
+                                                onChange={e => setDestInput(e.target.value)}
+                                                class="sim-input"
+                                                style={{width:'60px', height:'28px', padding:'2px 8px', fontSize:'12px'}}
+                                                placeholder="Node..."
+                                                maxLength="1"
+                                                disabled={stepIndex < steps.length - 1}
+                                            />
+                                            <button
+                                                onClick={findShortestPath}
+                                                class="sim-btn blue"
+                                                style={{height:'28px', padding:'0 12px', fontSize:'11px'}}
+                                                disabled={stepIndex < steps.length - 1}
+                                            >
+                                                Highlight Path
+                                            </button>
+                                            {shortestPath.length > 0 && (
+                                                <span style={{fontSize:'11px', color:'var(--accent-purple)', fontWeight:'700'}}>
+                                                    Path: {shortestPath.join(' -> ')} (cost: {steps[steps.length - 1].dist[destInput.toUpperCase()]})
+                                                </span>
+                                            )}
+                                        </div>
+                                        {stepIndex < steps.length - 1 && (
+                                            <span style={{fontSize:'10px', color:'var(--text-muted)', display:'block', marginTop:'4px'}}>
+                                                <i class="fa-solid fa-lock"></i> Highlights unlock once simulation reaches the end.
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>    
+                            </div>
+                            <div class="card glass control-focus compact-player">
+                                <MediaControls
+                                    stepIndex={stepIndex}
+                                    totalSteps={steps.length}
+                                    isPlaying={isPlaying}
+                                    setIsPlaying={setIsPlaying}
+                                    onPrev={handlePrev}
+                                    onNext={handleNext}
+                                    onReplay={handleReplay}
+                                    speed={speed}
+                                    setSpeed={setSpeed}
+                                />
+                            </div>             
+
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ── Custom Graph Playground Component ──
+        const PlaygroundSimulator = () => {
+            const [nodes, setNodes] = useState([...TEACHING_NODES]);
+            const [edges, setEdges] = useState([...TEACHING_EDGES]);
+            
+            const [fromNode, setFromNode] = useState("0");
+            const [toNode, setToNode] = useState("1");
+            const [weight, setWeight] = useState("1");
+
+            const [activeAlgo, setActiveAlgo] = useState("dfs");
+            const [stepIndex, setStepIndex] = useState(0);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [speed, setSpeed] = useState(1);
+            const [steps, setSteps] = useState([]);
+
+            useEffect(() => {
+                if (nodes.length === 0) {
+                    setSteps([]);
+                    return;
+                }
+                const startNodeLabel = nodes[0].label;
+                let newSteps = [];
+                if (activeAlgo === 'dfs') {
+                    newSteps = generateDfsSteps(nodes, edges, startNodeLabel);
+                } else if (activeAlgo === 'bfs') {
+                    newSteps = generateBfsSteps(nodes, edges, startNodeLabel);
+                } else if (activeAlgo === 'dijkstra') {
+                    newSteps = generateDijkstraSteps(nodes, edges, startNodeLabel);
+                }
+                setSteps(newSteps);
+                setStepIndex(0);
+                setIsPlaying(false);
+            }, [nodes, edges, activeAlgo]);
+
+            useEffect(() => {
+                let timer = null;
+                if (isPlaying && steps.length > 0) {
+                    timer = setTimeout(() => {
+                        if (stepIndex < steps.length - 1) {
+                            setStepIndex(stepIndex + 1);
+                        } else {
+                            setIsPlaying(false);
+                        }
+                    }, 1500 / speed);
+                }
+                return () => clearTimeout(timer);
+            }, [isPlaying, stepIndex, speed, steps.length]);
+
+            const addEdge = () => {
+                const uId = parseInt(fromNode);
+                const vId = parseInt(toNode);
+                const w = parseInt(weight) || 1;
+
+                if (!nodes.some(n => n.id === uId) || !nodes.some(n => n.id === vId)) {
+                    alert("Please select existing nodes before connecting an edge.");
+                    return;
+                }
+
+                if (uId === vId) {
+                    alert("Loops are not supported in this visualizer.");
+                    return;
+                }
+
+                const exists = edges.some(e => e.from === uId && e.to === vId);
+                if (exists) {
+                    alert("Edge already exists.");
+                    return;
+                }
+
+                const nextEdgeId = edges.length > 0 ? Math.max(...edges.map(e => e.id)) + 1 : 0;
+                setEdges([...edges, { id: nextEdgeId, from: uId, to: vId, weight: w }]);
+            };
+
+            const removeEdge = (id) => {
+                setEdges(edges.filter(e => e.id !== id));
+            };
+
+            const resetToDefault = () => {
+                setNodes([...TEACHING_NODES]);
+                setEdges([...TEACHING_EDGES]);
+                setFromNode("0");
+                setToNode("1");
+            };
+
+            const clearGraph = () => {
+                setNodes([{ id: 0, x: 100, y: 200, label: 'A' }]);
+                setEdges([]);
+                setFromNode("0");
+                setToNode("0");
+            };
+
+            const addNode = () => {
+                if (nodes.length >= 8) {
+                    alert("Maximum 8 nodes allowed in playground.");
+                    return;
+                }
+                const nextId = nodes.length > 0 ? Math.max(...nodes.map(n => n.id)) + 1 : 0;
+                const nextLabel = String.fromCharCode(65 + nextId);
+
+                const angle = (nodes.length / 8) * 2 * Math.PI;
+                const x = 390 + Math.cos(angle) * 200;
+                const y = 200 + Math.sin(angle) * 120;
+
+                setNodes([...nodes, { id: nextId, x, y, label: nextLabel }]);
+            };
+
+            const currentStep = steps[stepIndex] || { visited: [], result: [], stack: [], queue: [], pq: [], logs: [] };
+
+            return (
+                <div class="guided-simulator playground-guide">
+                    <div class="card glass playground-step playground-build" data-step="1">
+                        <div class="playground-step-title"><span>1</span><div><strong>Build the graph</strong><small>Optional: the default graph is ready to use.</small></div></div>
+                        <div class="graph-builder-controls">
+                            <div class="graph-builder-row">
+                                <span class="graph-builder-label"><i class="fa-solid fa-circle-nodes"></i> Nodes</span>
+                                <div class="graph-builder-actions">
+                                    <button onClick={addNode} class="sim-btn blue" style={{height:'32px'}}><i class="fa-solid fa-plus"></i> Add Node</button>
+                                    <button onClick={resetToDefault} class="sim-btn" style={{height:'32px'}}><i class="fa-solid fa-rotate-left"></i> Reset to Default</button>
+                                    <button onClick={clearGraph} class="sim-btn" style={{height:'32px', color:'var(--accent-red)'}}><i class="fa-solid fa-trash-can"></i> Clear All</button>
+                                </div>
+                            </div>
+
+                            <div class="graph-builder-row">
+                                <span class="graph-builder-label"><i class="fa-solid fa-share-nodes"></i> Edges</span>
+                                <div class="graph-builder-actions">
+                                    <select value={fromNode} onChange={e => setFromNode(e.target.value)} class="sim-input" style={{width:'80px', height:'32px', padding:'2px 8px'}}>
+                                        {nodes.map(n => <option key={n.id} value={n.id}>Node {n.label}</option>)}
+                                    </select>
+                                    <span>&rarr;</span>
+                                    <select value={toNode} onChange={e => setToNode(e.target.value)} class="sim-input" style={{width:'80px', height:'32px', padding:'2px 8px'}}>
+                                        {nodes.map(n => <option key={n.id} value={n.id}>Node {n.label}</option>)}
+                                    </select>
+                                    <input type="number" value={weight} onChange={e => setWeight(e.target.value)} class="sim-input" style={{width:'60px', height:'32px', padding:'2px 8px'}} min="1" placeholder="Weight" />
+                                    <button onClick={addEdge} class="sim-btn blue" style={{height:'32px'}}><i class="fa-solid fa-plus"></i> Connect</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card glass playground-step playground-run" data-step="2">
+                        <div class="playground-step-title"><span>2</span><div><strong>Choose and run</strong><small>Change one step at a time and watch the graph.</small></div></div>
+                        <div style={{display:'flex', gap:'16px', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap'}}>
+                            <div style={{display:'flex', gap:'8px', alignItems:'center'}}>
+                                <span style={{fontSize:'12px', fontWeight:'700', textTransform:'uppercase'}}>Choose Traversal:</span>
+                                {['dfs', 'bfs', 'dijkstra'].map(algo => (
+                                    <button
+                                        key={algo}
+                                        onClick={() => setActiveAlgo(algo)}
+                                        class={`sim-btn ${activeAlgo === algo ? 'blue' : ''}`}
+                                        style={{height:'30px', padding:'0 16px', fontSize:'11px', textTransform:'uppercase', fontWeight:'700'}}
+                                    >
+                                        {algo}
+                                    </button>
+                                ))}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="playground-results">
+                        <div style={{display:'flex', flexDirection:'column', gap:'12px'}}>
+                            <div class="stage-label"><span class="live-dot"></span> 3 &nbsp; Watch what changes</div>
+                            <GraphVisualizerCanvas
+                                nodes={nodes}
+                                edges={edges}
+                                currentStep={currentStep}
+                                showWeights={true}
+                            />
+                            <div class="card glass control-focus compact-player playground-player">
+                                <MediaControls
+                                    stepIndex={stepIndex}
+                                    totalSteps={steps.length}
+                                    isPlaying={isPlaying}
+                                    setIsPlaying={setIsPlaying}
+                                    onPrev={() => { setIsPlaying(false); if (stepIndex > 0) setStepIndex(stepIndex - 1); }}
+                                    onNext={() => { setIsPlaying(false); if (stepIndex < steps.length - 1) setStepIndex(stepIndex + 1); }}
+                                    onReplay={() => { setIsPlaying(false); setStepIndex(0); }}
+                                    speed={speed}
+                                    setSpeed={setSpeed}
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{display:'flex', flexDirection:'column', gap:'12px'}}>
+                            <div class="sim-panel frontier-tracker">
+                                <div class="sim-panel-header">
+                                    <span><i class="fa-solid fa-chart-line" style={{color:'var(--accent-blue)', marginRight:'4px'}}></i>Frontier State Tracker</span>
+                                    <span style={{textTransform:'uppercase', fontSize:'9px', fontWeight:'700'}}>{activeAlgo} mode</span>
+                                </div>
+                                <div class="flex-1 p-3 flex flex-col gap-2 justify-center" style={{background:'var(--bg-secondary)'}}>
+                                    {activeAlgo === 'dfs' && (
+                                        <div style={{fontSize:'12px'}}>
+                                            <strong>Recursion Stack:</strong> <span style={{fontFamily:'Fira Code, monospace'}}>{currentStep.stack?.join(' | ') || 'empty'}</span>
+                                        </div>
+                                    )}
+                                    {activeAlgo === 'bfs' && (
+                                        <div style={{fontSize:'12px'}}>
+                                            <strong>FIFO Queue:</strong> <span style={{fontFamily:'Fira Code, monospace'}}>{currentStep.queue?.join(' | ') || 'empty'}</span>
+                                        </div>
+                                    )}
+                                    {activeAlgo === 'dijkstra' && (
+                                        <div style={{fontSize:'12px'}}>
+                                            <strong>Priority Queue:</strong> <span style={{fontFamily:'Fira Code, monospace'}}>{currentStep.pq?.map(item => `(${item.node}, ${item.priority})`).join(', ') || 'empty'}</span>
+                                        </div>
+                                    )}
+                                    <div style={{fontSize:'12px'}}>
+                                        <strong>Visited List:</strong> <span style={{fontFamily:'Fira Code, monospace'}}>{currentStep.visited?.join(' | ') || 'empty'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card glass active-connections" style={{borderRadius:'8px', padding:'6px 12px', height: '325px'}}>
+                                <div class="card-header" style={{padding:'8px 12px', borderBottom:'1px solid var(--border-color)'}}>
+                                    <h4 style={{fontSize:'11px', textTransform:'uppercase', margin:'0'}}><i class="fa-solid fa-table-list" style={{marginRight:'4px'}}></i>Active Connections</h4>
+                                </div>
+                                <div class="card-body" style={{padding:'6px 12px'}}>
+                                    {edges.length === 0 ? (
+                                        <span class="sim-empty-label" style={{display:'block', padding:'10px 0'}}>No connections yet. Connect nodes using tools above.</span>
+                                    ) : (
+                                        <div class="connections-list">
+                                            {edges.map(e => {
+                                                const u = nodes.find(n => n.id === e.from)?.label || '?';
+                                                const v = nodes.find(n => n.id === e.to)?.label || '?';
+                                                return (
+                                                    <div key={e.id} style={{background:'var(--bg-secondary)', border:'1px solid var(--border-color)', borderRadius:'6px', padding:'4px 8px', display:'flex', alignItems:'center', justifyContent:'space-between', fontSize:'11px', fontFamily:'Fira Code, monospace'}}>
+                                                        <span>{u} &rarr; {v} ({e.weight})</span>
+                                                        <i class="fa-solid fa-trash-can node-trash-btn" onClick={() => removeEdge(e.id)}></i>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // ── Knowledge Quiz Component ──
+        const QuizModule = () => {
+            const questions = [
+                {
+                    num: "Question 1",
+                    text: "What is the maximum number of edges in a simple undirected graph with V vertices (having no loops)?",
+                    options: [
+                        { letter: "A", text: "V", correct: false },
+                        { letter: "B", text: "V * (V - 1)", correct: false },
+                        { letter: "C", text: "V * (V - 1) / 2", correct: true },
+                        { letter: "D", text: "2^V", correct: false }
+                    ],
+                    feedback: "For an undirected graph with V vertices, the maximum number of unique connections between any two distinct nodes is V choose 2, which equals V*(V-1)/2 edges."
+                },
+                {
+                    num: "Question 2",
+                    text: "In Breadth-First Search (BFS), which data structure is used to store unvisited frontier nodes to ensure the level-by-level search order?",
+                    options: [
+                        { letter: "A", text: "Stack (LIFO)", correct: false },
+                        { letter: "B", text: "Queue (FIFO)", correct: true },
+                        { letter: "C", text: "Priority Queue", correct: false },
+                        { letter: "D", text: "Binary Search Tree", correct: false }
+                    ],
+                    feedback: "BFS visits nodes level-by-level, meaning nodes discovered first must be explored first. A First-In, First-Out (FIFO) Queue enforces this ordering constraint."
+                },
+                {
+                    num: "Question 3",
+                    text: "In the recursive DFS traversal starting at node A, if neighbors are visited in alphabetical order, which node is visited immediately after node B?",
+                    options: [
+                        { letter: "A", text: "C", correct: false },
+                        { letter: "B", text: "D", correct: true },
+                        { letter: "C", text: "E", correct: false },
+                        { letter: "D", text: "G", correct: false }
+                    ],
+                    feedback: "When DFS reaches B, its neighbors are D and E (sorted alphabetically). Since D is unvisited, DFS recursively descends into node D next. Thus, D is visited immediately after B."
+                },
+                {
+                    num: "Question 4",
+                    text: "Under which condition will Dijkstra's algorithm fail to find the correct shortest path?",
+                    options: [
+                        { letter: "A", text: "The graph contains directed edges.", correct: false },
+                        { letter: "B", text: "The graph contains edges with different weights.", correct: false },
+                        { letter: "C", text: "The graph contains negative edge weights.", correct: true },
+                        { letter: "D", text: "The graph is not fully connected.", correct: false }
+                    ],
+                    feedback: "Dijkstra's algorithm assumes that once a node is settled (added to the visited set), its shortest distance is finalized. This greedy choice fails if negative weights exist because later paths can reduce previously finalized distances."
+                }
+            ];
+
+            const [selectedOptions, setSelectedOptions] = useState(Array(questions.length).fill(null));
+            const [showFeedback, setShowFeedback] = useState(Array(questions.length).fill(false));
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [quizComplete, setQuizComplete] = useState(false);
+
+            const handleSelectOption = (qIdx, optIdx) => {
+                if (showFeedback[qIdx]) return;
+                const copy = [...selectedOptions];
+                copy[qIdx] = optIdx;
+                setSelectedOptions(copy);
+            };
+
+            const handleCheckAnswer = (qIdx) => {
+                if (selectedOptions[qIdx] === null) return;
+                const copy = [...showFeedback];
+                copy[qIdx] = true;
+                setShowFeedback(copy);
+            };
+
+            const score = selectedOptions.reduce((acc, sel, idx) => {
+                if (showFeedback[idx] && sel !== null && questions[idx].options[sel].correct) {
+                    return acc + 1;
+                }
+                return acc;
+            }, 0);
+
+            const current = questions[currentQuestion];
+            const selectedOpt = selectedOptions[currentQuestion];
+            const checked = showFeedback[currentQuestion];
+
+            const handleNextQuestion = () => {
+                if (currentQuestion < questions.length - 1) {
+                    setCurrentQuestion(currentQuestion + 1);
+                } else {
+                    setQuizComplete(true);
+                }
+            };
+
+            const handlePreviousQuestion = () => {
+                if (currentQuestion > 0) {
+                    setCurrentQuestion(currentQuestion - 1);
+                }
+            };
+
+            const resetQuiz = () => {
+                setSelectedOptions(Array(questions.length).fill(null));
+                setShowFeedback(Array(questions.length).fill(false));
+                setCurrentQuestion(0);
+                setQuizComplete(false);
+            };
+
+            return (
+                <div class="single-question-quiz">
+                    {!quizComplete ? (
+                        <React.Fragment>
+                            <div class="quiz-progress-header">
+                                <span>Question {currentQuestion + 1} of {questions.length}</span>
+                                <span>{Math.round(((currentQuestion + (checked ? 1 : 0)) / questions.length) * 100)}%</span>
+                            </div>
+                            <div class="quiz-progress-track">
+                                <div class="quiz-progress-fill" style={{width: `${((currentQuestion + (checked ? 1 : 0)) / questions.length) * 100}%`}}></div>
+                            </div>
+
+                            <div class="quiz-card single-quiz-card">
+                                <span class="quiz-question-num">{current.num}</span>
+                                <div class="quiz-question-text">{current.text}</div>
+
+                                <div class="quiz-options">
+                                    {current.options.map((opt, optIdx) => {
+                                        const isSelected = selectedOpt === optIdx;
+                                        let optClass = "quiz-option";
+                                        if (checked) {
+                                            if (opt.correct) optClass += " correct";
+                                            else if (isSelected) optClass += " incorrect";
+                                        } else if (isSelected) {
+                                            optClass += " selected";
+                                        }
+
+                                        return (
+                                            <div
+                                                key={optIdx}
+                                                onClick={() => handleSelectOption(currentQuestion, optIdx)}
+                                                class={optClass}
+                                            >
+                                                <span class="quiz-option-letter">{opt.letter}</span>
+                                                <span>{opt.text}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                {!checked ? (
+                                    <button
+                                        onClick={() => handleCheckAnswer(currentQuestion)}
+                                        disabled={selectedOpt === null}
+                                        class="sim-btn blue"
+                                        style={{height:'36px', padding:'0 20px'}}
+                                    >
+                                        Submit Answer
+                                    </button>
+                                ) : (
+                                    <div class={`quiz-feedback ${current.options[selectedOpt].correct ? 'success' : 'error'}`}>
+                                        <i class={`fa-solid ${current.options[selectedOpt].correct ? 'fa-circle-check' : 'fa-circle-xmark'}`}></i>
+                                        <div>
+                                            <strong>{current.options[selectedOpt].correct ? 'Correct!' : 'Incorrect.'}</strong>
+                                            <p style={{marginTop:'4px', color:'inherit'}}>{current.feedback}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {(currentQuestion > 0 || checked) && (
+                                    <div class="quiz-next-row">
+                                        {currentQuestion > 0 && (
+                                            <button onClick={handlePreviousQuestion} class="sim-btn quiz-prev-btn">
+                                                <i class="fa-solid fa-chevron-left"></i> Previous Question
+                                            </button>
+                                        )}
+                                        {checked && (
+                                            <button onClick={handleNextQuestion} class="sim-btn blue quiz-next-btn">
+                                                {currentQuestion < questions.length - 1 ? 'Next Question' : 'View Results'}
+                                                <i class="fa-solid fa-chevron-right"></i>
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </React.Fragment>
+                    ) : (
+                        <div class="quiz-score-banner">
+                            <div class="quiz-score-circle">
+                                {score} / {questions.length}
+                            </div>
+                            <div>
+                                <h3 style={{fontSize:'16px', fontWeight:'700', color:'var(--text-primary)', margin:'0'}}>Quiz Completed!</h3>
+                                <p style={{fontSize:'13px', color:'var(--text-secondary)', margin:'4px 0 0 0'}}>
+                                    {score === questions.length ? "Excellent! You have a strong conceptual grasp of graph algorithms." : "Good work. Review the modules, then try again to strengthen the concepts."}
+                                </p>
+                                <button onClick={resetQuiz} class="sim-btn blue quiz-retry-btn"><i class="fa-solid fa-rotate-left"></i> Try Again</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // Nav bar routing
+        const navItems = document.querySelectorAll(".nav-item");
+        const contentSections = document.querySelectorAll(".content-section");
+        const sectionTitle = document.getElementById("current-section-title");
+
+        navItems.forEach(item => {
+            item.addEventListener("click", () => {
+                const target = item.getAttribute("data-target");
+
+                navItems.forEach(n => n.classList.remove("active"));
+                contentSections.forEach(c => c.classList.remove("active"));
+
+                item.classList.add("active");
+                document.getElementById(target).classList.add("active");
+
+                const label = item.querySelector("span").textContent;
+                sectionTitle.textContent = label;
+            });
+        });
+
+        // Theme toggler
+        const themeBtn = document.getElementById("theme-toggle-btn");
+        const body = document.body;
+
+        themeBtn.addEventListener("click", () => {
+            body.classList.toggle("light-mode");
+            const isLight = body.classList.contains("light-mode");
+            themeBtn.innerHTML = isLight ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+        });
+
+        // Sidebar Collapsible Toggler
+        const sidebarToggle = document.getElementById("sidebar-toggle-btn");
+        const container = document.querySelector(".app-container");
+        sidebarToggle.addEventListener("click", () => {
+            container.classList.toggle("collapsed");
+        });
+
+        // Mount Queue & PQ Sandbox
+        const qSandboxRoot = document.getElementById("queue-sandbox-root");
+        if (qSandboxRoot) {
+            ReactDOM.createRoot(qSandboxRoot).render(<QueueSandbox />);
+        }
+
+        // Mount DFS Simulator
+        const dfsSteps = generateDfsSteps(TEACHING_NODES, TEACHING_EDGES, "A");
+        const dfsRoot = document.getElementById("dfs-sim-root");
+        if (dfsRoot) {
+            ReactDOM.createRoot(dfsRoot).render(
+                <AlgorithmSimulator
+                    title="DFS Recursive Traversal"
+                    code={DFS_CODE}
+                    steps={dfsSteps}
+                    algoType="dfs"
+                />
+            );
+        }
+
+        // Mount BFS Simulator
+        const bfsSteps = generateBfsSteps(TEACHING_NODES, TEACHING_EDGES, "A");
+        const bfsRoot = document.getElementById("bfs-sim-root");
+        if (bfsRoot) {
+            ReactDOM.createRoot(bfsRoot).render(
+                <AlgorithmSimulator
+                    title="BFS Queue Traversal"
+                    code={BFS_CODE}
+                    steps={bfsSteps}
+                    algoType="bfs"
+                />
+            );
+        }
+
+        // Mount Dijkstra Simulator
+        const dijkstraRoot = document.getElementById("dijkstra-sim-root");
+        if (dijkstraRoot) {
+            ReactDOM.createRoot(dijkstraRoot).render(<DijkstraSimulator />);
+        }
+
+        // Mount Playground
+        const playgroundRoot = document.getElementById("playground-sim-root");
+        if (playgroundRoot) {
+            ReactDOM.createRoot(playgroundRoot).render(<PlaygroundSimulator />);
+        }
+
+        // Mount Quiz
+        const quizRoot = document.getElementById("quiz-sim-root");
+        if (quizRoot) {
+            ReactDOM.createRoot(quizRoot).render(<QuizModule />);
+        }
+    </script>
+</body>
+</html>
