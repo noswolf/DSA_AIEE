@@ -195,6 +195,27 @@ body.light-mode .code-block pre {
     gap: 16px;
 }
 
+.concept-overview {
+    margin: 0 0 22px;
+    padding: 18px 20px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+.concept-intro { max-width: 850px; }
+.concept-kicker { display: block; margin-bottom: 5px; color: var(--module-accent, var(--accent-blue)); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.concept-intro h3 { margin: 0 0 7px; color: var(--text-primary); font: 700 17px/1.35 'Outfit', sans-serif; }
+.concept-intro p { margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.65; }
+.concept-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin-top: 16px; overflow: hidden; border: 1px solid var(--border-color); border-radius: 8px; background: var(--border-color); }
+.concept-facts > div { min-width: 0; padding: 12px 14px; background: var(--bg-card); }
+.concept-facts span { display: block; margin-bottom: 4px; color: var(--module-accent, var(--accent-blue)); font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.concept-facts strong { display: block; color: var(--text-primary); font-size: 13px; }
+.concept-facts small { display: block; margin-top: 4px; color: var(--text-muted); font-size: 11px; line-height: 1.45; }
+.concept-process { display: flex; align-items: center; gap: 10px; margin-top: 14px; color: var(--text-secondary); font-size: 11px; font-weight: 700; }
+.concept-process span { display: inline-flex; align-items: center; gap: 6px; }
+.concept-process b { display: inline-flex; width: 21px; height: 21px; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: var(--module-accent, var(--accent-blue)); }
+.concept-process i { color: var(--text-muted); font-size: 9px; }
+
 .learning-route {
     display: flex;
     align-items: center;
@@ -406,6 +427,7 @@ body.light-mode .log-surface .sim-log-line .active { color: #0369a1; }
     .primary-stage .graph-canvas { min-height: 260px; height: 340px; }
     .quick-state-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .frontier-focus { grid-column: 1 / -1; }
+    .concept-facts { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
@@ -415,6 +437,8 @@ body.light-mode .log-surface .sim-log-line .active { color: #0369a1; }
     .quick-state-grid { grid-template-columns: 1fr; }
     .frontier-focus { grid-column: auto; }
     .graph-builder-row { grid-template-columns: 1fr; gap: 8px; }
+    .concept-process { align-items: flex-start; flex-direction: column; }
+    .concept-process i { display: none; }
 }
 
 .pill-card {

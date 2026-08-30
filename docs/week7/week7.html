@@ -351,6 +351,19 @@ graph = {
                         </div>
                     </div>
 
+                    <div class="concept-overview">
+                        <div class="concept-intro">
+                            <span class="concept-kicker">Before you run it</span>
+                            <h3>DFS follows one route until it must return.</h3>
+                            <p>Starting from one vertex, DFS visits an unvisited neighbor and repeats the same process. When a vertex has no unvisited neighbors, recursion returns to the previous call. A visited set prevents cycles from sending the search around forever.</p>
+                        </div>
+                        <div class="concept-facts">
+                            <div><span>Uses</span><strong>Recursion / Stack</strong><small>The newest unfinished call is handled first.</small></div>
+                            <div><span>Cost</span><strong>O(V + E)</strong><small>Each vertex and edge is examined a constant number of times.</small></div>
+                            <div><span>Watch</span><strong>Go deep, then backtrack</strong><small>Compare the current node with the top of the call stack.</small></div>
+                        </div>
+                    </div>
+
                     <div id="dfs-sim-root">
                         <!-- DFS Simulator React component mounts here -->
                     </div>
@@ -373,6 +386,19 @@ graph = {
                                 <h2>Module 4: Breadth-First Search (BFS)</h2>
                                 <p>Watch the search spread one level at a time. The FIFO queue shows which node will be visited next.</p>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-overview">
+                        <div class="concept-intro">
+                            <span class="concept-kicker">Before you run it</span>
+                            <h3>BFS expands the graph one distance level at a time.</h3>
+                            <p>BFS places the start vertex in a queue. It removes the front vertex, discovers its unvisited neighbors, and adds them to the back. Earlier discoveries leave first, so vertices one edge away are processed before vertices two edges away.</p>
+                        </div>
+                        <div class="concept-facts">
+                            <div><span>Uses</span><strong>FIFO Queue</strong><small>The earliest discovered vertex is explored first.</small></div>
+                            <div><span>Cost</span><strong>O(V + E)</strong><small>With an adjacency list, every vertex and connection is considered.</small></div>
+                            <div><span>Useful for</span><strong>Unweighted shortest paths</strong><small>The first visit gives the fewest-edge route from the start.</small></div>
                         </div>
                     </div>
 
@@ -401,6 +427,20 @@ graph = {
                         </div>
                     </div>
 
+                    <div class="concept-overview">
+                        <div class="concept-intro">
+                            <span class="concept-kicker">Before you run it</span>
+                            <h3>Dijkstra repeatedly confirms the cheapest reachable vertex.</h3>
+                            <p>Every vertex begins with an unknown distance except the start, which has distance 0. The priority queue selects the smallest tentative distance. Relaxing an edge means checking whether traveling through the current vertex gives its neighbor a cheaper route.</p>
+                        </div>
+                        <div class="concept-facts">
+                            <div><span>Uses</span><strong>Priority Queue</strong><small>The vertex with the lowest tentative cost is selected next.</small></div>
+                            <div><span>Cost</span><strong>O((V + E) log V)</strong><small>This assumes an adjacency list and a heap priority queue.</small></div>
+                            <div><span>Important</span><strong>No negative weights</strong><small>A negative edge can invalidate an already finalized distance.</small></div>
+                        </div>
+                        <div class="concept-process"><span><b>1</b>Select minimum</span><i class="fa-solid fa-arrow-right"></i><span><b>2</b>Relax edges</span><i class="fa-solid fa-arrow-right"></i><span><b>3</b>Update queue and table</span></div>
+                    </div>
+
                     <div id="dijkstra-sim-root">
                         <!-- Dijkstra Simulator React component mounts here -->
                     </div>
@@ -423,6 +463,19 @@ graph = {
                                 <h2>Module 6: Graph Algorithms Playground</h2>
                                 <p>Build a small graph, choose an algorithm, then run it step by step. Start with the default graph before creating your own.</p>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-overview">
+                        <div class="concept-intro">
+                            <span class="concept-kicker">Experiment with purpose</span>
+                            <h3>Change one feature, then compare the algorithm's behavior.</h3>
+                            <p>Begin with the default graph. Run DFS, BFS, and Dijkstra before editing it so the results are comparable. Next, add one node or edge and predict what should change before running the simulation again.</p>
+                        </div>
+                        <div class="concept-facts">
+                            <div><span>DFS</span><strong>Shape changes the route</strong><small>Neighbor order and deep branches affect traversal order.</small></div>
+                            <div><span>BFS</span><strong>Levels change the queue</strong><small>Connections determine which vertices share the same level.</small></div>
+                            <div><span>Dijkstra</span><strong>Weights change the choice</strong><small>The fewest edges may not be the lowest-cost path.</small></div>
                         </div>
                     </div>
 
