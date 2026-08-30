@@ -342,8 +342,18 @@
         /* Course Weeks Grid */
         .weeks-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
+            align-items: stretch;
+        }
+
+        .weeks-grid > a {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .weeks-grid.single-result {
+            grid-template-columns: minmax(280px, calc(50% - 0.75rem));
         }
 
         /* Week card general styling */
@@ -361,7 +371,8 @@
             transition: opacity var(--transition-normal), transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
         }
 
-        .week-card.hidden {
+        .week-card.hidden,
+        .weeks-grid > a.hidden {
             display: none !important;
             opacity: 0;
             transform: translateY(10px);
@@ -572,6 +583,9 @@
             main {
                 margin: 1.5rem auto 3rem;
             }
+            .weeks-grid.single-result {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -610,8 +624,8 @@
             <div class="filter-container">
                 <button class="filter-btn active" data-filter="all">All Materials</button>
                 <button class="filter-btn" data-filter="basics">Basics & Recursion</button>
-                <!-- <button class="filter-btn" data-filter="complexity">Complexity & Sorting</button>
-                <button class="filter-btn" data-filter="lists">Linked Lists, Stacks & Queues</button> -->
+                <button class="filter-btn" data-filter="complexity">Complexity, Search & Sorting</button>
+                <button class="filter-btn" data-filter="lists">Linked Lists, Stacks & Queues</button>
                 <button class="filter-btn" data-filter="trees">Trees & Graphs</button>
             </div>
         </section>
@@ -620,7 +634,7 @@
         <section class="weeks-grid" id="weeks-grid">
             <!-- Week 1 -->
             <a href="week1/week1.html" target="_blank">
-                <div class="week-card" data-category="basics" data-tags="basics">
+                <div class="week-card" data-category="basics" data-tags="basics python syntax recursion">
                     <div class="week-card-header">
                         <span class="week-badge">Week 01</span>
                     </div>
@@ -631,7 +645,7 @@
 
             <!-- Week 2 -->
             <a href="week2/week2.html" target="_blank">
-                <div class="week-card" data-category="basics" data-tags="basics">
+                <div class="week-card" data-category="complexity" data-tags="complexity arrays big-o memory">
                     <div class="week-card-header">
                         <span class="week-badge">Week 02</span>
                     </div>
@@ -642,7 +656,7 @@
 
             <!-- Week 3 -->
             <a href="week3/week3.html" target="_blank">
-                <div class="week-card" data-category="basics" data-tags="basics">
+                <div class="week-card" data-category="complexity" data-tags="complexity searching sorting hashing">
                     <div class="week-card-header">
                         <span class="week-badge">Week 03</span>
                     </div>
@@ -653,7 +667,7 @@
 
             <!-- Week 4 -->
             <a href="week4/week4.html" target="_blank">
-                <div class="week-card" data-category="basics" data-tags="basics">
+                <div class="week-card" data-category="lists" data-tags="lists linked-lists oop nodes">
                     <div class="week-card-header">
                         <span class="week-badge">Week 04</span>
                     </div>
@@ -664,7 +678,7 @@
 
             <!-- Week 5 -->
             <a href="week5/week5.html" target="_blank">
-            <div class="week-card" data-category="lists" data-tags="lists stacks queues">
+            <div class="week-card" data-category="lists" data-tags="lists stacks queues lifo fifo">
                 <div class="week-card-header">
                     <span class="week-badge">Week 05</span>
                 </div>
@@ -675,7 +689,7 @@
 
             <!-- Week 6 -->
             <a href="week6/week6.html" target="_blank">
-            <div class="week-card" data-category="trees" data-tags="trees bst">
+            <div class="week-card" data-category="trees" data-tags="trees bst traversal dfs bfs">
                 <div class="week-card-header">
                     <span class="week-badge">Week 06</span>
                 </div>
@@ -755,7 +769,7 @@
 
             <!-- Week 7 -->
             <a href="week7/week7.html" target="_blank">
-            <div class="week-card" data-category="trees" data-tags="trees graphs traversal shortest-path">
+            <div class="week-card" data-category="trees" data-tags="trees graphs traversal dfs bfs dijkstra shortest-path">
                 <div class="week-card-header">
                     <span class="week-badge">Week 7</span>
                 </div>
@@ -841,20 +855,29 @@
             // Filter Logic
             const filterBtns = document.querySelectorAll(".filter-btn");
             const weekCards = document.querySelectorAll(".week-card");
+            const weeksGrid = document.getElementById("weeks-grid");
 
             const updateDashboard = () => {
-                const activeFilter = document.querySelector(".filter-btn.active").getAttribute("data-filter");
+                const activeButton = document.querySelector(".filter-btn.active");
+                const activeFilter = activeButton?.getAttribute("data-filter") || "all";
+                let visibleCount = 0;
 
                 weekCards.forEach(card => {
-                    const tags = card.getAttribute("data-tags").split(" ");
-                    const matchesFilter = activeFilter === "all" || tags.includes(activeFilter);
+                    const category = card.dataset.category || "";
+                    const tags = (card.dataset.tags || "").split(/\s+/).filter(Boolean);
+                    const matchesFilter = activeFilter === "all" || category === activeFilter || tags.includes(activeFilter);
+                    const gridItem = card.closest("a") || card;
 
                     if (matchesFilter) {
+                        gridItem.classList.remove("hidden");
                         card.classList.remove("hidden");
+                        visibleCount += 1;
                     } else {
-                        card.classList.add("hidden");
+                        gridItem.classList.add("hidden");
                     }
                 });
+
+                weeksGrid?.classList.toggle("single-result", visibleCount === 1);
             };
 
             // Setup listeners
