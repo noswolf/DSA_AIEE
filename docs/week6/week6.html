@@ -64,14 +64,14 @@
                 <button class="nav-item" data-target="bst-basics-section">
                     <i class="fa-solid fa-sitemap"></i> <span>Module 4: BST Fundamentals</span>
                 </button>
-                <button class="nav-item" data-target="bst-ops-section">
+                <!-- <button class="nav-item" data-target="bst-ops-section">
                     <i class="fa-solid fa-code"></i> <span>Module 5: BST Operations</span>
-                </button>
+                </button> -->
                 <button class="nav-item" data-target="bst-sim-section">
-                    <i class="fa-solid fa-laptop-code"></i> <span>Module 6: BST Simulator</span>
+                    <i class="fa-solid fa-laptop-code"></i> <span>Module 5: BST Simulator</span>
                 </button>
                 <button class="nav-item" data-target="quiz-section">
-                    <i class="fa-solid fa-clipboard-question"></i> <span>Module 7: Knowledge Quiz</span>
+                    <i class="fa-solid fa-clipboard-question"></i> <span>Module 6: Knowledge Quiz</span>
                 </button>
             </nav>
 
@@ -1249,9 +1249,9 @@
                             <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
                             <span class="nav-title">Module 3: Real-World Applications</span>
                         </button>
-                        <button class="sec-nav-btn next-btn" onclick="showSection('bst-ops-section')">
+                        <button class="sec-nav-btn next-btn" onclick="showSection('bst-sim-section')">
                             <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
-                            <span class="nav-title">Module 5: BST Operations</span>
+                            <span class="nav-title">Module 5: BST Simulator</span>
                         </button>
                     </div>
                 </section>
@@ -1259,7 +1259,7 @@
                 <!-- ═══════════════════════════════════════ -->
                 <!-- MODULE 4: BST Operations Theory         -->
                 <!-- ═══════════════════════════════════════ -->
-                <section id="bst-ops-section" class="content-section">
+                <!-- <section id="bst-ops-section" class="content-section">
                     <div class="header-block">
                         <div class="module-header-block welcome-header-block">
                             <div class="mod-header-icon-wrap" style="background:rgba(249,115,22,0.15);color:var(--accent-orange);">
@@ -1272,7 +1272,6 @@
                         </div>
                     </div>
 
-                    <!-- Search & Min/Max Operation Card -->
                     <div class="card glass" style="margin-bottom:20px;">
                         <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">
                             <i class="fa-solid fa-magnifying-glass" style="color:var(--accent-blue);margin-right:8px;"></i>
@@ -1307,7 +1306,6 @@
                         </div>
                     </div>
 
-                    <!-- Insert Operation Card -->
                     <div class="card glass" style="margin-bottom:20px;">
                         <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">
                             <i class="fa-solid fa-plus-circle" style="color:var(--accent-green);margin-right:8px;"></i>
@@ -1339,7 +1337,6 @@
                         </div>
                     </div>
 
-                    <!-- Delete Operation (3 Cases) Card -->
                     <div class="card glass" style="margin-bottom:20px;">
                         <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:14px;">
                             <i class="fa-solid fa-trash-can" style="color:var(--accent-red);margin-right:8px;"></i>
@@ -1349,7 +1346,6 @@
                             Deletion is the most intricate BST operation because removing a node must preserve the BST ordering property without disconnecting children.
                         </p>
 
-                        <!-- The 3 Cases Grid -->
                         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px; margin-bottom:16px;">
                             <div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); border-radius:8px; padding:12px;">
                                 <strong style="color:var(--accent-blue); display:block; margin-bottom:4px;">Case 0: Leaf Node (0 Children)</strong>
@@ -1365,7 +1361,6 @@
                             </div>
                         </div>
 
-                        <!-- Full Delete Code -->
                         <div class="oop-code"><span class="kw">def</span> <span class="fn">delete</span>(root, key):
     <span class="kw">if</span> root <span class="kw">is None</span>:
         <span class="kw">return None</span>
@@ -1394,7 +1389,6 @@
     <span class="kw">return</span> root</div>
                     </div>
 
-                    <!-- Section Footer Navigation -->
                     <div class="section-nav-footer">
                         <button class="sec-nav-btn prev-btn" onclick="showSection('bst-basics-section')">
                             <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
@@ -1405,7 +1399,7 @@
                             <span class="nav-title">Module 6: BST Simulator</span>
                         </button>
                     </div>
-                </section>
+                </section> -->
 
                 <!-- ═══════════════════════════════════════ -->
                 <!-- MODULE 5: BST Simulator (React)         -->
@@ -1428,13 +1422,13 @@
 
                     <!-- Section Footer Navigation -->
                     <div class="section-nav-footer" style="margin-top:24px;">
-                        <button class="sec-nav-btn prev-btn" onclick="showSection('bst-ops-section')">
+                        <button class="sec-nav-btn prev-btn" onclick="showSection('bst-basics-section')">
                             <span class="nav-label"><i class="fa-solid fa-arrow-left"></i> Previous Section</span>
-                            <span class="nav-title">Module 5: BST Operations</span>
+                            <span class="nav-title">Module 4: BST Fundamentals</span>
                         </button>
                         <button class="sec-nav-btn next-btn" onclick="showSection('quiz-section')">
                             <span class="nav-label">Next Section <i class="fa-solid fa-arrow-right"></i></span>
-                            <span class="nav-title">Module 7: Knowledge Quiz</span>
+                            <span class="nav-title">Module 6: Knowledge Quiz</span>
                         </button>
                     </div>
                 </section>
@@ -1449,7 +1443,7 @@
                                 <i class="fa-solid fa-clipboard-question mod-glow-icon"></i>
                             </div>
                             <div class="mod-header-text">
-                                <h2>Module 7: Tree &amp; BST Knowledge Quiz</h2>
+                                <h2>Module 6: Tree &amp; BST Knowledge Quiz</h2>
                                 <p>Test your understanding of tree terminology, depth/height calculations, DFS/BFS traversal orders, BST invariants, insertion/deletion steps, and computational complexities.</p>
                             </div>
                         </div>
@@ -1628,9 +1622,18 @@
                 edge: "rw-in-edge-6",
                 token: "5",
                 type: "operand",
+                tokens: ["(", "4", "&times;", "2", ")", "+", "(", "10", "&divide;", "5", ")"],
+                calc: "Tree Expression Complete: (4 &times; 2) + (10 &divide; 5)",
+                log: "[07] In-Order Step 7: Visit Rightmost Leaf (5). The tree has now produced the complete Infix expression."
+            },
+            {
+                node: "rw-in-node-plus",
+                edge: null,
+                token: "10",
+                type: "result",
                 tokens: ["(", "4", "&times;", "2", ")", "+", "(", "10", "&divide;", "5", ")", "=", "10"],
                 calc: "Final Evaluation: 8 + 2 = 10",
-                log: "[07] In-Order Step 7: Visit Rightmost Leaf (5). Subtree (10 &divide; 5) = 2. Final Infix evaluation: 8 + 2 = 10!"
+                log: "[08] Evaluation Step: Evaluate the completed Infix expression: (4 &times; 2) + (10 &divide; 5) = 10."
             }
         ],
         updateUI() {
@@ -1686,8 +1689,9 @@
             if (tokensBox) {
                 tokensBox.innerHTML = current.tokens.map((t, idx) => {
                     const isLast = (idx === current.tokens.length - 1);
-                    const bg = (t === "=" || t === "10") ? "rgba(16,185,129,0.2)" : (t === "+" || t === "&times;" || t === "&divide;") ? "rgba(168,85,247,0.2)" : "rgba(59,130,246,0.15)";
-                    const col = (t === "=" || t === "10") ? "var(--accent-green)" : (t === "+" || t === "&times;" || t === "&divide;") ? "var(--accent-purple)" : "var(--accent-blue)";
+                    const isFinalResultToken = current.type === "result" && (t === "=" || isLast);
+                    const bg = isFinalResultToken ? "rgba(16,185,129,0.2)" : (t === "+" || t === "&times;" || t === "&divide;") ? "rgba(168,85,247,0.2)" : "rgba(59,130,246,0.15)";
+                    const col = isFinalResultToken ? "var(--accent-green)" : (t === "+" || t === "&times;" || t === "&divide;") ? "var(--accent-purple)" : "var(--accent-blue)";
                     return `<span style="padding:4px 10px; border-radius:6px; background:${bg}; color:${col}; font-family:'Fira Code',monospace; font-weight:bold; font-size:13px; border:1px solid ${col}; ${isLast ? 'transform:scale(1.08);' : ''}">${t}</span>`;
                 }).join("");
             }
