@@ -402,22 +402,22 @@
                     <div class="card glass" style="margin-bottom:20px;">
                         <h3 style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:16px;">
                             <i class="fa-solid fa-code" style="color:var(--accent-blue);margin-right:8px;"></i>
-                            Python Implementations of the 4 Core Traversals
+                            Pseudocode of the 4 Core Traversals
                         </h3>
 
-                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:16px;">
                             <!-- Preorder -->
                             <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; padding:16px;">
                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                                     <strong style="color:var(--accent-purple);">Pre-Order (Root, L, R)</strong>
                                     <span class="badge-o1" style="font-size:11px;">O(N)</span>
                                 </div>
-                                <div class="oop-code" style="margin:0; font-size:12px; padding:10px;"><span class="kw">def</span> <span class="fn">pre_order</span>(root):
-    <span class="kw">if</span> root <span class="kw">is None</span>:
-        <span class="kw">return</span>
-    <span class="fn">print</span>(root.val)      <span class="cm"># Root</span>
-    <span class="fn">pre_order</span>(root.left) <span class="cm"># Left</span>
-    <span class="fn">pre_order</span>(root.right)<span class="cm"># Right</span></div>
+                                <div class="oop-code" style="margin:0; font-size:12px; padding:10px;"><span class="kw">PROCEDURE</span> <span class="fn">PreOrder</span>(node)
+    <span class="kw">IF</span> node is empty
+        <span class="kw">STOP</span>
+    <span class="fn">VISIT</span> node        <span class="cm">// Root</span>
+    <span class="fn">PreOrder</span>(left child)  <span class="cm">// Left</span>
+    <span class="fn">PreOrder</span>(right child) <span class="cm">// Right</span></div>
                                 <p style="font-size:12px; color:var(--text-muted); margin-top:8px;"><strong>Use:</strong> Tree copying, expression prefix serialization.</p>
                             </div>
 
@@ -427,27 +427,27 @@
                                     <strong style="color:var(--accent-blue);">In-Order (L, Root, R)</strong>
                                     <span class="badge-o1" style="font-size:11px;">O(N)</span>
                                 </div>
-                                <div class="oop-code" style="margin:0; font-size:12px; padding:10px;"><span class="kw">def</span> <span class="fn">in_order</span>(root):
-    <span class="kw">if</span> root <span class="kw">is None</span>:
-        <span class="kw">return</span>
-    <span class="fn">in_order</span>(root.left)  <span class="cm"># Left</span>
-    <span class="fn">print</span>(root.val)      <span class="cm"># Root</span>
-    <span class="fn">in_order</span>(root.right) <span class="cm"># Right</span></div>
+                                <div class="oop-code" style="margin:0; font-size:12px; padding:10px;"><span class="kw">PROCEDURE</span> <span class="fn">InOrder</span>(node)
+    <span class="kw">IF</span> node is empty
+        <span class="kw">STOP</span>
+    <span class="fn">InOrder</span>(left child)   <span class="cm">// Left</span>
+    <span class="fn">VISIT</span> node         <span class="cm">// Root</span>
+    <span class="fn">InOrder</span>(right child)  <span class="cm">// Right</span></div>
                                 <p style="font-size:12px; color:var(--text-muted); margin-top:8px;"><strong>Use:</strong> Yields strictly sorted keys on a BST!</p>
                             </div>
 
                             <!-- Postorder -->
-                            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; padding:16px;">
+                            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:10px; padding:16px; height:fit-content;">
                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                                     <strong style="color:var(--accent-orange);">Post-Order (L, R, Root)</strong>
                                     <span class="badge-o1" style="font-size:11px;">O(N)</span>
                                 </div>
-                                <div class="oop-code" style="margin:0; font-size:12px; padding:10px;"><span class="kw">def</span> <span class="fn">post_order</span>(root):
-    <span class="kw">if</span> root <span class="kw">is None</span>:
-        <span class="kw">return</span>
-    <span class="fn">post_order</span>(root.left) <span class="cm"># Left</span>
-    <span class="fn">post_order</span>(root.right)<span class="cm"># Right</span>
-    <span class="fn">print</span>(root.val)       <span class="cm"># Root</span></div>
+                                <div class="oop-code" style="margin:0; font-size:12px; padding:10px;"><span class="kw">PROCEDURE</span> <span class="fn">PostOrder</span>(node)
+    <span class="kw">IF</span> node is empty
+        <span class="kw">STOP</span>
+    <span class="fn">PostOrder</span>(left child)  <span class="cm">// Left</span>
+    <span class="fn">PostOrder</span>(right child) <span class="cm">// Right</span>
+    <span class="fn">VISIT</span> node         <span class="cm">// Root</span></div>
                                 <p style="font-size:12px; color:var(--text-muted); margin-top:8px;"><strong>Use:</strong> Deleting trees, bottom-up calculations (height).</p>
                             </div>
 
@@ -457,15 +457,16 @@
                                     <strong style="color:var(--accent-green);">Level-Order (BFS)</strong>
                                     <span class="badge-o1" style="font-size:11px;">O(N)</span>
                                 </div>
-                                <div class="oop-code" style="margin:0; font-size:12px; padding:10px;"><span class="kw">from</span> collections <span class="kw">import</span> deque
-<span class="kw">def</span> <span class="fn">level_order</span>(root):
-    <span class="kw">if not</span> root: <span class="kw">return</span>
-    q = <span class="cn">deque</span>([root])
-    <span class="kw">while</span> q:
-        node = q.<span class="fn">popleft</span>()
-        <span class="fn">print</span>(node.val)
-        <span class="kw">if</span> node.left: q.<span class="fn">append</span>(node.left)
-        <span class="kw">if</span> node.right: q.<span class="fn">append</span>(node.right)</div>
+                                <div class="oop-code" style="margin:0; font-size:12px; padding:10px;"><span class="kw">PROCEDURE</span> <span class="fn">LevelOrder</span>(root)
+    <span class="kw">IF</span> root is empty
+        <span class="kw">STOP</span>
+    create empty <span class="cn">QUEUE</span>
+    <span class="fn">ENQUEUE</span> root
+    <span class="kw">WHILE</span> queue is not empty
+        node = <span class="fn">DEQUEUE</span>()
+        <span class="fn">VISIT</span> node
+        <span class="fn">ENQUEUE</span> left child if it exists
+        <span class="fn">ENQUEUE</span> right child if it exists</div>
                                 <p style="font-size:12px; color:var(--text-muted); margin-top:8px;"><strong>Use:</strong> Shortest paths, level-by-level printouts.</p>
                             </div>
                         </div>
