@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Exam Guide | DSA AIEE</title>
+    <meta name="description" content="Interactive revision guide for the 01546203 DSA final exam: queues, BST, tree traversals, DFS, BFS and Dijkstra, with hidden answers and step-by-step walkthroughs.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../week6/styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js"></script>
+</head>
+<body class="light-mode">
+<div class="app-container">
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-area">
+                <span class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+                <div class="logo-text">
+                    <h1>Final Exam</h1>
+                    <span class="subtitle">Revision Guide</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Toggle Sidebar">
+                <i class="fa-solid fa-angles-left"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-section-title">Start</span>
+            <button class="nav-item active part-x" data-target="home" data-title="Start Here">
+                <span class="nav-letter"><i class="fa-solid fa-flag" style="width:auto;font-size:11px"></i></span><span class="nav-label">Start Here</span>
+            </button>
+            <span class="nav-section-title">Exam Parts</span>
+            <button class="nav-item part-a" data-target="part-a" data-title="Part A · Stacks &amp; Queues">
+                <span class="nav-letter">A</span><span class="nav-label">Stacks &amp; Queues</span>
+            </button>
+            <button class="nav-item part-b" data-target="part-b" data-title="Part B · Binary Search Tree">
+                <span class="nav-letter">B</span><span class="nav-label">Binary Search Tree</span>
+            </button>
+            <button class="nav-item part-c" data-target="part-c" data-title="Part C · Tree Traversals">
+                <span class="nav-letter">C</span><span class="nav-label">Tree Traversals</span>
+            </button>
+            <button class="nav-item part-d" data-target="part-d" data-title="Part D · Graphs">
+                <span class="nav-letter">D</span><span class="nav-label">Graphs</span>
+            </button>
+            <span class="nav-section-title">Before the Exam</span>
+            <button class="nav-item part-x" data-target="cheat" data-title="Cheat Sheet &amp; Self-Check">
+                <span class="nav-letter"><i class="fa-solid fa-list-check" style="width:auto;font-size:11px"></i></span><span class="nav-label">Cheat Sheet</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="interpreter-status">
+                <span class="status-dot ready"></span>
+                <span class="status-text">Answers are hidden until you click</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── Main ── -->
+    <main class="main-content">
+        <header class="main-header">
+            <div>
+                <span class="breadcrumb">Final Exam &gt; Revision Guide</span>
+                <h2 id="current-section-title">Start Here</h2>
+            </div>
+            <div style="display:flex; gap:12px;">
+                <button class="btn btn-secondary answers-toggle" id="answers-toggle" title="Open or close every answer on the page">
+                    <i class="fa-solid fa-eye"></i><span>Show all answers</span>
+                </button>
+                <button class="btn btn-secondary" id="projector-btn" title="Present one question per page (arrow keys to move, A for the answer)" hidden>
+                    <i class="fa-solid fa-expand"></i><span>Projector</span>
+                </button>
+                <a href="../index.html" class="btn btn-secondary" id="back-dashboard-btn" title="Back to Dashboard">
+                    <i class="fa-solid fa-house"></i><span>Dashboard</span>
+                </a>
+                <button class="btn btn-secondary" id="theme-toggle-btn" title="Toggle Light/Dark Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-body">
+
+<!-- ═══════════════════════ START HERE ═══════════════════════ -->
+<section id="home" class="content-section active part-x">
+    <div class="part-hero">
+        <div class="eyebrow">01546203 DSA · Final Exam Revision</div>
+        <h2>The final is about tracing by hand</h2>
+        <p>No code to write. Every question follows a fixed procedure. Learn the procedure, write each step down, then check your answer.</p>
+    </div>
+
+    <div class="golden">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <div>
+            <div class="g-big">Write the state after every step.</div>
+            <div class="g-small">Most lost marks come from two things: doing it in your head, and ignoring a tie-break rule.</div>
+        </div>
+    </div>
+
+    <div class="block-label">What is on the exam</div>
+    <div class="map-grid">
+        <button class="map-card part-a" data-goto="part-a">
+            <div class="top"><span class="letter">PART A</span><span class="pts">MCQ + Yes/No</span></div>
+            <h3>Queue simulation</h3>
+            <p>Hot Potato with a queue. Who is out, in what order, who wins.</p>
+            <span class="go">Open Part A <i class="fa-solid fa-arrow-right"></i></span>
+        </button>
+        <button class="map-card part-b" data-goto="part-b">
+            <div class="top"><span class="letter">PART B</span><span class="pts">Draw + short answers</span></div>
+            <h3>Binary Search Tree</h3>
+            <p>Insert, search, delete, and tree words (parent, leaf, sibling).</p>
+            <span class="go">Open Part B <i class="fa-solid fa-arrow-right"></i></span>
+        </button>
+        <button class="map-card part-c" data-goto="part-c">
+            <div class="top"><span class="letter">PART C</span><span class="pts">15 marks</span></div>
+            <h3>Tree traversals</h3>
+            <p>Fill 9 boxes for pre-order, in-order and post-order.</p>
+            <span class="go">Open Part C <i class="fa-solid fa-arrow-right"></i></span>
+        </button>
+        <button class="map-card part-d" data-goto="part-d">
+            <div class="top"><span class="letter">PART D</span><span class="pts">20 marks · biggest</span></div>
+            <h3>Graphs</h3>
+            <p>DFS, BFS, Dijkstra table, and the fastest route.</p>
+            <span class="go">Open Part D <i class="fa-solid fa-arrow-right"></i></span>
+        </button>
+    </div>
+
+    <div class="block-label">How to use this page</div>
+    <div class="howto">
+        <div><i class="fa-solid fa-lightbulb" style="background:var(--bg-orange-light);color:var(--accent-orange)"></i><span><b>1. Read the rule</b>The coloured cards at the top of each part.</span></div>
+        <div><i class="fa-solid fa-pencil" style="background:var(--bg-blue-light);color:var(--accent-blue)"></i><span><b>2. Solve on paper</b>Each exam question, before you peek.</span></div>
+        <div><i class="fa-solid fa-eye" style="background:var(--bg-green-light);color:var(--accent-green)"></i><span><b>3. Show answer</b>Answers stay hidden until you click.</span></div>
+        <div><i class="fa-solid fa-forward-step" style="background:var(--bg-purple-light);color:var(--accent-purple)"></i><span><b>4. Step through</b>Press <b>Next step</b> to see each move.</span></div>
+    </div>
+
+    <div class="tip"><i class="fa-solid fa-clock"></i><div><b>Time budget.</b> Part D gives the most marks (20), so give it the most time. Part C is the fastest 15 marks: never leave it blank.</div></div>
+</section>
+
+<!-- ═══════════════════════ PART A ═══════════════════════ -->
+<section id="part-a" class="content-section part-a">
+    <div class="part-hero">
+        <div class="marks"><b>A</b><span>MCQ + Yes/No</span></div>
+        <div class="eyebrow">Part A · Stacks &amp; Queues</div>
+        <h2>Queue simulation (Hot Potato)</h2>
+        <p>A queue where "passing the potato" means: take the person at the front and put them at the back.</p>
+    </div>
+
+    <!-- ── Zone 1: Learn ── -->
+    <div class="zone zone-learn">
+        <header class="zone-head">
+            <i class="fa-solid fa-book-open"></i>
+            <div><h3>Learn</h3><p>Read this first. There are no questions in this zone.</p></div>
+        </header>
+        <div class="zone-body">
+            <div class="rule-grid">
+                <div class="rule-card">
+                    <div class="rule-title"><i class="fa-solid fa-layer-group"></i> Stack</div>
+                    <div class="rule-big">LIFO</div>
+                    <div class="rule-small">Last In, First Out. <code>push</code> and <code>pop</code> both use the <b>top</b>.</div>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-title"><i class="fa-solid fa-people-line"></i> Queue</div>
+                    <div class="rule-big">FIFO</div>
+                    <div class="rule-small">First In, First Out. <code>enqueue</code> at the <b>rear</b>, <code>dequeue</code> from the <b>front</b>.</div>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-title"><i class="fa-solid fa-fire"></i> Hot Potato</div>
+                    <div class="rule-big">1 pass = dequeue + enqueue</div>
+                    <div class="rule-small">After <b>k</b> passes, the person now at the <b>front</b> is out.</div>
+                </div>
+            </div>
+
+            <div class="block-label">Method</div>
+            <div class="method">
+                <div class="method-step"><span class="n">1</span><div>Write the queue <b>front → rear</b> on one line.</div></div>
+                <div class="method-step"><span class="n">2</span><div>Move <b>k</b> people from the front to the rear.</div></div>
+                <div class="method-step"><span class="n">3</span><div>The person now at the <b>front is out</b>.</div></div>
+                <div class="method-step"><span class="n">4</span><div>Write the new line. Repeat until <b>one</b> is left.</div></div>
+            </div>
+
+            <div class="trap"><i class="fa-solid fa-triangle-exclamation"></i><div>
+                <b class="t">Watch out.</b> "Passed 3 times" means 3 people move to the rear. The <b>4th</b> person (now at the front) is out, not the 3rd.
+                When fewer people are left than passes, keep counting around the circle (2 people, 3 passes: X → Y → X).
+            </div></div>
+        </div>
+    </div>
+
+    <!-- ── Zone 2: Exam questions ── -->
+    <div class="zone zone-exam">
+        <header class="zone-head">
+            <i class="fa-solid fa-file-pen"></i>
+            <div><h3>Exam questions</h3><p>The real exam question. Answer in the page, press <b>Check</b>, then open the answer.</p></div>
+            <span class="zone-tag">MCQ + Yes/No</span>
+        </header>
+        <div class="zone-body">
+            <section class="scenario" aria-labelledby="sc-a">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-a">Scenario: Hot Potato, 6 students</h4>
+                    <span class="scenario-for">Questions 1–4</span>
+                </header>
+                <div class="scenario-body">
+                <p>Six students stand in a <b>queue</b> and play Hot Potato. In every round the potato is <b>passed 3 times</b>: each pass, the student at the front moves to the rear.
+                After the 3 passes, the student now at the front is <b>eliminated</b>. The game goes on until only one student is left.</p>
+                <div class="input-seq"><span class="lane-end">front</span><span class="chip">Ann</span><span class="chip">Ben</span><span class="chip">Cat</span><span class="chip">Dan</span><span class="chip">Eve</span><span class="chip">Fay</span><span class="lane-end">rear</span></div>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">1</span>
+                        <p class="q-text">Who is eliminated <b>first</b>?</p>
+                        <span class="q-marks">MCQ</span>
+                    </div>
+                    <div class="q-work"><div data-mount="a-exam-first"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 1"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">(1)</span><span class="ans">Dan</span><span class="why">Ann, Ben, Cat move to the rear. Dan is now at the front.</span></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">2</span>
+                        <p class="q-text">What is the full <b>elimination order</b>?</p>
+                        <span class="q-marks">MCQ</span>
+                    </div>
+                    <div class="q-work"><div data-mount="a-exam-order"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 2"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">(2)</span><span class="ans">Dan, Ben, Ann, Cat, Fay</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="potato-exam"></div>
+                    <div class="block-label">What to write on paper</div>
+                    <div data-mount="potato-exam-table"></div>
+                    <div class="note"><i class="fa-solid fa-circle-info"></i><div>Round 4: 3 people and 3 passes, so the queue comes back in the <b>same order</b>. That is correct, nothing is wrong.</div></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">3</span>
+                        <p class="q-text">Who is the <b>winner</b>?</p>
+                        <span class="q-marks">MCQ</span>
+                    </div>
+                    <div class="q-work"><div data-mount="a-exam-win"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 3"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">(3)</span><span class="ans">Eve</span><span class="why">The only student never eliminated.</span></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">4</span>
+                        <p class="q-text">Yes or No: the queue does <b>20 dequeue</b> operations in total.</p>
+                        <span class="q-marks">Yes / No</span>
+                    </div>
+                    <div class="q-work"><div data-mount="a-exam-deq"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 4"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">(4)</span><span class="ans">Yes, 20.</span><span class="why">Each round = 3 passes + 1 elimination = 4 dequeues. 5 rounds × 4 = 20.</span></div>
+                    <div class="tip"><i class="fa-solid fa-calculator"></i><div><b>Shortcut:</b> dequeues = (n − 1) × (k + 1), with n players and k passes. (6 − 1) × (3 + 1) = <b>20</b>.</div></div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Zone 3: Practice ── -->
+    <div class="zone zone-practice">
+        <header class="zone-head">
+            <i class="fa-solid fa-dumbbell"></i>
+            <div><h3>Practice</h3><p>Another Hot Potato, a stack and a bracket check. Try it alone.</p></div>
+        </header>
+        <div class="zone-body">
+            <section class="scenario" aria-labelledby="sc-ap1">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-ap1">Scenario: Hot Potato, 5 players</h4>
+                    <span class="scenario-for">Questions 1–3</span>
+                </header>
+                <div class="scenario-body">
+                <p>Same game, <b>2 passes</b> per round.</p>
+                <div class="input-seq"><span class="lane-end">front</span><span class="chip">A</span><span class="chip">B</span><span class="chip">C</span><span class="chip">D</span><span class="chip">E</span><span class="lane-end">rear</span></div>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">1</span>
+                        <p class="q-text">Write the <b>elimination order</b>.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="a-p1-order"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 1"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Out</span><span class="ans">C, A, E, B</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="potato-prac"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">2</span>
+                        <p class="q-text">Who is the <b>winner</b>, and how many <b>dequeue</b> operations are done in total?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="a-p1-nums"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 2"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Win</span><span class="ans">D</span></div>
+                    <div class="answer-line"><span class="lbl">Deq</span><span class="ans">12</span><span class="why">(5 − 1) × (2 + 1) = 12</span></div>
+                </div></div>
+            </div>
+
+            <section class="scenario" aria-labelledby="sc-ap2">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-ap2">Scenario: Stack operations</h4>
+                    <span class="scenario-for">Questions 3–4</span>
+                </header>
+                <div class="scenario-body">
+                <p>Start with an empty stack and run these operations in order:</p>
+                <p class="mono"><b>push(1), push(2), pop(), push(3), push(4), pop(), pop(), push(5)</b></p>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">3</span>
+                        <p class="q-text">Which values are <b>popped</b>, in order?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="a-p2-popped"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 3"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Popped</span><span class="ans">2, 4, 3</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="stack-prac"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">4</span>
+                        <p class="q-text">What is <b>left</b> in the stack, from bottom to top?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="a-p2-left"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 4"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Left</span><span class="ans">[1, 5]</span><span class="why">5 is on top</span></div>
+                </div></div>
+            </div>
+
+            <section class="scenario" aria-labelledby="sc-ap3">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-ap3">Scenario: Bracket check</h4>
+                    <span class="scenario-for">Question 5</span>
+                </header>
+                <div class="scenario-body">
+                <p>Read the brackets left to right with a stack: open bracket → push, close bracket → pop, and it must match.</p>
+                <p class="mono"><b>{[()]}(</b></p>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">5</span>
+                        <p class="q-text">Is <span class="mono">{[()]}(</span> <b>balanced</b>?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="a-p3"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 5"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">No</span><span class="ans">Not balanced</span><span class="why">After reading everything, the stack still holds "(".</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bracket-prac"></div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════ PART B ═══════════════════════ -->
+<section id="part-b" class="content-section part-b">
+    <div class="part-hero">
+        <div class="marks"><b>B</b><span>Draw + short</span></div>
+        <div class="eyebrow">Part B · Binary Search Tree</div>
+        <h2>Insert, search, delete</h2>
+        <p>Build the tree one key at a time. Then answer questions about the tree you drew.</p>
+    </div>
+
+    <!-- ── Zone 1: Learn ── -->
+    <div class="zone zone-learn">
+        <header class="zone-head">
+            <i class="fa-solid fa-book-open"></i>
+            <div><h3>Learn</h3><p>Read this first. There are no questions in this zone.</p></div>
+        </header>
+        <div class="zone-body">
+            <div class="rule-grid">
+                <div class="rule-card">
+                    <div class="rule-title"><i class="fa-solid fa-arrows-left-right"></i> Insert</div>
+                    <div class="rule-big">Smaller ← · → Bigger</div>
+                    <div class="rule-small">Start at the root <b>every time</b>. Go down until you find an empty spot.</div>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-title"><i class="fa-solid fa-font"></i> Strings</div>
+                    <div class="rule-big">Letter by letter</div>
+                    <div class="rule-small">"Pim" &lt; "Ploy": P = P, then <b>i &lt; l</b>.</div>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-title"><i class="fa-solid fa-clone"></i> Duplicate</div>
+                    <div class="rule-big">Ignored</div>
+                    <div class="rule-small">Key already in the tree? Do <b>not</b> insert it (course rule, Guide #7).</div>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-title"><i class="fa-solid fa-scissors"></i> Delete (2 children)</div>
+                    <div class="rule-big">Min of the RIGHT subtree</div>
+                    <div class="rule-small">Go <b>right once</b>, then <b>left</b> as far as possible. Leaf: just remove. 1 child: the child moves up.</div>
+                </div>
+            </div>
+
+            <div class="block-label">Tree words you must know</div>
+            <div class="table-wrap"><table class="g-table">
+                <tr><th>Word</th><th>Meaning</th><th>Word</th><th>Meaning</th></tr>
+                <tr><td><b>Root</b></td><td>Top node, no parent</td><td><b>Siblings</b></td><td>Nodes with the same parent</td></tr>
+                <tr><td><b>Parent</b> (internal)</td><td>Has at least one child</td><td><b>Depth</b> of a node</td><td>Edges from the root down to it</td></tr>
+                <tr><td><b>Leaf</b></td><td>Has no children</td><td><b>Height</b> of the tree</td><td>Edges on the longest root → leaf path</td></tr>
+            </table></div>
+
+            <div class="trap"><i class="fa-solid fa-triangle-exclamation"></i><div>
+                <b class="t">Common traps.</b> Comparing only the first letter (Pim vs Ploy) ·
+                inserting a duplicate as an extra node ·
+                replacing a deleted node with the <b>root</b> of the right subtree instead of its <b>minimum</b> ·
+                forgetting that the final "found it" comparison counts.
+            </div></div>
+        </div>
+    </div>
+
+    <!-- ── Zone 2: Exam questions ── -->
+    <div class="zone zone-exam">
+        <header class="zone-head">
+            <i class="fa-solid fa-file-pen"></i>
+            <div><h3>Exam questions</h3><p>Two real exam questions. Build the tree in the page, answer, press <b>Check</b>, then open the answer.</p></div>
+            <span class="zone-tag">Draw + short</span>
+        </header>
+        <div class="zone-body">
+            <section class="scenario" aria-labelledby="sc-b1">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-b1">Scenario 1: Names (strings)</h4>
+                    <span class="scenario-for">Questions 1–5</span>
+                </header>
+                <div class="scenario-body">
+                <p>Insert these names into an empty <b>Binary Search Tree</b>, in this order. Compare names letter by letter.</p>
+                <div class="input-seq"><span class="chip">Nam</span><span class="chip">Bee</span><span class="chip">Pim</span><span class="chip">Aom</span><span class="chip">Fah</span><span class="chip">Ploy</span><span class="chip">Toon</span><span class="chip">Earth</span><span class="chip">Mint</span></div>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">1</span>
+                        <p class="q-text"><b>Draw</b> the BST.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q1-build"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 1"><div class="reveal-body">
+                    <div data-mount="bst-q1-final"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-q1"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">2</span>
+                        <p class="q-text">How many <b>parent</b> nodes are there?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q1-parents"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 2"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">2</span><span class="ans">5 parents</span><span class="why">Nam, Bee, Fah, Pim, Ploy</span></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">3</span>
+                        <p class="q-text">How many <b>siblings</b> are there?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q1-siblings"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 3"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">3</span><span class="ans">3 sibling pairs = 6 nodes</span><span class="why">(Bee, Pim), (Aom, Fah), (Earth, Mint)</span></div>
+                    <div class="note"><i class="fa-solid fa-circle-info"></i><div>"How many siblings" is ambiguous. Write <b>"3 pairs (6 nodes)"</b> to be safe.</div></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">4</span>
+                        <p class="q-text">How many <b>comparisons</b> does it take to search for "Earth"?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q1-search"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 4"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">4</span><span class="ans">4 comparisons</span><span class="why">Nam → Bee → Fah → Earth</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-q1-search-walk"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">5</span>
+                        <p class="q-text">If the root "Nam" is <b>deleted</b>, what is the new root?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q1-delete"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 5"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">5</span><span class="ans">Pim</span><span class="why">Min of the right subtree. Pim has no left child.</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-q1-delete-walk"></div>
+                </div></div>
+            </div>
+
+            <section class="scenario" aria-labelledby="sc-b2">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-b2">Scenario 2: Numbers, with a duplicate</h4>
+                    <span class="scenario-for">Questions 6–9</span>
+                </header>
+                <div class="scenario-body">
+                <p>Insert these numbers into an empty <b>Binary Search Tree</b>, in this order.</p>
+                <div class="input-seq"><span class="chip">72</span><span class="chip">45</span><span class="chip">88</span><span class="chip">30</span><span class="chip">59</span><span class="chip">45</span><span class="chip">95</span><span class="chip">52</span><span class="chip">66</span><span class="chip">80</span></div>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">6</span>
+                        <p class="q-text"><b>Draw</b> the BST. How many nodes does it have?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q2-build"></div><div data-mount="bst-q2-count" style="margin-top:14px"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 6"><div class="reveal-body">
+                    <div data-mount="bst-q2-final"></div>
+                    <div class="answer-line"><span class="lbl">6</span><span class="ans">9 nodes, not 10</span><span class="why">The second 45 is a duplicate → ignored.</span></div>
+                    <div class="tip"><i class="fa-solid fa-check-double"></i><div><b>Check:</b> the in-order of a BST is always sorted: 30, 45, 52, 59, 66, 72, 80, 88, 95 ✔</div></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-q2"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">7</span>
+                        <p class="q-text">How many <b>parent</b> nodes? How many <b>siblings</b>?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q2-words"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 7"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">7</span><span class="ans">4 parents · 4 sibling pairs = 8 nodes</span><span class="why">Parents: 72, 45, 59, 88. Pairs: (45, 88), (30, 59), (52, 66), (80, 95)</span></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">8</span>
+                        <p class="q-text">How many <b>comparisons</b> does it take to search for 66?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q2-search"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 8"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">8</span><span class="ans">4 comparisons</span><span class="why">72 → 45 → 59 → 66</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-q2-search-walk"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">9</span>
+                        <p class="q-text">If the root 72 is <b>deleted</b>, what is the new root?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-q2-delete"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 9"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">9</span><span class="ans">80</span><span class="why">Right once (88), then left (80). Not 88!</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-q2-delete-walk"></div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Zone 3: Practice ── -->
+    <div class="zone zone-practice">
+        <header class="zone-head">
+            <i class="fa-solid fa-dumbbell"></i>
+            <div><h3>Practice</h3><p>Two new trees, same kind of questions. Try it alone.</p></div>
+        </header>
+        <div class="zone-body">
+            <section class="scenario" aria-labelledby="sc-bp1">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-bp1">Scenario 1: Numbers</h4>
+                    <span class="scenario-for">Questions 1–5</span>
+                </header>
+                <div class="scenario-body">
+                <p>Insert into an empty BST, in this order:</p>
+                <div class="input-seq"><span class="chip">50</span><span class="chip">30</span><span class="chip">70</span><span class="chip">20</span><span class="chip">40</span><span class="chip">60</span><span class="chip">80</span><span class="chip">35</span><span class="chip">45</span><span class="chip">30</span></div>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">1</span>
+                        <p class="q-text"><b>Draw</b> the BST.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-p1-build"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 1"><div class="reveal-body">
+                    <div data-mount="bst-p1-final"></div>
+                    <div class="answer-line"><span class="lbl">Dup</span><span class="ans">The second 30 is ignored</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-p1"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">2</span>
+                        <p class="q-text">How many <b>leaves</b>? What is the <b>height</b> of the tree?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-p1-words"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 2"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Leaves</span><span class="ans">5</span><span class="why">20, 35, 45, 60, 80</span></div>
+                    <div class="answer-line"><span class="lbl">Height</span><span class="ans">3</span><span class="why">50 → 30 → 40 → 35 is 3 edges</span></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">3</span>
+                        <p class="q-text">How many <b>comparisons</b> to find 45?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-p1-search"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 3"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Find 45</span><span class="ans">4</span><span class="why">50 → 30 → 40 → 45</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-p1-search-walk"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">4</span>
+                        <p class="q-text">If 50 is <b>deleted</b>, what is the new root?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-p1-del50"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 4"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Del 50</span><span class="ans">60</span><span class="why">Right (70), then left (60)</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-p1-delete-walk"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">5</span>
+                        <p class="q-text">If 30 is <b>deleted</b> (from the original tree), which key replaces it?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-p1-del30"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 5"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Del 30</span><span class="ans">35</span><span class="why">Right (40), then left (35)</span></div>
+                </div></div>
+            </div>
+
+            <section class="scenario" aria-labelledby="sc-bp2">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-bp2">Scenario 2: Names</h4>
+                    <span class="scenario-for">Questions 6–8</span>
+                </header>
+                <div class="scenario-body">
+                <p>Insert into an empty BST, in this order:</p>
+                <div class="input-seq"><span class="chip">Mew</span><span class="chip">Ice</span><span class="chip">Zen</span><span class="chip">Bank</span><span class="chip">Jay</span><span class="chip">Tan</span><span class="chip">Gun</span><span class="chip">Kai</span></div>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">6</span>
+                        <p class="q-text"><b>Draw</b> the BST.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-p2-build"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 6"><div class="reveal-body">
+                    <div data-mount="bst-p2-final"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-p2"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">7</span>
+                        <p class="q-text">How many <b>comparisons</b> to find "Kai"?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-p2-search"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 7"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Find Kai</span><span class="ans">4</span><span class="why">Mew → Ice → Jay → Kai</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-p2-search-walk"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">8</span>
+                        <p class="q-text">If the root "Mew" is <b>deleted</b>, what is the new root?</p>
+                    </div>
+                    <div class="q-work"><div data-mount="bst-p2-delete"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 8"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Del Mew</span><span class="ans">Tan</span><span class="why">Right (Zen), then left (Tan)</span></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="bst-p2-delete-walk"></div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════ PART C ═══════════════════════ -->
+<section id="part-c" class="content-section part-c">
+    <div class="part-hero">
+        <div class="marks"><b>15</b><span>marks</span></div>
+        <div class="eyebrow">Part C · Binary Tree Traversals</div>
+        <h2>Pre-order, In-order, Post-order</h2>
+        <p>Same tree, three orders. The only thing that changes is <b>when</b> you write the root.</p>
+    </div>
+
+    <!-- ── Zone 1: Learn ── -->
+    <div class="zone zone-learn">
+        <header class="zone-head">
+            <i class="fa-solid fa-book-open"></i>
+            <div><h3>Learn</h3><p>Read this first. There are no questions in this zone.</p></div>
+        </header>
+        <div class="zone-body">
+            <div class="learn-slide" data-slide-title="Three orders">
+                <div class="rule-grid">
+                    <div class="rule-card">
+                        <div class="rule-title"><i class="fa-solid fa-1"></i> Pre-order</div>
+                        <div class="rule-big">Root → L → R</div>
+                        <div class="rule-small">Write a node <b>before</b> its children. First box = root.</div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-title"><i class="fa-solid fa-arrows-to-dot"></i> In-order</div>
+                        <div class="rule-big">L → Root → R</div>
+                        <div class="rule-small">Root sits <b>in the middle</b>. For a BST it comes out sorted.</div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-title"><i class="fa-solid fa-flag-checkered"></i> Post-order</div>
+                        <div class="rule-big">L → R → Root</div>
+                        <div class="rule-small">Write a node <b>after</b> its children. Last box = root.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learn-slide" data-slide-title="The flag trick">
+                <div class="block-label">The flag trick</div>
+                <div class="method">
+                    <div class="method-step"><span class="n">1</span><div>Draw one line <b>around</b> the tree, starting left of the root, hugging every node.</div></div>
+                    <div class="method-step"><span class="n">2</span><div><b>Pre:</b> write a node when you pass its <b>left</b> side.</div></div>
+                    <div class="method-step"><span class="n">3</span><div><b>In:</b> write it when you pass <b>under</b> it.</div></div>
+                    <div class="method-step"><span class="n">4</span><div><b>Post:</b> write it when you pass its <b>right</b> side.</div></div>
+                </div>
+            </div>
+
+            <div class="learn-slide" data-slide-title="The exam hides the traversal in a story">
+                <div class="block-label">The exam hides the traversal in a story</div>
+                <div class="table-wrap"><table class="g-table">
+                    <tr><th>If the question says…</th><th>It means</th></tr>
+                    <tr><td>"introduces each match the moment the show <b>first reaches it</b>"</td><td><b>Pre-order</b></td></tr>
+                    <tr><td>"the left side is listed <b>before</b> it, the right side <b>after</b> it"</td><td><b>In-order</b></td></tr>
+                    <tr><td>"a match can only be played <b>after</b> the matches that feed into it"</td><td><b>Post-order</b></td></tr>
+                </table></div>
+            </div>
+
+            <div class="learn-slide" data-slide-title="The trap: one-child nodes">
+                <div class="trap"><i class="fa-solid fa-triangle-exclamation"></i><div>
+                    <b class="t">The trap: one-child nodes.</b> Is the only child on the <b>left</b> or the <b>right</b>? It changes the in-order answer.
+                    Before you start, <b>label every edge L or R</b>. (The trees in the questions below already do this for you.)
+                </div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Zone 2: Exam questions ── -->
+    <div class="zone zone-exam">
+        <header class="zone-head">
+            <i class="fa-solid fa-file-pen"></i>
+            <div><h3>Exam questions</h3><p>The real exam question, 15 marks. Click the nodes to answer, press <b>Check</b>, then open the answer.</p></div>
+            <span class="zone-tag">15 marks</span>
+        </header>
+        <div class="zone-body">
+            <section class="scenario" aria-labelledby="sc-c">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-c">Scenario: AIEE Freshy Cup bracket</h4>
+                    <span class="scenario-for">Questions 1–3</span>
+                </header>
+                <div class="scenario-body">
+                <p>The AIEE Freshy Cup is an esports tournament for 10 first-year teams. The organisers store the bracket as a <b>Binary Tree</b>.<br><br>
+                Each box in the tree is one <b>match</b>, labelled with its code (for example, QF2). The children of a match are the earlier matches whose winners play in it.
+                Some matches have only one child: the other place in that match goes to a seeded team that skips a round (a bye), so nothing is drawn there.</p>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">1</span>
+                        <p class="q-text">Before the tournament, the live-stream host presents a preview show. It starts at the Grand Final, and the host introduces each match the moment the show first reaches it, always covering the left side of a match before its right side. Write the sequence of matches using a <b>Pre-order</b> traversal.</p>
+                        <span class="q-marks">5 marks</span>
+                    </div>
+                    <div class="q-work"><div data-mount="trav-exam-pre"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 1"><div class="reveal-body">
+                    <div data-mount="trav-exam-ans-pre"></div>
+                    <div class="tip"><i class="fa-solid fa-check-double"></i><div><b>Self-check:</b> pre-order starts with GF ✔ · 9 codes, no repeats ✔</div></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="trav-exam-walk-pre"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">2</span>
+                        <p class="q-text">The tournament website shows every match in one long row. For each match, all matches on its left side are listed before it, and all matches on its right side are listed after it. Write the sequence of matches using an <b>In-order</b> traversal.</p>
+                        <span class="q-marks">5 marks</span>
+                    </div>
+                    <div class="q-work"><div data-mount="trav-exam-in"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 2"><div class="reveal-body">
+                    <div data-mount="trav-exam-ans-in"></div>
+                    <div class="tip"><i class="fa-solid fa-check-double"></i><div><b>Self-check:</b> the 4 codes before GF come from SF1's side, the 4 after it from SF2's side ✔</div></div>
+                    <div class="trap"><i class="fa-solid fa-triangle-exclamation"></i><div>Common wrong answer: <span class="mono">PI1, QF1, …</span> (treating PI1 as a left child). PI1 is the <b>right</b> child of QF1, so QF1 comes first.</div></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="trav-exam-walk-in"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">3</span>
+                        <p class="q-text">A match can only be played after all the matches that feed into it have finished. The scheduling app always completes the left side before the right side, then plays the match itself. Write the order in which the matches are played using a <b>Post-order</b> traversal.</p>
+                        <span class="q-marks">5 marks</span>
+                    </div>
+                    <div class="q-work"><div data-mount="trav-exam-post"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 3"><div class="reveal-body">
+                    <div data-mount="trav-exam-ans-post"></div>
+                    <div class="tip"><i class="fa-solid fa-check-double"></i><div><b>Self-check:</b> post-order ends with GF ✔ · 9 codes, no repeats ✔</div></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="trav-exam-walk-post"></div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Zone 3: Practice ── -->
+    <div class="zone zone-practice">
+        <header class="zone-head">
+            <i class="fa-solid fa-dumbbell"></i>
+            <div><h3>Practice</h3><p>A new tree, same three questions. Try it alone.</p></div>
+        </header>
+        <div class="zone-body">
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">1</span>
+                        <p class="q-text">Write the <b>Pre-order</b> traversal of this tree.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="trav-prac-pre"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 1"><div class="reveal-body">
+                    <div data-mount="trav-prac-ans-pre"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="trav-prac-walk-pre"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">2</span>
+                        <p class="q-text">Write the <b>In-order</b> traversal of this tree.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="trav-prac-in"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 2"><div class="reveal-body">
+                    <div data-mount="trav-prac-ans-in"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="trav-prac-walk-in"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">3</span>
+                        <p class="q-text">Write the <b>Post-order</b> traversal of this tree.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="trav-prac-post"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 3"><div class="reveal-body">
+                    <div data-mount="trav-prac-ans-post"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="trav-prac-walk-post"></div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════ PART D ═══════════════════════ -->
+<section id="part-d" class="content-section part-d">
+    <div class="part-hero">
+        <div class="marks"><b>20</b><span>marks</span></div>
+        <div class="eyebrow">Part D · Graphs</div>
+        <h2>DFS, BFS, Dijkstra &amp; the fastest route</h2>
+        <p>The biggest part of the exam. Do Step 0 first, every time.</p>
+    </div>
+
+    <!-- ── Zone 1: Learn ── -->
+    <div class="zone zone-learn">
+        <header class="zone-head">
+            <i class="fa-solid fa-book-open"></i>
+            <div><h3>Learn</h3><p>Read this first. There are no questions in this zone.</p></div>
+        </header>
+        <div class="zone-body">
+            <div class="learn-slide" data-slide-title="Step 0: adjacency list">
+                <div class="golden" style="background:linear-gradient(120deg,#1d4ed8,#0e7490)">
+                    <i class="fa-solid fa-table-list"></i>
+                    <div>
+                        <div class="g-big">Step 0: write the adjacency list A → Z.</div>
+                        <div class="g-small">For every station, list its neighbours in alphabetical order. This one step prevents most DFS and BFS mistakes.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learn-slide" data-slide-title="Four rules">
+                <div class="rule-grid">
+                    <div class="rule-card">
+                        <div class="rule-title"><i class="fa-solid fa-arrow-down-long"></i> DFS · stack</div>
+                        <div class="rule-big">Go deep, then backtrack</div>
+                        <div class="rule-small">Take the first <b>unvisited</b> neighbour (A → Z). Dead end? Go <b>back the way you came</b>.</div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-title"><i class="fa-solid fa-water"></i> BFS · queue</div>
+                        <div class="rule-big">Dequeue one, enqueue its new neighbours</div>
+                        <div class="rule-small">Neighbours A → Z. Mark a station seen <b>when it is enqueued</b>, so it is never added twice.</div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-title"><i class="fa-solid fa-stopwatch"></i> Dijkstra</div>
+                        <div class="rule-big">Smallest time first</div>
+                        <div class="rule-small">Tie → <b>alphabetical</b>. Update only if <b>strictly smaller</b> (equal = keep the old one).</div>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-title"><i class="fa-solid fa-route"></i> Route</div>
+                        <div class="rule-big">Follow "Previous" backwards</div>
+                        <div class="rule-small">Start at the target, follow Previous to the start, then <b>reverse</b> it.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Zone 2: Exam questions ── -->
+    <div class="zone zone-exam">
+        <header class="zone-head">
+            <i class="fa-solid fa-file-pen"></i>
+            <div><h3>Exam questions</h3><p>The real exam question, 20 marks. Answer on the map, press <b>Check</b>, then open the answer.</p></div>
+            <span class="zone-tag">20 marks</span>
+        </header>
+        <div class="zone-body">
+            <section class="scenario" aria-labelledby="sc-d">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-d">Scenario: Weekend trip by train</h4>
+                    <span class="scenario-for">Questions 1–5</span>
+                </header>
+                <div class="scenario-body">
+                <p>You and your AIEE friends plan weekend trips around Bangkok by train. The map shows 7 real stations. Each line is a direct train link, and the number on it is the travel time in <b>minutes</b> (simplified, including walking between platforms). Every link works in both directions. <b>Consider only BTS, MRT and Airport Rail Link trains.</b> Each station has a two-letter code.</p>
+                <div data-mount="map-graph"></div>
+                <div class="station-key">
+                    <span><b>MO</b> Mo Chit</span><span><b>PH</b> Phaya Thai</span><span><b>MA</b> Makkasan</span><span><b>LA</b> Lat Krabang</span>
+                    <span><b>SI</b> Siam</span><span><b>AS</b> Asok</span><span><b>SA</b> Sala Daeng</span>
+                </div>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">1</span>
+                        <p class="q-text">A travel vlogger films every station, starting at Siam (SI) and moving with <b>Depth-First Search (DFS)</b>: keep travelling to a new station until there is none, then go back and try another link. In what order does she film the stations?</p>
+                        <span class="q-marks">4 marks</span>
+                    </div>
+                    <p class="q-rule"><b>Rule:</b> From the current station, always travel to the unvisited neighbouring station that comes <b>first alphabetically</b>. If there is none, go back to the station you came from and continue from there.</p>
+                    <div class="q-work"><div data-mount="map-dfs-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 1"><div class="reveal-body">
+                    <div data-mount="map-dfs-ans"></div>
+                    <div class="trap"><i class="fa-solid fa-triangle-exclamation"></i><div>After LA (a dead end), students jump to "the next station A → Z overall". Wrong: <b>backtrack to MA</b> and continue from there.</div></div>
+                    <div class="block-label">Step 0: adjacency list</div>
+                    <div data-mount="map-adj"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="map-dfs"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">2</span>
+                        <p class="q-text">A metro app sends a crowd alert from Siam (SI) using <b>Breadth-First Search (BFS)</b>: first to every station one link away, then to stations two links away, and so on. In what order do the stations receive the alert?</p>
+                        <span class="q-marks">4 marks</span>
+                    </div>
+                    <p class="q-rule"><b>Rule:</b> When adding several neighbouring stations to the BFS queue, add them in <b>alphabetical order</b>.</p>
+                    <div class="q-work"><div data-mount="map-bfs-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 2"><div class="reveal-body">
+                    <div data-mount="map-bfs-ans"></div>
+                    <div class="trap"><i class="fa-solid fa-triangle-exclamation"></i><div>Don't do BFS "level by level" in your head and sort each level A → Z. Use the <b>queue</b>: it gives the right order.</div></div>
+                    <div class="block-label">Step 0: adjacency list</div>
+                    <div data-mount="map-adj"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="map-bfs"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">3</span>
+                        <p class="q-text">Use <b>Dijkstra's Algorithm</b> to find the fastest travel time from Lat Krabang using the rules below. The Lat Krabang row is already filled.</p>
+                        <span class="q-marks">7 marks</span>
+                    </div>
+                    <ol class="q-rules">
+                        <li><b>Next station:</b> always finalise the unvisited station with the smallest time so far. If two or more stations tie, choose the one that comes first alphabetically.</li>
+                        <li><b>Updating:</b> change a station's time and Previous only if the new time is <b>strictly smaller</b>. If the new time is equal, keep the old one.</li>
+                        <li><b>Order finalised:</b> list the stations in the order they are finalised, starting with Lat Krabang.</li>
+                    </ol>
+                    <div class="q-work"><div data-mount="map-dij-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 3"><div class="reveal-body">
+                    <div data-mount="map-dij-table"></div>
+                    <div class="note"><i class="fa-solid fa-circle-info"></i><div>The table is in <b>alphabetical</b> order, but "Order finalised" is the order you <b>picked</b> them. Don't mix them up.</div></div>
+                    <div class="block-label">3 moments that decide the marks</div>
+                    <div class="method">
+                        <div class="method-step"><span class="n">1</span><div>After MA: <b>AS = 18 and PH = 18 tie</b> → pick AS (alphabetical).</div></div>
+                        <div class="method-step"><span class="n">2</span><div>From PH: MO 30 → <b>28</b>, SI 25 → <b>22</b>. Previous becomes PH.</div></div>
+                        <div class="method-step"><span class="n">3</span><div>From SI: SA would be 22 + 3 = <b>25 = 25</b>. Not strictly smaller → Previous stays <b>AS</b>.</div></div>
+                    </div>
+                    <div class="tip"><i class="fa-solid fa-check-double"></i><div><b>Self-check:</b> in "Order finalised" order, the times never go down: 0, 12, 18, 18, 22, 25, 28 ✔</div></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="map-dij"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">4</span>
+                        <p class="q-text">Use your table to write the fastest route from Lat Krabang (LA) to Mo Chit (MO), and its total travel time.</p>
+                        <span class="q-marks">2 marks</span>
+                    </div>
+                    <div class="q-work"><div data-mount="map-route-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 4"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Route</span><span class="ans">LA, MA, PH, MO</span><span class="why">Follow Previous back: MO ← PH ← MA ← LA, then reverse.</span></div>
+                    <div class="answer-line"><span class="lbl">Time</span><span class="ans">28 min</span><span class="why">12 + 6 + 10</span></div>
+                    <div data-mount="map-route"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">5</span>
+                        <p class="q-text">The Airport Rail Link between Makkasan (MA) and Phaya Thai (PH) is closed for maintenance. Every other link is still open. Write the new fastest route from Lat Krabang to Mo Chit, and its total travel time.</p>
+                        <span class="q-marks">3 marks</span>
+                    </div>
+                    <div class="q-work"><div data-mount="map-route-cut-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 5"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Route</span><span class="ans">LA, MA, MO</span></div>
+                    <div class="answer-line"><span class="lbl">Time</span><span class="ans">30 min</span><span class="why">12 + 18. The other way, LA → MA → AS → SI → PH → MO, takes 39.</span></div>
+                    <div data-mount="map-route-cut"></div>
+                    <div class="tip"><i class="fa-solid fa-lightbulb"></i><div>You don't have to redo all of Dijkstra: only routes that used MA–PH change. If you have time, re-running it is the safest check.</div></div>
+                    <div class="block-label">Re-run Dijkstra without MA–PH</div>
+                    <div data-mount="map-dij-cut"></div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Zone 3: Practice ── -->
+    <div class="zone zone-practice">
+        <header class="zone-head">
+            <i class="fa-solid fa-dumbbell"></i>
+            <div><h3>Practice</h3><p>A smaller graph, same four questions. Try it alone.</p></div>
+        </header>
+        <div class="zone-body">
+            <section class="scenario" aria-labelledby="sc-dp">
+                <header class="scenario-head">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <h4 id="sc-dp">Scenario: Undirected graph</h4>
+                    <span class="scenario-for">Questions 1–4</span>
+                </header>
+                <div class="scenario-body">
+                <p>Links and travel times: A–B 4 · A–C 1 · B–C 2 · B–D 5 · C–D 8 · C–E 10 · D–E 3</p>
+                <div data-mount="pg-graph"></div>
+                </div>
+            </section>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">1</span>
+                        <p class="q-text">Write the <b>DFS</b> order starting from D (neighbours in alphabetical order).</p>
+                    </div>
+                    <div class="q-work"><div data-mount="pg-dfs-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 1"><div class="reveal-body">
+                    <div data-mount="pg-dfs-ans"></div>
+                    <div class="block-label">Step 0: adjacency list</div>
+                    <div data-mount="pg-adj"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="pg-dfs"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">2</span>
+                        <p class="q-text">Write the <b>BFS</b> order starting from D (neighbours in alphabetical order).</p>
+                    </div>
+                    <div class="q-work"><div data-mount="pg-bfs-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 2"><div class="reveal-body">
+                    <div data-mount="pg-bfs-ans"></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="pg-bfs"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">3</span>
+                        <p class="q-text">Use <b>Dijkstra's Algorithm</b> from A: fill in the fastest time, Previous and the order each station is finalised. The A row is already filled.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="pg-dij-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 3"><div class="reveal-body">
+                    <div data-mount="pg-dij-table"></div>
+                    <div class="trap"><i class="fa-solid fa-triangle-exclamation"></i><div><b class="t">Built-in trap.</b> From D, E would be 8 + 3 = 11 = 11. Not strictly smaller, so Previous stays <b>C</b>.</div></div>
+                    <div class="block-label">Step through it</div>
+                    <div data-mount="pg-dij"></div>
+                </div></div>
+            </div>
+
+            <div class="q-block">
+                <article class="q-item">
+                    <div class="q-top">
+                        <span class="q-num">4</span>
+                        <p class="q-text">Write the fastest route from A to E, and its total travel time.</p>
+                    </div>
+                    <div class="q-work"><div data-mount="pg-route-quiz"></div></div>
+                </article>
+                <div class="reveal answer-box" data-label="Show answer · Question 4"><div class="reveal-body">
+                    <div class="answer-line"><span class="lbl">Route</span><span class="ans">A, C, E = 11 min</span><span class="why">A, C, B, D, E is also 11, but the strict rule keeps A, C, E.</span></div>
+                    <div data-mount="pg-route"></div>
+                </div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════ CHEAT SHEET ═══════════════════════ -->
+<section id="cheat" class="content-section part-x">
+    <div class="part-hero">
+        <div class="eyebrow">Before the exam</div>
+        <h2>Cheat sheet &amp; self-check</h2>
+        <p>Everything on one screen. Read it the night before and again just before you go in.</p>
+    </div>
+
+    <div class="cheat-grid">
+        <div class="cheat part-a">
+            <h3><span class="nav-letter">A</span> Queue &amp; Stack</h3>
+            <ul>
+                <li><b>Queue = FIFO.</b> Write front → rear after <b>every</b> round.</li>
+                <li><b>Stack = LIFO.</b> The top is the last one pushed.</li>
+                <li>Hot Potato: k passes, then the <b>front</b> is out.</li>
+                <li>Dequeues = (n − 1) × (k + 1).</li>
+            </ul>
+        </div>
+        <div class="cheat part-b">
+            <h3><span class="nav-letter">B</span> BST</h3>
+            <ul>
+                <li>Smaller ← · → bigger. Strings: <b>letter by letter</b>.</li>
+                <li>Duplicate = <b>ignored</b>.</li>
+                <li>Delete with 2 children = <b>min of RIGHT subtree</b>.</li>
+                <li>In-order of a BST = <b>sorted</b>. Use it to check.</li>
+            </ul>
+        </div>
+        <div class="cheat part-c">
+            <h3><span class="nav-letter">C</span> Traversals</h3>
+            <ul>
+                <li><b>Pre</b> = Root L R (first box = root).</li>
+                <li><b>In</b> = L Root R.</li>
+                <li><b>Post</b> = L R Root (last box = root).</li>
+                <li>One-child node: <b>left or right?</b> Label edges first.</li>
+            </ul>
+        </div>
+        <div class="cheat part-d">
+            <h3><span class="nav-letter">D</span> Graphs</h3>
+            <ul>
+                <li>Write the adjacency list <b>A → Z first</b>.</li>
+                <li><b>DFS:</b> go deep, backtrack the way you came.</li>
+                <li><b>BFS:</b> queue, mark seen when <b>enqueued</b>.</li>
+                <li><b>Dijkstra:</b> smallest; tie → A → Z; update only if <b>strictly</b> smaller.</li>
+                <li><b>Route:</b> follow Previous backwards, then reverse.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="block-label">Exam strategy</div>
+    <div class="method">
+        <div class="method-step"><span class="n">1</span><div><b>Show the working.</b> Queue lines, the tree, the Dijkstra table. Working earns marks even if the final answer is wrong.</div></div>
+        <div class="method-step"><span class="n">2</span><div><b>Underline the tie-break rules</b> ("alphabetically", "strictly smaller"). The question is built around them.</div></div>
+        <div class="method-step"><span class="n">3</span><div><b>Count the boxes.</b> 9 boxes = 9 nodes. 7 boxes = 7 stations.</div></div>
+        <div class="method-step"><span class="n">4</span><div><b>Unsure of a rule?</b> Write your assumption next to the answer.</div></div>
+    </div>
+
+    <div class="block-label">Self-check before you hand in (tick as you go)</div>
+    <div class="checklist">
+        <label><input type="checkbox" data-k="bst"><span><b>BST:</b> my tree's in-order is sorted.</span></label>
+        <label><input type="checkbox" data-k="trav"><span><b>Traversals:</b> pre-order starts with the root, post-order ends with the root.</span></label>
+        <label><input type="checkbox" data-k="graph"><span><b>DFS / BFS:</b> every station appears exactly once, and the start station is first.</span></label>
+        <label><input type="checkbox" data-k="dij"><span><b>Dijkstra:</b> in "order finalised" order, the times never go down.</span></label>
+        <label><input type="checkbox" data-k="route"><span><b>Route:</b> the sum of edge weights on my route equals the time in my table.</span></label>
+        <label><input type="checkbox" data-k="boxes"><span><b>Boxes:</b> the number of answers matches the number of boxes.</span></label>
+    </div>
+
+    <div class="block-label">Want more practice?</div>
+    <div class="howto">
+        <div><i class="fa-solid fa-layer-group" style="background:var(--bg-orange-light);color:var(--accent-orange)"></i><span><b><a href="../week5/week5.html" target="_blank">Guide #6</a></b>Stack &amp; Queue animations</span></div>
+        <div><i class="fa-solid fa-sitemap" style="background:var(--bg-green-light);color:var(--accent-green)"></i><span><b><a href="../week6/week6.html" target="_blank">Guide #7</a></b>Tree traversals &amp; BST</span></div>
+        <div><i class="fa-solid fa-circle-nodes" style="background:var(--bg-blue-light);color:var(--accent-blue)"></i><span><b><a href="../week7/week7.html" target="_blank">Guide #8</a></b>Graph traversals &amp; shortest path</span></div>
+    </div>
+</section>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>
